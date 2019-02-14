@@ -9,8 +9,8 @@ string AskTimeServer() {
        * выброс исключения system_error
        * выброс другого исключения с сообщением.
     */
-//    throw(runtime_error("Something went wrong"));
-//    throw(system_error(error_code()));
+   throw(runtime_error("Something went wrong"));
+   throw(system_error(error_code()));
    return "00:01:01";
 }
 
