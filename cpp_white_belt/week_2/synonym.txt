@@ -1,0 +1,22 @@
+21
+ADD program code
+ADD code cipher
+ADD program cpp
+ADD cipher cpp
+ADD lol kek
+ADD kek rofl
+ADD rofl lol
+ADD rofl kek
+ADD kek program
+ADD lol cipher
+ADD kek code
+COUNT program
+COUNT code
+COUNT cipher
+COUNT lol
+COUNT rofl
+CHECK lol kek
+CHECK rofl code
+CHECK idfk cipher
+CHECK program kek
+CHECK asda dfsfsd 
