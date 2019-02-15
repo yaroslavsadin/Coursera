@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_white_belt/week_4/rational_io.exe",
+            "program": "${workspaceFolder}/cpp_white_belt/week_5/project_template.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
