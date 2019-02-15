@@ -37,7 +37,7 @@ public:
     DateValueChecker(year, month, day);
   }
   ~Date() {
-    cout << "Destruction here: " << year << " " << month << " " << day << endl; 
+    // cout << "Destruction here: " << year << " " << month << " " << day << endl; 
   }
   int GetYear() const {
     return year;
@@ -50,7 +50,7 @@ public:
   }
 private:
   void DateValueChecker(int year, int month, int day) {
-    cout << "Construction here: " << year << "-" << month << "-" << day << endl;
+    // cout << "Construction here: " << year << "-" << month << "-" << day << endl;
     if(month < 1 || month > 12) {
       throw(runtime_error("Month value is invalid: "+to_string(month)));
     } else if (day < 1 || day > 31) {
@@ -139,11 +139,42 @@ int main() {
       cout << e.what() << endl;
     }
     try {
+      auto date = Date("2016--4-32");
+      cout << date << endl;
+    } catch(runtime_error& e) {
+      cout << e.what() << endl;
+    }
+    try {
       auto date = Date("2016----13-32");
       cout << date << endl;
     } catch(runtime_error& e) {
       cout << e.what() << endl;
     }
+    try {
+      auto date = Date("2016-13-uuu32");
+      cout << date << endl;
+    } catch(runtime_error& e) {
+      cout << e.what() << endl;
+    }
+    try {
+      auto date = Date("23eef344gt65");
+      cout << date << endl;
+    } catch(runtime_error& e) {
+      cout << e.what() << endl;
+    }
+  }
+  {
+    db.AddEvent({"1990-06-21"},"Birthday");
+    db.AddEvent({"1997-09-1"},"School");
+    db.AddEvent({"1997-09-1"},"End-of-summer");
+    db.AddEvent({"2001-01-1"},"Millenium");
+    db.AddEvent({"2001-01-1"},"New-Year");
+    db.AddEvent({"2001-01-1"},"New-Year");
+    db.AddEvent({"2007-07-1"},"SchoolEnd");
+    db.AddEvent({"2007-07-1"},"UniversityExams");
+    db.DeleteEvent({"2007-07-1"},"UniversityExams");
+    db.DeleteEvent({"2007-07-1"},"First-Girlfriend");
+    db.DeleteDate({"2001-01-1"});
   }
   // string command;
   // while (getline(cin, command)) {
