@@ -4,12 +4,14 @@
 #include <set>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 // Реализуйте функции и методы классов и при необходимости добавьте свои
 
 class Date {
 public:
+  Date() {}
   Date(int year, int month, int day) : year(year), month(month), day(day) {
     DateValueChecker(year, month, day);
   }
@@ -77,7 +79,14 @@ bool operator<(const Date& lhs, const Date& rhs) {
 }
 
 ostream& operator<<(ostream& stream, const Date& date) {
-  stream << date.GetYear() << "-" << date.GetMonth() << "-" << date.GetDay();
+  stream << setw(4) << setfill('0') << date.GetYear() << "-" << setw(2) << date.GetMonth() << "-" << setw(2) << date.GetDay();
+  return stream;
+}
+
+istream& operator>>(istream& stream, Date& date) {
+  string s;
+  stream >> s;
+  date = Date(s);
   return stream;
 }
 
@@ -90,7 +99,9 @@ public:
     return vault[date].erase(event);
   }
   int  DeleteDate(const Date& date) {
-    return vault.erase(date);
+    int res = vault.at(date).size();
+    vault.erase(date);
+    return res;
   }
 
 const set<string>& Find(const Date& date) const {
@@ -116,9 +127,54 @@ private:
   set<string> dummy;
 };
 
+string ParseCommand(const string& command, Database& db) {
+  stringstream ss{command};
+  string opcode;
+  ss >> opcode;
+  if(opcode == "Add") {
+    Date date;
+    string event;
+    ss >> date >> event;
+    db.AddEvent(date,event);
+    return "";
+  } else if (opcode == "Del") {
+    Date date;
+    string event;
+
+    ss >> date;
+    if (ss >> event) {
+      if (db.DeleteEvent(date,event)) {
+        return "Deleted succesfully";
+      } else {
+        return "Event not found";
+      }
+    } else {
+      return "Deleted "+to_string(db.DeleteDate(date))+" events";
+    }
+  } else if(opcode == "Print") {
+    db.Print();
+    return "";
+  } else if(opcode == "Find") {
+    Date date;
+    ss >> date;
+    string res;
+    set<string> events = db.Find(date);
+    for(const auto& event : events) {
+      res += event+"\n";
+    }
+    // remove last \n
+    res = res.substr(0,res.size()-1);
+    return res;
+  } else if(opcode == ""){
+    return "";
+  } else {
+    throw(runtime_error("Unknown command: "+command));
+  }
+}
+
 int main() {
   Database db;
-
+#if 0
   { 
     try {
       auto date = Date("2016-10-05");
@@ -174,6 +230,21 @@ int main() {
     } catch(runtime_error& e) {
       cout << e.what() << endl;
     }
+    try {
+      stringstream ss("1--1-0");
+      auto date = Date("1970-1-1");
+      ss >> date;
+    } catch(runtime_error& e) {
+      cout << e.what() << endl;
+    }
+    try {
+      stringstream ss("1965-4-31");
+      auto date = Date("1970-1-1");
+      ss >> date;
+      cout << date << endl;
+    } catch(runtime_error& e) {
+      cout << e.what() << endl;
+    }
   }
   {
     try {  
@@ -200,10 +271,21 @@ int main() {
       cout << e.what() << endl;
     }
   }
-  // string command;
-  // while (getline(cin, command)) {
-  //   // Считайте команды с потока ввода и обработайте каждую
-  // }
+#endif
+  string command;
+  while (getline(cin, command)) {
+    // Считайте команды с потока ввода и обработайте каждую
+    string feedback;
+    try {  
+       feedback = ParseCommand(command, db);
+    } catch(exception& e) {
+      cout << e.what() << endl;
+      return -1;
+    }
+    if(feedback != "") { 
+      cout << feedback << endl;
+    }
+  }
 
   return 0;
 }

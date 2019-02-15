@@ -1,0 +1,25 @@
+Add 1990-06-21 Brithday
+Add 1991-12-26 USSR_Collapse
+Add 1991-12-26 Day_after_Christmas
+Add 1997-09-01 School_start
+
+Add 1997-09-1 Autumn
+Add 2001-1-01 Millenium
+Add 2001-1-01 NewYear2001
+Print
+Del 1997-09-1
+Print
+Add 1997-09-01 1st_grade
+
+
+Print
+Del 2001-1-01 NewYear2001
+Del 1991-12-26 Day_after_Christmas
+
+
+Del 1991-12-26 Day_after_NewYear
+Print
+Find 2001-1-01
+Find 2000-06-21
+Print
+

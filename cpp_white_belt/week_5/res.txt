@@ -1,0 +1,31 @@
+1990-06-21 Brithday
+1991-12-26 Day_after_Christmas
+1991-12-26 USSR_Collapse
+1997-09-01 Autumn
+1997-09-01 School_start
+2001-01-01 Millenium
+2001-01-01 NewYear2001
+Deleted 2 events
+1990-06-21 Brithday
+1991-12-26 Day_after_Christmas
+1991-12-26 USSR_Collapse
+2001-01-01 Millenium
+2001-01-01 NewYear2001
+1990-06-21 Brithday
+1991-12-26 Day_after_Christmas
+1991-12-26 USSR_Collapse
+1997-09-01 1st_grade
+2001-01-01 Millenium
+2001-01-01 NewYear2001
+Deleted succesfully
+Deleted succesfully
+Event not found
+1990-06-21 Brithday
+1991-12-26 USSR_Collapse
+1997-09-01 1st_grade
+2001-01-01 Millenium
+Millenium
+1990-06-21 Brithday
+1991-12-26 USSR_Collapse
+1997-09-01 1st_grade
+2001-01-01 Millenium
