@@ -17,7 +17,9 @@ public:
   }
   Date(string date) {
     stringstream ss{date};
-    int y,m,d;
+    int m,d;
+    // Using long long to prevent exception
+    long long y;
     if (!(ss >> y)) {
       throw(runtime_error("Wrong date format: "+date));
     }
@@ -35,6 +37,12 @@ public:
     if(!(ss >> d)) {
       throw(runtime_error("Wrong date format: "+date));
     }
+    if(!ss.eof()) {
+      throw(runtime_error("Wrong date format: "+date));
+    }
+    // Narrow cast!
+    // | | |
+    // v v v
     year = y; month = m; day = d;
     DateValueChecker(year, month, day);
   }
@@ -144,7 +152,7 @@ string ParseCommand(const string& command, Database& db) {
     ss >> date;
     if (ss >> event) {
       if (db.DeleteEvent(date,event)) {
-        return "Deleted succesfully";
+        return "Deleted successfully";
       } else {
         return "Event not found";
       }

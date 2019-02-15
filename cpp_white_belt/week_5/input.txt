@@ -1,11 +1,16 @@
-Add 1990-06-21 Brithday
+Add 199000000000000-6-21 Brithday
 Add 1991-12-26 USSR_Collapse
 Add 1991-12-26 Day_after_Christmas
 Add 1997-09-01 School_start
 
+
+Del 666-6-6
+
+s sada asdas
 Add 1997-09-1 Autumn
 Add 2001-1-01 Millenium
 Add 2001-1-01 NewYear2001
+Find 2001-1-01
 Print
 Del 1997-09-1
 Print
@@ -22,4 +27,5 @@ Print
 Find 2001-1-01
 Find 2000-06-21
 Print
+Del 1991-12-26 lol
 
