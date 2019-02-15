@@ -96,12 +96,24 @@ public:
 const set<string>& Find(const Date& date) const {
   if (vault.count(date)) {
     return vault.at(date);
+  } else {
+    /*
+    throw(logic_error("Date doesn't exist"));
+    */
+    return dummy;
   }
 }
   
-  void Print() const;
+  void Print() const {
+    for(const auto& date : vault) {
+      for(const auto& event : date.second) {
+        cout << date.first << " " << event << endl;
+      }
+    }
+  }
 private:
   map<Date,set<string>> vault;
+  set<string> dummy;
 };
 
 int main() {
@@ -164,17 +176,29 @@ int main() {
     }
   }
   {
-    db.AddEvent({"1990-06-21"},"Birthday");
-    db.AddEvent({"1997-09-1"},"School");
-    db.AddEvent({"1997-09-1"},"End-of-summer");
-    db.AddEvent({"2001-01-1"},"Millenium");
-    db.AddEvent({"2001-01-1"},"New-Year");
-    db.AddEvent({"2001-01-1"},"New-Year");
-    db.AddEvent({"2007-07-1"},"SchoolEnd");
-    db.AddEvent({"2007-07-1"},"UniversityExams");
-    db.DeleteEvent({"2007-07-1"},"UniversityExams");
-    db.DeleteEvent({"2007-07-1"},"First-Girlfriend");
-    db.DeleteDate({"2001-01-1"});
+    try {  
+      db.AddEvent({"1990-06-21"},"Birthday");
+      db.AddEvent({"1997-09-1"},"School");
+      db.AddEvent({"1997-09-1"},"End-of-summer");
+      db.AddEvent({"2001-01-1"},"Millenium");
+      db.AddEvent({"2001-01-1"},"New-Year");
+      db.AddEvent({"2001-01-1"},"New-Year");
+      db.AddEvent({"2007-07-1"},"SchoolEnd");
+      db.Print();
+      db.AddEvent({"2007-07-1"},"UniversityExams");
+      db.DeleteEvent({"2007-07-1"},"UniversityExams");
+      db.DeleteEvent({"2007-07-1"},"First-Girlfriend");
+      db.DeleteDate({"2001-01-1"});
+      auto events = db.Find({"2005-12-21"});
+      for(const string& event : events) {
+        cout << event << endl;
+      }
+      for(const string& event : db.Find({"1997-09-01"})) {
+        cout << event << endl;
+      }
+    } catch(exception& e) {
+      cout << e.what() << endl;
+    }
   }
   // string command;
   // while (getline(cin, command)) {
