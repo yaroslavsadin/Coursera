@@ -8,12 +8,12 @@ using namespace std;
 
 class Lecture {
 public:
-    string name = "C++";
-    int duration = 2;
+    string name = "kek";
+    int duration;
 };
 
 int main(void) {
-    Lecture lecture = {.name = "lol"};
+    Lecture lecture = {.name = "lol", .duration = 4};
     cout << lecture.duration << " " << lecture.name << endl;
     return 0;
 }

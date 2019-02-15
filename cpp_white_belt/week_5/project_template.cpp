@@ -19,6 +19,7 @@ public:
     stringstream ss{date};
     int m,d;
     // Using long long to prevent exception
+    // Can use chain with bool variable and check in the end...
     long long y;
     if (!(ss >> y)) {
       throw(runtime_error("Wrong date format: "+date));
@@ -71,6 +72,7 @@ private:
 };
 
 bool operator<(const Date& lhs, const Date& rhs) {
+// Can use vector<Date> comparison...
   if(lhs.GetYear() < rhs.GetYear()) {
     return true;
   } else if (lhs.GetYear() == rhs.GetYear()) {
@@ -104,6 +106,11 @@ public:
     vault[date].insert(event);
   }
   bool DeleteEvent(const Date& date, const string& event) {
+    // if (storage.count(date) > 0 && storage[date].count(event) > 0) {
+    //   storage[date].erase(event);
+    //   return true;
+    // }
+    // return false;
     return vault[date].erase(event);
   }
   int  DeleteDate(const Date& date) {
@@ -122,6 +129,7 @@ const set<string>& Find(const Date& date) const {
     /*
     throw(logic_error("Date doesn't exist"));
     */
+   // If return type is set<string> can return {}
     return dummy;
   }
 }
