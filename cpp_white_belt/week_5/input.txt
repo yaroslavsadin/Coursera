@@ -6,13 +6,12 @@ Add 1997-09-01 School_start
 
 Del 666-6-6
 
-s sada asdas
 Add 1997-09-1 Autumn
 Add 2001-1-01 Millenium
 Add 2001-1-01 NewYear2001
 Find 2001-1-01
 Print
-Del 1997-09-1
+Del 1997-09-5
 Print
 Add 1997-09-01 1st_grade
 

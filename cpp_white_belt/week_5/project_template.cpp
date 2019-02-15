@@ -107,8 +107,11 @@ public:
     return vault[date].erase(event);
   }
   int  DeleteDate(const Date& date) {
-    int res = vault.at(date).size();
-    vault.erase(date);
+    int res = 0;
+    if(vault.count(date)) {
+      res = vault.at(date).size();
+      vault.erase(date);
+    }
     return res;
   }
 
@@ -176,7 +179,7 @@ string ParseCommand(const string& command, Database& db) {
   } else if(opcode == ""){
     return "";
   } else {
-    throw(runtime_error("Unknown command: "+command));
+    throw(runtime_error("Unknown command: "+opcode));
   }
 }
 
