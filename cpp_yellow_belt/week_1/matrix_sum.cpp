@@ -61,12 +61,29 @@ private:
   vector<vector<int>> matrix;
 };
 
-istream& operator>>(istream& stream, const Matrix& matrix) {
-
+istream& operator>>(istream& stream, Matrix& matrix) {
+  int num_rows,num_cols;
+  stream >> num_rows >> num_cols;
+  matrix.Reset(num_rows,num_cols);
+  for(int i = 0; i < matrix.GetNumRows(); i++) {
+    for(int j = 0; j < matrix.GetNumColumns(); j++) {
+      stream >> matrix.At(i,j);
+    }
+  }
+  return stream;
 }
 
 ostream& operator<<(ostream& stream, Matrix& matrix) {
-  
+  int num_rows = matrix.GetNumRows();
+  int num_cols = matrix.GetNumColumns();
+  stream << num_rows << " " << num_cols << endl;
+  for(int i = 0; i < matrix.GetNumRows(); i++) {
+    for(int j = 0; j < matrix.GetNumColumns(); j++) {
+      stream << matrix.At(i,j) << " ";
+    }
+    stream << endl;
+  }
+  return stream;
 }
 
 bool operator==(const Matrix& lhs,const Matrix& rhs) {
@@ -79,7 +96,19 @@ bool operator+(const Matrix& lhs,const Matrix& rhs) {
 
 int main() {
   Matrix one;
-  Matrix two{5,6};
+  Matrix two;
+#if 0
+  try {
+    Matrix three{-4,5};
+  } catch(out_of_range& e) {
+    cout << e.what() << endl;
+  }
+
+  try {
+    Matrix four{4,-5};
+  } catch(out_of_range& e) {
+    cout << e.what() << endl;
+  }
 
   cout << two.At(1,2) << endl;
   try {  
@@ -105,8 +134,8 @@ int main() {
   int& b = one.At(2,3);
   b = 666;
   cout << one.At(2,3) << endl;
-
-  // cin >> one >> two;
-  // cout << one + two << endl;
+#endif
+  cin >> one;
+  cout << one << endl;
   return 0;
 }
