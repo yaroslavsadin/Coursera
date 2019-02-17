@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
     if(num_rows >= 0 && num_cols >= 0) {
       matrix.resize(num_rows);
       for(auto& m : matrix) {
-        m.resize(num_cols);
+        m.assign(num_cols,0);
       }
     }
     else
@@ -32,7 +33,8 @@ public:
     }
   }
   int At(int row, int col) const {
-    if(row < GetNumRows() && col < GetNumColumns()) {
+    if(row < GetNumRows() && col < GetNumColumns() &&
+       row >= 0 && col >= 0) {
       return matrix[row][col];
     } else {
       throw(out_of_range("Out of range, row: "+to_string(row)+
@@ -40,7 +42,8 @@ public:
     }
   }
   int& At(int row, int col) {
-    if(row < GetNumRows() && col < GetNumColumns()) {
+    if(row < GetNumRows() && col < GetNumColumns() &&
+       row >= 0 && col >= 0) {
       int& res = matrix[row][col];
       return res;
     } else {
@@ -73,7 +76,7 @@ istream& operator>>(istream& stream, Matrix& matrix) {
   return stream;
 }
 
-ostream& operator<<(ostream& stream, Matrix& matrix) {
+ostream& operator<<(ostream& stream, const Matrix& matrix) {
   int num_rows = matrix.GetNumRows();
   int num_cols = matrix.GetNumColumns();
   stream << num_rows << " " << num_cols << endl;
@@ -87,55 +90,150 @@ ostream& operator<<(ostream& stream, Matrix& matrix) {
 }
 
 bool operator==(const Matrix& lhs,const Matrix& rhs) {
-
+  if(rhs.GetNumRows() != lhs.GetNumRows() || rhs.GetNumColumns() != lhs.GetNumColumns()) {
+    return false;
+  } else {
+    for(int i = 0; i < rhs.GetNumRows(); i++) {
+      for(int j = 0; j < rhs.GetNumColumns(); j++) {
+        if(lhs.At(i,j) != rhs.At(i,j)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }
 
-bool operator+(const Matrix& lhs,const Matrix& rhs) {
-
+Matrix operator+(const Matrix& lhs,const Matrix& rhs) {
+  if(rhs.GetNumRows() != lhs.GetNumRows() || rhs.GetNumColumns() != lhs.GetNumColumns()) {
+    throw(runtime_error("Invalid argument"));
+  } else {
+    Matrix res{lhs.GetNumRows(), lhs.GetNumColumns()};
+    for(int i = 0; i < rhs.GetNumRows(); i++) {
+      for(int j = 0; j < rhs.GetNumColumns(); j++) {
+        res.At(i,j) = lhs.At(i,j) + rhs.At(i,j);
+      }
+    }
+    return res;
+  }
 }
 
 int main() {
+#if 0
+  /************* Test constructors **************/
+  try {
+    Matrix matrix(0,0);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix matrix(-1,0);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix matrix(0,-1);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  /******* Test GetNumRows GetNumColumns ********/
+  try {
+    Matrix m(9,7);
+    cout << m.GetNumColumns() << m.GetNumRows();
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  /**************** Test .At() ******************/
+  try {
+    Matrix m(5,4);
+    m.At(5,3);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m(5,4);
+    m.At(4,4);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m(5,4);
+    m.At(-1,1);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m(5,4);
+    m.At(1,-1);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  /*************** Test .Reset() ****************/
+  try {
+    Matrix m(4,4);
+    m.Reset(0,0);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m(4,4);
+    m.Reset(-5,0);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m(4,4);
+    m.Reset(0,-3);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  /*************** Test operators ****************/
+  try {
+    Matrix m1(4,4);
+    Matrix m2(4,4);
+    stringstream ss{"2 4 1 2 3 4 5 6 7 8 2 4 8 7 6 5 4 3 2 1"};
+    ss >> m1;
+    ss >> m2;
+    cout << (m1 + m2) << endl;
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m1(4,4);
+    Matrix m2(4,4);
+    stringstream ss{"2 4 1 2 3 4 5 6 7 8 2 2 8 7 6 5"};
+    ss >> m1;
+    ss >> m2;
+    cout << (m1 + m2) << endl;
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+#else
   Matrix one;
   Matrix two;
-#if 0
-  try {
-    Matrix three{-4,5};
-  } catch(out_of_range& e) {
-    cout << e.what() << endl;
-  }
 
-  try {
-    Matrix four{4,-5};
-  } catch(out_of_range& e) {
-    cout << e.what() << endl;
-  }
-
-  cout << two.At(1,2) << endl;
-  try {  
-    cout << two.At(4,6) << endl;
-  } catch(out_of_range& e) {
-    cout << e.what() << endl;
-  }
-  try {  
-    cout << two.At(9,5) << endl;
-  } catch(out_of_range& e) {
-    cout << e.what() << endl;
-  }
-
-  int& a = two.At(1,1);
-  a++;
-  cout << two.At(1,1) << endl;
-
-  cout << one.GetNumColumns() << " " << one.GetNumRows() << endl;
-  cout << two.GetNumColumns() << " " << two.GetNumRows() << endl;
-  one.Reset(4,4);
-  cout << one.GetNumColumns() << " " << one.GetNumRows() << endl;
-
-  int& b = one.At(2,3);
-  b = 666;
-  cout << one.At(2,3) << endl;
-#endif
   cin >> one;
-  cout << one << endl;
+  cin >> two;
+  try {
+    Matrix three = one + two;
+    cout << three << endl;
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+#endif
   return 0;
 }
