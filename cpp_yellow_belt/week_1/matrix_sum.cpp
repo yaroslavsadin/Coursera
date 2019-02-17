@@ -22,6 +22,8 @@ public:
     Reset(num_rows, num_cols);
   }
   void Reset(int num_rows, int num_cols) {
+    // Can use single assign method on matrix...
+    // elements_.assign(num_rows, vector<int>(num_columns));
     if(num_rows >= 0 && num_cols >= 0) {
       matrix.resize(num_rows);
       for(auto& m : matrix) {
@@ -36,6 +38,8 @@ public:
     }
   }
   int At(int row, int col) const {
+    // out_of_range could be thrown by the vecotr itself??
+    // return elements_.at(row).at(column);
     if(row < GetNumRows() && col < GetNumColumns() &&
        row >= 0 && col >= 0) {
       return matrix[row][col];
