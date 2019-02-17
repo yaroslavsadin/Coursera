@@ -15,7 +15,9 @@ using namespace std;
 
 class Matrix {
 public:
-  Matrix() {}
+  Matrix() {
+    Reset(0, 0);
+  }
   Matrix(int num_rows, int num_cols) {
     Reset(num_rows, num_cols);
   }
@@ -25,6 +27,7 @@ public:
       for(auto& m : matrix) {
         m.assign(num_cols,0);
       }
+      columns = num_cols;
     }
     else
     {
@@ -55,13 +58,11 @@ public:
     return matrix.size();
   }
   int GetNumColumns() const {
-    if(matrix.size())  
-      return matrix[0].size();
-    else
-      return 0;
+    return columns;
   }
 private:
   vector<vector<int>> matrix;
+  int columns;
 };
 
 istream& operator>>(istream& stream, Matrix& matrix) {
@@ -106,7 +107,8 @@ bool operator==(const Matrix& lhs,const Matrix& rhs) {
 
 Matrix operator+(const Matrix& lhs,const Matrix& rhs) {
   if(rhs.GetNumRows() != lhs.GetNumRows() || rhs.GetNumColumns() != lhs.GetNumColumns()) {
-    throw(runtime_error("Invalid argument"));
+    throw(invalid_argument("Invalid argument: "+to_string(rhs.GetNumRows())+" "+to_string(lhs.GetNumRows())+" "
+    +to_string(rhs.GetNumColumns())+" "+to_string(lhs.GetNumColumns())));
   } else {
     Matrix res{lhs.GetNumRows(), lhs.GetNumColumns()};
     for(int i = 0; i < rhs.GetNumRows(); i++) {
@@ -119,7 +121,7 @@ Matrix operator+(const Matrix& lhs,const Matrix& rhs) {
 }
 
 int main() {
-#if 0
+#if 1
   /************* Test constructors **************/
   try {
     Matrix matrix(0,0);
@@ -198,6 +200,13 @@ int main() {
     cout << e.what() << endl;
     cout << "Line: " << __LINE__ << endl;
   }
+  try {
+    Matrix m(4,4);
+    m.Reset(-3,-3);
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
   /*************** Test operators ****************/
   try {
     Matrix m1(4,4);
@@ -217,6 +226,41 @@ int main() {
     ss >> m1;
     ss >> m2;
     cout << (m1 + m2) << endl;
+  } catch(invalid_argument& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m1;
+    Matrix m2;
+    stringstream ss{"3 3 6 4 -1 9 8 12 1 2 9 -5 -4 0 12 8 6 3 5 5 1 0 -8 23 14 5 -6 6 9 8 0 5 4 1"};
+    ss >> m1;
+    ss >> m2;
+    cout << (m1 + m2) << endl;
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m1(0,0);
+    Matrix m2(1,0);
+    cout << (m1 + m2) << endl;
+  } catch(invalid_argument& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m1(0,3);
+    Matrix m2(0,5);
+    cout << (m1 + m2) << endl;
+  } catch(exception& e) {
+    cout << e.what() << endl;
+    cout << "Line: " << __LINE__ << endl;
+  }
+  try {
+    Matrix m1;
+    Matrix m2;
+    cout << (m1 + m2) << endl;
   } catch(exception& e) {
     cout << e.what() << endl;
     cout << "Line: " << __LINE__ << endl;
@@ -224,10 +268,9 @@ int main() {
 #else
   Matrix one;
   Matrix two;
-
-  cin >> one;
-  cin >> two;
   try {
+    cin >> one;
+    cin >> two;
     Matrix three = one + two;
     cout << three << endl;
   } catch(exception& e) {
