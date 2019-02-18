@@ -70,10 +70,13 @@ public:
   tuple<TasksInfo, TasksInfo> PerformPersonTasks(
       const string& person, int task_count) {
         TasksInfo modified;
-        TasksInfo untouched = person_tasks.at(person);
+        TasksInfo untouched;
 
         for(const auto& [key,value] : person_tasks.at(person)) {
             if(key == TaskStatus::DONE) { break; }
+            if(task_count < value) {
+                untouched[key] = value - task_count;
+            }
             while(task_count-- && (++modified[TaskStatusNext(key)] < value)) {}
         }
         for(const auto& [key,value] : modified) {
