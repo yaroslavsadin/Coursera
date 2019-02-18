@@ -69,18 +69,21 @@ public:
   // подробности см. ниже
   tuple<TasksInfo, TasksInfo> PerformPersonTasks(
       const string& person, int task_count) {
-        TasksInfo modified;
-        TasksInfo untouched;
+        TasksInfo modified; TasksInfo untouched;
+        auto& person_list = person_tasks.at(person);
 
-        for(const auto& [key,value] : person_tasks.at(person)) {
-            if(key == TaskStatus::DONE) { break; }
-            if(task_count < value) {
-                untouched[key] = value - task_count;
+        task_count = min(CountTaskNum(person),task_count);
+        for(const auto& [task_status,task_num] : person_list) {
+            if(task_status == TaskStatus::DONE) { break; }
+            // TODO: if task_count is a big number it should be DONE
+            if(task_count < task_num) {
+                untouched[task_status] = task_num - task_count;
             }
-            while(task_count-- && (++modified[TaskStatusNext(key)] < value)) {}
+            // TODO: hande zero task_num of previos task count DONE
+            while(task_num && task_count-- && (++modified[TaskStatusNext(task_status)] < task_num)) {}
         }
+
         for(const auto& [key,value] : modified) {
-            auto& person_list = person_tasks.at(person);
             person_list[key] += value;
             person_list[TaskStatusPrev(key)] -= value;
         }
@@ -89,6 +92,13 @@ public:
       }
 
 private:
+    int CountTaskNum(string person) {
+        int res = 0;
+        for(const auto& [ts,num] : person_tasks.at(person)) {
+            res += num;
+        }
+        return res;
+    }
     map<string,TasksInfo> person_tasks;
 };
 
@@ -105,7 +115,7 @@ void PrintTasksInfo(TasksInfo tasks_info) {
 int main() {
   TeamTasks tasks;
   tasks.AddNewTask("Ilia");
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < 10; ++i) {
     tasks.AddNewTask("Ivan");
   }
   cout << "Ilia's tasks: ";
@@ -117,6 +127,10 @@ int main() {
   
   tie(updated_tasks, untouched_tasks) =
       tasks.PerformPersonTasks("Ivan", 2);
+    tie(updated_tasks, untouched_tasks) =
+      tasks.PerformPersonTasks("Ivan", 15);  
+    tie(updated_tasks, untouched_tasks) =
+    tasks.PerformPersonTasks("Ivan", 66);
   cout << "Updated Ivan's tasks: ";
   PrintTasksInfo(updated_tasks);
   cout << "Untouched Ivan's tasks: ";
