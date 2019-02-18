@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_yellow_belt/week_1/regions.exe",
+            "program": "${workspaceFolder}/cpp_yellow_belt/week_1/task_manager.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
