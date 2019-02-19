@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <exception>
 #include <tuple>
+#include <sstream>
 using namespace std;
 #if 1
 // Перечислимый тип для статуса задачи
@@ -21,6 +22,9 @@ enum class TaskStatus {
 // позволяющего хранить количество задач каждого статуса
 using TasksInfo = map<TaskStatus, int>;
 #endif
+// Can use static_cast<int> instead of this function
+// return static_cast<TaskStatus>(static_cast<int>(task_status) + 1);
+// Will return TaskStatus object "saturated" to DONE
 TaskStatus TaskStatusNext(TaskStatus t) {
     switch(t) {
     case TaskStatus::NEW: 
@@ -75,7 +79,7 @@ public:
   tuple<TasksInfo, TasksInfo> PerformPersonTasks(
       const string& person, int task_count) {
         TasksInfo modified; TasksInfo untouched;
-        auto& person_list = person_tasks.at(person);
+        auto& person_list = person_tasks[person];
 
         task_count = min(CountTaskNum(person),task_count);
         for(const auto& [task_status,task_num] : person_list) {
@@ -100,7 +104,7 @@ public:
       }
 
 private:
-    int CountTaskNum(string person) {
+    int CountTaskNum(string person) const {
         int res = 0;
         for(const auto& [ts,num] : person_tasks.at(person)) {
             res += num;
@@ -110,84 +114,78 @@ private:
     map<string,TasksInfo> person_tasks;
 };
 
-// Принимаем словарь по значению, чтобы иметь возможность
-// обращаться к отсутствующим ключам с помощью [] и получать 0,
-// не меняя при этом исходный словарь
-void PrintTasksInfo(TasksInfo tasks_info) {
-  cout << tasks_info[TaskStatus::NEW] << " new tasks" <<
-      ", " << tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress" <<
-      ", " << tasks_info[TaskStatus::TESTING] << " tasks are being tested" <<
-      ", " << tasks_info[TaskStatus::DONE] << " tasks are done" << endl;
-}
-
 string TaskStatusToString(TaskStatus t) {
     switch(t) {
     case TaskStatus::NEW: 
-        return "NEW";
+        return "\"NEW\"";
         break;
     case TaskStatus::IN_PROGRESS: 
-        return "IN_PROGRESS";
+        return "\"IN_PROGRESS\"";
         break;
     case TaskStatus::TESTING: 
-        return "TESTING";
+        return "\"TESTING\"";
         break;
     default:
-        return "DONE";
+        return "\"DONE\"";
     }
 }
 
-void PrintTasksInfo(const TasksInfo& modified,const TasksInfo& untouched) {
-    cout << "[";
-    if(modified.size()) {
-        cout << "{";
-        for(const auto& [status,number] : modified) {
-            cout << TaskStatusToString(status) << ": " <<  number << " ";
+// Принимаем словарь по значению, чтобы иметь возможность
+// обращаться к отсутствующим ключам с помощью [] и получать 0,
+// не меняя при этом исходный словарь
+void PrintTasksInfo(const TasksInfo& tasks_info) {
+    cout << "{";
+    if(tasks_info.size()) {
+        int i = 0;
+        for(const auto& [status,number] : tasks_info) {
+            cout << TaskStatusToString(status) << ": " <<  number;
+            if(i++ + 1 != tasks_info.size()) {
+                cout << ", ";
+            }
         }
-        cout << "}";
     }
-    if(untouched.size()) {
-        cout << ", {";
-        for(const auto& [status,number] : untouched) {
-            cout << TaskStatusToString(status) << ": " <<  number << " ";
-        }
-        cout << "}";
+    cout << "}";
+}
+
+void ExecuteCommand(const string& command, TeamTasks& tasks) {
+    stringstream ss{command};
+    string opcode;
+    ss >> opcode;
+    TasksInfo updated_tasks, untouched_tasks;
+    if(opcode == "AddNewTasks") {
+        string name; int num;
+        ss >> name >> num;
+        tasks.AddNewTasks(name,num);
+        cout << "[]" << endl;
+    } else if (opcode == "PerformPersonTasks") {
+        string name; int num;
+        ss >> name >> num;
+        tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks(name, num);
+        cout << "["; PrintTasksInfo(updated_tasks); cout << ", ";
+        PrintTasksInfo(untouched_tasks); cout << "]" << endl;
+    } else if(opcode == "GetPersonTasksInfo") {
+        string name;
+        ss >> name;
+        PrintTasksInfo(tasks.GetPersonTasksInfo(name));
+        cout << endl;
+    } else {
+        throw(runtime_error("Unknown command: "+opcode));
     }
-    cout << "]" << endl;
 }
 
 int main() {
-  TeamTasks tasks;
-  TasksInfo updated_tasks, untouched_tasks;
-  {
-    tasks.AddNewTasks("Ivan", 5);
-    cout << "Ivan's tasks: ";
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
+    TeamTasks tasks;
 
-    tie(updated_tasks, untouched_tasks) =
-      tasks.PerformPersonTasks("Ivan", 5);
-    PrintTasksInfo(updated_tasks, untouched_tasks);
+    string command;
+    while (getline(cin, command)) {
+        string feedback;
+        try {  
+            ExecuteCommand(command, tasks);
+        } catch(exception& e) {
+            cout << e.what() << endl;
+            return -1;
+        }
+    }
 
-    tie(updated_tasks, untouched_tasks) =
-      tasks.PerformPersonTasks("Ivan", 5);
-    PrintTasksInfo(updated_tasks, untouched_tasks);
-
-    tie(updated_tasks, untouched_tasks) =
-      tasks.PerformPersonTasks("Ivan", 1);
-    PrintTasksInfo(updated_tasks, untouched_tasks);
-
-    tasks.AddNewTasks("Ivan", 5);
-    cout << "Ivan's tasks: ";
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
-
-    tie(updated_tasks, untouched_tasks) =
-      tasks.PerformPersonTasks("Ivan", 2);
-    PrintTasksInfo(updated_tasks, untouched_tasks);
-
-    tie(updated_tasks, untouched_tasks) =
-      tasks.PerformPersonTasks("Ivan", 4);
-    PrintTasksInfo(updated_tasks, untouched_tasks);
-
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
-  }
   return 0;
 }
