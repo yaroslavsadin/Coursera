@@ -34,6 +34,11 @@ struct Query {
   vector<string> stops;
 };
 
+bool operator==(const Query& lhs, const Query rhs) {
+  return (tie(lhs.bus,lhs.stop,lhs.stops,lhs.type) == 
+          tie(rhs.bus,rhs.stop,rhs.stops,rhs.type));
+}
+
 istream& operator >> (istream& is, Query& q) {
   // Реализуйте эту функцию
   string operation_code;
@@ -156,7 +161,41 @@ public:
       }
     }
   }
-public:
+
+  void TestAddBus(void) {
+    {
+      map<string, vector<string>> buses_to_stops_expected = {
+        {"32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"}}
+      };
+      map<string, vector<string>> stops_to_buses_expected = {
+        {"Tolstopaltsevo", {"32"}},
+        {"Marushkino", {"32"}},
+        {"Vnukovo", {"32"}}
+      };
+      AddBus("32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"});
+      assert(buses_to_stops == buses_to_stops_expected);
+      assert(stops_to_buses == stops_to_buses_expected);
+    }
+    {
+      map<string, vector<string>> buses_to_stops_expected = {
+        {"32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"}},
+        {"32K", {"Tolstopaltsevo", "Marushkino", "Vnukovo", "Peredelkino", "Solntsevo", "Skolkovo"}}
+      };
+      map<string, vector<string>> stops_to_buses_expected = {
+        {"Tolstopaltsevo", {"32","32K"}},
+        {"Marushkino", {"32","32K"}},
+        {"Vnukovo", {"32","32K"}},
+        {"Peredelkino", {"32K"}},
+        {"Solntsevo", {"32K"}},
+        {"Skolkovo", {"32K"}}
+      };
+      AddBus("32K", {"Tolstopaltsevo", "Marushkino", "Vnukovo", "Peredelkino", "Solntsevo", "Skolkovo"});
+      assert(buses_to_stops == buses_to_stops_expected);
+      assert(stops_to_buses == stops_to_buses_expected);
+    }
+    cout << "bm::TestAddBus OK" << endl;
+  }
+private:
   map<string, vector<string>> buses_to_stops, stops_to_buses;
 };
 
@@ -187,9 +226,94 @@ void TestOperatorVector(void) {
   cout << "TestOperatorVector OK" << endl;
 }
 
+void TestOperatorQuery(void) {
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::AllBuses,
+      .bus = {},
+      .stop = {},
+      .stops = {}
+    };
+    ss << "ALL_BUSES";
+    ss >> input;
+    assert(input == expected);
+  }
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::BusesForStop,
+      .bus = {},
+      .stop = {"Marushkino"},
+      .stops = {}
+    };
+    ss << "BUSES_FOR_STOP Marushkino";
+    ss >> input;
+    assert(input == expected);
+  }
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::BusesForStop,
+      .bus = {},
+      .stop = {"Marushkino"},
+      .stops = {}
+    };
+    ss << "BUSES_FOR_STOP Marushkino Novoebenevo";
+    ss >> input;
+    assert(input == expected);
+  }
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::StopsForBus,
+      .bus = {"32K"},
+      .stop = {},
+      .stops = {}
+    };
+    ss << "STOPS_FOR_BUS 32K";
+    ss >> input;
+    assert(input == expected);
+  }
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::NewBus,
+      .bus = {"32"},
+      .stop = {},
+      .stops = {{"Tolstopaltsevo", "Marushkino", "Vnukovo"}}
+    };
+    ss << "NEW_BUS 32 3 Tolstopaltsevo Marushkino Vnukovo";
+    ss >> input;
+    assert(input == expected);
+  }
+  {
+    stringstream ss;
+    Query input;
+    Query expected = {
+      .type = QueryType::AllBuses,
+      .bus = {},
+      .stop = {},
+      .stops = {}
+    };
+    ss << "ALL_BUSES";
+    ss >> input;
+    assert(input == expected);
+  }
+  cout << "TestOperatorQuery OK" << endl;
+}
+
 int main() {
 #ifdef RUN_UNIT_TESTS
   TestOperatorVector();
+  TestOperatorQuery();
+  BusManager bm;
+  bm.TestAddBus();
   return 0;
 #else
 /**********************************************/
