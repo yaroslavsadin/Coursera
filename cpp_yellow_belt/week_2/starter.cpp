@@ -110,7 +110,7 @@ public:
     // Реализуйте этот метод
     stringstream ss;
     if (stops_to_buses.count(stop) == 0) {
-        ss << "No stop" << endl;
+        ss << "No stop";
       } else {
         for (const string& bus : stops_to_buses.at(stop)) {
           ss << bus << " ";
@@ -137,8 +137,8 @@ public:
             }
           }
         }
-      r.stopsForBusResponse.push_back(ss.str());
-      ss.clear();
+        r.stopsForBusResponse.push_back(ss.str());
+        ss.str("");
       }
     }
     return r;
@@ -149,7 +149,7 @@ public:
     AllBusesResponse r;
     stringstream ss;
     if (buses_to_stops.empty()) {
-      ss << "No buses" << endl;
+      r.allBusesResponse.push_back("No buses");
     } else {
       for (const auto& bus_item : buses_to_stops) {
         ss << "Bus " << bus_item.first << ": ";
@@ -157,9 +157,10 @@ public:
           ss << stop << " ";
         }
         r.allBusesResponse.push_back(ss.str());
-        ss.clear();
+        ss.str("");
       }
     }
+    return r;
   }
 
   void TestAddBus(void) {
@@ -194,6 +195,143 @@ public:
       assert(stops_to_buses == stops_to_buses_expected);
     }
     cout << "bm::TestAddBus OK" << endl;
+  }
+
+  void TestGetBusesForStop(void) {
+    buses_to_stops = {
+      {"32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"}},
+      {"32K", {"Tolstopaltsevo", "Marushkino", "Vnukovo", "Peredelkino", "Solntsevo", "Skolkovo"}}
+    };
+    stops_to_buses = {
+      {"Tolstopaltsevo", {"32","32K"}},
+      {"Marushkino", {"32","32K"}},
+      {"Vnukovo", {"32","32K"}},
+      {"Peredelkino", {"32K"}},
+      {"Solntsevo", {"32K"}},
+      {"Skolkovo", {"32K"}}
+    };
+    {
+      BusesForStopResponse expected = {"No stop"};
+      BusesForStopResponse result = GetBusesForStop("");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    {
+      BusesForStopResponse expected = {"No stop"};
+      BusesForStopResponse result = GetBusesForStop("Novoebenevo");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    {
+      BusesForStopResponse expected = {"32 32K "};
+      BusesForStopResponse result = GetBusesForStop("Vnukovo");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    {
+      BusesForStopResponse expected = {"32K "};
+      BusesForStopResponse result = GetBusesForStop("Solntsevo");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    {
+      BusesForStopResponse expected = {"32K "};
+      BusesForStopResponse result = GetBusesForStop("Peredelkino");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    {
+      BusesForStopResponse expected = {"32 32K "};
+      BusesForStopResponse result = GetBusesForStop("Tolstopaltsevo");
+      assert(expected.busesForStopResponse == result.busesForStopResponse);
+    }
+    cout << "bm::TestGetBusesForStop OK" << endl;
+  }
+
+  void TestGetStopsForBus(void) {
+    buses_to_stops = {
+      {"32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"}},
+      {"32K", {"Tolstopaltsevo", "Marushkino", "Vnukovo", "Peredelkino", "Solntsevo", "Skolkovo"}}
+    };
+    stops_to_buses = {
+      {"Tolstopaltsevo", {"32","32K"}},
+      {"Marushkino", {"32","32K"}},
+      {"Vnukovo", {"32","32K"}},
+      {"Peredelkino", {"32K"}},
+      {"Solntsevo", {"32K"}},
+      {"Skolkovo", {"32K"}}
+    };
+
+    {
+      StopsForBusResponse expected = {
+        {
+          "Stop Tolstopaltsevo: 32K ",
+          "Stop Marushkino: 32K ",
+          "Stop Vnukovo: 32K "
+        }
+      };
+      StopsForBusResponse output = GetStopsForBus("32");
+      assert(expected.stopsForBusResponse == output.stopsForBusResponse);
+    }
+    {
+      StopsForBusResponse expected = {
+        {
+          "Stop Tolstopaltsevo: 32 ",
+          "Stop Marushkino: 32 ",
+          "Stop Vnukovo: 32 ",
+          "Stop Peredelkino: no interchange",
+          "Stop Solntsevo: no interchange",
+          "Stop Skolkovo: no interchange"
+        }
+      };
+      StopsForBusResponse output = GetStopsForBus("32K");
+      assert(expected.stopsForBusResponse == output.stopsForBusResponse);
+    }
+    {
+      StopsForBusResponse expected = {
+        {
+          "No bus"
+        }
+      };
+      StopsForBusResponse output = GetStopsForBus("666");
+      assert(expected.stopsForBusResponse == output.stopsForBusResponse);
+    }
+    cout << "bm::TestGetStopsForBus OK" << endl;
+  }
+
+  void TestGetAllBuses(void) {
+    {  
+      buses_to_stops = {
+        {"32", {"Tolstopaltsevo", "Marushkino", "Vnukovo"}},
+        {"32K", {"Tolstopaltsevo", "Marushkino", "Vnukovo", "Peredelkino", "Solntsevo", "Skolkovo"}}
+      };
+      stops_to_buses = {
+        {"Tolstopaltsevo", {"32","32K"}},
+        {"Marushkino", {"32","32K"}},
+        {"Vnukovo", {"32","32K"}},
+        {"Peredelkino", {"32K"}},
+        {"Solntsevo", {"32K"}},
+        {"Skolkovo", {"32K"}}
+      };
+      
+      AllBusesResponse expected = {
+        {
+          "Bus 32: Tolstopaltsevo Marushkino Vnukovo ",
+          "Bus 32K: Tolstopaltsevo Marushkino Vnukovo Peredelkino Solntsevo Skolkovo "
+        }
+      };
+      AllBusesResponse output = GetAllBuses();
+      assert(expected.allBusesResponse == output.allBusesResponse);
+    }
+
+    {  
+      buses_to_stops = {};
+      
+      AllBusesResponse expected = {
+        {
+          "No buses"
+        }
+      };
+      AllBusesResponse output = GetAllBuses();
+      assert(expected.allBusesResponse == output.allBusesResponse);
+    }
+    
+    cout << "bm::TestGetAllBuses OK" << endl;
   }
 private:
   map<string, vector<string>> buses_to_stops, stops_to_buses;
@@ -312,8 +450,22 @@ int main() {
 #ifdef RUN_UNIT_TESTS
   TestOperatorVector();
   TestOperatorQuery();
-  BusManager bm;
-  bm.TestAddBus();
+  {  
+    BusManager bm;
+    bm.TestAddBus();
+  }
+  {
+    BusManager bm;
+    bm.TestGetBusesForStop();
+  }
+  {
+    BusManager bm;
+    bm.TestGetStopsForBus();
+  }
+  {
+    BusManager bm;
+    bm.TestGetAllBuses();
+  }
   return 0;
 #else
 /**********************************************/
