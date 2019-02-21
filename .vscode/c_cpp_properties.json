@@ -8,8 +8,7 @@
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE",
-                "RUN_UNIT_TESTS"
+                "_UNICODE"
             ],
             "compilerPath": "C:\\cygwin64\\bin\\gcc.exe",
             "cStandard": "c11",
