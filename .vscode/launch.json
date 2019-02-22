@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_yellow_belt/week_2/starter.exe",
+            "program": "${workspaceFolder}/cpp_yellow_belt/week_2/test_palindrome.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",

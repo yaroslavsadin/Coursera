@@ -51,17 +51,18 @@ ostream& operator << (ostream& os, const map<K, V>& m) {
 }
 
 template<class T, class U>
-void AssertEqual(const T& t, const U& u, int line = __LINE__, string msg = {}) {
+void AssertEqual(const T& t, const U& u, string msg = {},
+                     int line = __LINE__, string file = __FILE__) {
   if (t != u) {
     ostringstream os;
     os << "Assertion failed: " << t << " != " << u << endl;
-    os << "Line: " << line << "; Message: " << msg;
+    os << "./" << file <<":" << line << "; Message: " << msg;
     throw runtime_error(os.str());
   }
 }
 
-void Assert(bool b, int line = __LINE__, string msg = {}) {
-  AssertEqual(b, true, line, msg);
+void Assert(bool b, string msg = {}, int line = __LINE__, string file = __FILE__) {
+  AssertEqual(b, true, msg, line, file);
 }
 
 constexpr auto RED_TEXT_START = "\033[1;31m";

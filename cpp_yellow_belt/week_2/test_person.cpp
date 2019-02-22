@@ -102,6 +102,7 @@ private:
   int fail_count = 0;
 };
 
+#if 1
 class Person {
 public:
   // Вы можете вставлять сюда различные реализации класса,
@@ -132,119 +133,86 @@ public:
       return first_name+" "+last_name;
     }
   }
-
-  void TestChangeFirstName() {
-    using TestType = map<int,pair<string,string>>;
-    {
-      TestType expected = {
-        {1990, {"Yaroslav",""}}
-      };
-      ChangeFirstName(1990,"Yaroslav");
-      AssertEqual(expected,data,__LINE__,"Added self");
-    }
-    {
-      TestType expected = {
-        {1990, {"Vasya",""}}
-      };
-      ChangeFirstName(1990,"Vasya");
-      AssertEqual(expected,data,__LINE__,"");
-    }
-    {
-      TestType expected = {
-        {1990, {"Vasya",""}},
-        {1980, {"Petya",""}}
-      };
-      ChangeFirstName(1980,"Petya");
-      AssertEqual(expected,data,__LINE__,"");
-    }
-  }
-
-  void TestChangeLastName() {
-    using TestType = map<int,pair<string,string>>;
-    {
-      TestType expected = {
-        {1990, {"","Sadin"}}
-      };
-      ChangeLastName(1990,"Sadin");
-      AssertEqual(expected,data,__LINE__,"Added self");
-    }
-    {
-      TestType expected = {
-        {1990, {"","Ugryumov"}}
-      };
-      ChangeLastName(1990,"Ugryumov");
-      AssertEqual(expected,data,__LINE__,"");
-    }
-    {
-      TestType expected = {
-        {1990, {"","Ugryumov"}},
-        {1980, {"","Marin"}}
-      };
-      ChangeLastName(1980,"Marin");
-      AssertEqual(expected,data,__LINE__,"");
-    }
-  }
-
-  void TestGetFullName() {
-    data = {
-        {1950, {"","Ugryumov"}},
-        {1970, {"","Marin"}},
-        {1980, {"Alexander",""}},
-        {1990, {"","Sadin"}},
-        {1999, {"Yaroslav","Zadin"}},
-        {2007, {"","Sadin"}}        
-      };
-    { 
-      string expected = "Incognito";
-      string result = GetFullName(1900);
-      AssertEqual(expected,result,__LINE__,"Incognito");
-    }
-    { 
-      string expected = "Ugryumov with unknown first name";
-      string result = GetFullName(1950);
-      AssertEqual(expected,result,__LINE__,"unknown first name");
-    }
-    {
-      string expected = "Alexander Sadin";
-      string result = GetFullName(1990);
-      AssertEqual(expected,result,__LINE__,"Both");
-    }
-    {
-      string expected = "Yaroslav Sadin";
-      string result = GetFullName(2007);
-      AssertEqual(expected,result,__LINE__,"Both");
-    }
-    { 
-      string expected = "Alexander with unknown last name";
-      data.erase(1950);
-      data.erase(1970);
-      string result = GetFullName(1980);
-      AssertEqual(expected,result,__LINE__,"unknown last name");
-    }
-  }
 private:
   map<int,pair<string,string>> data;
 };
+#endif
 
-void PersonTestChangeFirstName() {
-  Person p;
-  p.TestChangeFirstName();
+  void TestChangeFirstName() {
+  {
+    Person p;
+    p.ChangeFirstName(1990,"Yaroslav");
+    string expected = "Yaroslav with unknown last name";
+    string result = p.GetFullName(1990);
+    AssertEqual(expected,result,__LINE__,"Added Yaroslav to 1990");
+  }
+  {
+    Person p;
+    p.ChangeFirstName(1991,"Vasya");
+    string expected = "Vasya with unknown last name";
+    string result = p.GetFullName(1991);
+    AssertEqual(expected,result,__LINE__,"Added Vasya to 1991");
+  }
 }
-void PersonTestChangeLastName() {
-  Person p;
-  p.TestChangeLastName();
+
+void TestChangeLastName() {
+  {
+    Person p;
+    p.ChangeLastName(1990,"Sadin");
+    string expected = "Sadin with unknown first name";
+    string result = p.GetFullName(1990);
+    AssertEqual(expected,result,__LINE__,"Added Sadin to 1990");
+  }
+  {
+    Person p;
+    p.ChangeLastName(1991,"Ugryumov");
+    string expected = "Ugryumov with unknown first name";
+    string result = p.GetFullName(1991);
+    AssertEqual(expected,result,__LINE__,"Added Ugryumov to 1991");
+  }
 }
-void PersonTestGetFullName() {
-  Person p;
-  p.TestGetFullName();
+
+void TestGetFullName() {
+  {
+    Person p;
+    p.ChangeLastName(1950,"Ugryumov");
+    p.ChangeLastName(1970,"Marin");
+    p.ChangeFirstName(1980,"Alexander");
+    p.ChangeLastName(1990,"Sadin");
+    p.ChangeFirstName(1999,"Yaroslav");
+    p.ChangeLastName(1999,"Zadin");
+    p.ChangeLastName(2007,"Sadin");
+
+    string expected, result;
+
+    expected = "Incognito";
+    result = p.GetFullName(1900);
+    AssertEqual(expected,result,__LINE__,"Incognito not working");
+
+    expected = "Alexander Marin";
+    result = p.GetFullName(1980);
+    AssertEqual(expected,result,__LINE__,"");
+
+    expected = "Yaroslav Zadin";
+    result = p.GetFullName(1999);
+    AssertEqual(expected,result,__LINE__,"");
+
+    expected = "Yaroslav Sadin";
+    result = p.GetFullName(2007);
+    AssertEqual(expected,result,__LINE__,"");
+
+    expected = "Yaroslav Sadin";
+    result = p.GetFullName(2100);
+    AssertEqual(expected,result,__LINE__,"Year more than Person contains");
+  }
 }
 
 int main() {
   TestRunner runner;
   
-  runner.RunTest(PersonTestChangeFirstName,"PersonTestChangeFirstName");
-  runner.RunTest(PersonTestChangeLastName,"PersonTestChangeLastName");
-  runner.RunTest(PersonTestGetFullName,"PersonTestGetFullName");
+  runner.RunTest(TestChangeFirstName,"PersonTestChangeFirstName");
+  runner.RunTest(TestChangeLastName,"PersonTestChangeLastName");
+  runner.RunTest(TestGetFullName,"PersonTestGetFullName");
   // добавьте сюда свои тесты
   return 0;
 }
