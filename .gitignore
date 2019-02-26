@@ -4,3 +4,6 @@
 *.stackdump
 *.out
 *.json
+*.o
+*.d
+*.gz
