@@ -32,12 +32,21 @@ public:
       string first_name;
       string last_name;
       
-      for(auto it = names.begin(); it != after_found; it++)  {
-        auto first_name_ = it->second.first;
-        auto last_name_ = it->second.second;
-        if(first_name_.size()) first_name = first_name_;
-        if(last_name_.size()) last_name = last_name_;
-      }
+      auto rfound = make_reverse_iterator(after_found);
+      auto f = find_if(rfound,names.rend(),[](auto& p) {
+        return (p.second.first.size() != 0);
+      });
+
+      if(f != names.rend())  
+        first_name = f->second.first;
+
+      auto s = find_if(rfound,names.rend(),[](auto& p) {
+        return (p.second.second.size() != 0);
+      });
+
+      if(s != names.rend()) 
+        last_name = s->second.second;
+
       if (!first_name.size()) {
           return last_name+" with unknown first name";
       } else if (!last_name.size()) {
@@ -49,7 +58,10 @@ public:
   }
 private:
   // приватные поля
+  // silly \/\/\/
   map<int,pair<string,string>> names;
+  // map<int, string> first_names;
+  // map<int, string> last_names;
 };
 
  void TestChangeFirstName() {
@@ -89,6 +101,14 @@ void TestChangeLastName() {
 void TestGetFullName() {
   {
     Person p;
+    string expected, result;
+    expected = "Ugryumov with unknown first name";
+    p.ChangeLastName(1950,"Ugryumov");
+    result = p.GetFullName(1960);
+    AssertEqual(expected,result,"Ugryumov with unknown first name",__LINE__,__FILE__);
+  }
+  {
+    Person p;
     p.ChangeLastName(1950,"Ugryumov");
     p.ChangeLastName(1970,"Marin");
     p.ChangeFirstName(1980,"Alexander");
@@ -122,11 +142,13 @@ void TestGetFullName() {
 }
 
 int main() {
-  TestRunner runner;
+  {
+    TestRunner runner;
   
-  runner.RunTest(TestChangeFirstName,"PersonTestChangeFirstName");
-  runner.RunTest(TestChangeLastName,"PersonTestChangeLastName");
-  runner.RunTest(TestGetFullName,"PersonTestGetFullName");
+    runner.RunTest(TestChangeFirstName,"PersonTestChangeFirstName");
+    runner.RunTest(TestChangeLastName,"PersonTestChangeLastName");
+    runner.RunTest(TestGetFullName,"PersonTestGetFullName");
+  }
 
   Person person;
   
