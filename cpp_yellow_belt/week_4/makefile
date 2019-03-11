@@ -46,7 +46,8 @@ clean: | $(OBJDIR) $(BINDIR)
 
 .PHONY: cleanall
 cleanall:
-	rm -rf $(OBJDIR) $(BINDIR) *.stackdump
+	@echo [Making $(PROG)] Complete cleaning...
+	@rm -rf $(OBJDIR) $(BINDIR) *.stackdump
 
 $(OBJDIR):
 	mkdir $@
