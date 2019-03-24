@@ -61,5 +61,8 @@
         "ratio": "cpp",
         "iomanip": "cpp"
     },
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "terminal.integrated.env.windows": {
+        "PATH":"C:\\cygwin64\\bin;${env:PATH}"
+    }
 }
