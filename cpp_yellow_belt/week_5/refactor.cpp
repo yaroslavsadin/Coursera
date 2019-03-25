@@ -6,90 +6,74 @@ using namespace std;
 
 class Person {
 public:
-    Person(string name, string occupation) : name_(name),occupation_(occupation) {}
-    string GetName() const {
+    Person(const string& name, const string& occupation) : name_(name),occupation_(occupation) {}
+    const string& GetName() const {
         return name_;
     }
-    virtual void Walk(string destination) {
-        cout << occupation_ << ": " << name_ << " walks to: " << destination << endl;
+    const string& GetOccupation() const {
+        return occupation_;
     }
-protected:
-    string name_,occupation_;
+    void DoThings(const string& things) {
+        cout << occupation_ << ": " << name_ << " " << things << endl;
+    }
+    virtual void Walk(const string& destination) {
+        DoThings("walks to: " + destination);
+    }
+private:
+    const string name_,occupation_;
 };
 
 class Student : public Person {
 public:
 
-    Student(string name, string favouriteSong) : Person(name,"Student"), FavouriteSong(favouriteSong) {}
+    Student(const string& name, const string& favouriteSong) : Person(name,"Student"), FavouriteSong(favouriteSong) {}
 
     void Learn() {
-        cout << "Student: " << GetName() << " learns" << endl;
+        DoThings("learns");
     }
 
     void SingSong() {
-        cout << "Student: " << GetName() << " sings a song: " << FavouriteSong << endl;
+        DoThings("sings a song: "+FavouriteSong);
     }
 
-    void Walk(string destination) {
-        cout << "Student: " << GetName() << " walks to: " << destination << endl;
+    void Walk(const string& destination) override {
+        DoThings("walks to: " + destination);
         SingSong();
     }
 
 private:
-    string FavouriteSong;
+    const string FavouriteSong;
 };
 
 
 class Teacher : public Person {
 public:
-
-    Teacher(string name, string subject) : Person(name,"Teacher"),Subject(subject) {}
+    Teacher(const string& name, const string& subject) : Person(name,"Teacher"),Subject(subject) {}
 
     void Teach() {
-        cout << "Teacher: " << GetName() << " teaches: " << Subject << endl;
+        DoThings("teaches: "+Subject);
     }
 
 private:
-    string Subject;
+    const string Subject;
 };
 
 
 class Policeman : public Person {
 public:
-    Policeman(string name) : Person(name,"Policeman"),Name(name) {}
+    Policeman(const string& name) : Person(name,"Policeman") {}
 
-    void Check(Teacher t) {
-        cout << "Policeman: " << Name << " checks Teacher. Teacher's name is: " << t.GetName() << endl;
+    void Check(const Person& t) {
+        DoThings("checks " + t.GetOccupation() + ". " + t.GetOccupation() + "'s name is: " + t.GetName());
     }
 
-    void Check(Student s) {
-        cout << "Policeman: " << Name << " checks Student. Student's name is: " << s.GetName() << endl;
-    }
-
-    void Check(Policeman p) {
-        cout << "Policeman: " << Name << " checks Policeman. Policeman's name is: " << p.GetName() << endl;
-    }
-
-public:
-    string Name;
+private:
 };
 
 
-void VisitPlaces(Teacher t, vector<string> places) {
+void VisitPlaces(Person& t, vector<string> places) {
     for (auto p : places) {
         t.Walk(p);
-    }
-}
-
-void VisitPlaces(Student s, vector<string> places) {
-    for (auto p : places) {
-        s.Walk(p);
-    }
-}
-
-void VisitPlaces(Policeman pol, vector<string> places) {
-    for (auto p : places) {
-        pol.Walk(p);
     }
 }
 
