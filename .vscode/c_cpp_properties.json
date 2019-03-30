@@ -3,18 +3,13 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**",
-                "C:/cygwin64/lib/**",
-                "C:/cygwin64/usr/include/**"
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
-            ],
-            "compilerPath": "C:\\cygwin64\\bin\\gcc.exe",
-            "cStandard": "c11",
-            "intelliSenseMode": "clang-x64"
+            ]
         }
     ],
     "version": 4
