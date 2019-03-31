@@ -1,10 +1,9 @@
 #include "date.h"
-#include <iostream>
 #include <vector>
 
 using namespace std;
 
-ostream& operator<<(ostream& os, Date d) {
+ostream& operator<<(ostream& os, const Date& d) {
     os << d.GetYear() << "-" << d.GetMonth() << "-" << d.GetDay();
     return os;
 }
@@ -15,6 +14,6 @@ bool operator<(const Date& lhs, const Date& rhs) {
     return (lhs_ < rhs_);
 }
 
-Date ParseDate(const istream& is) {
+Date ParseDate(istream& is) {
     return Date(1990,06,21);
 }
