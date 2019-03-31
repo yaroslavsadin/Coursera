@@ -6,7 +6,10 @@ using namespace std;
 class Date {
 public:
     Date(int year, int month, int day) : year_(year), month_(month), day_(day) {
-        // TODO: Check corectness
+        if (year_ < 0 || year_ > 9999 || month_ <= 0 || 
+            month_ > 12 || day_ <= 0 || day > 31) {
+            throw invalid_argument("Incorrect date");
+        }
     }
     inline int GetYear() const {return year_;}
     inline int GetMonth() const {return month_;}

@@ -2,7 +2,7 @@
 #include "date.h"
 #include <vector>
 #include <map>
-#include <set>
+#include <deque>
 
 using namespace std;
 
@@ -11,7 +11,7 @@ using Entry = pair<Date,string>;
 class Database {
 public:
     Database() {}
-    void Add(Date date, string event);
+    void Add(Date date, const string& event);
     void Print(const ostream& os) const;
     template <typename PredT> 
     int RemoveIf (PredT predicate){
@@ -23,5 +23,5 @@ public:
     }
     string Last(Date date);
 private:
-    map<Date,set<string>> db;
+    map<Date,deque<string>> db;
 };

@@ -1,10 +1,11 @@
 #include "date.h"
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
 ostream& operator<<(ostream& os, const Date& d) {
-    os << d.GetYear() << "-" << d.GetMonth() << "-" << d.GetDay();
+    os << setw(4) << setfill('0') << d.GetYear() << "-" << setw(2) << d.GetMonth() << "-" << setw(2) << d.GetDay();
     return os;
 }
 
