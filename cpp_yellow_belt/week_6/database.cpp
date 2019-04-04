@@ -4,9 +4,9 @@
 #include <iostream>
 #include <sstream>
 #include "condition_parser.h"
-#include "test_framework.h"
+#include "test_runner.h"
 
-void Database::Add(Date date, const string& event) {
+void Database::Add(const Date& date, const string& event) {
     if(db.count(date)) {
         auto events = db.at(date);
         auto it = find_if(events.begin(), events.end(),[&event](const string& s) {
@@ -28,7 +28,7 @@ void Database::Print(ostream& os) const {
     }
 }
 
-string Database::Last(Date date) {
+string Database::Last(const Date& date) const {
     if (db.empty() || date < db.begin()->first) {
         throw invalid_argument("No entries");
     }
@@ -50,7 +50,7 @@ void TestDatabase(void) {
         try {
             string result = db.Last({1995,5,1});
         } catch (invalid_argument& res) {
-            AssertEqual(res.what(),expected,"Last return wrong value",__LINE__,__FILE__);
+            AssertEqual(res.what(),expected,"Last return wrong value");
         }
     }
     db.Add(Date{1990,6,21},"Birthday");
@@ -66,55 +66,55 @@ void TestDatabase(void) {
         try {
             string result = db.Last({1990,6,20});
         } catch (invalid_argument& res) {
-            AssertEqual(res.what(),expected,"Last return wrong value",__LINE__,__FILE__);
+            AssertEqual(res.what(),expected,"Last return wrong value");
         }
     }
     {    
         string expected = "1990-06-21 Birthday";
         string result = db.Last({1990,6,21});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "1990-06-21 Birthday";
         string result = db.Last({1995,5,1});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "2007-07-01 SchoolEnd";
         string result = db.Last({2008,1,1});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "2012-07-15 Employed";
         string result = db.Last({2012,7,16});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "2012-07-15 Employed";
         string result = db.Last({2012,7,15});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "2007-07-01 SchoolEnd";
         string result = db.Last({2012,7,14});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "2001-01-01 Millenium";
         string result = db.Last({2002,7,16});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {    
         string expected = "1997-09-01 End of summer";
         string result = db.Last({1997,9,1});
-        AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Last return wrong value");
     }
     {
         string expected = "1990-06-21 Birthday\n1997-09-01 School\n1997-09-01 End of summer\n2001-01-01 New-Year\n2001-01-01 Millenium\n2007-07-01 SchoolEnd\n2012-07-15 Employed\n";
         ostringstream os;
         db.Print(os);
         string result = os.str();
-        AssertEqual(result,expected,"Print falied",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Print falied");
     }
     {
         string expected = "1997-09-01 School\n1997-09-01 End of summer\n2001-01-01 New-Year\n2001-01-01 Millenium\n2007-07-01 SchoolEnd\n2012-07-15 Employed\n";
@@ -127,7 +127,7 @@ void TestDatabase(void) {
         ostringstream os;
         db.Print(os);
         string result = os.str();
-        AssertEqual(result,expected,"RemoveIf falied",__LINE__,__FILE__);
+        AssertEqual(result,expected,"RemoveIf falied");
     }
     {
         vector<Entry> expected = {{{1997,9,1},"School"},{{2001,1,1},"New-Year"},{{2001,1,1},"Millenium"},{{2007,7,1},"SchoolEnd"},{{2012,7,15},"Employed"}};
@@ -137,7 +137,7 @@ void TestDatabase(void) {
             return condition->Evaluate(date, event);
         };
         vector<Entry> result = db.FindIf(predicate);
-        AssertEqual(result,expected,"FindIf falied",__LINE__,__FILE__);
+        AssertEqual(result,expected,"FindIf falied");
     }
     {
         Database db1;
@@ -151,6 +151,23 @@ void TestDatabase(void) {
             return condition->Evaluate(date, event);
         };
         vector<Entry> result = db1.FindIf(predicate);
-        AssertEqual(result,expected,"FindIf falied",__LINE__,__FILE__);
+        AssertEqual(result,expected,"FindIf falied");
+    }
+    {
+        Database db1;
+        db1.Add(Date{2017,11,21},"Tuesday");
+        db1.Add(Date{2017,11,20},"Monday");
+        db1.Add(Date{2017,11,21},"Weekly meeting");
+        string expected = "";
+        istringstream is("date > 1995-01-01");
+        auto condition = ParseCondition(is);
+        auto predicate = [condition](const Date& date, const string& event) {
+            return condition->Evaluate(date, event);
+        };
+        int count = db1.RemoveIf(predicate);
+        ostringstream os;
+        db1.Print(os);
+        string result = os.str();
+        AssertEqual(result,expected,"RemoveIf falied");
     }
 }

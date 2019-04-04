@@ -20,7 +20,7 @@ OBJS=$(SRCS:%.cpp=$(OBJDIR)/%.o)
 DEPS=$(SRCS:%.cpp=$(DEPDIR)/%.d)
 BIN=$(BINDIR)/$(PROG).$(XEXT)
 
-CFLAGS=-std=c++17 -Werror $(DEFINES) -I.. -g -O0
+CFLAGS=-std=c++11 -Werror $(DEFINES) -I.. -g -O0
 LDFLAGS=$(CFLAGS)
 
 all: build run

@@ -8,7 +8,7 @@
 #include <exception>
 #include "LowerUpperTests.h"
 #include "LowerUpper.h"
-#include "test_framework.h"
+#include "test_runner.h"
 using namespace std;
 
 void TestLowerBound(void) {

@@ -16,29 +16,33 @@ ostream& operator<<(ostream& os, pair<T1,T2> p) {
 class Database {
 public:
     Database() {}
-    void Add(Date date, const string& event);
+    void Add(const Date& date, const string& event);
     void Print(ostream& os) const;
     template <typename PredT> 
-    int RemoveIf (PredT predicate){
+    int RemoveIf (const PredT& predicate){
         int res { 0 };
-        for(auto& i : db) {
-            auto it = i.second.begin();
-            while(it != i.second.end()) {
-                if (predicate(i.first,*it)) {
-                    it = i.second.erase(it);
+        auto i = db.begin();
+        while(i != db.end()) {
+            auto it = i->second.begin();
+            while(it != i->second.end()) {
+                if (predicate(i->first,*it)) {
+                    it = i->second.erase(it);
                     res++;
                 } else {
                     it = next(it);
                 }
             }
-            if (i.second.empty()) {
-                db.erase(i.first);
+            if (i->second.empty()) {
+                // !!!! Here simple db.erase(i) failed in test system while worked locally
+                i = db.erase(i);
+            } else {
+                i = next(i);
             }
         }
         return res;
     }
     template <typename PredT> 
-    vector<Entry> FindIf(PredT predicate) const {
+    vector<Entry> FindIf(const PredT& predicate) const {
         vector<Entry> res;
         for(auto& i : db) {
             auto it = i.second.begin();
@@ -51,7 +55,7 @@ public:
         }
         return res;
     }
-    string Last(Date date);
+    string Last(const Date& date) const;
 private:
     map<Date,deque<string>> db;
 };

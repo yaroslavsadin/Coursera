@@ -2,7 +2,7 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
-#include "test_framework.h"
+#include "test_runner.h"
 
 using namespace std;
 
@@ -67,13 +67,13 @@ void TestParseDate() {
     {
         istringstream ss("0-1-1");
         Date expected(0,1,1);
-        AssertEqual(ParseDate(ss),expected,"Date error",__LINE__,__FILE__);
+        AssertEqual(ParseDate(ss),expected,"Date error");
     }
     {
         istringstream ss("1990-1-1");
         Date expected(1990,1,1);
         Date result = ParseDate(ss);
-        AssertEqual(result,expected,"Date error",__LINE__,__FILE__);
+        AssertEqual(result,expected,"Date error");
     }
     {
         istringstream ss("10000-1-1");
@@ -81,7 +81,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Incorrect date";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
     {
@@ -90,7 +90,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Incorrect date";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
     {
@@ -99,7 +99,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Incorrect date";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
     {
@@ -108,7 +108,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Incorrect date";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
     {
@@ -117,7 +117,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Wrong date format";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
     {
@@ -126,7 +126,7 @@ void TestParseDate() {
             Date result = ParseDate(ss);
         } catch(invalid_argument& e) {
             string expected = "Wrong date format";
-            AssertEqual(e.what(),expected,"Date error",__LINE__,__FILE__);
+            AssertEqual(e.what(),expected,"Date error");
         }
     }
 }

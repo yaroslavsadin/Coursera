@@ -5,7 +5,7 @@
 #include "date.h"
 #include "condition_parser.h"
 #include "node.h"
-#include "test_framework.h"
+#include "test_runner.h"
 
 using namespace std;
 
@@ -72,18 +72,18 @@ int main() {
 void TestParseEvent() {
   {
     istringstream is("event");
-    AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces",__LINE__,__FILE__);
+    AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces");
   }
   {
     istringstream is("   sport event ");
-    AssertEqual(ParseEvent(is), "sport event ", "Parse event with leading spaces",__LINE__,__FILE__);
+    AssertEqual(ParseEvent(is), "sport event ", "Parse event with leading spaces");
   }
   {
     istringstream is("  first event  \n  second event");
     vector<string> events;
     events.push_back(ParseEvent(is));
     events.push_back(ParseEvent(is));
-    AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events",__LINE__,__FILE__);
+    AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events");
   }
 }
 
