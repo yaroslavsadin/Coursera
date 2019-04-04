@@ -2,6 +2,8 @@
 #include <iterator>
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include "condition_parser.h"
 #include "test_framework.h"
 
 void Database::Add(Date date, const string& event) {
@@ -18,10 +20,10 @@ void Database::Add(Date date, const string& event) {
     }
 }
 
-void Database::Print(const ostream& os) const {
+void Database::Print(ostream& os) const {
     for(const auto& date : db) {
         for(const auto& event : date.second) {
-        cout << date.first << " " << event << endl;
+        os << date.first << " " << event << endl;
         }
     }
 }
@@ -41,7 +43,6 @@ string Database::Last(Date date) {
     return ss.str();
 }
 
-#ifdef TEST_DATABASE
 void TestDatabase(void) {
     Database db;
     {
@@ -108,12 +109,48 @@ void TestDatabase(void) {
         string result = db.Last({1997,9,1});
         AssertEqual(result,expected,"Last return wrong value",__LINE__,__FILE__);
     }
-    db.Print(cout);
+    {
+        string expected = "1990-06-21 Birthday\n1997-09-01 School\n1997-09-01 End of summer\n2001-01-01 New-Year\n2001-01-01 Millenium\n2007-07-01 SchoolEnd\n2012-07-15 Employed\n";
+        ostringstream os;
+        db.Print(os);
+        string result = os.str();
+        AssertEqual(result,expected,"Print falied",__LINE__,__FILE__);
+    }
+    {
+        string expected = "1997-09-01 School\n1997-09-01 End of summer\n2001-01-01 New-Year\n2001-01-01 Millenium\n2007-07-01 SchoolEnd\n2012-07-15 Employed\n";
+        istringstream is("date < 1995-01-01");
+        auto condition = ParseCondition(is);
+        auto predicate = [condition](const Date& date, const string& event) {
+            return condition->Evaluate(date, event);
+        };
+        int count = db.RemoveIf(predicate);
+        ostringstream os;
+        db.Print(os);
+        string result = os.str();
+        AssertEqual(result,expected,"RemoveIf falied",__LINE__,__FILE__);
+    }
+    {
+        vector<Entry> expected = {{{1997,9,1},"School"},{{2001,1,1},"New-Year"},{{2001,1,1},"Millenium"},{{2007,7,1},"SchoolEnd"},{{2012,7,15},"Employed"}};
+        istringstream is(R"(event != "End of summer")");
+        auto condition = ParseCondition(is);
+        auto predicate = [condition](const Date& date, const string& event) {
+            return condition->Evaluate(date, event);
+        };
+        vector<Entry> result = db.FindIf(predicate);
+        AssertEqual(result,expected,"FindIf falied",__LINE__,__FILE__);
+    }
+    {
+        Database db1;
+        db1.Add(Date{2017,11,21},"Tuesday");
+        db1.Add(Date{2017,11,20},"Monday");
+        db1.Add(Date{2017,11,21},"Weekly meeting");
+        vector<Entry> expected = {{{2017,11,20},"Monday"},{{2017,11,21},"Tuesday"}};
+        istringstream is(R"(event != "Weekly meeting")");
+        auto condition = ParseCondition(is);
+        auto predicate = [condition](const Date& date, const string& event) {
+            return condition->Evaluate(date, event);
+        };
+        vector<Entry> result = db1.FindIf(predicate);
+        AssertEqual(result,expected,"FindIf falied",__LINE__,__FILE__);
+    }
 }
-
-int main(void) {
-    TestRunner tr;
-    tr.RunTest(TestDatabase,"TestDatabase");
-    return 0;
-}
-#endif

@@ -76,9 +76,3 @@ void TestParseCondition() {
     Assert(root->Evaluate({2016, 1, 2}, "event"), "Parse condition 30",__LINE__,__FILE__);
   }
 }
-
-int main(void) {
-  TestRunner tr;
-  tr.RunTest(TestParseCondition,"TestParseCondition");
-  return 0;
-}
