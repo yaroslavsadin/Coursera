@@ -11,13 +11,17 @@ using namespace std;
 
 string ParseEvent(istream& is) {
   // Реализуйте эту функцию
+  string res;
+  getline(is, res);
+  auto pos = res.find_first_not_of(' ');
+  return res.substr(pos,res.npos);
 }
 
 void TestAll();
 
 int main() {
   TestAll();
-
+#if 1
   Database db;
 
   for (string line; getline(cin, line); ) {
@@ -61,30 +65,30 @@ int main() {
       throw logic_error("Unknown command: " + command);
     }
   }
-
+#endif
   return 0;
 }
 
 void TestParseEvent() {
   {
     istringstream is("event");
-    AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces");
+    AssertEqual(ParseEvent(is), "event", "Parse event without leading spaces",__LINE__,__FILE__);
   }
   {
     istringstream is("   sport event ");
-    AssertEqual(ParseEvent(is), "sport event ", "Parse event with leading spaces");
+    AssertEqual(ParseEvent(is), "sport event ", "Parse event with leading spaces",__LINE__,__FILE__);
   }
   {
     istringstream is("  first event  \n  second event");
     vector<string> events;
     events.push_back(ParseEvent(is));
     events.push_back(ParseEvent(is));
-    AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events");
+    AssertEqual(events, vector<string>{"first event  ", "second event"}, "Parse multiple events",__LINE__,__FILE__);
   }
 }
 
 void TestAll() {
   TestRunner tr;
   tr.RunTest(TestParseEvent, "TestParseEvent");
-  tr.RunTest(TestParseCondition, "TestParseCondition");
+  // tr.RunTest(TestParseCondition, "TestParseCondition");
 }
