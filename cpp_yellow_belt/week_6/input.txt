@@ -1,6 +1,7 @@
 Add 2014-11-17 Monday
+Add 2014-11-17 J
 Add 2015-11-17 Tuesday
 Add 2016-11-17 Thursday
 Add 2017-11-17 Friday
-Del date >= 2014-11-17
+Del event != "Monday"
 Print

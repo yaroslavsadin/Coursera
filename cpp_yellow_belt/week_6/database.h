@@ -2,7 +2,9 @@
 #include "date.h"
 #include <vector>
 #include <map>
+#include <set>
 #include <deque>
+#include <algorithm>
 
 using namespace std;
 
@@ -23,16 +25,18 @@ public:
         int res { 0 };
         auto i = db.begin();
         while(i != db.end()) {
-            auto it = i->second.begin();
-            while(it != i->second.end()) {
-                if (predicate(i->first,*it)) {
-                    it = i->second.erase(it);
-                    res++;
-                } else {
-                    it = next(it);
-                }
-            }
-            if (i->second.empty()) {
+            // Create aliases for convinience
+            auto &date = i->first;
+            auto &events = i->second;
+            
+            int size_ = events.size();
+            auto it = stable_partition(events.begin(),events.end(),[&](const string& s) {
+                return predicate(date,s);
+            });
+            events.erase(events.begin(), it);
+            res += size_ - events.size();
+
+            if (events.empty()) {
                 // !!!! Here simple db.erase(i) failed in test system while worked locally
                 i = db.erase(i);
             } else {
@@ -58,6 +62,7 @@ public:
     string Last(const Date& date) const;
 private:
     map<Date,deque<string>> db;
+    map<Date,set<string>> db_;
 };
 
 void TestDatabase(void);

@@ -8,15 +8,15 @@
 
 void Database::Add(const Date& date, const string& event) {
     if(db.count(date)) {
-        auto events = db.at(date);
-        auto it = find_if(events.begin(), events.end(),[&event](const string& s) {
-            return (s == event);
-        });
-        if (it == events.end()) {
+        auto& events = db_.at(date);
+        auto found = events.count(event);
+        if (!found) {
             db[date].push_back(event);
+            db_[date].insert(event);
         }
     } else {
         db[date].push_back(event);
+        db_[date].insert(event);
     }
 }
 
