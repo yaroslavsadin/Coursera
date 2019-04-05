@@ -62,7 +62,6 @@ Date ParseDate(istream& is) {
     }
 }
 
-#ifdef TEST_DATE
 void TestParseDate() {
     {
         istringstream ss("0-1-1");
@@ -131,9 +130,76 @@ void TestParseDate() {
     }
 }
 
-int main(void) {
-    TestRunner tr;
-    tr.RunTest(TestParseDate,"TestParseDate");
-    return 0;
+void TestDataComparison(void) {
+    {
+        istringstream ss1("0-1-1");
+        istringstream ss2("1-1-1");
+        Date d1 = ParseDate(ss1);
+        Date d2 = ParseDate(ss2);
+        AssertEqual(d1<=d2,true,"Date error");
+        AssertEqual(d1>=d2,false,"Date error");
+        AssertEqual(d1==d2,false,"Date error");
+        AssertEqual(d1<d2,true,"Date error");
+        AssertEqual(d1>d2,false,"Date error");
+    }
+    {
+        istringstream ss1("1-1-1");
+        istringstream ss2("1-1-1");
+        Date d1 = ParseDate(ss1);
+        Date d2 = ParseDate(ss2);
+        AssertEqual(d1<=d2,true,"Date error");
+        AssertEqual(d1>=d2,true,"Date error");
+        AssertEqual(d1==d2,true,"Date error");
+        AssertEqual(d1<d2,false,"Date error");
+        AssertEqual(d1>d2,false,"Date error");
+    }
+    {
+        Assert(  Date{2017, 1, 1} == Date{2017, 1, 1},  "==");
+        Assert(!(Date{2017, 1, 1} == Date{2017, 1, 2}), "!==");
+        Assert(!(Date{2017, 1, 1} == Date{2017, 2, 1}), "!==");
+        Assert(!(Date{2017, 1, 1} == Date{2018, 1, 1}), "!==");
+        Assert(!(Date{2017, 1, 2} == Date{2017, 1, 1}), "!==");
+        Assert(!(Date{2017, 2, 1} == Date{2017, 1, 1}), "!==");
+        Assert(!(Date{2018, 1, 1} == Date{2017, 1, 1}), "!==");
+
+        Assert(  Date{2017, 1, 1} != Date{2017, 1, 2},  "!=");
+        Assert(  Date{2017, 1, 1} != Date{2017, 2, 1},  "!=");
+        Assert(  Date{2017, 1, 1} != Date{2018, 1, 1},  "!=");
+        Assert(  Date{2017, 1, 2} != Date{2017, 1, 1},  "!=");
+        Assert(  Date{2017, 2, 1} != Date{2017, 1, 1},  "!=");
+        Assert(  Date{2018, 1, 1} != Date{2017, 1, 1},  "!=");
+        Assert(!(Date{2017, 1, 1} != Date{2017, 1, 1}), "!!=");
+
+        Assert(  Date{2017, 1, 1} <= Date{2017, 1, 1},  "<=");
+        Assert(  Date{2017, 1, 1} <= Date{2017, 1, 2},  "<=");
+        Assert(  Date{2017, 1, 1} <= Date{2017, 2, 1},  "<=");
+        Assert(  Date{2017, 1, 1} <= Date{2018, 1, 1},  "<=");
+        Assert(!(Date{2017, 1, 2} <= Date{2017, 1, 1}), "!<=");
+        Assert(!(Date{2017, 2, 1} <= Date{2017, 1, 1}), "!<=");
+        Assert(!(Date{2018, 1, 1} <= Date{2017, 1, 1}), "!<=");
+
+        Assert(  Date{2017, 1, 1} <  Date{2017, 1, 2},  "<");
+        Assert(  Date{2017, 1, 1} <  Date{2017, 2, 1},  "<");
+        Assert(  Date{2017, 1, 1} <  Date{2018, 1, 1},  "<");
+        Assert(!(Date{2017, 1, 1} <  Date{2017, 1, 1}), "!<");
+        Assert(!(Date{2017, 1, 2} <  Date{2017, 1, 1}), "!<");
+        Assert(!(Date{2017, 2, 1} <  Date{2017, 1, 1}), "!<");
+        Assert(!(Date{2018, 1, 1} <  Date{2017, 1, 1}), "!<");
+
+        Assert(  Date{2017, 1, 1} >= Date{2017, 1, 1} , ">=");
+        Assert(  Date{2017, 1, 2} >= Date{2017, 1, 1} , ">=");
+        Assert(  Date{2017, 2, 1} >= Date{2017, 1, 1} , ">=");
+        Assert(  Date{2018, 1, 1} >= Date{2017, 1, 1} , ">=");
+        Assert(!(Date{2017, 1, 1} >= Date{2017, 1, 2}), "!>=");
+        Assert(!(Date{2017, 1, 1} >= Date{2017, 2, 1}), "!>=");
+        Assert(!(Date{2017, 1, 1} >= Date{2018, 1, 1}), "!>=");
+
+        Assert(  Date{2017, 1, 2} >  Date{2017, 1, 1} , ">");
+        Assert(  Date{2017, 2, 1} >  Date{2017, 1, 1} , ">");
+        Assert(  Date{2018, 1, 1} >  Date{2017, 1, 1} , ">");
+        Assert(!(Date{2017, 1, 1} >  Date{2017, 1, 1}), "!>");
+        Assert(!(Date{2017, 1, 1} >  Date{2017, 1, 2}), "!>");
+        Assert(!(Date{2017, 1, 1} >  Date{2017, 2, 1}), "!>");
+        Assert(!(Date{2017, 1, 1} >  Date{2018, 1, 1}), "!>");
+    }
 }
-#endif

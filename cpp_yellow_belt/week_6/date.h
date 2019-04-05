@@ -23,3 +23,6 @@ bool operator>=(const Date& lhs, const Date& rhs);
 bool operator==(const Date& lhs, const Date& rhs);
 bool operator!=(const Date& lhs, const Date& rhs);
 Date ParseDate(istream& is);
+
+void TestParseDate(void);
+void TestDataComparison(void);

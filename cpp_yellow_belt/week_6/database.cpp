@@ -170,4 +170,24 @@ void TestDatabase(void) {
         string result = os.str();
         AssertEqual(result,expected,"RemoveIf falied");
     }
+    {
+        Database db;
+        stringstream is {R"(event == "second" OR event == "fourth")"};
+        db.Add({2017, 1, 1}, "first");
+        db.Add({2017, 1, 1}, "second");
+        db.Add({2017, 1, 1}, "third");
+        db.Add({2017, 1, 1}, "fourth");
+        db.Add({2017, 1, 1}, "five");
+        auto condition = ParseCondition(is);
+        auto predicate = [condition](const Date& date, const string& event) {
+            return condition->Evaluate(date, event);
+        };
+        int count = db.RemoveIf(predicate);
+        AssertEqual(2, count, "Remove several");
+        db.Add({2017, 1, 1}, "second");
+        stringstream ss;
+        db.Print(ss);
+        AssertEqual("2017-01-01 first\n2017-01-01 third\n2017-01-01 five\n2017-01-01 second\n", ss.str(), "Check print after remove several and add the same");
+
+    }
 }

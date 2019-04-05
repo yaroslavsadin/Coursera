@@ -1,7 +1,6 @@
-Add 2014-11-17 Monday
-Add 2014-11-17 J
-Add 2015-11-17 Tuesday
-Add 2016-11-17 Thursday
-Add 2017-11-17 Friday
-Del event != "Monday"
+Add 1-1-1 A
+Add 1-1-1 B
+Add 1-1-1 C
+Del event == "C"
+Add 1-1-1 C
 Print

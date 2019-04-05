@@ -33,6 +33,9 @@ public:
             auto it = stable_partition(events.begin(),events.end(),[&](const string& s) {
                 return predicate(date,s);
             });
+            for(auto k = events.begin(); k != it; k++) {
+                db_.at(date).erase(*k);
+            }
             events.erase(events.begin(), it);
             res += size_ - events.size();
 
@@ -48,7 +51,7 @@ public:
     template <typename PredT> 
     vector<Entry> FindIf(const PredT& predicate) const {
         vector<Entry> res;
-        for(auto& i : db) {
+        for(const auto& i : db) {
             auto it = i.second.begin();
             while(it != i.second.end()) {
                 if (predicate(i.first,*it)) {
