@@ -32,9 +32,7 @@ string Database::Last(const Date& date) const {
     if (db.empty() || date < db.begin()->first) {
         throw invalid_argument("No entries");
     }
-    auto it = upper_bound(db.begin(),db.end(),date,[](const Date &a, const pair<Date,vector<string>> &b) {
-         return a < b.first; 
-    });
+    auto it = db.upper_bound(date);
     if (it != db.begin()) {
         it = prev(it);
     }
