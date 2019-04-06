@@ -31,12 +31,10 @@ public:
             
             int size_ = events.size();
             auto it = stable_partition(events.begin(),events.end(),[&](const string& s) {
-                return predicate(date,s);
+                return !predicate(date,s);
             });
-            for(auto k = events.begin(); k != it; k++) {
-                db_.at(date).erase(*k);
-            }
-            events.erase(events.begin(), it);
+            db_.at(date) = set<string>(events.begin(), it);
+            events.erase(it,events.end());
             res += size_ - events.size();
 
             if (events.empty()) {
@@ -64,7 +62,7 @@ public:
     }
     string Last(const Date& date) const;
 private:
-    map<Date,deque<string>> db;
+    map<Date,vector<string>> db;
     map<Date,set<string>> db_;
 };
 
