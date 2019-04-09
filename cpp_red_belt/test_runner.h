@@ -54,17 +54,16 @@ ostream& operator << (ostream& os, const map<K, V>& m) {
 }
 
 template<class T, class U>
-void AssertEqual(const T& t, const U& u, string msg = {},
-                     int line = __LINE__, string file = __FILE__) {
+void AssertEqual(const T& t, const U& u, string msg = {}) {
   if (t != u) {
     ostringstream os;
     os << "Assertion failed: " << t << " != " << u << endl;
-    os << "./" << file <<":" << line << "; Message: " << msg;
+    os << msg;
     throw runtime_error(os.str());
   }
 }
 
-void Assert(bool b, string msg = {}, int line = __LINE__, string file = __FILE__);
+void Assert(bool b, string msg = {});
 
 constexpr auto RED_TEXT_START = "\033[1;31m";
 constexpr auto BLUE_TEXT_START = "\033[1;36m";
@@ -91,3 +90,22 @@ public:
 private:
   int fail_count = 0;
 };
+
+#define ASSERT_EQUAL(x,y) {         \
+  ostringstream ss;                 \
+  ss << #x << " != " << #y <<       \
+  endl << "./" << __FILE__ << ":"   \
+  << __LINE__;                      \
+  AssertEqual(x,y,ss.str());        \
+}
+
+#define ASSERT(x) {                 \
+  ostringstream ss;                 \
+  ss << #x << " is false " <<       \
+  endl << "./" << __FILE__ << ":"   \
+  << __LINE__;                      \
+  Assert(x,ss.str());               \
+}
+
+#define RUN_TEST(tr,func)           \
+  tr.RunTest(func,#func)

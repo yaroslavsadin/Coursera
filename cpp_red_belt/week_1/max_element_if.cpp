@@ -46,13 +46,11 @@ void TestUniqueMax() {
     неопределенное поведение, если функция max_element_if, к примеру,
     вернула итератор, указывающий на конец контейнера.
   */
-  Assert(
-    max_element_if(numbers.begin(), numbers.end(), IsEven) == --numbers.end(),
-    "Expect the last element"
+  ASSERT(
+    max_element_if(numbers.begin(), numbers.end(), IsEven) == --numbers.end()
   );
-  Assert(
-    max_element_if(hill.begin(), hill.end(), IsEven) == max_iterator,
-    "Expect the maximal even number"
+  ASSERT(
+    max_element_if(hill.begin(), hill.end(), IsEven) == max_iterator
   );
 }
 
@@ -68,9 +66,8 @@ void TestSeveralMax() {
   auto max_iterator = text.begin();
   advance(max_iterator, 4);
 
-  Assert(
-    max_element_if(text.begin(), text.end(), IsCapitalized()) == max_iterator,
-    "Expect thr first \"Two\""
+  ASSERT(
+    max_element_if(text.begin(), text.end(), IsCapitalized()) == max_iterator
   );
 }
 
@@ -81,24 +78,22 @@ void TestNoMax() {
   auto AlwaysTrue = [](int) {
     return true;
   };
-  Assert(
-    max_element_if(empty.begin(), empty.end(), AlwaysTrue) == empty.end(),
-    "Expect end for empty container"
+  ASSERT(
+    max_element_if(empty.begin(), empty.end(), AlwaysTrue) == empty.end()
   );
 
   auto AlwaysFalse = [](char) {
     return false;
   };
-  Assert(
-    max_element_if(str.begin(), str.end(), AlwaysFalse) == str.end(),
-    "Expect end for AlwaysFalse predicate"
+  ASSERT(
+    max_element_if(str.begin(), str.end(), AlwaysFalse) == str.end()
   );
 }
 
 int main() {
   TestRunner tr;
-  tr.RunTest(TestUniqueMax, "TestUniqueMax");
-  tr.RunTest(TestSeveralMax, "TestSeveralMax");
-  tr.RunTest(TestNoMax, "TestNoMax");
+  RUN_TEST(tr,TestUniqueMax);
+  RUN_TEST(tr,TestSeveralMax);
+  RUN_TEST(tr,TestNoMax);
   return 0;
 }

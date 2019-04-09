@@ -1,7 +1,7 @@
 #include "test_runner.h"
 
-void Assert(bool b, string msg, int line, string file) {
-  AssertEqual(b, true, msg, line, file);
+void Assert(bool b, string msg) {
+  AssertEqual(b, true, msg);
 }
 
 TestRunner::~TestRunner() {
