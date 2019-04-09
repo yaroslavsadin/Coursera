@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_yellow_belt/week_6/bin/a.exe",
+            "program": "${workspaceFolder}/cpp_red_belt/week_1/bin/a.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
