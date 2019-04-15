@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <vector>
+#include "ostream_color.h"
 
 #pragma once
 
@@ -64,10 +65,6 @@ void AssertEqual(const T& t, const U& u, string msg = {}) {
 }
 
 void Assert(bool b, string msg = {});
-
-constexpr auto RED_TEXT_START = "\033[1;31m";
-constexpr auto BLUE_TEXT_START = "\033[1;36m";
-constexpr auto TEXT_COLOR_RESET = "\033[0m";
 
 class TestRunner {
 public:
