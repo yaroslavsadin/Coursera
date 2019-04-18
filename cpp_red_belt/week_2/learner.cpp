@@ -10,16 +10,16 @@ using namespace std;
 
 class Learner {
  private:
-  vector<string> dict;
+  set<string> dict;
 
  public:
   int Learn(const vector<string>& words) {
     LOG_DURATION();
     int newWords = 0;
     for (const auto& word : words) {
-      if (find(dict.begin(), dict.end(), word) == dict.end()) {
+      bool not_in_dict = dict.insert(word).second;
+      if (not_in_dict) {
         ++newWords;
-        dict.push_back(word);
       }
     }
     return newWords;
@@ -27,19 +27,17 @@ class Learner {
 
   vector<string> KnownWords() {
     LOG_DURATION();
-    sort(dict.begin(), dict.end());
-    dict.erase(unique(dict.begin(), dict.end()), dict.end());
-    return dict;
+    return {dict.begin(), dict.end()};
   }
 };
 
 int main() {
   Learner learner;
   string line;
-  stringstream cin;
-  for(int i = 0; i < 9999; i++) {
-    cin << "kek" + to_string(i) << endl;
-  }
+  // stringstream cin;
+  // for(int i = 0; i < 9999; i++) {
+  //   cin << "kek" + to_string(i) << " ";
+  // }
   while (getline(cin, line)) {
     vector<string> words;
     stringstream ss(line);
