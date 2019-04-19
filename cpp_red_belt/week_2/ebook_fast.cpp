@@ -1,54 +1,84 @@
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <vector>
+#include <map>
+#include <set>
 #include <utility>
 #include "profile.h"
+#include "test_runner.h"
 
 using namespace std;
 
-class ReadingManager {
+template <typename Iterator>
+class IteratorRange {
 public:
-  ReadingManager()
-      : user_page_counts_(MAX_USER_COUNT_ + 1, 0),
-        sorted_users_(),
-        user_positions_(MAX_USER_COUNT_ + 1, -1) {}
-
-  // O(N)
-  void Read(int user_id, int page_count) {
-    if (user_page_counts_[user_id] == 0) {    // O(1)
-      AddUser(user_id);                       // O(1)
-    }
-    user_page_counts_[user_id] = page_count;  // O(1)
-    int& position = user_positions_[user_id]; // O(1)
-    // O(N)
-    while (position > 0 && page_count > user_page_counts_[sorted_users_[position - 1]]) {
-      SwapUsers(position, position - 1);
-    }
+  IteratorRange(Iterator begin, Iterator end)
+    : first(begin)
+    , last(end)
+    , size_(distance(first, last))
+  {
   }
 
-  // O(N)
+  Iterator begin() const {
+    return first;
+  }
+
+  Iterator end() const {
+    return last;
+  }
+
+  size_t size() const {
+    return size_;
+  }
+
+private:
+  Iterator first, last;
+  size_t size_;
+};
+
+template <typename Iterator>
+IteratorRange<Iterator> MakeRange(Iterator i1, Iterator i2) {
+  return IteratorRange(i1,i2);
+}
+
+class ReadingManager {
+public:
+  ReadingManager() {}
+
+  // O(1)
+  void Read(int user_id, int page_count) {
+    if(user_to_pages.count(user_id)) {
+        int user_page = user_to_pages[user_id];
+        pages_to_users[user_page].erase(user_id);
+        if (pages_to_users[user_page].empty()) {
+            pages_to_users.erase(user_page);
+        }
+    }
+    user_to_pages[user_id] = page_count;
+    pages_to_users[page_count].insert(user_id);
+  }
+
+  // O(L)
   double Cheer(int user_id) const {
-    if (user_page_counts_[user_id] == 0) {
+    if (!user_to_pages.count(user_id)) {
       return 0;
     }
-    const int user_count = GetUserCount();
+    const int user_count = user_to_pages.size();
     if (user_count == 1) {
       return 1;
     }
-    const int page_count = user_page_counts_[user_id];
-    int position = user_positions_[user_id];
-    // O(N)
-    while (position < user_count &&
-      user_page_counts_[sorted_users_[position]] == page_count) {
-      ++position;
-    }
-    if (position == user_count) {
-        return 0;
+    const int page_count = user_to_pages.at(user_id);
+    int count = 0;
+    // O(L)
+    for(const auto& [key,value] : 
+    MakeRange(pages_to_users.begin(), pages_to_users.find(page_count))) {
+      count += value.size();
     }
     // По умолчанию деление целочисленное, поэтому
     // нужно привести числитель к типу double.
     // Простой способ сделать это — умножить его на 1.0.
-    return (user_count - position) * 1.0 / (user_count - 1);
+    return ((count * 1.0) / (user_count - 1));
   }
 
 private:
@@ -59,27 +89,84 @@ private:
   // следующим образом: ReadingManager::MAX_USER_COUNT.
   static const int MAX_USER_COUNT_ = 100'000;
 
-  vector<int> user_page_counts_;
-  vector<int> sorted_users_;   // отсортированы по убыванию количества страниц
-  vector<int> user_positions_; // позиции в векторе sorted_users_
-
-  int GetUserCount() const {
-    return sorted_users_.size();
-  }
-  // O(1)
-  void AddUser(int user_id) {
-    sorted_users_.push_back(user_id);                     // O(1)
-    user_positions_[user_id] = sorted_users_.size() - 1;  // O(1)
-  }
-  // O(1)
-  void SwapUsers(int lhs_position, int rhs_position) {
-    const int lhs_id = sorted_users_[lhs_position];
-    const int rhs_id = sorted_users_[rhs_position];
-    swap(sorted_users_[lhs_position], sorted_users_[rhs_position]);
-    swap(user_positions_[lhs_id], user_positions_[rhs_id]);
-  }
+  map<int,set<int>> pages_to_users;
+  map<int,int> user_to_pages;
 };
 
+void ReadingManagerTests() {
+  {
+    // Если для данного пользователя пока не было ни одного события READ, доля считается равной 0
+    ReadingManager manager;
+    constexpr int NONEXISTENT = 0;
+    double result = manager.Cheer(NONEXISTENT);
+    const double expected = 0;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    // Если этот пользователь на данный момент единственный, доля считается равной 1.
+    ReadingManager manager;
+    manager.Read(1,666);
+    double result = manager.Cheer(1);
+    const double expected = 1;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    double result = manager.Cheer(1);
+    const double expected = 1./1;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    manager.Read(3,664);
+    manager.Read(4,663);
+    double result = manager.Cheer(3);
+    const double expected = 1./3;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    manager.Read(3,664);
+    manager.Read(4,663);
+    double result = manager.Cheer(4);
+    const double expected = 0./3;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    manager.Read(3,664);
+    manager.Read(4,663);
+    manager.Read(2,666);
+    manager.Read(4,666);
+    manager.Read(1,776);
+    manager.Read(4,777);
+    double result = manager.Cheer(1);
+    const double expected = 2./3;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,666);
+    manager.Read(3,666);
+    manager.Read(4,666);
+    manager.Read(5,666);
+    manager.Read(6,1000);
+    manager.Read(7,1000);
+    manager.Read(8,1000);
+    double result = manager.Cheer(7);
+    const double expected = 5./7;
+    ASSERT_EQUAL(expected,result);
+  }
+}
 
 int main() {
   // Для ускорения чтения данных отключается синхронизация
@@ -96,6 +183,14 @@ int main() {
 
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+
+  TestRunner tr;
+  RUN_TEST(tr,ReadingManagerTests);
+
+#if 0
+  ifstream oss{"C:\\Work\\Coursera\\cpp_red_belt\\week_2\\ebook.txt"};
+  cin.rdbuf(oss.rdbuf());
+#endif
 
   ReadingManager manager;
 
@@ -118,6 +213,6 @@ int main() {
     }
   }
 
-  // O(N*Q)
+  // O(L*Q)
   return 0;
 }

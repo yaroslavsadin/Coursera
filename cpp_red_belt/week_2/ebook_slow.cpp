@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include "profile.h"
+#include "test_runner.h"
 
 using namespace std;
 
@@ -80,6 +81,76 @@ private:
   }
 };
 
+void ReadingManagerTests() {
+  {
+    // Если для данного пользователя пока не было ни одного события READ, доля считается равной 0
+    ReadingManager manager;
+    constexpr int NONEXISTENT = 0;
+    int result = manager.Cheer(NONEXISTENT);
+    const int expected = 0;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    // Если этот пользователь на данный момент единственный, доля считается равной 1.
+    ReadingManager manager;
+    manager.Read(1,666);
+    int result = manager.Cheer(1);
+    const int expected = 1;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    int result = manager.Cheer(1);
+    const int expected = 1./1;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    manager.Read(3,664);
+    manager.Read(4,663);
+    int result = manager.Cheer(3);
+    const int expected = 1./3;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,665);
+    manager.Read(3,664);
+    manager.Read(4,663);
+    int result = manager.Cheer(4);
+    const int expected = 0./3;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,666);
+    manager.Read(1,777);
+    manager.Read(2,700);
+    int result = manager.Cheer(1);
+    const int expected = 1./1;
+    ASSERT_EQUAL(expected,result);
+  }
+  {
+    ReadingManager manager;
+    manager.Read(1,666);
+    manager.Read(2,666);
+    manager.Read(3,666);
+    manager.Read(4,666);
+    manager.Read(5,666);
+    manager.Read(6,1);
+    manager.Read(7,2);
+    manager.Read(8,3);
+    int result = manager.Cheer(8);
+    const int expected = 3./7;
+    ASSERT_EQUAL(expected,result);
+  }
+}
 
 int main() {
   // Для ускорения чтения данных отключается синхронизация
@@ -96,6 +167,9 @@ int main() {
 
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+
+  TestRunner tr;
+  RUN_TEST(tr,ReadingManagerTests);
 
   ReadingManager manager;
 
