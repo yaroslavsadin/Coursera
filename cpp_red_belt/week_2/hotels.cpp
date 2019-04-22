@@ -6,104 +6,70 @@
 #include <set>
 #include <algorithm>
 #include <exception>
-#include <tuple>
-// #include "iterator_range.h"
+#include <queue>
 #include "test_runner.h"
 #include "profile.h"
 using namespace std;
 
-template <typename Iterator>
-class IteratorRange {
-public:
-  IteratorRange(Iterator begin, Iterator end)
-    : first(begin)
-    , last(end)
-    , size_(distance(first, last))
-  {
-  }
-
-  Iterator begin() const {
-    return first;
-  }
-
-  Iterator end() const {
-    return last;
-  }
-
-  size_t size() const {
-    return size_;
-  }
-
-private:
-  Iterator first, last;
-  size_t size_;
-};
-
-template <typename Iterator>
-IteratorRange<Iterator> MakeRange(Iterator i1, Iterator i2) {
-  return IteratorRange(i1,i2);
-}
-
-struct Record {
-    set <int> clients;
-    int rooms_total = 0;
+struct Event {
+  int64_t timestamp;
+  string hotel_name;
+  int client_id;
+  int room_count;
 };
 
 class HotelManager {
 public:
     HotelManager() {}
-    // O(1)
+    // amortized O(1)
     void Book(int64_t time, const string& hotel_name,
                         int client_id, int room_count) {
-        data_[time][hotel_name].clients.insert(client_id);
-        data_[time][hotel_name].rooms_total += room_count;
+      Adjust(time);
+      hotel_to_unique_customers[hotel_name][client_id]++;
+      hotel_to_rooms[hotel_name] += room_count;
+      events.push({
+        .timestamp = time,
+        .hotel_name = hotel_name,
+        .client_id = client_id,
+        .room_count = room_count
+      });
     }
-    // O(D*Q*logQ)
-    int Clients(const string& hotel_name) const {
-        if(data_.empty()) {
-            return 0;
-        }
-        set<int> clients;
-        // O(D*Q)
-        for(const auto& [time_,hotels] : GetPastDayRange()) {
-            if(hotels.count(hotel_name)) {
-                // O(Q)
-                for(const auto& client : hotels.at(hotel_name).clients) {
-                    clients.insert(client);
-                }
-            }
-        }
-        return clients.size();
+
+    // O(1)
+    size_t Clients(const string& hotel_name) const {
+      if(events.empty() || !hotel_to_unique_customers.count(hotel_name)) {
+        return 0;
+      }
+      return hotel_to_unique_customers.at(hotel_name).size();
     }
-   // O(D*logQ)
+
+    // O(1)
     int Rooms(const string& hotel_name) const {
-        if(data_.empty()) {
-            return 0;
-        }
-        int num_rooms = 0;
-        // O(D)
-        for(const auto& [time_,hotels] : GetPastDayRange()) {
-            if(hotels.count(hotel_name)) {
-                // O(1)
-                num_rooms += hotels.at(hotel_name).rooms_total;
-            }
-        }
-        return num_rooms;
+      if(events.empty() || !hotel_to_unique_customers.count(hotel_name)) {
+        return 0;
+      }
+      return hotel_to_rooms.at(hotel_name);
     }
 private:
-    map<int64_t,map<string,Record>> data_;
-    // O(logQ)
-    IteratorRange<map<int64_t,map<string,Record>>::const_iterator> GetPastDayRange(void) const {
-        int64_t current_time = data_.rbegin()->first;
-        // O(logQ)
-        auto it = data_.upper_bound(current_time - 86400);
-        return MakeRange(it,data_.end());
+  queue<Event> events;
+  map<string,map<int,int>> hotel_to_unique_customers;
+  map<string,int> hotel_to_rooms;
+  // amortized O(1)
+  void Adjust(int64_t time) {
+    while (!events.empty() && events.front().timestamp <= time - 86400) {
+      hotel_to_unique_customers[events.front().hotel_name][events.front().client_id]--;
+      if(!hotel_to_unique_customers[events.front().hotel_name][events.front().client_id]) {
+        hotel_to_unique_customers[events.front().hotel_name].erase(events.front().client_id);
+      }
+      hotel_to_rooms[events.front().hotel_name] -= events.front().room_count;
+      events.pop();
     }
+  }
 };
 
 int main(void) {
-//   ios::sync_with_stdio(false);
-//   cin.tie(nullptr);
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
 
   TestRunner tr;
 
@@ -131,14 +97,14 @@ int main(void) {
     } else if (query_type == "CLIENTS") {
       string hotel_name;
       cin >> hotel_name;
-      cout << manager.Clients(hotel_name) << endl;
+      cout << manager.Clients(hotel_name) << '\n';
     } else if (query_type == "ROOMS") {
       string hotel_name;
       cin >> hotel_name;
-      cout << manager.Rooms(hotel_name) << endl;
+      cout << manager.Rooms(hotel_name) << '\n';
     }
   }
 
-  // O(D*Q*logQ)
+  // O(D*logQ)
   return 0;
 }
