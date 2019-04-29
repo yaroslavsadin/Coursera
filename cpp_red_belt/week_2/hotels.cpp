@@ -21,7 +21,7 @@ struct Event {
 class HotelManager {
 public:
     HotelManager() {}
-    // amortized O(1)
+    // O(LlogQ)
     void Book(int64_t time, const string& hotel_name,
                         int client_id, int room_count) {
       Adjust(time);
@@ -35,7 +35,7 @@ public:
       });
     }
 
-    // O(1)
+    // O(LlogQ)
     size_t Clients(const string& hotel_name) const {
       if(events.empty() || !hotel_to_unique_customers.count(hotel_name)) {
         return 0;
@@ -43,7 +43,7 @@ public:
       return hotel_to_unique_customers.at(hotel_name).size();
     }
 
-    // O(1)
+    // O(LlogQ)
     int Rooms(const string& hotel_name) const {
       if(events.empty() || !hotel_to_unique_customers.count(hotel_name)) {
         return 0;
@@ -54,7 +54,7 @@ private:
   queue<Event> events;
   map<string,map<int,int>> hotel_to_unique_customers;
   map<string,int> hotel_to_rooms;
-  // amortized O(1)
+  // amortized O(LlogQ)
   void Adjust(int64_t time) {
     while (!events.empty() && events.front().timestamp <= time - 86400) {
       hotel_to_unique_customers[events.front().hotel_name][events.front().client_id]--;
@@ -105,6 +105,6 @@ int main(void) {
     }
   }
 
-  // O(D*logQ)
+  // O(Q*L*logQ)
   return 0;
 }
