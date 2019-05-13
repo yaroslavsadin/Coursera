@@ -15,9 +15,8 @@ class AirportCounter {
 public:
   // конструктор по умолчанию: список элементов пока пуст
   AirportCounter() {
-    size_t count = 0;
-    for(auto& x : items_) {
-      x.first = static_cast<TAirport>(count++);
+    for(auto& item : items_) {
+      item = 0;
     }
   };
 
@@ -25,28 +24,28 @@ public:
   template <typename TIterator>
   AirportCounter(TIterator begin, TIterator end) : AirportCounter() {
     for(TIterator item = begin; item != end; item = next(item)) {
-      items_[airport_cast(*item)].second++;
+      items_[airport_cast(*item)]++;
     }
   }
 
   // получить количество элементов, равных данному
   size_t Get(TAirport airport) const {
-    return items_.at(airport_cast(airport)).second;
+    return items_.at(airport_cast(airport));
   }
 
   // добавить данный элемент
   void Insert(TAirport airport) {
-    items_[airport_cast(airport)].second++;
+    items_[airport_cast(airport)]++;
   }
 
   // удалить одно вхождение данного элемента
   void EraseOne(TAirport airport) {
-    items_[airport_cast(airport)].second--;
+    items_[airport_cast(airport)]--;
   }
 
   // удалить все вхождения данного элемента
   void EraseAll(TAirport airport) {
-    items_[airport_cast(airport)].second = 0;
+    items_[airport_cast(airport)] = 0;
   }
 
   using Item = pair<TAirport, size_t>;
@@ -56,7 +55,13 @@ public:
   // получив набор объектов типа Item - пар (аэропорт, количество),
   // упорядоченных по аэропорту
   Items GetItems() const {
-    return items_;
+    Items res;
+    size_t count = 0;
+    for(auto& item : res) {
+      item.second = items_[count];
+      item.first = static_cast<TAirport>(count++);
+    }
+    return res;
   }
 
 private:
@@ -64,7 +69,7 @@ private:
     return static_cast<size_t>(airport);
   }
   // ???
-  Items items_;
+  array<size_t,static_cast<size_t>(TAirport::Last_)> items_;
 };
 
 void TestMoscow() {
