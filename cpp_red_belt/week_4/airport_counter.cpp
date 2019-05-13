@@ -14,37 +14,61 @@ template <typename TAirport>
 class AirportCounter {
 public:
   // конструктор по умолчанию: список элементов пока пуст
-  AirportCounter();
+  AirportCounter() {
+    size_t count = 0;
+    for(auto& x : items_) {
+      x.first = static_cast<TAirport>(count++);
+    }
+  };
 
   // конструктор от диапазона элементов типа TAirport
   template <typename TIterator>
-  AirportCounter(TIterator begin, TIterator end);
+  AirportCounter(TIterator begin, TIterator end) : AirportCounter() {
+    for(TIterator item = begin; item != end; item = next(item)) {
+      items_[airport_cast(*item)].second++;
+    }
+  }
 
   // получить количество элементов, равных данному
-  size_t Get(TAirport airport) const;
+  size_t Get(TAirport airport) const {
+    return items_.at(airport_cast(airport)).second;
+  }
 
   // добавить данный элемент
-  void Insert(TAirport airport);
+  void Insert(TAirport airport) {
+    items_[airport_cast(airport)].second++;
+  }
 
   // удалить одно вхождение данного элемента
-  void EraseOne(TAirport airport);
+  void EraseOne(TAirport airport) {
+    items_[airport_cast(airport)].second--;
+  }
 
   // удалить все вхождения данного элемента
-  void EraseAll(TAirport airport);
+  void EraseAll(TAirport airport) {
+    items_[airport_cast(airport)].second = 0;
+  }
 
   using Item = pair<TAirport, size_t>;
-  using Items = /* ??? */;
+  using Items = array<Item,static_cast<size_t>(TAirport::Last_)>;
 
   // получить некоторый объект, по которому можно проитерироваться,
   // получив набор объектов типа Item - пар (аэропорт, количество),
   // упорядоченных по аэропорту
-  Items GetItems() const;
+  Items GetItems() const {
+    return items_;
+  }
 
 private:
+  size_t airport_cast(TAirport airport) const {
+    return static_cast<size_t>(airport);
+  }
   // ???
+  Items items_;
 };
 
 void TestMoscow() {
+  LOG_DURATION("");
   enum class MoscowAirport {
     VKO,
     SVO,

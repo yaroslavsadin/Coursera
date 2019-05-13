@@ -1,6 +1,7 @@
 CC=g++
 LD=g++
 PROG?=a
+OPT_LEVEL?=O0
 XEXT=exe
 
 ifneq ($(INPUT),)
@@ -20,7 +21,7 @@ OBJS=$(SRCS:%.cpp=$(OBJDIR)/%.o)
 DEPS=$(SRCS:%.cpp=$(DEPDIR)/%.d)
 BIN=$(BINDIR)/$(PROG).$(XEXT)
 
-CFLAGS=-std=c++17 -Werror $(DEFINES) -I.. -g -O0
+CFLAGS=-std=c++17 -Werror $(DEFINES) -I.. -g -$(OPT_LEVEL)
 LDFLAGS=$(CFLAGS)
 
 all: build run
