@@ -1,5 +1,6 @@
 #include <string>
 #include <deque>
+#include <algorithm>
 #include "test_runner.h"
 using namespace std;
 
@@ -15,41 +16,48 @@ class Editor {
   void Paste();
   string GetText() const;
  private:
-  void UpdateTextView() {
-    text_view = string_view(&text[0],text.size());
-  }
-  deque<char> text;
-  deque<char>::const_iterator cursor;
-  string_view text_view;
-  string buffer;
+  using ContainerT = deque<char>;
+  // void UpdateTextView() {
+  //   text_view = string_view(&text[0],text.size());
+  // }
+  ContainerT text;
+  ContainerT::iterator cursor;
+  ContainerT::iterator copy_;
+  // string_view text_view;
+  vector<char> buffer;
 };
 
-Editor::Editor() : text(), cursor(text.begin()), text_view(&text[0],0) {
+Editor::Editor() : buffer(), text(), cursor(text.begin()) {
 }
 
+// O(1)
 void Editor::Left() {
   if(cursor != text.begin()) {
     cursor--;
   }
  }
 
+// O(1)
 void Editor::Right() {
   if(cursor != text.end()) {
     cursor++;
   }
 }
 
+// O(1) + O(N/2)
 void Editor::Insert(char token) {
   cursor = text.insert(cursor,token);
   cursor++;
-  UpdateTextView();
+  // UpdateTextView();
 }
 
+// O(N)
 void Editor::Copy(size_t tokens) {
-  string res = string(cursor,cursor+tokens);
-  buffer = res;
+  copy(cursor,cursor+tokens,back_inserter(buffer));
+  // buffer = res;
 }
 
+// O(N)
 void Editor::Cut(size_t tokens) {
   Copy(tokens);
   if(text.end() - cursor < tokens) {  
@@ -57,14 +65,17 @@ void Editor::Cut(size_t tokens) {
   } else {
     cursor = text.erase(cursor,cursor+tokens);
   }
-  UpdateTextView();
+  // UpdateTextView();
 }
 
+// O(1) + O(N/2)
 void Editor::Paste() {
   cursor = text.insert(cursor,buffer.begin(),buffer.end());
   cursor += buffer.size();
+  // UpdateTextView();
 }
 
+// O(N)
 string Editor::GetText() const {
   return string(text.begin(),text.end());
 }
