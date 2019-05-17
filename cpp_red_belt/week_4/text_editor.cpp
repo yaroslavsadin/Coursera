@@ -1,5 +1,5 @@
 #include <string>
-#include <deque>
+#include <list>
 #include <algorithm>
 #include "test_runner.h"
 using namespace std;
@@ -16,18 +16,15 @@ class Editor {
   void Paste();
   string GetText() const;
  private:
-  using ContainerT = deque<char>;
-  // void UpdateTextView() {
-  //   text_view = string_view(&text[0],text.size());
-  // }
+  using ContainerT = list<char>;
   ContainerT text;
   ContainerT::iterator cursor;
-  ContainerT::iterator copy_;
-  // string_view text_view;
-  vector<char> buffer;
+  ContainerT::iterator buffer_start;
+  ContainerT::iterator buffer_end;
+  ContainerT::const_iterator text_end;
 };
 
-Editor::Editor() : buffer(), text(), cursor(text.begin()) {
+Editor::Editor() : cursor(text.begin()), buffer_start(text.end()), buffer_end(text.end()), text_end(text.end()) {
 }
 
 // O(1)
@@ -35,49 +32,55 @@ void Editor::Left() {
   if(cursor != text.begin()) {
     cursor--;
   }
- }
+}
 
 // O(1)
 void Editor::Right() {
-  if(cursor != text.end()) {
+  if(cursor != text_end) {
     cursor++;
   }
 }
 
-// O(1) + O(N/2)
+// O(1)
 void Editor::Insert(char token) {
   cursor = text.insert(cursor,token);
   cursor++;
-  // UpdateTextView();
 }
 
 // O(N)
 void Editor::Copy(size_t tokens) {
-  copy(cursor,cursor+tokens,back_inserter(buffer));
-  // buffer = res;
+  buffer_start = cursor;
+  buffer_end = cursor;
+  while(tokens-- && buffer_end != text.end()) {
+    ++buffer_end;
+  }
 }
 
-// O(N)
+// O(1)
 void Editor::Cut(size_t tokens) {
   Copy(tokens);
-  if(text.end() - cursor < tokens) {  
-    cursor = text.erase(cursor,text.end());
+  if(buffer_end != text.end()) {
+    cursor = buffer_end;
+    text.splice(text.end(),text,buffer_start,buffer_end);
   } else {
-    cursor = text.erase(cursor,cursor+tokens);
+    cursor = buffer_start;
   }
-  // UpdateTextView();
+  text_end = buffer_start;
+  buffer_end = text.end();
 }
 
-// O(1) + O(N/2)
+// O(1)
 void Editor::Paste() {
-  cursor = text.insert(cursor,buffer.begin(),buffer.end());
-  cursor += buffer.size();
-  // UpdateTextView();
+  if(cursor != buffer_start) {  
+    text.splice(cursor,text,buffer_start,buffer_end);
+  }
+  cursor = buffer_end;
+  text_end = text.end();
 }
 
 // O(N)
 string Editor::GetText() const {
-  return string(text.begin(),text.end());
+  return string(text.begin(),text_end);
 }
 
 void TypeText(Editor& editor, const string& text) {
@@ -92,7 +95,7 @@ void TestEditing() {
 
     const size_t text_len = 12;
     const size_t first_part_len = 7;
-    TypeText(editor, "hello, world");
+    TypeText(editor, "abcde, 12345");
     for(size_t i = 0; i < text_len; ++i) {
       editor.Left();
     }
@@ -106,7 +109,7 @@ void TestEditing() {
     editor.Left();
     editor.Cut(3);
     
-    ASSERT_EQUAL(editor.GetText(), "world, hello");
+    ASSERT_EQUAL(editor.GetText(), "12345, abcde");
   }
   {
     Editor editor;
