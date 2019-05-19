@@ -1,5 +1,6 @@
 #include <string>
-#include <list>
+#include <vector>
+#include <deque>
 #include <algorithm>
 #include "test_runner.h"
 using namespace std;
@@ -16,71 +17,60 @@ class Editor {
   void Paste();
   string GetText() const;
  private:
-  using ContainerT = list<char>;
-  ContainerT text;
-  ContainerT::iterator cursor;
-  ContainerT::iterator buffer_start;
-  ContainerT::iterator buffer_end;
-  ContainerT::const_iterator text_end;
+ // Could use list and assign()
+  vector<char> front_;
+  deque<char> back_;
+  vector<char> buffer;
 };
 
-Editor::Editor() : cursor(text.begin()), buffer_start(text.end()), buffer_end(text.end()), text_end(text.end()) {
+Editor::Editor() {
 }
 
 // O(1)
 void Editor::Left() {
-  if(cursor != text.begin()) {
-    cursor--;
+  if(front_.size()) {
+    back_.push_front(front_.back());
+    front_.pop_back();
   }
-}
+ }
 
 // O(1)
 void Editor::Right() {
-  if(cursor != text_end) {
-    cursor++;
+  if(back_.size()) {
+    front_.push_back(back_.front());
+    back_.pop_front();
   }
 }
 
 // O(1)
 void Editor::Insert(char token) {
-  cursor = text.insert(cursor,token);
-  cursor++;
+  front_.push_back(token);
 }
 
 // O(N)
 void Editor::Copy(size_t tokens) {
-  buffer_start = cursor;
-  buffer_end = cursor;
-  while(tokens-- && buffer_end != text.end()) {
-    ++buffer_end;
-  }
+  buffer.resize(tokens);
+  copy(back_.begin(),back_.begin()+tokens,buffer.begin());
 }
 
-// O(1)
+// O(N)
 void Editor::Cut(size_t tokens) {
   Copy(tokens);
-  if(buffer_end != text.end()) {
-    cursor = buffer_end;
-    text.splice(text.end(),text,buffer_start,buffer_end);
-  } else {
-    cursor = buffer_start;
-  }
-  text_end = buffer_start;
-  buffer_end = text.end();
+  if(back_.size() > tokens)  
+    back_.erase(back_.begin(),back_.begin()+tokens);
+  else
+    back_.clear();
 }
 
-// O(1)
+// O(N)
 void Editor::Paste() {
-  if(cursor != buffer_start) {  
-    text.splice(cursor,text,buffer_start,buffer_end);
-  }
-  cursor = buffer_end;
-  text_end = text.end();
+  front_.reserve(front_.size()+buffer.size());
+  front_.insert(front_.end(),buffer.begin(),buffer.end());
 }
 
 // O(N)
 string Editor::GetText() const {
-  return string(text.begin(),text_end);
+  return string(front_.begin(),front_.end()) + string(back_.begin(),back_.end());
 }
 
 void TypeText(Editor& editor, const string& text) {
@@ -95,7 +85,7 @@ void TestEditing() {
 
     const size_t text_len = 12;
     const size_t first_part_len = 7;
-    TypeText(editor, "abcde, 12345");
+    TypeText(editor, "hello, world");
     for(size_t i = 0; i < text_len; ++i) {
       editor.Left();
     }
@@ -109,7 +99,7 @@ void TestEditing() {
     editor.Left();
     editor.Cut(3);
     
-    ASSERT_EQUAL(editor.GetText(), "12345, abcde");
+    ASSERT_EQUAL(editor.GetText(), "world, hello");
   }
   {
     Editor editor;
