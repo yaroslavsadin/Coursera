@@ -17,18 +17,10 @@ private:
   map<string_view, int> method_stats;
   map<string_view, int> uri_stats;
   
-  static const string method_get_;
-  static const string method_post_;
-  static const string method_put_;
-  static const string method_delete_;
-  static const string method_unknown_;
-
-  static const string uri_empty_;
-  static const string uri_order_;
-  static const string uri_product_;
-  static const string uri_basket_;
-  static const string uri_help_;
-  static const string uri_unknown_;
+  static const array<string,4> methods_;
+  static const string default_method_;
+  static const array<string,5> uris_;
+  static const string default_uri_;
 };
 
 HttpRequest ParseRequest(string_view line);
