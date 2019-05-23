@@ -3,21 +3,64 @@
 #include <cstdint>
 #include <iterator>
 #include <numeric>
-#include <vector>
+#include <list>
 
 using namespace std;
 
+#if 0
+// O(N/2)
+template <typename RandomIt>
+void Permute(RandomIt first, RandomIt last, RandomIt to_permute) {
+  typename RandomIt::value_type* p = new typename RandomIt::value_type(move(*to_permute));
+  for(auto it = to_permute; it > first; it--) {
+    *(it) = move(*prev(it));
+  }
+  *first = move(*p);
+  delete p;
+}
+
+// O(N^2/2)
 template <typename RandomIt>
 void MakeJosephusPermutation(RandomIt first, RandomIt last, uint32_t step_size) {
-  vector<typename RandomIt::value_type> pool(first, last);
-  size_t cur_pos = 0;
-  while (!pool.empty()) {
-    *(first++) = pool[cur_pos];
-    pool.erase(pool.begin() + cur_pos);
-    if (pool.empty()) {
+  size_t count = last-first;
+  size_t current = 0;
+  // O(N)
+  for(size_t i = count - 1; i > 0; i--) {
+    auto it = first + current;
+    // O(N/2)
+    Permute(first++,last,it);
+    current = (current + step_size - 1) % i;
+  }
+}
+#endif
+
+template <typename RandomIt>
+void MakeJosephusPermutation(RandomIt first, RandomIt last, uint32_t step_size) {
+  list<typename RandomIt::value_type> pool;
+  for(auto it = first; it != last; it++) {
+    pool.push_back(move(*it));
+  }
+  size_t current = 0;
+  auto it = pool.begin();
+  while(pool.size()) {
+    *first++ = move(*it);
+    it = pool.erase(it);
+    if(!pool.size()) {
       break;
     }
-    cur_pos = (cur_pos + step_size - 1) % pool.size();
+    size_t next_ = (current + step_size - 1) % pool.size();
+    if (pool.size() <= step_size) {
+      it = next(pool.begin(),next_);
+    } else
+    {
+      if (next_ > current) {
+        it = next(it,step_size-1);
+      } else {
+        it = next(pool.begin(),next_);     
+      }
+    }
+
+    current = next_;
   }
 }
 
@@ -38,6 +81,7 @@ void TestIntVector() {
     vector<int> numbers_copy = numbers;
     MakeJosephusPermutation(begin(numbers_copy), end(numbers_copy), 3);
     ASSERT_EQUAL(numbers_copy, vector<int>({0, 3, 6, 9, 4, 8, 5, 2, 7, 1}));
+                                      //                               
   }
 }
 
@@ -85,8 +129,21 @@ void TestAvoidsCopying() {
   ASSERT_EQUAL(numbers, expected);
 }
 
+// void TestPermute() {
+//   vector<int> result = {1,2,3,4,5};
+//   vector<int> expected = {3,1,2,4,5};
+//   Permute(result.begin(),result.end(),result.begin()+2);
+//   ASSERT_EQUAL(expected,result);
+//   Permute(result.begin(),result.end(),result.begin());
+//   ASSERT_EQUAL(expected,result);
+//   expected = {5,3,1,2,4};
+//   Permute(result.begin(),result.end(),result.begin()+4);
+//   ASSERT_EQUAL(expected,result);
+// }
+
 int main() {
   TestRunner tr;
+  // RUN_TEST(tr, TestPermute);
   RUN_TEST(tr, TestIntVector);
   RUN_TEST(tr, TestAvoidsCopying);
   return 0;
