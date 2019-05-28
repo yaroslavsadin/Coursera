@@ -16,6 +16,22 @@ using Sentence = vector<Token>;
 template <typename Token>
 vector<Sentence<Token>> SplitIntoSentences(vector<Token> tokens) {
   // Напишите реализацию функции, не копируя объекты типа Token
+  vector<Sentence<Token>> res;
+  Sentence<Token> s;
+  bool end_ = false;
+  for(auto it = tokens.begin(); it != tokens.end(); it++) {
+    if(it->IsEndSentencePunctuation()) {
+      end_ = true;
+    } else if(end_) {
+      res.push_back(move(s));
+      end_ = false;
+    }
+    s.push_back(move(*it));
+  }
+  if(s.size()) {
+    res.push_back(move(s));
+  }
+  return move(res);
 }
 
 
@@ -27,7 +43,8 @@ struct TestToken {
     return is_end_sentence_punctuation;
   }
   bool operator==(const TestToken& other) const {
-    return data == other.data && is_end_sentence_punctuation == other.is_end_sentence_punctuation;
+    return data == other.data
+        && is_end_sentence_punctuation == other.is_end_sentence_punctuation;
   }
 };
 

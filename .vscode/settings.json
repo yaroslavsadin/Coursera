@@ -64,7 +64,8 @@
         "map": "cpp",
         "list": "cpp",
         "forward_list": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "__tree": "cpp"
     },
     "terminal.integrated.env.windows": {
         "PATH":"C:\\cygwin64\\bin;${env:PATH}"
