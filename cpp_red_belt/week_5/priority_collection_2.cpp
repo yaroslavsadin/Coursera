@@ -25,12 +25,9 @@ public:
   // в диапазон [ids_begin, ...)
   template <typename ObjInputIt, typename IdOutputIt>
   void Add(ObjInputIt range_begin, ObjInputIt range_end, IdOutputIt ids_begin) {
-    vector<Id> res;
-    res.reserve(std::distance(range_begin,range_end));
     for(auto it = range_begin; it != range_end; it++) {
-      res.push_back(Add(move(*it)));
+      *(ids_begin++) = Add(move(*it));
     }
-    std::copy(res.begin(),res.end(),ids_begin);
   }
 
   // Определить, принадлежит ли идентификатор какому-либо
@@ -47,14 +44,8 @@ public:
   // Увеличить приоритет объекта на 1
   void Promote(Id id) {
     int current_prio = id_to_prio[id]++;
-    auto it = data_.rbegin();
-    for(; it != data_.rend(); it++) {
-      if(prio_to_ids.at(current_prio).count(&*it)) {
-        break;
-      }
-    }
-    prio_to_ids[current_prio+1].insert(&*it);
-    prio_to_ids[current_prio].erase(&*it);
+    prio_to_ids[current_prio+1].insert(id);
+    prio_to_ids[current_prio].erase(id);
     if(!prio_to_ids[current_prio].size()) {
       prio_to_ids.erase(current_prio);
     }
@@ -63,25 +54,14 @@ public:
   // Получить объект с максимальным приоритетом и его приоритет
   pair<const T&, int> GetMax() const {
     size_t max_prio = (prev(prio_to_ids.end()))->first;
-    auto it = data_.rbegin();
-    for(;it != data_.rend(); it++) {
-      if(prio_to_ids.at(max_prio).count((Id)&*it)) {
-        break;
-      }
-    }
-    return {*prev(it.base()),max_prio};
+    auto it = FindIt(max_prio);
+    return {*it,max_prio};
   }
 
   // Аналогично GetMax, но удаляет элемент из контейнера
   pair<T, int> PopMax() {
     size_t max_prio = (prev(prio_to_ids.end()))->first;
-    auto it_ = data_.rbegin();
-    for(;it_ != data_.rend(); it_++) {
-      if(prio_to_ids.at(max_prio).count((Id)&*it_)) {
-        break;
-      }
-    }
-    auto it = prev(it_.base());
+    auto it = FindIt(max_prio);
     prio_to_ids[max_prio].erase(&*it);
     if(!prio_to_ids[max_prio].size()) {
       prio_to_ids.erase(max_prio);
@@ -99,6 +79,27 @@ private:
   map<int,set<Id>> prio_to_ids;
   map<Id,int> id_to_prio;
   set<Id> ids;
+
+  typename list<T>::iterator FindIt(size_t prio) {
+    auto it_ = data_.rbegin();
+    for(;it_ != data_.rend(); it_++) {
+      if(prio_to_ids.at(prio).count(&*it_)) {
+        break;
+      }
+    }
+    auto it = prev(it_.base());
+    return it;
+  }
+  typename list<T>::const_iterator FindIt(size_t prio) const {
+    auto it_ = data_.rbegin();
+    for(;it_ != data_.rend(); it_++) {
+      if(prio_to_ids.at(prio).count((Id)&*it_)) {
+        break;
+      }
+    }
+    auto it = prev(it_.base());
+    return it;
+  }
 };
 
 template <typename T>
