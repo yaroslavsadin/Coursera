@@ -13,8 +13,16 @@ using namespace std;
 
 template <typename T>
 class PriorityCollection {
+private:
+  struct Id_ {
+    size_t num_id;
+    typename list<T>::iterator it;
+    bool operator<(const Id_& rhs) const {
+      return num_id < rhs.num_id;
+    }
+  };
 public:
-  using Id = T*/* тип, используемый для идентификаторов */;
+  using Id = Id_/* тип, используемый для идентификаторов */;
 
   // Добавить объект с нулевым приоритетом
   // с помощью перемещения и вернуть его идентификатор
@@ -38,7 +46,7 @@ public:
 
   // Получить объект по идентификатору
   const T& Get(Id id) const {
-    return *id;
+    return *(id.it);
   }
 
   // Увеличить приоритет объекта на 1
@@ -53,23 +61,23 @@ public:
 
   // Получить объект с максимальным приоритетом и его приоритет
   pair<const T&, int> GetMax() const {
-    size_t max_prio = (prev(prio_to_ids.end()))->first;
-    auto it = FindIt(max_prio);
-    return {*it,max_prio};
+    auto max_id_and_prio = GetMaxIdAndPrio();
+    return {*max_id_and_prio.first.it,max_id_and_prio.second};
   }
 
   // Аналогично GetMax, но удаляет элемент из контейнера
   pair<T, int> PopMax() {
-    size_t max_prio = (prev(prio_to_ids.end()))->first;
-    auto it = FindIt(max_prio);
-    prio_to_ids[max_prio].erase(&*it);
+    auto max_id_and_prio = GetMaxIdAndPrio();
+    size_t max_prio = max_id_and_prio.second;
+    Id max_elem_id = max_id_and_prio.first;
+    prio_to_ids[max_prio].erase(max_elem_id);
     if(!prio_to_ids[max_prio].size()) {
       prio_to_ids.erase(max_prio);
     }
-    id_to_prio.erase(&*it);
-    ids.erase(&*it);
-    pair<T, int> res = {move(*it),max_prio};
-    data_.erase(it);
+    id_to_prio.erase(max_elem_id);
+    ids.erase(max_elem_id);
+    pair<T, int> res = {move(*max_elem_id.it),max_prio};
+    data_.erase(max_elem_id.it);
     return res;
   }
 
@@ -79,37 +87,30 @@ private:
   map<int,set<Id>> prio_to_ids;
   map<Id,int> id_to_prio;
   set<Id> ids;
-
-  typename list<T>::iterator FindIt(size_t prio) {
-    auto it_ = data_.rbegin();
-    for(;it_ != data_.rend(); it_++) {
-      if(prio_to_ids.at(prio).count(&*it_)) {
-        break;
-      }
-    }
-    auto it = prev(it_.base());
-    return it;
-  }
-  typename list<T>::const_iterator FindIt(size_t prio) const {
-    auto it_ = data_.rbegin();
-    for(;it_ != data_.rend(); it_++) {
-      if(prio_to_ids.at(prio).count((Id)&*it_)) {
-        break;
-      }
-    }
-    auto it = prev(it_.base());
-    return it;
+  static size_t num_gen;
+  pair<Id, size_t> GetMaxIdAndPrio() const {
+    const pair<int,set<Id>> &latest = *prev(prio_to_ids.end());
+    int max_prio = latest.first;
+    Id max_elem_id = *prev(latest.second.end());
+    return {max_elem_id,max_prio};
   }
 };
 
 template <typename T>
 typename PriorityCollection<T>::Id PriorityCollection<T>::Add(T object) {
   data_.push_back(std::move(object));
-  prio_to_ids[0].insert(&data_.back());
-  id_to_prio[&data_.back()] = 0;
-  ids.insert(&data_.back());
-  return &data_.back();
+  Id id = {
+    .num_id = num_gen++, 
+    .it = prev(data_.end())
+  };
+  prio_to_ids[0].insert(id);
+  id_to_prio[id] = 0;
+  ids.insert(id);
+  return id;
 }
+
+template<typename T>
+size_t PriorityCollection<T>::num_gen = 0;
 
 class StringNonCopyable : public string {
 public:
