@@ -21,7 +21,8 @@ public:
     V& ref_to_value;
   };
 
-  explicit ConcurrentMap(size_t bucket_count) : mutexes(bucket_count), 
+  explicit ConcurrentMap(size_t bucket_count) : values(bucket_count),
+                                                mutexes(bucket_count), 
                                                 step(is_unsigned<K>() ? numeric_limits<K>::max() / bucket_count : 
                                                                     (2ull * numeric_limits<K>::max() + 1) / bucket_count)
                                                 {}
@@ -35,13 +36,13 @@ public:
 
   map<K, V> BuildOrdinaryMap() {
     map<K, V> res;
-    for (auto& [num,subdict] : values) {
+    for (auto& subdict : values) {
       res.merge(subdict);
     }
     return res;
   }
 private:
-  map<int,map<K, V>> values;
+  vector<map<K, V>> values;
   vector<mutex> mutexes;
   unsigned long long step;
 
