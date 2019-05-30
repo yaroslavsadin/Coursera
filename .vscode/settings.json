@@ -65,7 +65,10 @@
         "list": "cpp",
         "forward_list": "cpp",
         "numeric": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp",
+        "thread": "cpp"
     },
     "terminal.integrated.env.windows": {
         "PATH":"C:\\cygwin64\\bin;${env:PATH}"

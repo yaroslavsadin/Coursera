@@ -9,6 +9,8 @@
 #include <future>
 #include <limits>
 #include <type_traits>
+#include <cstdlib>
+#include <cmath>
 using namespace std;
 
 template <typename K, typename V>
@@ -22,36 +24,30 @@ public:
   };
 
   explicit ConcurrentMap(size_t bucket_count) : values(bucket_count),
-                                                mutexes(bucket_count), 
-                                                step(is_unsigned<K>() ? numeric_limits<K>::max() / bucket_count : 
-                                                                    (2ull * numeric_limits<K>::max() + 1) / bucket_count)
+                                                mutexes(bucket_count)
                                                 {}
 
   Access operator[](const K& key) {
     auto subdict = KeyToSubDict(key);
-    mutex& m_ = mutexes[subdict];
     // lock_guard executed first???
-    return {lock_guard(m_),values[subdict][key]};
+    return {lock_guard(mutexes[subdict]),values[subdict][key]};
   }
 
   map<K, V> BuildOrdinaryMap() {
     map<K, V> res;
-    for (auto& subdict : values) {
-      res.merge(subdict);
+    size_t i = 0;
+    for (auto& value : values) {
+      lock_guard guard = lock_guard(mutexes[i++]);
+      res.merge(value);
     }
-    return res;
+    return move(res);
   }
 private:
   vector<map<K, V>> values;
   vector<mutex> mutexes;
-  unsigned long long step;
 
-  long long KeyToSubDict(const K& key) const {
-    auto k = key;
-    if(k < 0) {
-      k += numeric_limits<K>::max() + 1ull;
-    }
-    return k / step;
+  size_t KeyToSubDict(const K& key) const {
+    return abs(static_cast<long long>(key)) % mutexes.size();
   }
 };
 
