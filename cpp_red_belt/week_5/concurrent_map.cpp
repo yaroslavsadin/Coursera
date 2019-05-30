@@ -8,6 +8,7 @@
 #include <random>
 #include <future>
 #include <limits>
+#include <type_traits>
 using namespace std;
 
 template <typename K, typename V>
@@ -20,19 +21,37 @@ public:
     V& ref_to_value;
   };
 
-  explicit ConcurrentMap(size_t bucket_count) : mutexes(bucket_count) {}
+  explicit ConcurrentMap(size_t bucket_count) : mutexes(bucket_count), 
+                                                step(is_unsigned<K>() ? numeric_limits<K>::max() / bucket_count : 
+                                                                    (2ull * numeric_limits<K>::max() + 1) / bucket_count)
+                                                {}
 
   Access operator[](const K& key) {
-    mutex& m_ = mutexes[0];
-    return {lock_guard(m_),values[key]};
+    auto subdict = KeyToSubDict(key);
+    mutex& m_ = mutexes[subdict];
+    // lock_guard executed first???
+    return {lock_guard(m_),values[subdict][key]};
   }
 
   map<K, V> BuildOrdinaryMap() {
-    return values;
+    map<K, V> res;
+    for (auto& [num,subdict] : values) {
+      res.merge(subdict);
+    }
+    return res;
   }
 private:
-  map<K, V> values;
+  map<int,map<K, V>> values;
   vector<mutex> mutexes;
+  unsigned long long step;
+
+  long long KeyToSubDict(const K& key) const {
+    auto k = key;
+    if(k < 0) {
+      k += numeric_limits<K>::max() + 1ull;
+    }
+    return k / step;
+  }
 };
 
 void RunConcurrentUpdates(
