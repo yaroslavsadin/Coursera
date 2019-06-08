@@ -214,10 +214,98 @@ extern vector<string_view> SplitIntoWords(string_view str);
 // }
 
 void TestLoaded(void) {
-  constexpr size_t document_input {10000};
-  constexpr size_t query_input  {20000};
+  constexpr size_t document_input {800};
+  constexpr size_t query_input  {300000};
 
   const vector<string> docs(document_input, string("we are ready to go abc abc abc abc abc ") + 
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +

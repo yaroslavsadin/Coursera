@@ -56,11 +56,14 @@ void SearchServer::AddQueriesStream(
     // O(QW)
     const auto words = SplitIntoWords(current_query);
 
-    vector<pair<size_t,size_t>> docid_count(50000);
+    vector<pair<size_t,size_t>> docid_count;
     // O(QW)
     for (const auto& word : words) {
       // O(logWN*logDN*WN)
       for (const size_t docid : index.Lookup(word)) {
+        if (docid_count.size() <= docid) {
+          docid_count.resize(docid+1);
+        }
         docid_count[docid].first = VectorItToIdx(docid_count,&docid_count[docid]);
         docid_count[docid].second++;
       }
