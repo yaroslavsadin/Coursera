@@ -12,15 +12,15 @@ using namespace std;
 class InvertedIndex {
 public:
   void Add(const string& document);
-  const list<size_t>& Lookup(const string& word) const;
+  const vector<size_t>& Lookup(const string& word) const;
 
   const string& GetDocument(size_t id) const {
     return docs[id];
   }
 
 private:
-  const static list<size_t> dummy;
-  map<string, list<size_t>> index;
+  const static vector<size_t> dummy;
+  map<string, vector<size_t>> index;
   vector<string> docs;
 };
 

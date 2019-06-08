@@ -15,7 +15,7 @@
   max_query_words = QW = 10
 */
 
-const list<size_t> InvertedIndex::dummy = {};
+const vector<size_t> InvertedIndex::dummy = {};
 
 // O(DS)
 vector<string> SplitIntoWords(const string& line) {
@@ -28,6 +28,11 @@ vector<string> SplitIntoWords(const string& line) {
 SearchServer::SearchServer(istream& document_input) {
   // O(DN*DS)
   UpdateDocumentBase(document_input);
+}
+
+template<typename T>
+size_t VectorItToIdx(const vector<T>& v, T* it) {
+  return it - v.data();
 }
 
 // O(DN*DS)
@@ -51,23 +56,25 @@ void SearchServer::AddQueriesStream(
     // O(QW)
     const auto words = SplitIntoWords(current_query);
 
-    map<size_t, size_t> docid_count;
+    vector<pair<size_t,size_t>> docid_count(50000);
     // O(QW)
     for (const auto& word : words) {
       // O(logWN*logDN*WN)
       for (const size_t docid : index.Lookup(word)) {
-        docid_count[docid]++;
+        docid_count[docid].first = VectorItToIdx(docid_count,&docid_count[docid]);
+        docid_count[docid].second++;
       }
     }
 
-    // O(DN)
-    vector<pair<size_t, size_t>> search_results(
-      docid_count.begin(), docid_count.end()
-    );
+    // // O(DN)
+    // vector<pair<size_t, size_t>> search_results(
+    //   docid_count.begin(), docid_count.end()
+    // );
     // O(DNlogDN)
-    sort(
-      begin(search_results),
-      end(search_results),
+    partial_sort(
+      begin(docid_count),
+      min(begin(docid_count)+5,end(docid_count)),
+      end(docid_count),
       [](pair<size_t, size_t> lhs, pair<size_t, size_t> rhs) {
         int64_t lhs_docid = lhs.first;
         auto lhs_hit_count = lhs.second;
@@ -78,10 +85,12 @@ void SearchServer::AddQueriesStream(
     );
 
     search_results_output << current_query << ':';
-    for (auto [docid, hitcount] : Head(search_results, 5)) {
-      search_results_output << " {"
-        << "docid: " << docid << ", "
-        << "hitcount: " << hitcount << '}';
+    for (auto [docid, hitcount] : Head(docid_count, 5)) {
+      if(hitcount) {  
+        search_results_output << " {"
+          << "docid: " << docid << ", "
+          << "hitcount: " << hitcount << '}';
+      }
     }
     search_results_output << endl;
   }
@@ -99,7 +108,7 @@ void InvertedIndex::Add(const string& document) {
 }
 
 // O(DN*logWN)
-const list<size_t>& InvertedIndex::Lookup(const string& word) const {
+const vector<size_t>& InvertedIndex::Lookup(const string& word) const {
   // O(logWN)
   if (auto it = index.find(word); it != index.end()) {
     // Here NRVO and copy elision don't work
