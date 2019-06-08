@@ -27,5 +27,10 @@ private:
 
 template <typename Container>
 auto Head(Container& c, int top) {
-  return IteratorRange(begin(c), begin(c) + min<size_t>(max(top, 0), c.size()));
+  return IteratorRange( begin(c), next(begin(c) , min<size_t>(max(top, 0), c.size())) );
+}
+
+template <typename Container>
+auto Tail(Container& c, int top) {
+  return IteratorRange( c.rbegin(), next(c.rbegin() , min<size_t>(max(top, 0), c.size())) );
 }

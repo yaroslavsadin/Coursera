@@ -1,6 +1,7 @@
 #include "search_server.h"
 #include "parse.h"
 #include "test_runner.h"
+#include "profile.h"
 
 #include <algorithm>
 #include <iterator>
@@ -200,6 +201,46 @@ void TestBasicSearch() {
   TestFunctionality(docs, queries, expected);
 }
 
+extern vector<string_view> SplitIntoWords(string_view str);
+
+// void TestSplit() {
+//   string str =  "        aaa      bbb   ccc    ";
+//   string one = "aaa";
+//   string two = "bbb";
+//   string three = "ccc";
+//   vector<string_view> expected = {one,two,three};
+//   vector<string_view> result = SplitIntoWords(str);
+//   ASSERT_EQUAL(expected,result);
+// }
+
+void TestLoaded(void) {
+  constexpr size_t document_input {10000};
+  constexpr size_t query_input  {20000};
+
+  const vector<string> docs(document_input, string("we are ready to go abc abc abc abc abc ") + 
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc " +
+  "abc abc abc abc abc "
+  );
+  const vector<string> queries(query_input, "we need some help help help welp welp welp welp");
+
+  const vector<string> expected = { query_input,
+      string("we need some help help help welp welp welp welp: {docid: 0, hitcount: 1} ") +
+      "{docid: 1, hitcount: 1} " + 
+      "{docid: 2, hitcount: 1} " +
+      "{docid: 3, hitcount: 1} " +
+      "{docid: 4, hitcount: 1}"
+  };
+  LOG_DURATION("");
+  TestFunctionality(docs, queries, expected);
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestSerpFormat);
@@ -207,4 +248,6 @@ int main() {
   RUN_TEST(tr, TestHitcount);
   RUN_TEST(tr, TestRanking);
   RUN_TEST(tr, TestBasicSearch);
+  // RUN_TEST(tr, TestSplit);
+  RUN_TEST(tr,TestLoaded);
 }

@@ -15,6 +15,8 @@
   max_query_words = QW = 10
 */
 
+const list<size_t> InvertedIndex::dummy = {};
+
 // O(DS)
 vector<string> SplitIntoWords(const string& line) {
   istringstream words_input(line);
@@ -96,12 +98,14 @@ void InvertedIndex::Add(const string& document) {
   }
 }
 
-// O(logWN)
-list<size_t> InvertedIndex::Lookup(const string& word) const {
+// O(DN*logWN)
+const list<size_t>& InvertedIndex::Lookup(const string& word) const {
   // O(logWN)
   if (auto it = index.find(word); it != index.end()) {
-    return it->second;
+    // Here NRVO and copy elision don't work
+    // So passing by reference is faster
+    return it->second; // O(DN)
   } else {
-    return {};
+    return {InvertedIndex::dummy};
   }
 }
