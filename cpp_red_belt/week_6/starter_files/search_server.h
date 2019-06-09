@@ -11,16 +11,20 @@ using namespace std;
 
 class InvertedIndex {
 public:
-  void Add(const string& document);
-  const vector<size_t>& Lookup(const string& word) const;
+  void Add(string document);
+  vector<uint32_t> Lookup(const string& word) const;
 
-  const string& GetDocument(size_t id) const {
+  const string& GetDocument(uint32_t id) const {
     return docs[id];
   }
 
+  uint32_t GetDocsCount() const {
+    return docs.size();
+  }
+
 private:
-  const static vector<size_t> dummy;
-  map<string, vector<size_t>> index;
+  const static vector<uint32_t> dummy;
+  map<string, vector<uint32_t>> index;
   vector<string> docs;
 };
 

@@ -223,6 +223,7 @@ void TestLoaded(void) {
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc abc lol abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
@@ -232,6 +233,7 @@ void TestLoaded(void) {
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc abc kek abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
@@ -279,6 +281,7 @@ void TestLoaded(void) {
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc we aabc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
@@ -291,9 +294,11 @@ void TestLoaded(void) {
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc abc some bc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc abc help bc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
@@ -301,29 +306,24 @@ void TestLoaded(void) {
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc abc abc welp bc " +
   "abc abc abc abc abc " +
   "abc abc abc abc abc " +
+  "abc kek abc abc lol " +
   "abc abc abc abc abc " +
+  "abc abc help bc abc " +
+  "abc abc abc welp bc " +
   "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc " +
-  "abc abc abc abc abc "
+  "abc need bc abc abc "
   );
-  const vector<string> queries(query_input, "we need some help help help welp welp welp welp");
+  const vector<string> queries(query_input, "we need some help help lol welp kek welp welp");
 
   const vector<string> expected = { query_input,
-      string("we need some help help help welp welp welp welp: {docid: 0, hitcount: 1} ") +
-      "{docid: 1, hitcount: 1} " + 
-      "{docid: 2, hitcount: 1} " +
-      "{docid: 3, hitcount: 1} " +
-      "{docid: 4, hitcount: 1}"
+      string("we need some help help lol welp kek welp welp: {docid: 0, hitcount: 18} ") +
+      "{docid: 1, hitcount: 18} " + 
+      "{docid: 2, hitcount: 18} " +
+      "{docid: 3, hitcount: 18} " +
+      "{docid: 4, hitcount: 18}"
   };
   LOG_DURATION("");
   TestFunctionality(docs, queries, expected);

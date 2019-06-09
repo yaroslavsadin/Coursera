@@ -5,6 +5,7 @@
 #include <iterator>
 #include <sstream>
 #include <iostream>
+#include <cstdint>
 
 /*
   document_input = DN = 50000
@@ -15,13 +16,16 @@
   max_query_words = QW = 10
 */
 
-const vector<size_t> InvertedIndex::dummy = {};
+const vector<uint32_t> InvertedIndex::dummy = {};
 
 // O(DS)
 vector<string> SplitIntoWords(const string& line) {
   istringstream words_input(line);
   // O(DS)
-  return {istream_iterator<string>(words_input), istream_iterator<string>()};
+  return {
+    make_move_iterator(istream_iterator<string>(words_input)),
+    make_move_iterator(istream_iterator<string>())
+  };
 }
 
 // O(DN*DS)
@@ -31,7 +35,7 @@ SearchServer::SearchServer(istream& document_input) {
 }
 
 template<typename T>
-size_t VectorItToIdx(const vector<T>& v, T* it) {
+int64_t VectorPtrToIdx(const vector<T>& v, T* it) {
   return it - v.data();
 }
 
@@ -48,37 +52,46 @@ void SearchServer::UpdateDocumentBase(istream& document_input) {
   index = move(new_index);
 }
 
+struct Pair {
+  uint32_t first;
+  uint32_t second;
+};
+
+Pair make_Pair(uint32_t a, uint32_t b) {
+  return {a,b};
+}
+
 void SearchServer::AddQueriesStream(
   istream& query_input, ostream& search_results_output
 ) {
-  // O(QN*DNlogDN)
+  vector<Pair> docid_count;
+  docid_count.reserve(index.GetDocsCount());
+  // O(QN*QW*DN*logWN)
   for (string current_query; getline(query_input, current_query); ) {
-    // O(QW)
-    const auto words = SplitIntoWords(current_query);
-
-    vector<pair<size_t,size_t>> docid_count;
-    // O(QW)
-    for (const auto& word : words) {
-      // O(logWN*logDN*WN)
-      for (const size_t docid : index.Lookup(word)) {
+    docid_count.clear();
+    
+    // O(QW*DN)
+    for (const auto& word : SplitIntoWords(current_query)) {
+      // O(DN)
+      for (const uint32_t docid : index.Lookup(word)) { // logWN
         if (docid_count.size() <= docid) {
           docid_count.resize(docid+1);
         }
-        docid_count[docid].first = VectorItToIdx(docid_count,&docid_count[docid]);
+        docid_count[docid].first = docid;
         docid_count[docid].second++;
       }
     }
 
     // // O(DN)
-    // vector<pair<size_t, size_t>> search_results(
+    // vector<pair<uint32_t, uint32_t>> search_results(
     //   docid_count.begin(), docid_count.end()
     // );
-    // O(DNlogDN)
+    // O(DN)
     partial_sort(
       begin(docid_count),
       min(begin(docid_count)+5,end(docid_count)),
       end(docid_count),
-      [](pair<size_t, size_t> lhs, pair<size_t, size_t> rhs) {
+      [&](const Pair& lhs, const Pair& rhs) {
         int64_t lhs_docid = lhs.first;
         auto lhs_hit_count = lhs.second;
         int64_t rhs_docid = rhs.first;
@@ -86,38 +99,37 @@ void SearchServer::AddQueriesStream(
         return make_pair(lhs_hit_count, -lhs_docid) > make_pair(rhs_hit_count, -rhs_docid);
       }
     );
-
+// #define search_results_output cout
     search_results_output << current_query << ':';
     for (auto [docid, hitcount] : Head(docid_count, 5)) {
-      if(hitcount) {  
+      if(hitcount) {
         search_results_output << " {"
           << "docid: " << docid << ", "
           << "hitcount: " << hitcount << '}';
       }
     }
-    search_results_output << endl;
+    search_results_output << '\n';
   }
 }
 
 // ~O(DS)
-void InvertedIndex::Add(const string& document) {
-  docs.push_back(document); // Amortized O(1)
-
-  const size_t docid = docs.size() - 1;
+void InvertedIndex::Add(string document) {
+  docs.push_back(move(document)); // Amortized O(1)
+  const uint32_t docid = docs.size() - 1;
   // O(DS)*AmortizedO(1)
-  for (const auto& word : SplitIntoWords(document)) {
-    index[word].push_back(docid);
+  for (auto word : SplitIntoWords(docs.back())) {
+    index[move(word)].push_back(docid);
   }
 }
 
-// O(DN*logWN)
-const vector<size_t>& InvertedIndex::Lookup(const string& word) const {
+// O(logWN)
+vector<uint32_t> InvertedIndex::Lookup(const string& word) const {
   // O(logWN)
   if (auto it = index.find(word); it != index.end()) {
     // Here NRVO and copy elision don't work
     // So passing by reference is faster
-    return it->second; // O(DN)
+    return it->second;
   } else {
-    return {InvertedIndex::dummy};
+    return {};
   }
 }
