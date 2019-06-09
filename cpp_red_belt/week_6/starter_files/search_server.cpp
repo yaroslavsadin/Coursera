@@ -73,12 +73,12 @@ void SearchServer::AddQueriesStream(
     // O(QW*DN)
     for (const auto& word : SplitIntoWords(current_query)) {
       // O(DN)
-      for (const uint32_t docid : index.Lookup(word)) { // logWN
+      for (const auto [docid,count] : index.Lookup(word)) { // logWN
         if (docid_count.size() <= docid) {
           docid_count.resize(docid+1);
         }
         docid_count[docid].first = docid;
-        docid_count[docid].second++;
+        docid_count[docid].second += count;
       }
     }
 
@@ -118,12 +118,20 @@ void InvertedIndex::Add(string document) {
   const uint32_t docid = docs.size() - 1;
   // O(DS)*AmortizedO(1)
   for (auto word : SplitIntoWords(docs.back())) {
-    index[move(word)].push_back(docid);
+    vector<pair<uint32_t,uint32_t>>& docs = index[word];
+    auto it = find_if(docs.begin(),docs.end(),[docid](const pair<size_t,size_t> p) {
+      return (p.first == docid);
+    });
+    if(it == docs.end()) {
+      docs.push_back({docid,1});
+    } else {
+      it->second++;
+    }
   }
 }
 
 // O(logWN)
-vector<uint32_t> InvertedIndex::Lookup(const string& word) const {
+vector<pair<uint32_t,uint32_t>> InvertedIndex::Lookup(const string& word) const {
   // O(logWN)
   if (auto it = index.find(word); it != index.end()) {
     // Here NRVO and copy elision don't work

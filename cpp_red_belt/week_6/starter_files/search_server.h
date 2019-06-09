@@ -12,7 +12,7 @@ using namespace std;
 class InvertedIndex {
 public:
   void Add(string document);
-  vector<uint32_t> Lookup(const string& word) const;
+  vector<pair<uint32_t,uint32_t>> Lookup(const string& word) const;
 
   const string& GetDocument(uint32_t id) const {
     return docs[id];
@@ -24,7 +24,7 @@ public:
 
 private:
   const static vector<uint32_t> dummy;
-  map<string, vector<uint32_t>> index;
+  map<string, vector<pair<uint32_t,uint32_t>>> index;
   vector<string> docs;
 };
 
