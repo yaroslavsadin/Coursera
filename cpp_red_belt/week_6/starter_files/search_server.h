@@ -11,6 +11,9 @@ using namespace std;
 
 class InvertedIndex {
 public:
+  // Can use InvertedIndex constructor to directly build
+  // the index fro istream:
+  // InvertedIndex(istream& document_input)
   void Add(string document);
   vector<pair<uint32_t,uint32_t>> Lookup(const string& word) const;
 
@@ -24,6 +27,13 @@ public:
 
 private:
   const static vector<uint32_t> dummy;
+  // Could write like this to get read of pair 
+  // constructor and use string_view instead of string
+  //
+  // struct Entry {
+  //   size_t docid, hitcount;
+  // };
+  // map<string_view, vector<Entry>> index;
   map<string, vector<pair<uint32_t,uint32_t>>> index;
   vector<string> docs;
 };

@@ -1,5 +1,6 @@
 #include "search_server.h"
 #include "iterator_range.h"
+#include "profile_advanced.h"
 
 #include <algorithm>
 #include <iterator>
@@ -18,6 +19,7 @@
 
 const vector<uint32_t> InvertedIndex::dummy = {};
 
+// SplitIntoWordsView
 // O(DS)
 vector<string> SplitIntoWords(const string& line) {
   istringstream words_input(line);
@@ -64,6 +66,9 @@ Pair make_Pair(uint32_t a, uint32_t b) {
 void SearchServer::AddQueriesStream(
   istream& query_input, ostream& search_results_output
 ) {
+  TotalDuration internal_loop("internal_loop");
+  TotalDuration partial_sort_("partial_sort");
+
   vector<Pair> docid_count;
   docid_count.reserve(index.GetDocsCount());
   // O(QN*QW*DN*logWN)
@@ -72,6 +77,7 @@ void SearchServer::AddQueriesStream(
     
     // O(QW*DN)
     for (const auto& word : SplitIntoWords(current_query)) {
+      ADD_DURATION(internal_loop);
       // O(DN)
       for (const auto [docid,count] : index.Lookup(word)) { // logWN
         if (docid_count.size() <= docid) {
@@ -87,18 +93,21 @@ void SearchServer::AddQueriesStream(
     //   docid_count.begin(), docid_count.end()
     // );
     // O(DN)
-    partial_sort(
-      begin(docid_count),
-      min(begin(docid_count)+5,end(docid_count)),
-      end(docid_count),
-      [&](const Pair& lhs, const Pair& rhs) {
-        int64_t lhs_docid = lhs.first;
-        auto lhs_hit_count = lhs.second;
-        int64_t rhs_docid = rhs.first;
-        auto rhs_hit_count = rhs.second;
-        return make_pair(lhs_hit_count, -lhs_docid) > make_pair(rhs_hit_count, -rhs_docid);
-      }
-    );
+    {
+      ADD_DURATION(partial_sort_);  
+      partial_sort(
+        begin(docid_count),
+        min(begin(docid_count)+5,end(docid_count)),
+        end(docid_count),
+        [&](const Pair& lhs, const Pair& rhs) {
+          int64_t lhs_docid = lhs.first;
+          auto lhs_hit_count = lhs.second;
+          int64_t rhs_docid = rhs.first;
+          auto rhs_hit_count = rhs.second;
+          return make_pair(lhs_hit_count, -lhs_docid) > make_pair(rhs_hit_count, -rhs_docid);
+        }
+      );
+    }
 // #define search_results_output cout
     search_results_output << current_query << ':';
     for (auto [docid, hitcount] : Head(docid_count, 5)) {
@@ -119,6 +128,13 @@ void InvertedIndex::Add(string document) {
   // O(DS)*AmortizedO(1)
   for (auto word : SplitIntoWords(docs.back())) {
     vector<pair<uint32_t,uint32_t>>& docs = index[word];
+    // It is enough to check docs.back() to see if the word already
+    // has the document counted:
+    // if (!docids.empty() && docids.back().docid == docid) {
+    //     ++docids.back().hitcount;
+    //   } else {
+    //     docids.push_back({docid, 1});
+    //   }
     auto it = find_if(docs.begin(),docs.end(),[docid](const pair<size_t,size_t> p) {
       return (p.first == docid);
     });
