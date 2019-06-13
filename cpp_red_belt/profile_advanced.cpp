@@ -1,4 +1,5 @@
 #include "profile_advanced.h"
+#include "ostream_color.h"
 
 #include <iostream>
 #include <sstream>
@@ -14,7 +15,7 @@ TotalDuration::~TotalDuration() {
   os << message
      << duration_cast<milliseconds>(value).count()
      << " ms" << endl;
-  cerr << os.str();
+  cerr << MAGENTA_TEXT_START << os.str() << TEXT_COLOR_RESET;
 }
 
 AddDuration::AddDuration(steady_clock::duration& dest)

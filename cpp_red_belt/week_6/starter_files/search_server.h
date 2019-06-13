@@ -7,7 +7,34 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <future>
+#include <queue>
 using namespace std;
+
+template <typename T>
+class Synchronized {
+public:
+  explicit Synchronized(T initial = T()) : value(initial) {}
+
+  struct Access {
+    Access(T& value_, mutex& m_) : ref_to_value(value_), m(m_) {
+      m.lock();
+    }
+    ~Access() {
+      m.unlock();
+    }
+    T& ref_to_value;
+  private:
+    mutex& m;
+  };
+
+  Access GetAccess() {
+    return {value,m};
+  }
+private:
+  T value;
+  mutex m;
+};
 
 class InvertedIndex {
 public:
@@ -42,9 +69,15 @@ class SearchServer {
 public:
   SearchServer() = default;
   explicit SearchServer(istream& document_input);
+  void UpdateDocumentBaseSingleThread(istream& document_input);
   void UpdateDocumentBase(istream& document_input);
+  void AddQueriesStreamSingleThread(istream& query_input, ostream& search_results_output);
   void AddQueriesStream(istream& query_input, ostream& search_results_output);
 
 private:
   InvertedIndex index;
+  Synchronized<InvertedIndex> protected_index = Synchronized(index);
+  queue<future<void>> queries_futures;
+  queue<future<void>> update_futures;
+  bool first_update = true;
 };

@@ -1,6 +1,6 @@
 #include "search_server.h"
 #include "iterator_range.h"
-#include "profile_advanced.h"
+// #include "profile_advanced.h"
 
 #include <algorithm>
 #include <iterator>
@@ -42,7 +42,7 @@ int64_t VectorPtrToIdx(const vector<T>& v, T* it) {
 }
 
 // O(DN*DS)
-void SearchServer::UpdateDocumentBase(istream& document_input) {
+void SearchServer::UpdateDocumentBaseSingleThread(istream& document_input) {
   InvertedIndex new_index;
 
   // O(DN)
@@ -50,8 +50,7 @@ void SearchServer::UpdateDocumentBase(istream& document_input) {
     // O(DS)
     new_index.Add(move(current_document));
   }
-
-  index = move(new_index);
+  protected_index.GetAccess().ref_to_value = move(new_index);
 }
 
 struct Pair {
@@ -63,23 +62,24 @@ Pair make_Pair(uint32_t a, uint32_t b) {
   return {a,b};
 }
 
-void SearchServer::AddQueriesStream(
+void SearchServer::AddQueriesStreamSingleThread(
   istream& query_input, ostream& search_results_output
 ) {
-  TotalDuration internal_loop("internal_loop");
-  TotalDuration partial_sort_("partial_sort");
+  // TotalDuration internal_loop("internal_loop");
+  // TotalDuration partial_sort_("partial_sort");
 
   vector<Pair> docid_count;
-  docid_count.reserve(index.GetDocsCount());
+  docid_count.reserve(protected_index.GetAccess().ref_to_value.GetDocsCount());
   // O(QN*QW*DN*logWN)
   for (string current_query; getline(query_input, current_query); ) {
     docid_count.clear();
     
     // O(QW*DN)
     for (const auto& word : SplitIntoWords(current_query)) {
-      ADD_DURATION(internal_loop);
+      // ADD_DURATION(internal_loop);
       // O(DN)
-      for (const auto [docid,count] : index.Lookup(word)) { // logWN
+      vector<pair<uint32_t,uint32_t>> lookup;
+      for (const auto [docid,count] : protected_index.GetAccess().ref_to_value.Lookup(word)) { // logWN
         if (docid_count.size() <= docid) {
           docid_count.resize(docid+1);
         }
@@ -94,7 +94,7 @@ void SearchServer::AddQueriesStream(
     // );
     // O(DN)
     {
-      ADD_DURATION(partial_sort_);  
+      // ADD_DURATION(partial_sort_);  
       partial_sort(
         begin(docid_count),
         min(begin(docid_count)+5,end(docid_count)),
@@ -155,5 +155,27 @@ vector<pair<uint32_t,uint32_t>> InvertedIndex::Lookup(const string& word) const 
     return it->second;
   } else {
     return {};
+  }
+}
+
+void SearchServer::AddQueriesStream(istream& query_input, ostream& search_results_output) {
+  auto f = async([this,&query_input,&search_results_output] {
+    AddQueriesStreamSingleThread(query_input,search_results_output);
+  });
+  queries_futures.push(move(f));
+  queries_futures.back().get();
+}
+
+void SearchServer::UpdateDocumentBase(istream& document_input) {
+  if(update_futures.size()) {
+    update_futures.pop();
+  }
+  auto f = async([this,&document_input] {
+    UpdateDocumentBaseSingleThread(document_input);
+  });
+  update_futures.push(move(f));
+  if(first_update) {
+    update_futures.back().get();
+    first_update = false;
   }
 }
