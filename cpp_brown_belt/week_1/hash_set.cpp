@@ -2,6 +2,7 @@
 
 #include <forward_list>
 #include <iterator>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,13 +15,54 @@ public:
   explicit HashSet(
       size_t num_buckets,
       const Hasher& hasher = {}
-  );
+  ) : buckets(num_buckets), h(hasher) {}
 
   void Add(const Type& value);
   bool Has(const Type& value) const;
   void Erase(const Type& value);
   const BucketList& GetBucket(const Type& value) const;
+private:
+  Hasher h;
+  vector<BucketList> buckets;
 };
+
+template <typename Type, typename Hasher>
+void HashSet<Type,Hasher>::Add(const Type& value) {
+  size_t bucket = h(value) % buckets.size();
+  BucketList& b = buckets[bucket];
+  auto it =  find(b.begin(),b.end(),value);
+  
+  if(it == b.end()) {
+    b.push_front(value);
+  }
+}
+
+template <typename Type, typename Hasher>
+bool HashSet<Type,Hasher>::Has(const Type& value) const {
+  size_t bucket = h(value) % buckets.size();
+  const BucketList& b = buckets[bucket];
+  auto it =  find(b.begin(),b.end(),value);
+  if(it == b.end()) {
+    return false;
+  }
+  return true;
+}
+
+template <typename Type, typename Hasher>
+void HashSet<Type,Hasher>::Erase(const Type& value) {
+  size_t bucket = h(value) % buckets.size();
+  BucketList& b = buckets[bucket]; 
+  auto it =  find(b.begin(),b.end(),value);
+  if(it == b.end()) {
+    return;
+  }
+  b.remove(value);
+}
+
+template <typename Type, typename Hasher>
+const typename HashSet<Type,Hasher>::BucketList& HashSet<Type,Hasher>::GetBucket(const Type& value) const {
+  return buckets[h(value) % buckets.size()];
+}
 
 struct IntHasher {
   size_t operator()(int value) const {
