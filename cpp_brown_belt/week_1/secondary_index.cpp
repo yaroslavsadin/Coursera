@@ -81,6 +81,7 @@ ostream& operator << (ostream& os, const multimap<K, V>& m) {
 // Реализуйте этот класс
 class Database {
 public:
+  using RecordIt = list<Record>::iterator;
   Database() {
     // cerr << "Database default ctor" << endl;
   }
@@ -98,16 +99,33 @@ public:
   void AllByUser(const string& user, Callback callback) const;
 private:
   list<Record> records;
-  unordered_map<string,list<Record>::iterator> id_to_rec_it;
-  multimap<int,list<Record>::iterator> karma_to_rec_it;
-  multimap<int,list<Record>::iterator> time_to_rec_it;
-  multimap<string,list<Record>::iterator> user_to_rec_it;
+  unordered_map<string,RecordIt> id_to_rec_it;
+  map<int,vector<RecordIt>> karma_to_rec_it;
+  map<int,vector<RecordIt>> time_to_rec_it;
+  map<string,vector<RecordIt>> user_to_rec_it;
 
   void Log(void) const {
     for(const auto& [id,it] : id_to_rec_it) {
       cerr << id <<": " << *it << endl;
     }
   }
+
+  template<typename Key, typename Value, typename Callback>
+  void ForRange(map<Key,Value> m, Key one, Key two, Callback callback) const {
+    auto it_begin = m.lower_bound(one);
+    auto it_end = m.upper_bound(two);
+    if (it_begin == m.end()) {
+      return;
+    }
+    for(;it_begin != it_end; it_begin++) {
+      for(const auto& rec_it : it_begin->second) {
+        if(id_to_rec_it.count(rec_it->id)) {
+          if(!callback(*rec_it)) return;
+        }
+      }
+    }
+  }
+  
 };
 
 bool Database::Put(const Record& record) {
@@ -117,9 +135,9 @@ bool Database::Put(const Record& record) {
   } else {
     records.push_back(record);
     id_to_rec_it.insert(make_pair(records.back().id,prev(records.end())));
-    karma_to_rec_it.insert(make_pair(records.back().karma,prev(records.end())));
-    time_to_rec_it.insert(make_pair(records.back().timestamp,prev(records.end())));
-    user_to_rec_it.insert(make_pair(records.back().user,prev(records.end())));
+    karma_to_rec_it[record.karma].push_back(prev(records.end()));
+    time_to_rec_it[record.timestamp].push_back(prev(records.end()));
+    user_to_rec_it[record.user].push_back(prev(records.end()));
     return true;
   }
 }
@@ -139,12 +157,6 @@ const Record* Database::GetById(const string& id) const {
 bool Database::Erase(const string& id) {
   // cerr << "Erase " << id << endl;
   if(id_to_rec_it.count(id)) {
-    int karma = id_to_rec_it.at(id)->karma;
-    int timestamp = id_to_rec_it.at(id)->timestamp;
-    auto user = id_to_rec_it.at(id)->user;
-    // EraseFromMultiMap(karma_to_rec_it, karma, id);
-    // EraseFromMultiMap(time_to_rec_it, timestamp, id);
-    // EraseFromMultiMap(user_to_rec_it, user, id);
     records.erase(id_to_rec_it.at(id));
     id_to_rec_it.erase(id);
     return true;
@@ -155,52 +167,17 @@ bool Database::Erase(const string& id) {
 
 template<typename Callback>
 void Database::RangeByTimestamp(int low, int high, Callback callback) const {
-  // cerr << "RangeByTimestamp " << low << " " << high << endl;
-  // cerr << "-----------------------" << endl;
-  // Log();
-  // cerr << "-----------------------" << endl;
-  auto it_begin = time_to_rec_it.lower_bound(low);
-  if (it_begin == time_to_rec_it.end()) {
-    return;
-  }
-  auto rec_it = it_begin->second;
-  while(id_to_rec_it.count(rec_it->id) && (rec_it->timestamp <= high) && callback(*rec_it)) {
-    if(++it_begin != time_to_rec_it.end())
-      rec_it = it_begin->second;
-    else
-      break;
-  }
+  ForRange(time_to_rec_it, low, high, callback);
 }
 
 template<typename Callback>
 void Database::RangeByKarma(int low, int high, Callback callback) const {
-  // cerr << "RangeByKarma " << low << " " << high << endl;
-  auto it_begin = karma_to_rec_it.lower_bound(low);
-  if (it_begin == karma_to_rec_it.end()) {
-    return;
-  }
-  auto rec_it = it_begin->second;
-  while(id_to_rec_it.count(rec_it->id) && (rec_it->karma <= high) && callback(*rec_it)) {
-    if(++it_begin != karma_to_rec_it.end())
-      rec_it = it_begin->second;
-    else
-      break;
-  }
+  ForRange(karma_to_rec_it, low, high, callback);
 }
 
 template <typename Callback>
 void Database::AllByUser(const string& user, Callback callback) const {
-  // cerr << "AllByUser " << user << endl;
-  auto it_begin = user_to_rec_it.lower_bound(user);
-  if (it_begin == user_to_rec_it.end()) {
-    return;
-  }
-  auto rec_it = it_begin->second;
-  while(it_begin != user_to_rec_it.end() && (it_begin->first == user) && callback(*rec_it)) {
-    while(++it_begin != user_to_rec_it.end() && !id_to_rec_it.count(rec_it->id)) {
-        rec_it = it_begin->second;
-    }
-  }
+  ForRange(user_to_rec_it, user, user, callback);
 };
 
 void TestRangeBoundaries() {
@@ -212,8 +189,9 @@ void TestRangeBoundaries() {
   db.Put({"id2", "O>>-<", "general2", 1536107260, bad_karma});
 
   int count = 0;
-  db.RangeByKarma(bad_karma, good_karma, [&count](const Record&) {
+  db.RangeByKarma(bad_karma, good_karma, [&count](const Record& r) {
     ++count;
+    cerr << r << endl;
     return true;
   });
 
@@ -226,8 +204,9 @@ void TestSameUser() {
   db.Put({"id2", "Rethink life", "master", 1536107260, 2000});
 
   int count = 0;
-  db.AllByUser("master", [&count](const Record&) {
+  db.AllByUser("master", [&count](const Record& r) {
     ++count;
+    cerr << r << endl;
     return true;
   });
 
