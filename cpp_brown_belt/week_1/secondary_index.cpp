@@ -110,14 +110,13 @@ private:
     }
   }
 
-  template<typename Key, typename Value, typename Callback>
-  void ForRange(map<Key,Value> m, Key one, Key two, Callback callback) const {
+  template<typename Key, typename Value, typename Callback, typename Checker>
+  void ForRange(const map<Key,Value>& m, const Key& one, Callback callback, Checker checker) const {
     auto it_begin = m.lower_bound(one);
-    auto it_end = m.upper_bound(two);
     if (it_begin == m.end()) {
       return;
     }
-    for(;it_begin != it_end; it_begin++) {
+    for(;it_begin != m.end() && checker(it_begin->first); it_begin++) {
       for(const auto& rec_it : it_begin->second) {
         if(id_to_rec_it.count(rec_it->id)) {
           if(!callback(*rec_it)) return;
@@ -134,22 +133,19 @@ bool Database::Put(const Record& record) {
     return false;
   } else {
     records.push_back(record);
-    id_to_rec_it.insert(make_pair(records.back().id,prev(records.end())));
-    karma_to_rec_it[record.karma].push_back(prev(records.end()));
-    time_to_rec_it[record.timestamp].push_back(prev(records.end()));
-    user_to_rec_it[record.user].push_back(prev(records.end()));
+    auto new_it = prev(records.end());
+    id_to_rec_it[records.back().id] = new_it;
+    karma_to_rec_it[record.karma].push_back(new_it);
+    time_to_rec_it[record.timestamp].push_back(new_it);
+    user_to_rec_it[record.user].push_back(new_it);
     return true;
   }
 }
 
 const Record* Database::GetById(const string& id) const {
-  // cerr << "--------------> GetById " << id << endl;
-  // Log();
   if(id_to_rec_it.count(id)) {
-    // cerr << "RETURNED: " << *id_to_rec_it.at(id) << endl;
     return &*id_to_rec_it.at(id);
   } else {
-    // cerr << "RETURNED nullptr" << endl;
     return nullptr;
   }
 }
@@ -167,17 +163,23 @@ bool Database::Erase(const string& id) {
 
 template<typename Callback>
 void Database::RangeByTimestamp(int low, int high, Callback callback) const {
-  ForRange(time_to_rec_it, low, high, callback);
+  ForRange(time_to_rec_it, low, callback, [high](int cueernt_timestamp) {
+    return cueernt_timestamp <= high;
+  });
 }
 
 template<typename Callback>
 void Database::RangeByKarma(int low, int high, Callback callback) const {
-  ForRange(karma_to_rec_it, low, high, callback);
+  ForRange(karma_to_rec_it, low, callback, [high](int cueernt_karma) {
+    return cueernt_karma <= high;
+  });
 }
 
 template <typename Callback>
 void Database::AllByUser(const string& user, Callback callback) const {
-  ForRange(user_to_rec_it, user, user, callback);
+  ForRange(user_to_rec_it, user, callback, [&user](const string& cueernt_user) {
+    return cueernt_user == user;
+  });
 };
 
 void TestRangeBoundaries() {
