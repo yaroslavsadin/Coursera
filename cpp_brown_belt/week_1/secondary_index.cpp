@@ -5,67 +5,12 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <list>
 
 #include <string>
 #include <chrono>
 
 using namespace std;
-using namespace chrono;
-
-struct TotalDuration {
-  string message;
-  steady_clock::duration value;
-
-  explicit TotalDuration(const string& msg);
-  ~TotalDuration();
-};
-
-class AddDuration {
-public:
-  explicit AddDuration(steady_clock::duration& dest);
-  explicit AddDuration(TotalDuration& dest);
-
-  ~AddDuration();
-
-private:
-  steady_clock::duration& add_to;
-  steady_clock::time_point start;
-};
-
-#define MY_UNIQ_ID_IMPL(lineno) _a_local_var_##lineno
-#define MY_UNIQ_ID(lineno) MY_UNIQ_ID_IMPL(lineno)
-
-#define ADD_DURATION(value) \
-  AddDuration MY_UNIQ_ID(__LINE__){value};
-
-TotalDuration::TotalDuration(const string& msg)
-  : message(msg + ": ")
-  , value(0)
-{
-}
-
-TotalDuration::~TotalDuration() {
-  ostringstream os;
-  os << message
-     << duration_cast<milliseconds>(value).count()
-     << " ms" << endl;
-  cerr << os.str();
-}
-
-AddDuration::AddDuration(steady_clock::duration& dest)
-  : add_to(dest)
-  , start(steady_clock::now())
-{
-}
-
-AddDuration::AddDuration(TotalDuration& dest)
-  : AddDuration(dest.value)
-{
-}
-
-AddDuration::~AddDuration() {
-  add_to += steady_clock::now() - start;
-}
 
 struct Record {
   string id;
@@ -79,11 +24,6 @@ struct Record {
             tie(r.id,r.title,r.user,r.timestamp,r.karma);
   }
 };
-
-ostream& operator<<(ostream& os, const Record& r) {
-    return os << '[' << r.id << ' ' << r.title << ' ' << r.user 
-            << ' ' << r.timestamp << ' ' << r.karma << ']';
-  }
 
 class RecordHasher {
   size_t operator()(const Record& r) const {
@@ -107,33 +47,22 @@ class RecordHasher {
   }
 };
 
-template<typename Key, typename Value>
-  bool EraseFromMultiMap(multimap<Key,Value>& mm, Key k, Value v) {
-    auto it = mm.lower_bound(k);
-    for(;it != mm.end(); it++) {
-      if (it->second == v) {
+ostream& operator<<(ostream& os, const Record& r) {
+    return os << '[' << r.id << ' ' << r.title << ' ' << r.user 
+            << ' ' << r.timestamp << ' ' << r.karma << ']';
+  }
+
+template<typename Key, typename Value, typename Key1, typename Value1>
+  bool EraseFromMultiMap(multimap<Key,Value>& mm, Key1 k, Value1 v) {
+    auto its = mm.equal_range(k);
+    for(auto it = its.first ;it != its.second; it++) {
+      if (it->second->id == v) {
         mm.erase(it);
         return true;
       }
     }
     return false;
   }
-
-#if 0
-template <class K, class V>
-ostream& operator << (ostream& os, const unordered_map<K, V>& m) {
-  os << "{";
-  bool first = true;
-  for (const auto& kv : m) {
-    if (!first) {
-      os << ", ";
-    }
-    first = false;
-    os << kv.first << ": " << kv.second;
-  }
-  return os << "}";
-}
-#endif
 
 template <class K, class V>
 ostream& operator << (ostream& os, const multimap<K, V>& m) {
@@ -152,8 +81,7 @@ ostream& operator << (ostream& os, const multimap<K, V>& m) {
 // Реализуйте этот класс
 class Database {
 public:
-  Database() : put("Put"), erase("Erase"), range_time("RangeByTimestamp"),
-  range_karma("RangeByKarma"), all_by_user("AllByUser"), get_by_id("GetById") {
+  Database() {
     // cerr << "Database default ctor" << endl;
   }
   bool Put(const Record& record);
@@ -169,114 +97,109 @@ public:
   template <typename Callback>
   void AllByUser(const string& user, Callback callback) const;
 private:
-  unordered_map<string, Record> id_to_record;
-  multimap<int,string> timestamp_to_id;
-  multimap<int,string> karma_to_id;
-  multimap<string, string> user_to_id;
+  list<Record> records;
+  unordered_map<string,list<Record>::iterator> id_to_rec_it;
+  multimap<int,list<Record>::iterator> karma_to_rec_it;
+  multimap<int,list<Record>::iterator> time_to_rec_it;
+  multimap<string,list<Record>::iterator> user_to_rec_it;
 
-  TotalDuration put;
-  TotalDuration erase;
-  TotalDuration range_time;
-  TotalDuration range_karma;
-  TotalDuration all_by_user;
-  TotalDuration get_by_id;
-  
   void Log(void) const {
-    cerr << "---------id_to_record-----------" << endl;
-    cerr << id_to_record << endl;
-    cerr << "---------timestamp_to_id-----------" << endl;
-    cerr << timestamp_to_id << endl;
-    cerr << "---------karma_to_id-----------" << endl;
-    cerr << karma_to_id << endl;
-    cerr << "---------user_to_id-----------" << endl;
-    cerr << user_to_id << endl;
+    for(const auto& [id,it] : id_to_rec_it) {
+      cerr << id <<": " << *it << endl;
+    }
   }
 };
 
 bool Database::Put(const Record& record) {
-  ADD_DURATION(put);
-  // cerr << "Put" << endl;
-  auto res = id_to_record.insert(make_pair(record.id,record));
-  bool inserted = res.second;
-  if(inserted) {
-    timestamp_to_id.insert(make_pair(record.timestamp, record.id));
-    karma_to_id.insert(make_pair(record.karma, record.id));
-    user_to_id.insert(make_pair(record.user,record.id));
+  // cerr << "Put " << record << endl;
+  if(id_to_rec_it.count(record.id)) {
+    return false;
+  } else {
+    records.push_back(record);
+    id_to_rec_it.insert(make_pair(records.back().id,prev(records.end())));
+    karma_to_rec_it.insert(make_pair(records.back().karma,prev(records.end())));
+    time_to_rec_it.insert(make_pair(records.back().timestamp,prev(records.end())));
+    user_to_rec_it.insert(make_pair(records.back().user,prev(records.end())));
+    return true;
   }
-  return inserted;
 }
 
 const Record* Database::GetById(const string& id) const {
-  ADD_DURATION((TotalDuration&)get_by_id);
-  // cerr << "GetById" << endl;
-  if (id_to_record.count(id)) {
-    return &id_to_record.at(id);
+  // cerr << "--------------> GetById " << id << endl;
+  // Log();
+  if(id_to_rec_it.count(id)) {
+    // cerr << "RETURNED: " << *id_to_rec_it.at(id) << endl;
+    return &*id_to_rec_it.at(id);
   } else {
+    // cerr << "RETURNED nullptr" << endl;
     return nullptr;
   }
 }
 
 bool Database::Erase(const string& id) {
-  ADD_DURATION(erase);
-  // cerr << "Erase" << endl;
-   if(id_to_record.count(id)) {
-    int timestamp = id_to_record.at(id).timestamp;
-    int karma = id_to_record.at(id).karma;
-    string user = id_to_record.at(id).user;
-    id_to_record.erase(id);
-    EraseFromMultiMap(timestamp_to_id, timestamp, id);
-    EraseFromMultiMap(karma_to_id, karma, id);
-    EraseFromMultiMap(user_to_id, user, id);
+  // cerr << "Erase " << id << endl;
+  if(id_to_rec_it.count(id)) {
+    int karma = id_to_rec_it.at(id)->karma;
+    int timestamp = id_to_rec_it.at(id)->timestamp;
+    auto user = id_to_rec_it.at(id)->user;
+    // EraseFromMultiMap(karma_to_rec_it, karma, id);
+    // EraseFromMultiMap(time_to_rec_it, timestamp, id);
+    // EraseFromMultiMap(user_to_rec_it, user, id);
+    records.erase(id_to_rec_it.at(id));
+    id_to_rec_it.erase(id);
     return true;
-   } else {
-     return false;
-   }
+  } else {
+    return false;
+  }
 }
 
 template<typename Callback>
 void Database::RangeByTimestamp(int low, int high, Callback callback) const {
-  ADD_DURATION((TotalDuration&)range_time);
-  // cerr << "RangeByTimestamp" << low << ' ' << high << endl;
+  // cerr << "RangeByTimestamp " << low << " " << high << endl;
+  // cerr << "-----------------------" << endl;
   // Log();
-  auto it_begin = timestamp_to_id.lower_bound(low);
-  auto it_end = timestamp_to_id.upper_bound(high);
-  if (it_begin == timestamp_to_id.end()) {
+  // cerr << "-----------------------" << endl;
+  auto it_begin = time_to_rec_it.lower_bound(low);
+  if (it_begin == time_to_rec_it.end()) {
     return;
   }
-  string id = it_begin->second;
-  for(;it_begin != it_end && it_begin != timestamp_to_id.end() && callback(id_to_record.at(id)); it_begin++) {
-    id = it_begin->second;
+  auto rec_it = it_begin->second;
+  while(id_to_rec_it.count(rec_it->id) && (rec_it->timestamp <= high) && callback(*rec_it)) {
+    if(++it_begin != time_to_rec_it.end())
+      rec_it = it_begin->second;
+    else
+      break;
   }
 }
 
 template<typename Callback>
 void Database::RangeByKarma(int low, int high, Callback callback) const {
-  ADD_DURATION((TotalDuration&)range_karma);
-  // cerr << "RangeByKarma" << low << ' ' << high << endl;
-  // Log();
-  auto it_begin = karma_to_id.lower_bound(low);
-  auto it_end = karma_to_id.upper_bound(high);
-  if (it_begin == karma_to_id.end()) {
+  // cerr << "RangeByKarma " << low << " " << high << endl;
+  auto it_begin = karma_to_rec_it.lower_bound(low);
+  if (it_begin == karma_to_rec_it.end()) {
     return;
   }
-  string id = it_begin->second;
-  for(;it_begin != it_end && it_begin != karma_to_id.end() && callback(id_to_record.at(id)); it_begin++) {
-    id = it_begin->second;
+  auto rec_it = it_begin->second;
+  while(id_to_rec_it.count(rec_it->id) && (rec_it->karma <= high) && callback(*rec_it)) {
+    if(++it_begin != karma_to_rec_it.end())
+      rec_it = it_begin->second;
+    else
+      break;
   }
 }
 
 template <typename Callback>
 void Database::AllByUser(const string& user, Callback callback) const {
-  ADD_DURATION((TotalDuration&)all_by_user);
-  // cerr << "AllByUser" << user << endl;
-  // Log();
-  auto it_begin = user_to_id.lower_bound(user);
-  if (it_begin == user_to_id.end()) {
+  // cerr << "AllByUser " << user << endl;
+  auto it_begin = user_to_rec_it.lower_bound(user);
+  if (it_begin == user_to_rec_it.end()) {
     return;
   }
-  auto id = it_begin->second;
-  for(auto it = it_begin; it != user_to_id.end() && it->first == user && callback(id_to_record.at(id)); it++) {
-    id = it->second;
+  auto rec_it = it_begin->second;
+  while(it_begin != user_to_rec_it.end() && (it_begin->first == user) && callback(*rec_it)) {
+    while(++it_begin != user_to_rec_it.end() && !id_to_rec_it.count(rec_it->id)) {
+        rec_it = it_begin->second;
+    }
   }
 };
 
@@ -334,11 +257,55 @@ void TestRangeByKarma() {
   db.RangeByKarma(106,106,[](const Record& r){return true;});
 }
 
+void TestErase() {
+  Database db;
+  
+  db.Put({"id1", "upgrade1" ,"R2D2", 100500, 101});      // Put [id1 upgrade1 R2D2 100500 101]
+  db.Put({"id2", "upgrade2" ,"R2D2", 100501, 102});      // Put [id2 upgrade2 R2D2 100501 102]
+  db.Put({"id3", "upgrade3" ,"R2D2", 100502, 103});      // Put [id3 upgrade3 R2D2 100502 103]
+  db.Put({"id4", "upgrade4" ,"R2D2", 100503, 104});      // Put [id4 upgrade4 R2D2 100503 104]
+  db.GetById("unknown_id");      // GetById unknown_id
+  db.GetById("md5");      // GetById md5
+  db.AllByUser("Alex",[](const Record& r){return true;});      // AllByUser Alex
+  db.RangeByKarma(106,106,[](const Record& r){return true;});      // RangeByKarma 106 106
+  db.RangeByTimestamp(100504,100504,[](const Record& r){return true;});      // RangeByTimestamp 100504 100504
+  db.Put({"md5", "something" ,"Alex", 100504, 106});      // Put [md5 something Alex 100504 106]
+  db.GetById("unknown_id");      // GetById unknown_id
+  auto rec = db.GetById("md5");      // GetById md5
+  ASSERT(rec->id == "md5");
+  db.AllByUser("Alex",[](const Record& r){return true;});      // AllByUser Alex
+  db.RangeByKarma(106,106,[](const Record& r){return true;});      // RangeByKarma 106 106
+  db.RangeByTimestamp(100504,100504,[](const Record& r){return true;});      // RangeByTimestamp 100504 100504
+  db.Put({"md5", "something" ,"Alex", 100504, 106});      // Put [md5 something Alex 100504 106]
+  db.GetById("unknown_id");      // GetById unknown_id
+  db.GetById("md5");      // GetById md5
+  db.AllByUser("Alex",[](const Record& r){return true;});      // AllByUser Alex
+  db.RangeByKarma(106,106,[](const Record& r){return true;});      // RangeByKarma 106 106
+  db.RangeByTimestamp(100504,100504,[](const Record& r){return true;});      // RangeByTimestamp 100504 100504
+  db.GetById("md5");      // GetById md5
+  db.Put({"id6", "upgrade2" ,"Alex", 100505, 103});      // Put [id6 upgrade2 Alex 100505 103]
+  db.GetById("unknown_id");      // GetById unknown_id
+  db.GetById("md5");     // GetById md5
+  db.AllByUser("Alex",[](const Record& r){return true;});      // AllByUser Alex
+  db.RangeByKarma(106,106,[](const Record& r){return true;});      // RangeByKarma 106 106
+  db.RangeByTimestamp(100504,100504,[](const Record& r){return true;});      // RangeByTimestamp 100504 100504
+  db.Erase("md5");      // Erase md5
+        // { [id1 upgrade1 R2D2 100500 101]
+        // [id2 upgrade2 R2D2 100501 102]
+        // [id3 upgrade3 R2D2 100502 103]
+        // [id4 upgrade4 R2D2 100503 104]
+        // [md5 something Alex 100504 106]
+        // [id6 upgrade2 Alex 100505 103]
+        // }
+
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestRangeBoundaries);
   RUN_TEST(tr, TestSameUser);
   RUN_TEST(tr, TestReplacement);
   RUN_TEST(tr, TestRangeByKarma);
+  RUN_TEST(tr, TestErase);
   return 0;
 }
