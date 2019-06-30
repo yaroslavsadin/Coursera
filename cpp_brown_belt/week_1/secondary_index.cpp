@@ -51,6 +51,14 @@ class RecordHasher {
   }
 };
 
+class RecordIteratorHasher {
+public:
+  size_t operator()(const list<Record>::iterator& rit) const {
+    hash<string> shash;
+    return shash(rit->id);
+  }
+};
+
 ostream& operator<<(ostream& os, const Record& r) {
     return os << '[' << r.id << ' ' << r.title << ' ' << r.user 
             << ' ' << r.timestamp << ' ' << r.karma << ']';
@@ -94,8 +102,8 @@ public:
     // cerr << "Database default ctor" << endl;
   }
   ~Database() {
-    // cerr << duration_cast<milliseconds>(equal_range_).count() << endl;
-    // cerr << duration_cast<milliseconds>(loop).count() << endl;
+    cerr << duration_cast<milliseconds>(equal_range_).count() << endl;
+    cerr << duration_cast<milliseconds>(loop).count() << endl;
   }
   bool Put(const Record& record);
   const Record* GetById(const string& id) const;
@@ -112,9 +120,9 @@ public:
 private:
   list<Record> records;
   unordered_map<string,RecordIt> id_to_rec_it;
-  map<int,unordered_set<string>> karma_to_rec_it;
-  map<int,unordered_set<string>> time_to_rec_it;
-  map<string,unordered_set<string>> user_to_rec_it;
+  map< int, unordered_set< RecordIt, RecordIteratorHasher > > karma_to_rec_it;
+  map< int, unordered_set< RecordIt, RecordIteratorHasher > > time_to_rec_it;
+  map< string, unordered_set< RecordIt, RecordIteratorHasher > > user_to_rec_it;
 
   void Log(void) const {
     for(const auto& [id,it] : id_to_rec_it) {
@@ -124,20 +132,20 @@ private:
   
   template<typename Key, typename Value, typename Callback, typename Checker>
   void ForRange(const map<Key,Value>& m, const Key& one, Callback callback, Checker checker) const {
-    // steady_clock::time_point start = steady_clock::now();
+    steady_clock::time_point start = steady_clock::now();
     auto it_begin = m.lower_bound(one);
     if (it_begin == m.end()) {
       return;
     }
-    // equal_range_ += steady_clock::now() - start;
+    equal_range_ += steady_clock::now() - start;
+    start = steady_clock::now();
     for(;it_begin != m.end() && checker(it_begin->first); it_begin++) {
       // Mesuring inner loop time
-      // start = steady_clock::now();
-      for(const auto& id : it_begin->second) {
-          if(!callback(*id_to_rec_it.at(id))) return;
+      for(const auto& it : it_begin->second) {
+          if(!callback(*it)) return;
       }
-      // loop += steady_clock::now() - start;
     }
+    loop += steady_clock::now() - start;
   }
   
 };
@@ -150,9 +158,9 @@ bool Database::Put(const Record& record) {
     records.push_back(record);
     auto new_it = prev(records.end());
     id_to_rec_it[records.back().id] = new_it;
-    karma_to_rec_it[record.karma].insert(record.id);
-    time_to_rec_it[record.timestamp].insert(record.id);
-    user_to_rec_it[record.user].insert(record.id);
+    karma_to_rec_it[record.karma].insert(new_it);
+    time_to_rec_it[record.timestamp].insert(new_it);
+    user_to_rec_it[record.user].insert(new_it);
     return true;
   }
 }
@@ -168,9 +176,9 @@ const Record* Database::GetById(const string& id) const {
 bool Database::Erase(const string& id) {
   // cerr << "Erase " << id << endl;
   if(id_to_rec_it.count(id)) {
-    karma_to_rec_it.at(id_to_rec_it.at(id)->karma).erase(id);
-    time_to_rec_it.at(id_to_rec_it.at(id)->timestamp).erase(id);
-    user_to_rec_it.at(id_to_rec_it.at(id)->user).erase(id);
+    karma_to_rec_it.at(id_to_rec_it.at(id)->karma).erase(id_to_rec_it.at(id));
+    time_to_rec_it.at(id_to_rec_it.at(id)->timestamp).erase(id_to_rec_it.at(id));
+    user_to_rec_it.at(id_to_rec_it.at(id)->user).erase(id_to_rec_it.at(id));
     records.erase(id_to_rec_it.at(id));
     id_to_rec_it.erase(id);
     return true;
