@@ -5,12 +5,16 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 #include <list>
+#include <algorithm>
+#include <queue>
 
 #include <string>
 #include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 struct Record {
   string id;
@@ -78,12 +82,20 @@ ostream& operator << (ostream& os, const multimap<K, V>& m) {
   return os << "}";
 }
 
+static steady_clock::duration equal_range_(0);
+static steady_clock::duration loop(0);
+static steady_clock::duration checker_(0);
+
 // Реализуйте этот класс
 class Database {
 public:
   using RecordIt = list<Record>::iterator;
   Database() {
     // cerr << "Database default ctor" << endl;
+  }
+  ~Database() {
+    // cerr << duration_cast<milliseconds>(equal_range_).count() << endl;
+    // cerr << duration_cast<milliseconds>(loop).count() << endl;
   }
   bool Put(const Record& record);
   const Record* GetById(const string& id) const;
@@ -100,28 +112,31 @@ public:
 private:
   list<Record> records;
   unordered_map<string,RecordIt> id_to_rec_it;
-  map<int,vector<RecordIt>> karma_to_rec_it;
-  map<int,vector<RecordIt>> time_to_rec_it;
-  map<string,vector<RecordIt>> user_to_rec_it;
+  map<int,unordered_set<string>> karma_to_rec_it;
+  map<int,unordered_set<string>> time_to_rec_it;
+  map<string,unordered_set<string>> user_to_rec_it;
 
   void Log(void) const {
     for(const auto& [id,it] : id_to_rec_it) {
       cerr << id <<": " << *it << endl;
     }
   }
-
+  
   template<typename Key, typename Value, typename Callback, typename Checker>
   void ForRange(const map<Key,Value>& m, const Key& one, Callback callback, Checker checker) const {
+    // steady_clock::time_point start = steady_clock::now();
     auto it_begin = m.lower_bound(one);
     if (it_begin == m.end()) {
       return;
     }
+    // equal_range_ += steady_clock::now() - start;
     for(;it_begin != m.end() && checker(it_begin->first); it_begin++) {
-      for(const auto& rec_it : it_begin->second) {
-        if(id_to_rec_it.count(rec_it->id)) {
-          if(!callback(*rec_it)) return;
-        }
+      // Mesuring inner loop time
+      // start = steady_clock::now();
+      for(const auto& id : it_begin->second) {
+          if(!callback(*id_to_rec_it.at(id))) return;
       }
+      // loop += steady_clock::now() - start;
     }
   }
   
@@ -135,9 +150,9 @@ bool Database::Put(const Record& record) {
     records.push_back(record);
     auto new_it = prev(records.end());
     id_to_rec_it[records.back().id] = new_it;
-    karma_to_rec_it[record.karma].push_back(new_it);
-    time_to_rec_it[record.timestamp].push_back(new_it);
-    user_to_rec_it[record.user].push_back(new_it);
+    karma_to_rec_it[record.karma].insert(record.id);
+    time_to_rec_it[record.timestamp].insert(record.id);
+    user_to_rec_it[record.user].insert(record.id);
     return true;
   }
 }
@@ -153,6 +168,9 @@ const Record* Database::GetById(const string& id) const {
 bool Database::Erase(const string& id) {
   // cerr << "Erase " << id << endl;
   if(id_to_rec_it.count(id)) {
+    karma_to_rec_it.at(id_to_rec_it.at(id)->karma).erase(id);
+    time_to_rec_it.at(id_to_rec_it.at(id)->timestamp).erase(id);
+    user_to_rec_it.at(id_to_rec_it.at(id)->user).erase(id);
     records.erase(id_to_rec_it.at(id));
     id_to_rec_it.erase(id);
     return true;
@@ -193,7 +211,6 @@ void TestRangeBoundaries() {
   int count = 0;
   db.RangeByKarma(bad_karma, good_karma, [&count](const Record& r) {
     ++count;
-    cerr << r << endl;
     return true;
   });
 
@@ -208,7 +225,6 @@ void TestSameUser() {
   int count = 0;
   db.AllByUser("master", [&count](const Record& r) {
     ++count;
-    cerr << r << endl;
     return true;
   });
 
