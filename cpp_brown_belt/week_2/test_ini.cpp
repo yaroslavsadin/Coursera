@@ -8,19 +8,19 @@ using namespace std;
 
 void TestLoadIni() {
   istringstream input(
-R"([july]
-food=2500
-sport=12000
-travel=23400
-clothes=5200
+    R"([july]
+    food=2500
+    sport=12000
+    travel=23400
+    clothes=5200
 
-[august]
-food=3250
-sport=10000
-travel=0
-clothes=8300
-jewelery=25000
-)"
+    [august]
+    food=3250
+    sport=10000
+    travel=0
+    clothes=8300
+    jewelery=25000
+    )"
   );
 
   const Ini::Document doc = Ini::Load(input);
