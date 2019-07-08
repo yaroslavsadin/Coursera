@@ -11,29 +11,135 @@ using namespace std;
 // Определите классы Unit, Building, Tower и Fence так, чтобы они наследовались от
 // GameObject и реализовывали его интерфейс.
 
-class Unit {
+class Unit : public GameObject {
 public:
-  explicit Unit(geo2d::Point position);
+  explicit Unit(geo2d::Point position) : pos(position) {}
+  bool Collide(const GameObject& that) const override;
+  bool CollideWith(const Unit& that) const override;
+  bool CollideWith(const Building& that) const override;
+  bool CollideWith(const Tower& that) const override;
+  bool CollideWith(const Fence& that) const override;
+  const auto& GetPos() const { return pos; }
+private:
+  geo2d::Point pos;
 };
 
-class Building {
+class Building : public GameObject {
 public:
-  explicit Building(geo2d::Rectangle geometry);
+  explicit Building(geo2d::Rectangle geometry) : pos(geometry) {}
+  bool Collide(const GameObject& that) const override;
+  bool CollideWith(const Unit& that) const override;
+  bool CollideWith(const Building& that) const override;
+  bool CollideWith(const Tower& that) const override;
+  bool CollideWith(const Fence& that) const override;
+  const auto& GetPos() const { return pos; }
+private:
+  geo2d::Rectangle pos;
 };
 
-class Tower {
+class Tower : public GameObject {
 public:
-  explicit Tower(geo2d::Circle geometry);
+  explicit Tower(geo2d::Circle geometry) : pos(geometry) {}
+  bool Collide(const GameObject& that) const override;
+  bool CollideWith(const Unit& that) const override;
+  bool CollideWith(const Building& that) const override;
+  bool CollideWith(const Tower& that) const override;
+  bool CollideWith(const Fence& that) const override;
+  const auto& GetPos() const { return pos; }
+private:
+  geo2d::Circle pos;
 };
 
-class Fence {
+class Fence : public GameObject {
 public:
-  explicit Fence(geo2d::Segment geometry);
+  explicit Fence(geo2d::Segment geometry) : pos(geometry) {}
+  bool Collide(const GameObject& that) const override;
+  bool CollideWith(const Unit& that) const override;
+  bool CollideWith(const Building& that) const override;
+  bool CollideWith(const Tower& that) const override;
+  bool CollideWith(const Fence& that) const override;
+  const auto& GetPos() const { return pos; }
+private:
+  geo2d::Segment pos;
 };
+
+bool Unit::Collide(const GameObject& that) const {
+  // Here we know the type of 'this', so call the approproate
+  // CollideWith of 'that' with the exact type of 'this'
+  return that.CollideWith(*this);
+}
+bool Unit::CollideWith(const Unit& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());
+}
+bool Unit::CollideWith(const Building& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Unit::CollideWith(const Tower& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Unit::CollideWith(const Fence& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+
+bool Building::Collide(const GameObject& that) const {
+  // Here we know the type of 'this', so call the approproate
+  // CollideWith of 'that' with the exact type of 'this'
+  return that.CollideWith(*this);
+}
+bool Building::CollideWith(const Unit& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());
+}
+bool Building::CollideWith(const Building& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Building::CollideWith(const Tower& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Building::CollideWith(const Fence& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+
+bool Tower::Collide(const GameObject& that) const {
+  // Here we know the type of 'this', so call the approproate
+  // CollideWith of 'that' with the exact type of 'this'
+  return that.CollideWith(*this);
+}
+bool Tower::CollideWith(const Unit& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());
+}
+bool Tower::CollideWith(const Building& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Tower::CollideWith(const Tower& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Tower::CollideWith(const Fence& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+
+bool Fence::Collide(const GameObject& that) const {
+  // Here we know the type of 'this', so call the approproate
+  // CollideWith of 'that' with the exact type of 'this'
+  return that.CollideWith(*this);
+}
+bool Fence::CollideWith(const Unit& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());
+}
+bool Fence::CollideWith(const Building& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Fence::CollideWith(const Tower& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
+bool Fence::CollideWith(const Fence& that) const {
+  return geo2d::Collide(this->pos,that.GetPos());  
+}
 
 // Реализуйте функцию Collide из файла GameObject.h
 
 bool Collide(const GameObject& first, const GameObject& second) {
+  // Call the generic Collide method to launch a chain of CollideWith calls
+  return first.Collide(second);
 }
 
 void TestAddingNewObjectOnMap() {
