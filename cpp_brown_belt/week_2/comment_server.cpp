@@ -69,7 +69,7 @@ private:
 const string HttpResponse::version = "HTTP/1.1";
 
 HttpResponse& HttpResponse::AddHeader(string name, string value) {
-  headers.push_back({.name = name, .value = value});
+  headers.push_back({.name = move(name), .value = move(value)});
   return *this;
 }
 
