@@ -90,6 +90,10 @@ static steady_clock::duration TGetPopularNamePartition(0);
 static steady_clock::duration TGetPopularNameSearch(0);
 
 std::optional<string> GetPopularName(const vector<Person>& people, char gender) {
+  static vector<optional<string>> cache(2);
+  if(cache[gender].has_value()) {
+     return cache[gender].value();
+  }
   steady_clock::time_point start = steady_clock::now();
   auto it_divisor = lower_bound(people.begin(), people.end(), gender, [](const Person& p, char g) {
     return p.is_male;
@@ -98,11 +102,13 @@ std::optional<string> GetPopularName(const vector<Person>& people, char gender) 
     (gender == 'M') ? people.begin() : it_divisor,
     (gender == 'M') ? it_divisor : people.end()
   };
+  TGetPopularNamePartition += steady_clock::now() - start;
   if (range.begin() == range.end()) {
     return {};
   } else {
     const string* most_popular_name = &range.begin()->name;
     int count = 1;
+    start = steady_clock::now();
     for (auto i = range.begin(); i != range.end(); ) {
       auto same_name_end = find_if_not(i, range.end(), [i](const Person& p) {
         return p.name == i->name;
@@ -115,7 +121,7 @@ std::optional<string> GetPopularName(const vector<Person>& people, char gender) 
       i = same_name_end;
     }
     TGetPopularNameSearch += steady_clock::now() - start;
-    return {*most_popular_name};
+    return cache[gender] = *most_popular_name;
   }
 }
 
