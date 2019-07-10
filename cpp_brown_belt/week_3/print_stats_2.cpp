@@ -5,6 +5,7 @@
 #include <numeric>
 #include <optional>
 #include <sstream>
+#include <chrono>
 
 using namespace std;
 
@@ -54,50 +55,52 @@ vector<Person> ReadPeople(istream& input) {
   return result;
 }
 
+using namespace chrono;
+
+static steady_clock::duration TGetMatureCount(0);
+
 // std::ptrdiff_t
 auto GetMatureCount(const vector<Person>& people, int adult_age) {
+  steady_clock::time_point start = steady_clock::now();
   auto adult_begin = lower_bound(
       begin(people), end(people), adult_age, [](const Person& lhs, int age) {
         return lhs.age < age;
       }
   );
+  TGetMatureCount += steady_clock::now() - start;
   return std::distance(adult_begin, end(people));
 }
 
-int GetWealthyCount(const vector<Person>& people_, int count) {
-  vector<Person> people(people_);
-  auto head = Head(people, count);
+static steady_clock::duration TGetWealthyCount(0);
 
-  partial_sort(
-    head.begin(), head.end(), end(people), [](const Person& lhs, const Person& rhs) {
-      return lhs.income > rhs.income;
-    }
-  );
+int GetWealthyCount(const vector<Person>& people, int count) {
+  steady_clock::time_point start = steady_clock::now();
+  auto head = Head(people, count);
 
   int total_income = accumulate(
     head.begin(), head.end(), 0, [](int cur, const Person& p) {
       return p.income + cur;
     }
   );
-
+  TGetWealthyCount += steady_clock::now() - start;
   return total_income;
 }
 
-std::optional<string> GetPopularName(const vector<Person>& people_, char gender) {
-  vector<Person> people(people_);
-  auto it_divisor = partition(begin(people), end(people), [gender](const Person& p) {
-      return p.is_male == (gender == 'M');
-    });
+static steady_clock::duration TGetPopularNamePartition(0);
+static steady_clock::duration TGetPopularNameSearch(0);
+
+std::optional<string> GetPopularName(const vector<Person>& people, char gender) {
+  steady_clock::time_point start = steady_clock::now();
+  auto it_divisor = lower_bound(people.begin(), people.end(), gender, [](const Person& p, char g) {
+    return p.is_male;
+  });
   IteratorRange range{
-    begin(people),
-    it_divisor
+    (gender == 'M') ? people.begin() : it_divisor,
+    (gender == 'M') ? it_divisor : people.end()
   };
   if (range.begin() == range.end()) {
     return {};
   } else {
-    sort(range.begin(), range.end(), [](const Person& lhs, const Person& rhs) {
-      return lhs.name < rhs.name;
-    });
     const string* most_popular_name = &range.begin()->name;
     int count = 1;
     for (auto i = range.begin(); i != range.end(); ) {
@@ -111,6 +114,7 @@ std::optional<string> GetPopularName(const vector<Person>& people_, char gender)
       }
       i = same_name_end;
     }
+    TGetPopularNameSearch += steady_clock::now() - start;
     return {*most_popular_name};
   }
 }
@@ -134,10 +138,32 @@ int main() {
     AGE 25
     WEALTHY 5
     POPULAR_NAME M
+    POPULAR_NAME W
     )");
 #endif
 
   vector<Person> people = ReadPeople(cin);
+  vector<Person> people_sorted_by_income = [&people](){
+    vector<Person> res(people);
+    sort(begin(res), end(res), [](const Person& lhs, const Person& rhs) {
+      return lhs.income > rhs.income;
+    });
+    return move(res);
+  }();
+  vector<Person>::iterator it_divisor;
+  vector<Person> people_partitioned_by_gender = [&people,&it_divisor](){
+    vector<Person> res(people);
+    it_divisor = partition(begin(res), end(res), [](const Person& p) {
+      return p.is_male == true;
+    });
+    sort(res.begin(), it_divisor, [](const Person& lhs, const Person& rhs) {
+      return lhs.name < rhs.name;
+    });
+    sort(it_divisor, res.end(), [](const Person& lhs, const Person& rhs) {
+      return lhs.name < rhs.name;
+    });
+    return move(res);
+  }();
 
   sort(begin(people), end(people), [](const Person& lhs, const Person& rhs) {
     return lhs.age < rhs.age;
@@ -153,11 +179,11 @@ int main() {
       int count;
       cin >> count;
       cout << "Top-" << count << " people have total income " 
-      << GetWealthyCount(people, count) << '\n';
+      << GetWealthyCount(people_sorted_by_income, count) << '\n';
     } else if (command == "POPULAR_NAME") {
       char gender;
       cin >> gender;
-      auto res = GetPopularName(people,gender);
+      auto res = GetPopularName(people_partitioned_by_gender,gender);
       if(!res.has_value()) {
         cout << "No people of gender " << gender << '\n';
       } else {
@@ -166,4 +192,8 @@ int main() {
       }
     }
   }
+  cerr << "TGetMatureCount: " << duration_cast<milliseconds>(TGetMatureCount).count() << endl;
+  cerr << "TGetWealthyCount: " << duration_cast<milliseconds>(TGetWealthyCount).count() << endl;
+  cerr << "TGetPopularNamePartition: " << duration_cast<milliseconds>(TGetPopularNamePartition).count() << endl;
+  cerr << "TGetPopularNameSearch: " << duration_cast<milliseconds>(TGetPopularNameSearch).count() << endl;
 }
