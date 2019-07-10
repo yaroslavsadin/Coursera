@@ -4,6 +4,7 @@
 #include <string>
 #include <numeric>
 #include <optional>
+#include <sstream>
 
 using namespace std;
 
@@ -54,7 +55,7 @@ vector<Person> ReadPeople(istream& input) {
 }
 
 // std::ptrdiff_t
-auto GetMatureCount(const vector<Person> people, int adult_age) {
+auto GetMatureCount(const vector<Person>& people, int adult_age) {
   auto adult_begin = lower_bound(
       begin(people), end(people), adult_age, [](const Person& lhs, int age) {
         return lhs.age < age;
@@ -63,7 +64,8 @@ auto GetMatureCount(const vector<Person> people, int adult_age) {
   return std::distance(adult_begin, end(people));
 }
 
-int GetWealthyCount(const vector<Person> people, int count) {
+int GetWealthyCount(const vector<Person>& people_, int count) {
+  vector<Person> people(people_);
   auto head = Head(people, count);
 
   partial_sort(
@@ -73,20 +75,22 @@ int GetWealthyCount(const vector<Person> people, int count) {
   );
 
   int total_income = accumulate(
-    head.begin(), head.end(), 0, [](int cur, Person& p) {
-      return p.income += cur;
+    head.begin(), head.end(), 0, [](int cur, const Person& p) {
+      return p.income + cur;
     }
   );
 
   return total_income;
 }
 
-std::optional<string> GetPopularName(const vector<Person> people, bool gender) {
+std::optional<string> GetPopularName(const vector<Person>& people_, char gender) {
+  vector<Person> people(people_);
+  auto it_divisor = partition(begin(people), end(people), [gender](const Person& p) {
+      return p.is_male == (gender == 'M');
+    });
   IteratorRange range{
     begin(people),
-    partition(begin(people), end(people), [gender](Person& p) {
-      return p.is_male = (gender == 'M');
-    })
+    it_divisor
   };
   if (range.begin() == range.end()) {
     return {};
@@ -112,6 +116,27 @@ std::optional<string> GetPopularName(const vector<Person> people, bool gender) {
 }
 
 int main() {
+#ifdef TEST_OVERRIDE_CIN
+  istringstream cin(R"(
+    11
+    Ivan 25 1000 M
+    Olga 30 623 W
+    Sergey 24 825 M
+    Maria 42 1254 W
+    Mikhail 15 215 M
+    Oleg 18 230 M
+    Denis 53 8965 M
+    Maxim 37 9050 M
+    Ivan 47 19050 M
+    Ivan 17 50 M
+    Olga 23 550 W
+    AGE 18
+    AGE 25
+    WEALTHY 5
+    POPULAR_NAME M
+    )");
+#endif
+
   vector<Person> people = ReadPeople(cin);
 
   sort(begin(people), end(people), [](const Person& lhs, const Person& rhs) {
@@ -133,11 +158,11 @@ int main() {
       char gender;
       cin >> gender;
       auto res = GetPopularName(people,gender);
-      if(res.has_value) {
+      if(!res.has_value()) {
         cout << "No people of gender " << gender << '\n';
       } else {
         cout << "Most popular name among people of gender " << gender << " is "
-        << res.value << '\n';
+        << res.value() << '\n';
       }
     }
   }
