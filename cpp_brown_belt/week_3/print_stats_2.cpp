@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <numeric>
+#include <optional>
 
 using namespace std;
 
@@ -52,6 +53,64 @@ vector<Person> ReadPeople(istream& input) {
   return result;
 }
 
+// std::ptrdiff_t
+auto GetMatureCount(const vector<Person> people, int adult_age) {
+  auto adult_begin = lower_bound(
+      begin(people), end(people), adult_age, [](const Person& lhs, int age) {
+        return lhs.age < age;
+      }
+  );
+  return std::distance(adult_begin, end(people));
+}
+
+int GetWealthyCount(const vector<Person> people, int count) {
+  auto head = Head(people, count);
+
+  partial_sort(
+    head.begin(), head.end(), end(people), [](const Person& lhs, const Person& rhs) {
+      return lhs.income > rhs.income;
+    }
+  );
+
+  int total_income = accumulate(
+    head.begin(), head.end(), 0, [](int cur, Person& p) {
+      return p.income += cur;
+    }
+  );
+
+  return total_income;
+}
+
+std::optional<string> GetPopularName(const vector<Person> people, bool gender) {
+  IteratorRange range{
+    begin(people),
+    partition(begin(people), end(people), [gender](Person& p) {
+      return p.is_male = (gender == 'M');
+    })
+  };
+  if (range.begin() == range.end()) {
+    return {};
+  } else {
+    sort(range.begin(), range.end(), [](const Person& lhs, const Person& rhs) {
+      return lhs.name < rhs.name;
+    });
+    const string* most_popular_name = &range.begin()->name;
+    int count = 1;
+    for (auto i = range.begin(); i != range.end(); ) {
+      auto same_name_end = find_if_not(i, range.end(), [i](const Person& p) {
+        return p.name == i->name;
+      });
+      auto cur_name_count = std::distance(i, same_name_end);
+      if (cur_name_count > count) {
+        count = cur_name_count;
+        most_popular_name = &i->name;
+      }
+      i = same_name_end;
+    }
+    return {*most_popular_name};
+  }
+}
+
 int main() {
   vector<Person> people = ReadPeople(cin);
 
@@ -63,64 +122,22 @@ int main() {
     if (command == "AGE") {
       int adult_age;
       cin >> adult_age;
-
-      auto adult_begin = lower_bound(
-        begin(people), end(people), adult_age, [](const Person& lhs, int age) {
-          return lhs.age < age;
-        }
-      );
-
-      cout << "There are " << std::distance(adult_begin, end(people))
+      cout << "There are " << GetMatureCount(people, adult_age)
            << " adult people for maturity age " << adult_age << '\n';
     } else if (command == "WEALTHY") {
       int count;
       cin >> count;
-
-      auto head = Head(people, count);
-
-      partial_sort(
-        head.begin(), head.end(), end(people), [](const Person& lhs, const Person& rhs) {
-          return lhs.income > rhs.income;
-        }
-      );
-
-      int total_income = accumulate(
-        head.begin(), head.end(), 0, [](int cur, Person& p) {
-          return p.income += cur;
-        }
-      );
-      cout << "Top-" << count << " people have total income " << total_income << '\n';
+      cout << "Top-" << count << " people have total income " 
+      << GetWealthyCount(people, count) << '\n';
     } else if (command == "POPULAR_NAME") {
       char gender;
       cin >> gender;
-
-      IteratorRange range{
-        begin(people),
-        partition(begin(people), end(people), [gender](Person& p) {
-          return p.is_male = (gender == 'M');
-        })
-      };
-      if (range.begin() == range.end()) {
+      auto res = GetPopularName(people,gender);
+      if(res.has_value) {
         cout << "No people of gender " << gender << '\n';
       } else {
-        sort(range.begin(), range.end(), [](const Person& lhs, const Person& rhs) {
-          return lhs.name < rhs.name;
-        });
-        const string* most_popular_name = &range.begin()->name;
-        int count = 1;
-        for (auto i = range.begin(); i != range.end(); ) {
-          auto same_name_end = find_if_not(i, range.end(), [i](const Person& p) {
-            return p.name == i->name;
-          });
-          auto cur_name_count = std::distance(i, same_name_end);
-          if (cur_name_count > count) {
-            count = cur_name_count;
-            most_popular_name = &i->name;
-          }
-          i = same_name_end;
-        }
         cout << "Most popular name among people of gender " << gender << " is "
-             << *most_popular_name << '\n';
+        << res.value << '\n';
       }
     }
   }
