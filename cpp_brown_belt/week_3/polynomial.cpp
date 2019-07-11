@@ -31,16 +31,36 @@ void PrintCoeff(std::ostream& out, int i, const T& coef, bool printed) {
 
 template<typename T>
 class Polynomial {
-private:
-  std::vector<T> coeffs_ = {0};
-
-  void Shrink() {
-    while (!coeffs_.empty() && coeffs_.back() == 0) {
-      coeffs_.pop_back();
-    }
-  }
-
 public:
+  
+  struct TWrapper {
+    T value = T();
+    size_t degree = 0;
+    Polynomial* poly_p = nullptr;
+    T operator=(T rhs) {
+      if(poly_p->coeffs_.size() - 1 < degree) {
+        poly_p->coeffs_.resize(degree + 1);
+        *prev(poly_p->coeffs_.end()) = rhs;
+      } else {
+        poly_p->coeffs_[degree] = rhs;
+      }
+      poly_p->Shrink();
+      return value = rhs;
+    }
+    bool operator!=(T rhs) const {
+      return value != rhs;
+    }
+    bool operator==(T rhs) const {
+      return value == rhs;
+    }
+    friend ostream& operator<<(ostream& os, const TWrapper& w) {
+      return os << w.value;
+    }
+    operator T() {
+      return value;
+    }
+  };
+
   Polynomial() = default;
   Polynomial(vector<T> coeffs) : coeffs_(std::move(coeffs)) {
     Shrink();
@@ -90,6 +110,16 @@ public:
   }
 
   // Реализуйте неконстантную версию operator[]
+  TWrapper& operator [](size_t degree) {
+    wrapper.degree = degree;
+    wrapper.poly_p = this;
+    if(degree < coeffs_.size()) {
+      wrapper.value = coeffs_[degree];
+    } else {
+      wrapper.value = T();
+    }
+    return wrapper;
+  }
 
   T operator ()(const T& x) const {
     T res = 0;
@@ -108,6 +138,15 @@ public:
 
   const_iterator end() const {
     return coeffs_.cend();
+  }
+private:
+  std::vector<T> coeffs_ = {0};
+  TWrapper wrapper;
+
+  void Shrink() {
+    while (!coeffs_.empty() && coeffs_.back() == 0) {
+      coeffs_.pop_back();
+    }
   }
 };
 
