@@ -15,25 +15,73 @@ class ConcurrentMap {
 public:
   using MapType = unordered_map<K, V, Hash>;
 
+  // Выполняем наследование от lock_guard<mutex>, чтобы гарантировать, что мьютекс
+  // будет захвачен до модификации bucket'а. Вместо наследования можно было бы
+  // просто объявить поле типа lock_guard<mutex>, но такой подход полагается
+  // на порядок инициализации полей и не гарантирует, что в будущем он случайно не поменяется
+  // struct ReadAccess : lock_guard<mutex> {
+  //   const V& ref_to_value;
+
+  //   ReadAccess(const K& key, const Bucket& bucket)
+  //     : lock_guard(bucket.m)
+  //     , ref_to_value(bucket.data.at(key))
+  //   {
+  //   }
+  // };
+
   struct WriteAccess {
+    lock_guard<mutex> g;
     V& ref_to_value;
   };
 
   struct ReadAccess {
+    lock_guard<mutex> g;
     const V& ref_to_value;
   };
+  // ConcurrentMap(const ConcurrentMap& other) = delete;
+  // ConcurrentMap(ConcurrentMap&& other) {
+  //   lock_guard g(master);
+  //   other.hasher = move(this->hasher);
+  //   other.maps = move(this->maps);
+  //   other.mutexes = move(this->mutexes);
+  // }
+  explicit ConcurrentMap(size_t bucket_count) : 
+  mutexes(vector<mutex>(bucket_count)) ,
+  maps(vector<MapType>(bucket_count))
+  {}
 
-  explicit ConcurrentMap(size_t bucket_count);
+  WriteAccess operator[](const K& key) {
+    auto bucket = hasher(key) % mutexes.size();
+    return {lock_guard(mutexes[bucket]),maps[bucket][key]};
+  }
+  ReadAccess At(const K& key) const {
+    auto bucket = hasher(key) % mutexes.size();
+    if(!maps[bucket].count(key)){ throw std::out_of_range(""); }
+    return {lock_guard(mutexes[bucket]),maps[bucket].at(key)};
+  }
 
-  WriteAccess operator[](const K& key);
-  ReadAccess At(const K& key) const;
+  bool Has(const K& key) const {
+    try {
+      At(key);
+    } catch (std::out_of_range) {
+      return false;
+    }
+    return true;
+  }
 
-  bool Has(const K& key) const;
-
-  MapType BuildOrdinaryMap() const;
+  MapType BuildOrdinaryMap() const {
+    MapType res;
+    for(size_t i = 0; i < maps.size(); i++) {
+      lock_guard g(mutexes[i]);
+      res.merge(maps[i]);
+    }
+    return res;
+  }
 
 private:
   Hash hasher;
+  mutable vector<MapType> maps;
+  mutable vector<mutex> mutexes;
 };
 
 void RunConcurrentUpdates(
