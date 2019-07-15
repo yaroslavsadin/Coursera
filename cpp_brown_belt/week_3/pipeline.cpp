@@ -103,12 +103,10 @@ public:
   {}
 
   void Process(unique_ptr<Email> email) override {
-    Email copy_;
-    if(email->to != cc_) {
-      copy_ = {email->from,cc_,email->body};
-    }
+    Email copy_ = *email;
     PassOn(move(email));
-    if(copy_.to == cc_) {
+    if(copy_.to != cc_) {
+      copy_.to = cc_;
       PassOn(make_unique<Email>(copy_));
     }
   }
@@ -127,6 +125,7 @@ public:
 
   void Process(unique_ptr<Email> email) override {
     os_ << *email << '\n';
+    PassOn(move(email));
   }
 
 private:
@@ -198,6 +197,7 @@ void TestEmails() {
     return (email.to != "lol@example.com");
   });
   builder.CopyTo("kek@example.com");
+  builder.CopyTo("rolf@example.com");
   builder.Send(outStream);
   auto workers = builder.Build();
   workers->Run();
@@ -209,10 +209,18 @@ void TestEmails() {
 
     "lol@example.com\n"
     "rolf@example.com\n"
+    "Hello there\n"
+
+    "lol@example.com\n"
+    "rolf@example.com\n"
     "LOOOOOOOL\n"
 
     "lol@example.com\n"
     "kek@example.com\n"
+    "LOOOOOOOL\n"
+
+    "lol@example.com\n"
+    "rolf@example.com\n"
     "LOOOOOOOL\n"
   );
 
