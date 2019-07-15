@@ -30,12 +30,12 @@ build: $(BIN)
 
 $(BIN): $(OBJS) | $(BINDIR)
 	@echo [Making $(PROG)] Linking $@...
-	$(LD) $(LDFLAGS) $^ -o $@
+	$(LD) $(LDFLAGS) $^ -o $@ 2> ./$@.log
 	@-$(RM) $(OBJDIR)/*.log $(BINDIR)/*.log
 
 $(OBJDIR)/%.o: %.cpp | $(OBJDIR)
 	@echo [Making $(PROG)] Compiling $<...
-	$(CC) -c $(CFLAGS) -MMD -MP $< -o $@
+	$(CC) -c $(CFLAGS) -MMD -MP $< -o $@ 2> ./$@.log
 
 run:
 	@echo [Making $(PROG)] Launching...
