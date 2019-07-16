@@ -5,6 +5,71 @@
 
 using namespace std;
 
+namespace Expr {
+class Value : public Expression {
+public:
+  Value(int value) : val(value) {}
+  // Вычисляет значение выражения
+  int Evaluate() const override {
+    return val;
+  }
+
+  // Форматирует выражение как строку
+  // Каждый узел берётся в скобки, независимо от приоритета
+  std::string ToString() const override {
+    return std::to_string(val);
+  }
+private:
+  int val;
+};
+
+class Sum : public Expression {
+public:
+  Sum(ExpressionPtr left_, ExpressionPtr right_) : left(move(left_)), right(move(right_)) {}
+  // Вычисляет значение выражения
+  int Evaluate() const override {
+    return left->Evaluate() + right->Evaluate();
+  }
+
+  // Форматирует выражение как строку
+  // Каждый узел берётся в скобки, независимо от приоритета
+  std::string ToString() const override {
+    return '(' + left->ToString() + ")+(" + right->ToString() + ')';
+  }
+private:
+  ExpressionPtr left;
+  ExpressionPtr right;
+};
+
+class Product : public Expression {
+public:
+  Product(ExpressionPtr left_, ExpressionPtr right_) : left(move(left_)), right(move(right_)) {}
+  // Вычисляет значение выражения
+  int Evaluate() const override {
+    return left->Evaluate() * right->Evaluate();
+  }
+
+  // Форматирует выражение как строку
+  // Каждый узел берётся в скобки, независимо от приоритета
+  std::string ToString() const override {
+    return '(' + left->ToString() + ")*(" + right->ToString() + ')';
+  }
+private:
+  ExpressionPtr left;
+  ExpressionPtr right;
+};
+}
+
+ExpressionPtr Value(int value) {
+  return make_unique<Expr::Value>(value);
+}
+ExpressionPtr Sum(ExpressionPtr left, ExpressionPtr right) {
+  return make_unique<Expr::Sum>(move(left),move(right));
+}
+ExpressionPtr Product(ExpressionPtr left, ExpressionPtr right) {
+  return make_unique<Expr::Product>(move(left),move(right));
+}
+
 string Print(const Expression* e) {
   if (!e) {
     return "Null expression provided";
