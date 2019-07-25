@@ -54,17 +54,19 @@ public:
     auto& cache = sync.ref_to_value;
 
     if(cache.count(book_name)) {
-      cache[book_name].lru++;
+      cache[book_name].lru = ++current_max_lru;
       return cache[book_name].ptr;
     } else {
       BookPtr book_content = books_unpacker_->UnpackBook(book_name);
       auto book_size = book_content->GetContent().size();
       if(mem_consumed + book_size <= settings_.max_memory) {
-        cache[book_name] = BookKeeper{book_content,1};
+        cache[book_name] = BookKeeper{book_content,++current_max_lru};
         mem_consumed += book_size;
         return cache[book_name].ptr;
       } else {
-        while(mem_consumed + book_size > settings_.max_memory && !cache.empty()) {
+        mem_consumed += book_size;
+        cache[book_name] = {book_content,++current_max_lru};
+        while(mem_consumed > settings_.max_memory && !cache.empty()) {
           auto it = min_element(cache.begin(),cache.end(),
           [](const pair<string , BookKeeper>& lhs, const pair<string , BookKeeper>& rhs){
             return lhs.second.lru < rhs.second.lru;
@@ -75,8 +77,6 @@ public:
         if(cache.empty()) {
           return nullptr;
         } else {
-          mem_consumed += book_size;
-          cache[book_name] = {book_content,1};
           return cache[book_name].ptr;
         }
       }
@@ -87,6 +87,7 @@ private:
   Synchronized< unordered_map< string , BookKeeper > > cache_;
   shared_ptr<IBooksUnpacker> books_unpacker_;
   Settings settings_;
+  atomic<size_t> current_max_lru = 1;
 };
 
 
