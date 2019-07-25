@@ -116,7 +116,6 @@ void TestMaxMemory(const Library& lib) {
   }
 }
 
-
 void TestCaching(const Library& lib) {
   auto unpacker = make_shared<BooksUnpacker>();
   ICache::Settings settings;
