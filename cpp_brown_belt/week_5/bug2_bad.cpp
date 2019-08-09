@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "test_runner.h"
 
 using namespace std;
 
@@ -34,8 +35,24 @@ int ComputeMedianAge(InputIt range_begin, InputIt range_end) {
   );
   return middle->age;
 }
+void Test2(void) {
+  vector<Person> test_middle = {
+    {Person{2,Gender::FEMALE,false}},
+    {Person{7,Gender::FEMALE,false}},
+    {Person{4,Gender::FEMALE,false}},
+    {Person{9,Gender::FEMALE,false}},
+    {Person{8,Gender::FEMALE,false}},
+    {Person{3,Gender::FEMALE,false}},
+    {Person{1,Gender::FEMALE,false}},
+  };
+  int age = ComputeMedianAge(test_middle.begin(),test_middle.end());
+  ASSERT_EQUAL(age,4);
+}
 
 int main() {
+  TestRunner tr;
+  RUN_TEST(tr,Test2);
+  return 0;
   int person_count;
   cin >> person_count;
   vector<Person> persons;

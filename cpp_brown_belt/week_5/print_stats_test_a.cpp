@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "test_runner.h"
 
 using namespace std;
 
@@ -19,6 +18,9 @@ struct Person {
 
 template <typename InputIt>
 int ComputeMedianAge(InputIt range_begin, InputIt range_end) {
+  if (range_begin == range_end) {
+    return 0;
+  }
   vector<typename iterator_traits<InputIt>::value_type> range_copy(
       range_begin,
       range_end
@@ -33,17 +35,7 @@ int ComputeMedianAge(InputIt range_begin, InputIt range_end) {
   return middle->age;
 }
 
-void Test1(void) {
-  vector<Person> test_empty;
-  int age = ComputeMedianAge(test_empty.begin(),test_empty.end());
-  // Expecting segfault
-  ASSERT_EQUAL(age,0);
-}
-
 int main() {
-  TestRunner tr;
-  RUN_TEST(tr,Test1);
-  return 0;
   int person_count;
   cin >> person_count;
   vector<Person> persons;
@@ -95,4 +87,3 @@ int main() {
 
   return 0;
 }
-

@@ -1,13 +1,10 @@
-#include <iostream>
-
 #include <algorithm>
 #include <iostream>
-#include "test_runner.h"
 #include <string>
 #include <vector>
 
 using namespace std;
-#if 1
+
 enum class Gender {
   FEMALE,
   MALE
@@ -132,118 +129,8 @@ void PrintStats(const AgeStats& stats,
              << "Median age for unemployed males = "
              << stats.unemployed_males   << endl;
 }
-#endif
 
-void Test1(void) {
-  vector<Person> test_middle;
-  int age;
-  try {  
-    age = ComputeMedianAge(test_middle.begin(),test_middle.end());
-  } catch(...) {
-    cerr << "excp" << endl;
-  }
-  // Expecting segfault
-  ASSERT_EQUAL(age,0);
-}
-
-void Test2(void) {
-  vector<Person> test_middle = {
-    {Person{2,Gender::FEMALE,false}},
-    {Person{7,Gender::FEMALE,false}},
-    {Person{4,Gender::FEMALE,false}},
-    {Person{9,Gender::FEMALE,false}},
-    {Person{8,Gender::FEMALE,false}},
-    {Person{3,Gender::FEMALE,false}},
-    {Person{1,Gender::FEMALE,false}},
-  };
-  int age = ComputeMedianAge(test_middle.begin(),test_middle.end());
-  // Expecting segfault
-  ASSERT_EQUAL(age,4);
-}
-
-void Test3() {
-  istringstream is("2\n \
-  42 0 1\n              \
-  43 1 0");
-  vector<Person> persons = ReadPersons(is);
-  ASSERT_EQUAL(persons.size(),2u);
-  ASSERT_EQUAL(static_cast<int>(persons[0].gender),static_cast<int>(Gender::FEMALE));
-  ASSERT_EQUAL(static_cast<int>(persons[1].gender),static_cast<int>(Gender::MALE));
-}
-
-void Test4() {
-  istringstream is("2\n \
-  42 0 1\n              \
-  43 1 0");
-  vector<Person> persons = ReadPersons(is);
-  ASSERT_EQUAL(persons.size(),2u);
-  ASSERT_EQUAL(persons[0].is_employed,true);
-  ASSERT_EQUAL(persons[1].is_employed,false);
-}
-
-void Test5() {
-  vector<Person> persons{
-    {Person{42,Gender::FEMALE,false}},
-    {Person{43,Gender::FEMALE,false}},
-    {Person{44,Gender::FEMALE,false}},
-    {Person{45,Gender::FEMALE,false}},
-    {Person{46,Gender::MALE,true}},
-    {Person{47,Gender::MALE,false}},
-    {Person{48,Gender::MALE,true}},
-    {Person{49,Gender::MALE,true}},
-    {Person{50,Gender::MALE,false}}
-  };
-  AgeStats stats;
-  try{  
-    stats = ComputeStats(persons);
-  } catch (exception& e) {
-    cerr << e.what() << endl;
-    ASSERT(0);
-  }
-  ASSERT_EQUAL(stats.employed_males,48);
-}
-
-void Test6() {
-  vector<Person> persons{
-    {Person{2,Gender::FEMALE,true}},
-    {Person{18,Gender::FEMALE,true}},
-    {Person{91,Gender::FEMALE,true}},
-    
-    {Person{1,Gender::FEMALE,false}},
-    {Person{2,Gender::FEMALE,false}},
-    {Person{5,Gender::FEMALE,false}},
-    {Person{9,Gender::FEMALE,false}},
-    {Person{13,Gender::FEMALE,false}},
-    {Person{22,Gender::FEMALE,false}},
-    {Person{23,Gender::FEMALE,false}},
-
-    {Person{4,Gender::MALE,true}},
-    {Person{6,Gender::MALE,true}},
-    {Person{7,Gender::MALE,true}},
-    {Person{14,Gender::MALE,true}},
-    {Person{15,Gender::MALE,true}},
-    
-    
-    {Person{10,Gender::MALE,false}},
-    {Person{100,Gender::MALE,false}},
-    {Person{150,Gender::MALE,false}}
-  };
-
-  AgeStats stats = ComputeStats(persons);
-  ASSERT_EQUAL(stats.total,13);
-  ASSERT_EQUAL(stats.females,13);
-  ASSERT_EQUAL(stats.males,14);
-  ASSERT_EQUAL(stats.unemployed_females,9);
-  ASSERT_EQUAL(stats.employed_males,7);
-  ASSERT_EQUAL(stats.unemployed_males,100);
-}
-
-int main(void) {
-    TestRunner tr;
-    RUN_TEST(tr,Test1);
-    RUN_TEST(tr,Test2);
-    RUN_TEST(tr,Test3);
-    RUN_TEST(tr,Test4);
-    RUN_TEST(tr,Test5);
-    RUN_TEST(tr,Test6);
+int main() {
+  PrintStats(ComputeStats(ReadPersons()));
+  return 0;
 }

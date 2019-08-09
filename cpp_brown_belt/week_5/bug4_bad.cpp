@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "test_runner.h"
 
 using namespace std;
 
@@ -35,7 +36,38 @@ int ComputeMedianAge(InputIt range_begin, InputIt range_end) {
   return middle->age;
 }
 
+vector<Person> ReadPersons(istream& in_stream = cin) {
+  int person_count;
+  in_stream >> person_count;
+  vector<Person> persons;
+  persons.reserve(person_count);
+  for (int i = 0; i < person_count; ++i) {
+    int age, gender, is_employed;
+    in_stream >> age >> gender >> is_employed;
+    Person person{
+        age,
+        static_cast<Gender>(gender),
+        is_employed == 0
+    };
+    persons.push_back(person);
+  }
+  return persons;
+}
+
+void Test4() {
+  istringstream is("2\n \
+  42 0 1\n              \
+  43 1 0");
+  vector<Person> persons = ReadPersons(is);
+  ASSERT_EQUAL(persons.size(),2u);
+  ASSERT_EQUAL(persons[0].is_employed,true);
+  ASSERT_EQUAL(persons[1].is_employed,false);
+}
+
 int main() {
+  TestRunner tr;
+  RUN_TEST(tr,Test4);
+  return 0;
   int person_count;
   cin >> person_count;
   vector<Person> persons;
