@@ -135,15 +135,8 @@ void PrintStats(const AgeStats& stats,
 #endif
 
 void Test1(void) {
-  vector<Person> test_middle;
-  int age;
-  try {  
-    age = ComputeMedianAge(test_middle.begin(),test_middle.end());
-  } catch(...) {
-    cerr << "excp" << endl;
-  }
-  // Expecting segfault
-  ASSERT_EQUAL(age,0);
+  vector<Person> persons;
+  ASSERT_EQUAL(ComputeMedianAge(begin(persons), end(persons)), 0);
 }
 
 void Test2(void) {
@@ -236,6 +229,20 @@ void Test6() {
   ASSERT_EQUAL(stats.unemployed_females,9);
   ASSERT_EQUAL(stats.employed_males,7);
   ASSERT_EQUAL(stats.unemployed_males,100);
+
+  ostringstream os;
+
+  PrintStats(stats,os);
+
+  ASSERT_EQUAL(os.str(),
+  "Median age = 13\n" \
+  "Median age for females = 13\n" \
+  "Median age for males = 14\n" \
+  "Median age for employed females = 18\n" \
+  "Median age for unemployed females = 9\n" \
+  "Median age for employed males = 7\n" \
+  "Median age for unemployed males = 100\n"
+  );
 }
 
 int main(void) {

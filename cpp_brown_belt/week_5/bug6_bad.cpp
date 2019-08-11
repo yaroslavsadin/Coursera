@@ -131,6 +131,20 @@ void Test6() {
   ASSERT_EQUAL(stats.unemployed_females,9);
   ASSERT_EQUAL(stats.employed_males,7);
   ASSERT_EQUAL(stats.unemployed_males,100);
+
+  ostringstream os;
+
+  // PrintStats(stats,os);
+
+  ASSERT_EQUAL(os.str(),
+  "Median age = 13\n" \
+  "Median age for females = 13\n" \
+  "Median age for males = 14\n" \
+  "Median age for employed females = 18\n" \
+  "Median age for unemployed females = 9\n" \
+  "Median age for employed males = 7\n" \
+  "Median age for unemployed males = 100\n"
+  );
 }
 
 int main() {

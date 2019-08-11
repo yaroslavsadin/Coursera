@@ -34,10 +34,8 @@ int ComputeMedianAge(InputIt range_begin, InputIt range_end) {
 }
 
 void Test1(void) {
-  vector<Person> test_empty;
-  int age = ComputeMedianAge(test_empty.begin(),test_empty.end());
-  // Expecting segfault
-  ASSERT_EQUAL(age,0);
+  vector<Person> persons;
+  ASSERT_EQUAL(ComputeMedianAge(begin(persons), end(persons)), 0);
 }
 
 int main() {

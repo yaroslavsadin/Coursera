@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "test_runner.h"
 
 using namespace std;
 
@@ -103,12 +104,12 @@ AgeStats ComputeStats(vector<Person> persons) {
 
   return {
        ComputeMedianAge(begin(persons), end(persons)),
-       ComputeMedianAge(begin(persons), females_end),
        ComputeMedianAge(females_end, end(persons)),
-       ComputeMedianAge(begin(persons),  employed_females_end),
-       ComputeMedianAge(employed_females_end, females_end),
+       ComputeMedianAge(begin(persons), females_end),
        ComputeMedianAge(females_end, employed_males_end),
-       ComputeMedianAge(employed_males_end, end(persons))
+       ComputeMedianAge(employed_males_end, end(persons)),
+       ComputeMedianAge(begin(persons), employed_females_end),
+       ComputeMedianAge(employed_females_end, females_end)
   };
 }
 
@@ -130,7 +131,45 @@ void PrintStats(const AgeStats& stats,
              << stats.unemployed_males   << endl;
 }
 
+void Test3() {
+    vector<Person> persons{
+    {Person{2,Gender::FEMALE,true}},
+    {Person{18,Gender::FEMALE,true}},
+    {Person{91,Gender::FEMALE,true}},
+    
+    {Person{1,Gender::FEMALE,false}},
+    {Person{2,Gender::FEMALE,false}},
+    {Person{5,Gender::FEMALE,false}},
+    {Person{9,Gender::FEMALE,false}},
+    {Person{13,Gender::FEMALE,false}},
+    {Person{22,Gender::FEMALE,false}},
+    {Person{23,Gender::FEMALE,false}},
+
+    {Person{4,Gender::MALE,true}},
+    {Person{6,Gender::MALE,true}},
+    {Person{7,Gender::MALE,true}},
+    {Person{14,Gender::MALE,true}},
+    {Person{15,Gender::MALE,true}},
+    
+    
+    {Person{10,Gender::MALE,false}},
+    {Person{100,Gender::MALE,false}},
+    {Person{150,Gender::MALE,false}}
+  };
+
+  AgeStats stats = ComputeStats(persons);
+  ASSERT_EQUAL(stats.total,13);
+  ASSERT_EQUAL(stats.females,13);
+  ASSERT_EQUAL(stats.males,14);
+  ASSERT_EQUAL(stats.unemployed_females,9);
+  ASSERT_EQUAL(stats.employed_males,7);
+  ASSERT_EQUAL(stats.unemployed_males,100);
+}
+
 int main() {
+  TestRunner tr;
+  RUN_TEST(tr,Test3);
+  return 0;
   PrintStats(ComputeStats(ReadPersons()));
   return 0;
 }
