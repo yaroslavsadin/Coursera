@@ -4,6 +4,7 @@
 #include <string_view>
 #include <vector>
 #include <sstream>
+#include <cctype>
 #include "test_runner.h"
 
 using namespace std;
@@ -18,12 +19,14 @@ bool IsSubdomain(string_view subdomain, string_view domain) {
   }
   size_t i = 0;
   size_t j = 0;
-  while (i < subdomain.size() - 1 && j < domain.size() - 1) {
+  while (i < subdomain.size() && j < domain.size()) {
     if (subdomain[i++] != domain[j++]) {
       return false;
     }
   }
-  return true;
+  return (i == subdomain.size() && domain[j] == '.')
+      || (j == domain.size() && subdomain[i] == '.')
+      || (subdomain.size() == domain.size());
 }
 
 string EraseLeadingZeroes(string_view s) {
@@ -73,7 +76,8 @@ void CheckDomains(const vector<string>& domains_to_check, const vector<string>& 
 ////////////////// TESTS /////////////////////
 
 void TestRemoveSubdomains() {
-  vector<string> banned_domains = {
+  {
+    vector<string> banned_domains = {
     {"ya.ru"},
     {"m.ya.ru"},
     {"aaa.ya.ru"},
@@ -89,7 +93,6 @@ void TestRemoveSubdomains() {
   for (string& domain : banned_domains) {
     reverse(begin(domain), end(domain));
   }
-  sort(begin(banned_domains), end(banned_domains));
   vector<string> expected = {
     {"moc"},
     {"ten.mmm"},
@@ -97,6 +100,26 @@ void TestRemoveSubdomains() {
   };
   RemoveSubdomains(banned_domains);
   ASSERT_EQUAL(expected,banned_domains);
+  }
+  {
+    vector<string> banned_domains = {
+    {"ya.ru"},
+    {"u"},
+    {"ya.ru"},
+    {"ya.ru"},
+    {"ru"},
+    {"ya.ru"}
+  };
+  for (string& domain : banned_domains) {
+    reverse(begin(domain), end(domain));
+  }
+  vector<string> expected = {
+    {"u"},
+    {"ur"}
+  };
+  RemoveSubdomains(banned_domains);
+  ASSERT_EQUAL(expected,banned_domains);
+  }
 }
 
 void TestReadDomains() {
@@ -121,16 +144,16 @@ void TestReadDomains() {
 }
 
 void TestIsSubdomain() {
-  {
-    string domain = {};
-    string subdomain = {};
-    ASSERT(IsSubdomain(subdomain,domain));
-  }
-  {
-    string domain = {};
-    string subdomain{"ur.ay"};
-    ASSERT(!IsSubdomain(subdomain,domain));
-  }
+  // {
+  //   string domain = {};
+  //   string subdomain = {};
+  //   ASSERT(IsSubdomain(subdomain,domain));
+  // }
+  // {
+  //   string domain = {};
+  //   string subdomain{"ur.ay"};
+  //   ASSERT(!IsSubdomain(subdomain,domain));
+  // }
   {
     string domain{"ur.ay"};
     string subdomain = {"ube.ur.ay"};
@@ -165,32 +188,58 @@ void TestIsSubdomain() {
 }
 
 void TestCheckDomains() {
-  vector<string> banned_domains = {
-    {"ya.com"},
-    {"ru.ru"},
-    {"net"},
-    {"battle.su"},
-    {"something"}
-  };
-  vector<string> domains_to_check = {
-    {"m.ya.com"},
-    {"com.something"},
-    {"ya.ru"},
-    {"com.su"},
-    {"battle.net"},
-    {"steam.ru"}
-  };
-  for (string& domain : banned_domains) {
-    reverse(begin(domain), end(domain));
+  {
+    vector<string> banned_domains = {
+      {"ru"}
+    };
+    vector<string> domains_to_check = {
+      {"m.mail.ya.ru"},
+      {"com.something"},
+      {"ya.ru"},
+      {"com.su"},
+      {"battle.net"},
+      {"stea.ya.ru"}
+    };
+    for (string& domain : banned_domains) {
+      reverse(begin(domain), end(domain));
+    }
+    for (string& domain : domains_to_check) {
+      reverse(begin(domain), end(domain));
+    }
+    RemoveSubdomains(banned_domains);
+    ostringstream os;
+    CheckDomains(domains_to_check, banned_domains,os);
+    string expected{"Bad\nGood\nBad\nGood\nGood\nBad\n"};
+    ASSERT_EQUAL(os.str(),expected);
   }
-  for (string& domain : domains_to_check) {
-    reverse(begin(domain), end(domain));
+  {
+    vector<string> banned_domains = {
+      {"ya.ru"},
+      {"maps.me"},
+      {"m.ya.ru"},
+      {"com"}
+    };
+    vector<string> domains_to_check = {
+      {"ya.ru"},
+      {"ya.com"},
+      {"m.maps.me"},
+      {"moscow.m.ya.ru"},
+      {"maps.com"},
+      {"maps.ru"},
+      {"ya.ya"}
+    };
+    for (string& domain : banned_domains) {
+      reverse(begin(domain), end(domain));
+    }
+    for (string& domain : domains_to_check) {
+      reverse(begin(domain), end(domain));
+    }
+    RemoveSubdomains(banned_domains);
+    ostringstream os;
+    CheckDomains(domains_to_check, banned_domains,os);
+    string expected{"Bad\nBad\nBad\nBad\nBad\nGood\nGood\n"};
+    ASSERT_EQUAL(os.str(),expected);
   }
-  RemoveSubdomains(banned_domains);
-  ostringstream os;
-  CheckDomains(domains_to_check, banned_domains,os);
-  string expected{"Bad\nBad\nGood\nGood\nBad\nGood\n"};
-  ASSERT_EQUAL(os.str(),expected);
 }
 
 int main() {
@@ -199,7 +248,7 @@ int main() {
   RUN_TEST(tr,TestReadDomains);
   RUN_TEST(tr,TestRemoveSubdomains);
   RUN_TEST(tr,TestCheckDomains);
-  
+#ifndef RUN_TESTS
   vector<string> banned_domains = ReadDomains();
   vector<string> domains_to_check = ReadDomains();
 
@@ -212,6 +261,6 @@ int main() {
   
   RemoveSubdomains(banned_domains);
   CheckDomains(domains_to_check, banned_domains);
-
+#endif
   return 0;
 }
