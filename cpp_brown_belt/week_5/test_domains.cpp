@@ -188,12 +188,119 @@ void TestSimple() {
   // Your tests here
 }
 
+// 1.При разбиении строки по разделителю в начало списка частей добавляется пустая строка.
+void TestSplit() {
+  string test;
+  auto res = Split(test, ".");
+  ASSERT_EQUAL(vector<string_view>{},res);
+}
+
+
+// 2. Метод GetReversedParts возвращает части домена в прямом порядке, а не в обратном.
+void TestReversedParts() {
+  Domain d{"uber.ya.ru"};
+  auto reversed = d.GetReversedParts();
+  vector<string> expected{"ru","ya","uber"};
+  vector<string> res{reversed.begin(),reversed.end()};
+  ASSERT_EQUAL(res,expected);
+}
+
+// 3. Домен не считается своим поддоменом.
+void TestDomainIsSelfSub() {
+  Domain d1{"uber.ya.ru"};
+  Domain d2{"uber.ya.ru"};
+  ASSERT(IsSubdomain(d1,d2));
+}
+
+// 4. При проверке того, является ли один домен поддоменом другого, параметры перепутаны местами.
+void TestDomainParamOrder() {
+  Domain d1{"uber.ya.ru"};
+  Domain d2{"ya.ru"};
+  ASSERT(IsSubdomain(d1,d2));
+  ASSERT(!IsSubdomain(d2,d1));
+}
+
+// 5. При инициализации DomainChecker не происходит поглощения поддоменов.
+void TestRemoveSubdomains() {
+  {
+    vector<Domain> banned_domains = {
+      Domain{"ya.ru"},
+      Domain{"a.ya.ru"},
+      Domain{"b.ya.ru"},
+    };
+    DomainChecker checker(banned_domains.begin(),banned_domains.end());
+    ASSERT(checker.IsSubdomain(Domain("aaaa.ya.ru")));
+  }
+}
+
+// 6. При проверке доменов по данному набору успехом считается ситуация, когда домен-запрос является поддоменом одного из запрещённых.
+void TestCheck() {
+  vector<Domain> banned_domains = {
+    Domain{"ya.ru"},
+    Domain{"a.ya.ru"},
+    Domain{"b.ya.ru"},
+  };
+  vector<Domain> domains_to_check = {
+    Domain{"y.ya.ru"}
+  };
+  ASSERT(!CheckDomains(banned_domains, domains_to_check)[0]);
+}
+
+// 7. При выводе перепутаны Good и Bad.
+void TestGoodBad() {
+  vector<Domain> banned_domains = {
+    Domain{"ya.ru"},
+    Domain{"a.ya.ru"},
+    Domain{"b.ya.ru"},
+  };
+  vector<Domain> domains_to_check = {
+    Domain{"y.ya.ru"},
+    Domain{"y.yaaaaa.ru"}
+  };
+  auto check_results = CheckDomains(banned_domains, domains_to_check);
+  ostringstream os;
+  PrintCheckResults(check_results, os);
+  ASSERT_EQUAL("Bad\nGood\n",os.str());
+}
+
+// 8. При считывании доменов из-за неаккуратного использования getline первый домен всегда считывается пустым.
+void TestReadDomains() {
+  {
+    istringstream is {R"(
+      3
+      uber.ya.ru
+      lol.kek.rofl.com
+      no.no.no.yes)"
+    };
+
+    vector<Domain> expected = {
+      Domain{"uber.ya.ru"},
+      Domain{"lol.kek.rofl.com"},
+      Domain{"no.no.no.yes"}
+    };
+
+    vector<Domain> res = ReadDomains(is);
+
+    ASSERT_EQUAL(expected,res);
+  }
+}
+
 int main() {
   TestRunner tr;
+  RUN_TEST(tr, TestSplit);
   RUN_TEST(tr, TestSimple);
+  RUN_TEST(tr, TestReadDomains);
+  RUN_TEST(tr, TestReversedParts);
+  RUN_TEST(tr, TestDomainIsSelfSub);
+  RUN_TEST(tr, TestDomainParamOrder);
+  RUN_TEST(tr, TestRemoveSubdomains);
+  RUN_TEST(tr, TestCheck);
+  RUN_TEST(tr, TestGoodBad);
 
+#ifndef RUN_TESTS
   const vector<Domain> banned_domains = ReadDomains();
   const vector<Domain> domains_to_check = ReadDomains();
   PrintCheckResults(CheckDomains(banned_domains, domains_to_check));
+#endif
   return 0;
 }
