@@ -54,25 +54,12 @@ struct Date {
     DATE_COMP_OP(!=);
 #undef DATE_COMP_OP
 
-    bool IsLeapYear() {
-        bool res = false;
-        if (year%400 == 0) // Exactly divisible by 400 e.g. 1600, 2000
-            res = true;
-        else if (year%100 == 0) // Exactly divisible by 100 and not by 400 e.g. 1900, 2100
-            res = false;
-        else if (year%4 == 0) // Exactly divisible by 4 and neither by 100 nor 400 e.g. 2016, 2020
-            res = true;
-        else // Not divisible by 4 or 100 or 400 e.g. 2017, 2018, 2019
-            res = false;
-        return res;
-    }
-
-    int GetMonthDays() {
-        int days_in_month = month_days_count[month];
-        if(month == FEB && IsLeapYear()) {
-            days_in_month++;
-        }
-        return days_in_month;
+    friend istream& operator>>(istream& is, Date& date) {
+        char dash;
+        int year, month, day;
+        is >> year >> dash >> month >> dash >> day;
+        date = {year,month,day};
+        return is;
     }
 
     Date& operator++ ()     // prefix ++
@@ -113,6 +100,27 @@ struct Date {
         Date result(*this);   // make a copy for result
         --(*this);              // Now use the prefix version to do the work
         return result;          // return the copy (the old) value.
+    }
+
+    bool IsLeapYear() {
+        bool res = false;
+        if (year%400 == 0) // Exactly divisible by 400 e.g. 1600, 2000
+            res = true;
+        else if (year%100 == 0) // Exactly divisible by 100 and not by 400 e.g. 1900, 2100
+            res = false;
+        else if (year%4 == 0) // Exactly divisible by 4 and neither by 100 nor 400 e.g. 2016, 2020
+            res = true;
+        else // Not divisible by 4 or 100 or 400 e.g. 2017, 2018, 2019
+            res = false;
+        return res;
+    }
+
+    int GetMonthDays() {
+        int days_in_month = month_days_count[month];
+        if(month == FEB && IsLeapYear()) {
+            days_in_month++;
+        }
+        return days_in_month;
     }
 };
 
@@ -184,7 +192,7 @@ public:
         double res  = accumulate(it_from, it_to, .0, [](const double& acc, const pair<Date,double>& rhs) {
             return acc + rhs.second;
         });
-        os << res;
+        os << res << '\n';
     }
     void Earn(const Date& from, const Date& to, double value) {
         Range range = GetDatesRange(from,to);
@@ -201,6 +209,7 @@ public:
     }
 };
 
+#ifdef _DEBUG
 void TestDateOperators() {
     Date bigger{.year = 1990, .month = JUN, .day = 21};
     Date smaller{.year = 1990, .month = JUN, .day = 20};
@@ -308,7 +317,7 @@ void TestBudgetManager() {
         ostringstream os;
         bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 15}, os);
-        ASSERT_EQUAL("15",os.str());
+        ASSERT_EQUAL("15\n",os.str());
     }
     {
         BudgetManager bm;
@@ -321,7 +330,7 @@ void TestBudgetManager() {
         ostringstream os;
         bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 6}, os);
-        ASSERT_EQUAL("4",os.str());
+        ASSERT_EQUAL("4\n",os.str());
     }
     {
         BudgetManager bm;
@@ -330,20 +339,20 @@ void TestBudgetManager() {
                     Date{.year = 1991, .month = MAR, .day = 1}, 29);
         bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("29",os.str());
+        ASSERT_EQUAL("29\n",os.str());
         bm.PayTax(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1});
         os.str("");
         bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("25.23",os.str());
+        ASSERT_EQUAL("25.23\n",os.str());
 
         bm.Earn(Date{.year = 1991, .month = FEB, .day = 28},
                     Date{.year = 1991, .month = FEB, .day = 29}, 2);
         os.str("");
         bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("27.23",os.str());
+        ASSERT_EQUAL("27.23\n",os.str());
 
         bm.Earn(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 31}, 31);
@@ -353,7 +362,7 @@ void TestBudgetManager() {
         os.str("");
         bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("50.6601",os.str());
+        ASSERT_EQUAL("50.6601\n",os.str());
         
     }
     {
@@ -370,7 +379,7 @@ void TestBudgetManager() {
         bm.ComputeIncome(Date{.year = 1991, .month = JUL, .day = 15},
                     Date{.year = 1991, .month = NOV, .day = 1}, os);
         
-        ASSERT_EQUAL("46.79",os.str());
+        ASSERT_EQUAL("46.79\n",os.str());
     }
     {
         // 8
@@ -389,34 +398,63 @@ void TestBudgetManager() {
                     Date{.year = 2000, .month = JAN, .day = 6}, 20);
         bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
                     Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("20",os.str());
+        ASSERT_EQUAL("20\n",os.str());
         os.str("");
         bm.PayTax(Date{.year = 2000, .month = JAN, .day = 2},
                     Date{.year = 2000, .month = JAN, .day = 3});
         bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
                     Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("18.96",os.str());
+        ASSERT_EQUAL("18.96\n",os.str());
         os.str("");
         bm.Earn(Date{.year = 2000, .month = JAN, .day = 3},
                     Date{.year = 2000, .month = JAN, .day = 3}, 10);
         bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
                     Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("28.96",os.str());
+        ASSERT_EQUAL("28.96\n",os.str());
         os.str("");
         bm.PayTax(Date{.year = 2000, .month = JAN, .day = 3},
                     Date{.year = 2000, .month = JAN, .day = 3});
         bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
                     Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("27.2076",os.str());
+        ASSERT_EQUAL("27.2076\n",os.str());
         os.str("");
     }
 }
+#endif
 
 int main(void) {
+#ifdef _DEBUG
     TestRunner tr;
     RUN_TEST(tr,TestDateOperators);
     RUN_TEST(tr,TestDateIncDec);
     RUN_TEST(tr,TestGetDatesRange);
     RUN_TEST(tr,TestBudgetManager);
+#endif
+
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    BudgetManager bm;
+    int num;
+    cin >> num;
+    while(num--) {
+        string cmd;
+        cin >> cmd;
+        if(cmd == "Earn") {
+            Date from, to;
+            int income;
+            cin >> from >> to >> income;
+            bm.Earn(from,to,income);
+        } else if (cmd == "PayTax") {
+            Date from, to;
+            cin >> from >> to;
+            bm.PayTax(from,to);
+        } else if (cmd == "ComputeIncome") {
+            Date from, to;
+            cin >> from >> to;
+            bm.ComputeIncome(from,to);
+        } else {
+            throw runtime_error("Unknown command");
+        }
+    }
     return 0;
 }
