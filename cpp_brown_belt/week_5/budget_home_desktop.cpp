@@ -433,6 +433,7 @@ int main(void) {
 
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+    cout.precision(25);
     BudgetManager bm;
     int num;
     cin >> num;
