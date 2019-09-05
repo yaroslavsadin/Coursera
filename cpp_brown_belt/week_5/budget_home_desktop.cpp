@@ -146,31 +146,36 @@ private:
 public:
 #endif
     auto GetDatesRange(const Date& from, const Date& to) {
-        auto it_from = date_to_balance_.lower_bound(from);
-        auto it_to = date_to_balance_.lower_bound(to);
-
+        bool from_exists = date_to_balance_.count(from);
+        bool to_exists = date_to_balance_.count(to);
         // Both found, return the existing range
-        if (it_from != date_to_balance_.end() && it_to != date_to_balance_.end()) {
-            return Range(it_from,it_to);
-        } else if (it_from == date_to_balance_.end() && it_to != date_to_balance_.end()) {
+        if (from_exists && to_exists) {
+            auto it_from = date_to_balance_.lower_bound(from);
+            auto it_to = date_to_balance_.lower_bound(to);
+            return Range(it_from,++it_to);
+        // 'from' not found, fill in every date from 'to' down to 'from'
+        } else if (!from_exists && to_exists) {
+            auto it_to = date_to_balance_.lower_bound(to);
             Date insertion{to};
             while(insertion > from) {
                 date_to_balance_[--insertion];
             }
-            return Range(date_to_balance_.find(from),it_to);
-        } else if (it_to == date_to_balance_.end() && it_from != date_to_balance_.end()) {
+            return Range(date_to_balance_.find(from),++it_to);
+        // 'to' not found, fill in every date from 'from' to 'to'
+        } else if (from_exists && !to_exists) {
+            auto it_from = date_to_balance_.lower_bound(from);
             Date insertion{from};
             while(insertion < to) {
                 date_to_balance_[++insertion];
             }
-            return Range(it_from,date_to_balance_.find(to));
+            return Range(it_from,++date_to_balance_.find(to));
         // Neither found
         } else {
             Date insertion{from};
             while(insertion <= to) {
                 date_to_balance_[insertion++];
             }
-            return Range(date_to_balance_.find(from),date_to_balance_.find(to));
+            return Range(date_to_balance_.find(from),++date_to_balance_.find(to));
         }
     }
 };
@@ -226,29 +231,51 @@ void TestDateIncDec() {
     }
 }
 
+void DoRangeCheck(BudgetManager& bm, const Date& from, const Date& to) {
+    vector<Date> expected_ = [from,to] {
+        vector<Date> v;
+        for(Date i = from; i <= to; i++) {
+            v.push_back(i);
+        }
+        return v;
+    }();
+    Range expected(expected_.begin(),expected_.end());
+
+    Range result = bm.GetDatesRange(from,to);
+    ASSERT_EQUAL(expected.size(),result.size());
+    auto it = expected.begin();
+    for(const auto& d : result) {
+        ASSERT(d.first == *it++);
+    }
+}
+
 void TestGetDatesRange() {
     BudgetManager bm;
-    Date from{.year = 1991, .month = JAN, .day = 1};
-    Date to{.year = 1991, .month = FEB, .day = 1};
-    auto range = bm.GetDatesRange(from,to);
-    ASSERT_EQUAL(range.size(),31u);
-    for(const auto& date : range) {
-        ASSERT(date.first == from++);
-    }
 
-    from = {.year = 1991, .month = JAN, .day = 1};
-    range = bm.GetDatesRange(from,to);
-    for(const auto& date : range) {
-        ASSERT(date.first == from++);
-    }
+    DoRangeCheck(bm, 
+                Date{.year = 1991, .month = JAN, .day = 10},
+                Date{.year = 1991, .month = FEB, .day = 1}
+    );
 
-    from = {.year = 1991, .month = JAN, .day = 25};
-    to = {.year = 1991, .month = FEB, .day = 15};
-    range = bm.GetDatesRange(from,to);
-    ASSERT_EQUAL(range.size(),21u);
-    for(const auto& date : range) {
-        ASSERT(date.first == from++);
-    }
+    DoRangeCheck(bm, 
+                Date{.year = 1991, .month = JAN, .day = 10},
+                Date{.year = 1991, .month = FEB, .day = 1}
+    );
+
+    DoRangeCheck(bm, 
+                Date{.year = 1991, .month = JAN, .day = 15},
+                Date{.year = 1991, .month = JAN, .day = 23}
+    );
+
+    DoRangeCheck(bm, 
+                Date{.year = 1991, .month = JAN, .day = 15},
+                Date{.year = 1991, .month = FEB, .day = 23}
+    );
+
+    DoRangeCheck(bm, 
+                Date{.year = 1990, .month = AUG, .day = 4},
+                Date{.year = 1991, .month = FEB, .day = 23}
+    );
 
 }
 
