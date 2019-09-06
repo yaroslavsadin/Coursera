@@ -185,14 +185,14 @@ public:
     }
 public:
     BudgetManager() {}
-    void ComputeIncome(const Date& from, const Date& to, ostream& os = cout) const {
+    double ComputeIncome(const Date& from, const Date& to) const {
         auto it_from = date_to_balance_.lower_bound(from);
         auto it_to = date_to_balance_.upper_bound(to);
         
         double res  = accumulate(it_from, it_to, .0, [](const double& acc, const pair<Date,double>& rhs) {
             return acc + rhs.second;
         });
-        os << res << '\n';
+        return res;
     }
     void Earn(const Date& from, const Date& to, double value) {
         Range range = GetDatesRange(from,to);
@@ -314,10 +314,10 @@ void TestBudgetManager() {
         BudgetManager bm;
         bm.Earn(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 31}, 31);
-        ostringstream os;
-        bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
-                    Date{.year = 1991, .month = JAN, .day = 15}, os);
-        ASSERT_EQUAL("15\n",os.str());
+        
+        double result = bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
+                    Date{.year = 1991, .month = JAN, .day = 15});
+        ASSERT_EQUAL(15,result);
     }
     {
         BudgetManager bm;
@@ -327,47 +327,42 @@ void TestBudgetManager() {
                     Date{.year = 1991, .month = JAN, .day = 4}, 2);
         bm.Earn(Date{.year = 1991, .month = JAN, .day = 6},
                     Date{.year = 1991, .month = JAN, .day = 6}, 1);
-        ostringstream os;
-        bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
-                    Date{.year = 1991, .month = JAN, .day = 6}, os);
-        ASSERT_EQUAL("4\n",os.str());
+        double result = bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
+                    Date{.year = 1991, .month = JAN, .day = 6});
+        ASSERT_EQUAL(4,result);
     }
     {
         BudgetManager bm;
-        ostringstream os;
         bm.Earn(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1}, 29);
-        bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
-                    Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("29\n",os.str());
+        double result = bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
+                    Date{.year = 1991, .month = MAR, .day = 1});
+        ASSERT_EQUAL(29,result);
         bm.PayTax(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1});
-        os.str("");
-        bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
-                    Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("25.23\n",os.str());
+        result = bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
+                    Date{.year = 1991, .month = MAR, .day = 1});
+        ASSERT_EQUAL(25.230000000000004,result);
 
         bm.Earn(Date{.year = 1991, .month = FEB, .day = 28},
                     Date{.year = 1991, .month = FEB, .day = 29}, 2);
-        os.str("");
-        bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
-                    Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("27.23\n",os.str());
+        result = bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
+                    Date{.year = 1991, .month = MAR, .day = 1});
+        ASSERT_EQUAL(27.230000000000004,result);
 
         bm.Earn(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 31}, 31);
         bm.PayTax(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1});
         
-        os.str("");
-        bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
-                    Date{.year = 1991, .month = MAR, .day = 1}, os);
-        ASSERT_EQUAL("50.6601\n",os.str());
+        result = bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
+                    Date{.year = 1991, .month = MAR, .day = 1});
+        ASSERT_EQUAL(50.660100000000057,result);
         
     }
     {
         BudgetManager bm;
-        ostringstream os;
+        
         bm.Earn(Date{.year = 1991, .month = JUL, .day = 1},
                     Date{.year = 1991, .month = JUL, .day = 31}, 31);
         bm.Earn(Date{.year = 1991, .month = OCT, .day = 1},
@@ -376,10 +371,10 @@ void TestBudgetManager() {
         bm.PayTax(Date{.year = 1991, .month = JUN, .day = 1},
                     Date{.year = 1991, .month = JUL, .day = 31});
         
-        bm.ComputeIncome(Date{.year = 1991, .month = JUL, .day = 15},
-                    Date{.year = 1991, .month = NOV, .day = 1}, os);
+        double result = bm.ComputeIncome(Date{.year = 1991, .month = JUL, .day = 15},
+                    Date{.year = 1991, .month = NOV, .day = 1});
         
-        ASSERT_EQUAL("46.79\n",os.str());
+        ASSERT_EQUAL(46.789999999999992,result);
     }
     {
         // 8
@@ -393,31 +388,31 @@ void TestBudgetManager() {
         // ComputeIncome 2000-01-01 2001-01-01
 
         BudgetManager bm;
-        ostringstream os;
+        
         bm.Earn(Date{.year = 2000, .month = JAN, .day = 2},
                     Date{.year = 2000, .month = JAN, .day = 6}, 20);
-        bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
-                    Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("20\n",os.str());
-        os.str("");
+        double result = bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
+                    Date{.year = 2001, .month = JAN, .day = 1});
+        ASSERT_EQUAL(20,result);
+        
         bm.PayTax(Date{.year = 2000, .month = JAN, .day = 2},
                     Date{.year = 2000, .month = JAN, .day = 3});
-        bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
-                    Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("18.96\n",os.str());
-        os.str("");
+        result = bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
+                    Date{.year = 2001, .month = JAN, .day = 1});
+        ASSERT_EQUAL(18.96,result);
+        
         bm.Earn(Date{.year = 2000, .month = JAN, .day = 3},
                     Date{.year = 2000, .month = JAN, .day = 3}, 10);
-        bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
-                    Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("28.96\n",os.str());
-        os.str("");
+        result = bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
+                    Date{.year = 2001, .month = JAN, .day = 1});
+        ASSERT_EQUAL(28.96,result);
+        
         bm.PayTax(Date{.year = 2000, .month = JAN, .day = 3},
                     Date{.year = 2000, .month = JAN, .day = 3});
-        bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
-                    Date{.year = 2001, .month = JAN, .day = 1}, os);
-        ASSERT_EQUAL("27.2076\n",os.str());
-        os.str("");
+        result = bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
+                    Date{.year = 2001, .month = JAN, .day = 1});
+        ASSERT_EQUAL(27.2076,result);
+        
     }
 }
 #endif
@@ -452,7 +447,7 @@ int main(void) {
         } else if (cmd == "ComputeIncome") {
             Date from, to;
             cin >> from >> to;
-            bm.ComputeIncome(from,to);
+            cout << bm.ComputeIncome(from,to) << '\n';
         } else {
             throw runtime_error("Unknown command");
         }
