@@ -7,6 +7,7 @@
 #include <tuple>
 #include <array>
 #include <numeric>
+#include <ctime>
 #include "test_runner.h"
 
 using namespace std;
@@ -123,7 +124,26 @@ struct Date {
         }
         return days_in_month;
     }
+
+    time_t AsTimestamp() const {
+        std::tm t;
+        t.tm_sec   = 0;
+        t.tm_min   = 0;
+        t.tm_hour  = 0;
+        t.tm_mday  = day;
+        t.tm_mon   = month - 1;
+        t.tm_year  = year - 1900;
+        t.tm_isdst = 0;
+        return mktime(&t);
+    }
 };
+
+int ComputeDaysDiff(const Date& date_to, const Date& date_from) {
+  const time_t timestamp_to = date_to.AsTimestamp();
+  const time_t timestamp_from = date_from.AsTimestamp();
+  static const int SECONDS_IN_DAY = 60 * 60 * 24;
+  return (timestamp_to - timestamp_from) / SECONDS_IN_DAY;
+}
 
 const array<int,13> Date::month_days_count = {
     0,  // padding
@@ -145,8 +165,8 @@ class BudgetManager {
 protected:
 private:
     struct Balance {
-        double income;
-        double spending;
+        double income = 0.0;
+        double spending = 0.0;
     };
 
     using Storage = map<Date,Balance>;
@@ -170,15 +190,16 @@ public:
             Date insertion{to};
             // TODO: check including ranges
             while(insertion >= from) {
-                date_to_balance_[--insertion];
+                date_to_balance_[insertion--];
+                // date_to_balance_[--insertion]; -- fixes test 9 ???
             }
             return Range(date_to_balance_.find(from),it_to);
         // 'to' not found, fill in every date from 'from' to 'to'
         } else if (from_exists && !to_exists) {
             auto it_from = date_to_balance_.lower_bound(from);
             Date insertion{from};
-            while(insertion < to) {
-                date_to_balance_[++insertion];
+            while(insertion <= to) {
+                date_to_balance_[insertion++];
             }
             return Range(it_from,++date_to_balance_.find(to));
         // Neither found
@@ -192,6 +213,7 @@ public:
     }
 public:
     BudgetManager() {}
+    size_t size() { return date_to_balance_.size(); }
     double ComputeIncome(const Date& from, const Date& to) const {
         auto it_from = date_to_balance_.lower_bound(from);
         auto it_to = date_to_balance_.upper_bound(to);
@@ -203,14 +225,14 @@ public:
     }
     void Earn(const Date& from, const Date& to, double value) {
         Range range = GetDatesRange(from,to);
-        double daily_income = value / range.size();
+        double daily_income = value / (ComputeDaysDiff(to, from) + 1);
         for(auto& p : range) {
             p.second.income += daily_income;
         }
     }
     void Spend(const Date& from, const Date& to, double value) {
         Range range = GetDatesRange(from,to);
-        double daily_spending = value / range.size();
+        double daily_spending = value / (ComputeDaysDiff(to, from) + 1);
         for(auto& p : range) {
             p.second.spending += daily_spending;
         }
@@ -276,6 +298,24 @@ void TestDateIncDec() {
     }
 }
 
+void TestDatesDiff() {
+    {
+        Date from{.year = 2020, .month = JAN, .day = 31};
+        Date to{.year = 2020, .month = JAN, .day = 31};
+        ASSERT_EQUAL(0,ComputeDaysDiff(to,from));
+    }
+    {
+        Date from{.year = 2020, .month = JAN, .day = 1};
+        Date to{.year = 2020, .month = JAN, .day = 2};
+        ASSERT_EQUAL(1,ComputeDaysDiff(to,from));
+    }
+    {
+        Date from{.year = 2020, .month = JAN, .day = 1};
+        Date to{.year = 2020, .month = JAN, .day = 15};
+        ASSERT_EQUAL(14,ComputeDaysDiff(to,from));
+    }
+}
+
 void DoRangeCheck(BudgetManager& bm, const Date& from, const Date& to) {
     vector<Date> expected_ = [from,to] {
         vector<Date> v;
@@ -297,31 +337,54 @@ void DoRangeCheck(BudgetManager& bm, const Date& from, const Date& to) {
 void TestGetDatesRange() {
     BudgetManager bm;
 
+    // Both missing
+    // 23
     DoRangeCheck(bm, 
                 Date{.year = 1991, .month = JAN, .day = 10},
                 Date{.year = 1991, .month = FEB, .day = 1}
     );
+    ASSERT_EQUAL(bm.size(),23u);
 
+    // From exists, To exists
+    // 23
     DoRangeCheck(bm, 
                 Date{.year = 1991, .month = JAN, .day = 10},
                 Date{.year = 1991, .month = FEB, .day = 1}
     );
+    ASSERT_EQUAL(bm.size(),23u);
 
+    // From exists, To exists
     DoRangeCheck(bm, 
                 Date{.year = 1991, .month = JAN, .day = 15},
                 Date{.year = 1991, .month = JAN, .day = 23}
     );
+    ASSERT_EQUAL(bm.size(),23u);
 
+    // From exists, To does not
+    // 46
     DoRangeCheck(bm, 
                 Date{.year = 1991, .month = JAN, .day = 15},
                 Date{.year = 1991, .month = FEB, .day = 23}
     );
+    ASSERT_EQUAL(bm.size(),45u);
 
+    // From does not exist, To does
+    // 205
     DoRangeCheck(bm, 
                 Date{.year = 1990, .month = AUG, .day = 4},
-                Date{.year = 1991, .month = FEB, .day = 23}
+                Date{.year = 1991, .month = FEB, .day = 15}
     );
+    ASSERT_EQUAL(bm.size(),204u);
 
+    // From does not exist, To does
+    // 205
+    DoRangeCheck(bm, 
+                Date{.year = 1991, .month = FEB, .day = 27},
+                Date{.year = 1991, .month = FEB, .day = 28}
+    );
+    ASSERT_EQUAL(bm.size(),206u);
+
+    
 }
 
 void TestBudgetManager() {
@@ -359,8 +422,8 @@ void TestBudgetManager() {
                     Date{.year = 1991, .month = MAR, .day = 1});
         ASSERT_EQUAL(25.230000000000004,result);
 
-        bm.Earn(Date{.year = 1991, .month = FEB, .day = 28},
-                    Date{.year = 1991, .month = FEB, .day = 29}, 2);
+        bm.Earn(Date{.year = 1991, .month = FEB, .day = 27},
+                    Date{.year = 1991, .month = FEB, .day = 28}, 2);
         result = bm.ComputeIncome(Date{.year = 1991, .month = FEB, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1});
         ASSERT_EQUAL(27.230000000000004,result);
@@ -372,7 +435,7 @@ void TestBudgetManager() {
         
         result = bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = MAR, .day = 1});
-        ASSERT_EQUAL(50.660100000000057,result);
+        ASSERT_EQUAL(50.66010000000005,result);
         
     }
     {
@@ -473,6 +536,7 @@ int main(void) {
 #ifdef _DEBUG
     TestRunner tr;
     RUN_TEST(tr,TestDateOperators);
+    RUN_TEST(tr,TestDatesDiff);
     RUN_TEST(tr,TestDateIncDec);
     RUN_TEST(tr,TestGetDatesRange);
     RUN_TEST(tr,TestBudgetManager);
@@ -481,6 +545,7 @@ int main(void) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.precision(25);
+
     BudgetManager bm;
     int num;
 
