@@ -64,6 +64,10 @@ struct Date {
         return is;
     }
 
+    friend ostream& operator<<(ostream& os, Date& date) {
+        return os << "Date{.year = " << date.year << ", .month = " << date.month << ", .day = " << date.day << "}";
+    }
+
     Date& operator++ ()     // prefix ++
     {
         // Do work on this.   (increment your object here)
@@ -177,39 +181,19 @@ private:
 public:
 #endif
     auto GetDatesRange(const Date& from, const Date& to) {
-        bool from_exists = date_to_balance_.count(from);
-        bool to_exists = date_to_balance_.count(to);
-        // Both found, return the existing range
-        if (from_exists && to_exists) {
-            auto it_from = date_to_balance_.lower_bound(from);
-            auto it_to = date_to_balance_.upper_bound(to);
-            return Range(it_from,it_to);
-        // 'from' not found, fill in every date from 'to' down to 'from'
-        } else if (!from_exists && to_exists) {
-            auto it_to = date_to_balance_.upper_bound(to);
-            Date insertion{to};
-            // TODO: check including ranges
-            while(insertion >= from) {
-                date_to_balance_[insertion--];
-                // date_to_balance_[--insertion]; -- fixes test 9 ???
-            }
-            return Range(date_to_balance_.find(from),it_to);
-        // 'to' not found, fill in every date from 'from' to 'to'
-        } else if (from_exists && !to_exists) {
-            auto it_from = date_to_balance_.lower_bound(from);
+        // bool from_exists = date_to_balance_.count(from);
+        // bool to_exists = date_to_balance_.count(to);
+
+        if (true) {
             Date insertion{from};
             while(insertion <= to) {
                 date_to_balance_[insertion++];
             }
-            return Range(it_from,++date_to_balance_.find(to));
-        // Neither found
-        } else {
-            Date insertion{from};
-            while(insertion <= to) {
-                date_to_balance_[insertion++];
-            }
-            return Range(date_to_balance_.find(from),++date_to_balance_.find(to));
         }
+
+        auto it_from = date_to_balance_.lower_bound(from);
+        auto it_to = date_to_balance_.upper_bound(to);
+        return Range(it_from,it_to);
     }
 public:
     BudgetManager() {}
@@ -217,8 +201,8 @@ public:
     double ComputeIncome(const Date& from, const Date& to) const {
         auto it_from = date_to_balance_.lower_bound(from);
         auto it_to = date_to_balance_.upper_bound(to);
-        
-        double res  = accumulate(it_from, it_to, .0, [](const double& acc, const Storage::value_type& rhs) {
+
+        double res  = accumulate(it_from, it_to, .0, [](const double acc, const Storage::value_type& rhs) {
             return acc + (rhs.second.income - rhs.second.spending);
         });
         return res;
@@ -237,7 +221,7 @@ public:
             p.second.spending += daily_spending;
         }
     }
-    void PayTax(const Date& from, const Date& to, int percentage = 13) {
+    void PayTax(const Date& from, const Date& to, unsigned int percentage = 13) {
         Range range = GetDatesRange(from,to);
         double tax_rate = (100 - percentage) / 100.;
         for(auto& p : range) {
@@ -331,60 +315,114 @@ void DoRangeCheck(BudgetManager& bm, const Date& from, const Date& to) {
     auto it = expected.begin();
     for(const auto& d : result) {
         ASSERT(d.first == *it++);
+        ASSERT(d.second.income == 0.0);
+        ASSERT(d.second.spending == 0.0);
     }
 }
 
 void TestGetDatesRange() {
-    BudgetManager bm;
+    {
+        BudgetManager bm;
 
-    // Both missing
-    // 23
-    DoRangeCheck(bm, 
-                Date{.year = 1991, .month = JAN, .day = 10},
-                Date{.year = 1991, .month = FEB, .day = 1}
-    );
-    ASSERT_EQUAL(bm.size(),23u);
+        // Both missing
+        // 23
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = JAN, .day = 10},
+                    Date{.year = 1991, .month = FEB, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),23u);
 
-    // From exists, To exists
-    // 23
-    DoRangeCheck(bm, 
-                Date{.year = 1991, .month = JAN, .day = 10},
-                Date{.year = 1991, .month = FEB, .day = 1}
-    );
-    ASSERT_EQUAL(bm.size(),23u);
+        // From exists, To exists
+        // 23 
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = JAN, .day = 10},
+                    Date{.year = 1991, .month = FEB, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),23u);
 
-    // From exists, To exists
-    DoRangeCheck(bm, 
-                Date{.year = 1991, .month = JAN, .day = 15},
-                Date{.year = 1991, .month = JAN, .day = 23}
-    );
-    ASSERT_EQUAL(bm.size(),23u);
+        // From exists, To exists
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = JAN, .day = 15},
+                    Date{.year = 1991, .month = JAN, .day = 23}
+        );
+        ASSERT_EQUAL(bm.size(),23u);
 
-    // From exists, To does not
-    // 46
-    DoRangeCheck(bm, 
-                Date{.year = 1991, .month = JAN, .day = 15},
-                Date{.year = 1991, .month = FEB, .day = 23}
-    );
-    ASSERT_EQUAL(bm.size(),45u);
+        // From exists, To does not
+        // 46
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = JAN, .day = 15},
+                    Date{.year = 1991, .month = FEB, .day = 23}
+        );
+        ASSERT_EQUAL(bm.size(),45u);
 
-    // From does not exist, To does
-    // 205
-    DoRangeCheck(bm, 
-                Date{.year = 1990, .month = AUG, .day = 4},
-                Date{.year = 1991, .month = FEB, .day = 15}
-    );
-    ASSERT_EQUAL(bm.size(),204u);
+        // From does not exist, To does
+        // 204
+        DoRangeCheck(bm, 
+                    Date{.year = 1990, .month = AUG, .day = 4},
+                    Date{.year = 1991, .month = FEB, .day = 15}
+        );
+        ASSERT_EQUAL(bm.size(),204u);
 
-    // From does not exist, To does
-    // 205
-    DoRangeCheck(bm, 
-                Date{.year = 1991, .month = FEB, .day = 27},
-                Date{.year = 1991, .month = FEB, .day = 28}
-    );
-    ASSERT_EQUAL(bm.size(),206u);
+        // From does not exist, To does
+        // 206
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = FEB, .day = 27},
+                    Date{.year = 1991, .month = FEB, .day = 28}
+        );
+        ASSERT_EQUAL(bm.size(),206u);
 
-    
+        // From does not exist, To does
+        // 207
+        DoRangeCheck(bm, 
+                    Date{.year = 1991, .month = MAR, .day = 1},
+                    Date{.year = 1991, .month = MAR, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),207u);
+
+        // Both missing
+        // 217
+        DoRangeCheck(bm, 
+                    Date{.year = 2016, .month = MAR, .day = 1},
+                    Date{.year = 2016, .month = MAR, .day = 10}
+        );
+        ASSERT_EQUAL(bm.size(),217u);
+
+        // From does not exist, To does
+        // 246
+        DoRangeCheck(bm, 
+                    Date{.year = 2016, .month = FEB, .day = 1},
+                    Date{.year = 2016, .month = MAR, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),246u);
+
+        // From does not exist, To does
+        // 246
+        DoRangeCheck(bm, 
+                    Date{.year = 2016, .month = FEB, .day = 1},
+                    Date{.year = 2016, .month = MAR, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),246u);
+    }
+
+    {
+        BudgetManager bm;
+
+        // Both missing
+        // 30
+        DoRangeCheck(bm, 
+                    Date{.year = 2016, .month = FEB, .day = 1},
+                    Date{.year = 2016, .month = MAR, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),30u);
+
+        // Both missing
+        // 59
+        DoRangeCheck(bm, 
+                    Date{.year = 2017, .month = FEB, .day = 1},
+                    Date{.year = 2017, .month = MAR, .day = 1}
+        );
+        ASSERT_EQUAL(bm.size(),59u);
+    }
 }
 
 void TestBudgetManager() {
@@ -405,9 +443,11 @@ void TestBudgetManager() {
                     Date{.year = 1991, .month = JAN, .day = 4}, 2);
         bm.Earn(Date{.year = 1991, .month = JAN, .day = 6},
                     Date{.year = 1991, .month = JAN, .day = 6}, 1);
+        bm.Earn(Date{.year = 1991, .month = JAN, .day = 1},
+                    Date{.year = 1991, .month = JAN, .day = 6}, 6);
         double result = bm.ComputeIncome(Date{.year = 1991, .month = JAN, .day = 1},
                     Date{.year = 1991, .month = JAN, .day = 6});
-        ASSERT_EQUAL(4,result);
+        ASSERT_EQUAL(10,result);
     }
     {
         BudgetManager bm;
@@ -492,7 +532,7 @@ void TestBudgetManager() {
         ASSERT_EQUAL(27.2076,result);
         
     }
-        {
+    {
         // 8
         // Earn 2000-01-02 2000-01-06 20
         // ComputeIncome 2000-01-01 2001-01-01
@@ -529,6 +569,33 @@ void TestBudgetManager() {
                     Date{.year = 2001, .month = JAN, .day = 1});
         ASSERT_EQUAL(8.46,result);
     }
+    {
+        BudgetManager bm;
+
+        double result;
+        
+        // bm.Earn(Date{.year = 2001, .month = JAN, .day = 1},
+        //             Date{.year = 2001, .month = JUL, .day = 31}, 5000000);
+        // double result = bm.ComputeIncome(Date{.year = 2000, .month = JAN, .day = 1},
+        //             Date{.year = 2001, .month = JAN, .day = 1});
+        // ASSERT_EQUAL(23584.9056603773584905660377358,result);
+
+        // result = bm.ComputeIncome(Date{.year = 2001, .month = JUN, .day = 1},
+        //             Date{.year = 2001, .month = JUN, .day = 15});
+        // ASSERT_EQUAL(353773.5849056603,result);
+        
+        // bm.Spend(Date{.year = 2001, .month = JUN, .day = 1},
+        //             Date{.year = 2001, .month = JUL, .day = 1}, 3000);
+        // result = bm.ComputeIncome(Date{.year = 2001, .month = JUN, .day = 1},
+        //             Date{.year = 2001, .month = JUN, .day = 1});
+        // ASSERT_EQUAL(23488.131466828971393791844187413,result);
+
+        bm.PayTax(Date{.year = 2001, .month = JUN, .day = 1},
+                    Date{.year = 2001, .month = JUN, .day = 30});
+        result = bm.ComputeIncome(Date{.year = 2000, .month = JUN, .day = 1},
+                    Date{.year = 2001, .month = JUN, .day = 30});
+        ASSERT_EQUAL(0,result);
+    }
 }
 #endif
 
@@ -558,11 +625,13 @@ int main(void) {
             double income;
             cin >> from >> to >> income;
             bm.Earn(from,to,income);
+            // cout << "bm.Earn(" << from <<", " << to << ", " << income << ");" << endl;
         } else if(cmd == "Spend") {
             Date from, to;
             double spending;
             cin >> from >> to >> spending;
             bm.Spend(from,to,spending);
+            // cout << "bm.Spend(" << from <<", " << to << ", " << spending << ");" << endl;
         } else if (cmd == "PayTax") {
             Date from, to;
             int percentage;
@@ -572,6 +641,7 @@ int main(void) {
             Date from, to;
             cin >> from >> to;
             cout << bm.ComputeIncome(from,to) << '\n';
+            // cout << "bm.ComputeIncome(" << from <<", " << to << ");" << endl;
         } else {
             throw runtime_error("Unknown command");
         }
