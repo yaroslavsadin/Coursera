@@ -102,10 +102,12 @@ struct BulkMoneyAdder {
 constexpr uint8_t TAX_PERCENTAGE = 13;
 
 struct BulkTaxApplier {
-  static constexpr double FACTOR = 1.0 - TAX_PERCENTAGE / 100.0;
+  // static constexpr double FACTOR = 1.0 - TAX_PERCENTAGE / 100.0;
   uint32_t count = 0;
+  uint32_t percentage = 0;
 
   double ComputeFactor() const {
+    const double FACTOR = 1.0 - percentage / 100.0;
     return pow(FACTOR, count);
   }
 };
@@ -393,15 +395,17 @@ struct PayTaxRequest : ModifyRequest {
   PayTaxRequest() : ModifyRequest(Type::PAY_TAX) {}
   void ParseFrom(string_view input) override {
     date_from = Date::FromString(ReadToken(input));
-    date_to = Date::FromString(input);
+    date_to = Date::FromString(ReadToken(input));
+    percentage = ConvertToInt(ReadToken(input));
   }
 
   void Process(BudgetManager& manager) const override {
-    manager.AddBulkOperation(MakeDateSegment(date_from, date_to), BulkTaxApplier{1});
+    manager.AddBulkOperation(MakeDateSegment(date_from, date_to), BulkTaxApplier{1,percentage});
   }
 
   Date date_from = START_DATE;
   Date date_to = START_DATE;
+  uint32_t percentage = TAX_PERCENTAGE;
 };
 
 RequestHolder Request::Create(Request::Type type) {
@@ -486,8 +490,19 @@ void PrintResponses(const vector<double>& responses, ostream& stream = cout) {
 
 
 int main() {
+    istringstream is{
+    R"(8
+Earn 2000-01-02 2000-01-06 20
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-01-02 2000-01-03 13
+ComputeIncome 2000-01-01 2001-01-01
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-12-30 2000-12-30 13
+ComputeIncome 2000-01-01 2001-01-01
+    )"
+  };
   cout.precision(25);
-  const auto requests = ReadRequests();
+  const auto requests = ReadRequests(is);
   const auto responses = ProcessRequests(requests);
   PrintResponses(responses);
 
