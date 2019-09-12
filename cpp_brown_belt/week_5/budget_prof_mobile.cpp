@@ -107,12 +107,10 @@ constexpr uint8_t TAX_PERCENTAGE = 13;
 
 struct BulkTaxApplier {
   // static constexpr double FACTOR = 1.0 - TAX_PERCENTAGE / 100.0;
-  uint32_t count = 0;
-  uint32_t percentage = 0;
+  double factor = 1.0;
 
   double ComputeFactor() const {
-    const double FACTOR = 1.0 - percentage / 100.0;
-    return pow(FACTOR, count);
+    return factor;
   }
 };
 
@@ -152,8 +150,7 @@ public:
   {}
 
   void CombineWith(const BulkLinearUpdater& other) {
-    tax_.count += other.tax_.count;
-    tax_.percentage += other.tax_.percentage;
+    tax_.factor *= other.tax_.factor;
     add_.delta = add_.delta * other.tax_.ComputeFactor() + other.add_.delta;
     spend_.delta += other.spend_.delta;
   }
@@ -453,12 +450,12 @@ struct PayTaxRequest : ModifyRequest {
   }
 
   void Process(BudgetManager& manager) const override {
-    manager.AddBulkOperation(MakeDateSegment(date_from, date_to), BulkTaxApplier{1,percentage});
+    manager.AddBulkOperation(MakeDateSegment(date_from, date_to), BulkTaxApplier{(100. - percentage) / 100.});
   }
 
   Date date_from = START_DATE;
   Date date_to = START_DATE;
-  uint32_t percentage = TAX_PERCENTAGE;
+  double percentage = TAX_PERCENTAGE;
 };
 
 RequestHolder Request::Create(Request::Type type) {
