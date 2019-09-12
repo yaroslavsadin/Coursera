@@ -153,8 +153,9 @@ public:
 
   void CombineWith(const BulkLinearUpdater& other) {
     tax_.count += other.tax_.count;
+    tax_.percentage += other.tax_.percentage;
     add_.delta = add_.delta * other.tax_.ComputeFactor() + other.add_.delta;
-    spend_.delta = other.spend_.delta;
+    spend_.delta += other.spend_.delta;
   }
 
   MoneyState Collapse(const MoneyState& origin, IndexSegment segment) const {
@@ -568,7 +569,7 @@ ComputeIncome 2000-01-01 2001-01-01
 // ComputeIncome 2001-01-01 2001-01-10
 //     )"
 //   };
-  cout.precision();
+  cout.precision(25);
   const auto requests = ReadRequests();
   const auto responses = ProcessRequests(requests);
   PrintResponses(responses);
