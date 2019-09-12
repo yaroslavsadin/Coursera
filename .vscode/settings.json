@@ -71,7 +71,8 @@
         "thread": "cpp",
         "unordered_set": "cpp",
         "random": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "__hash_table": "cpp"
     },
     "terminal.integrated.env.windows": {
         "PATH":"C:\\cygwin64\\bin;${env:PATH}"
