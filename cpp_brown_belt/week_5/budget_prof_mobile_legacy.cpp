@@ -103,12 +103,32 @@ size_t ComputeDayIndex(const Date& date) {
   return ComputeDaysDiff(date, START_DATE);
 }
 
+struct MoneyState {
+  double earned = 0.0;
+  double spent = 0.0;
 
-array<double, VERTEX_COUNT> tree_values, tree_add, tree_factor;
+  double ComputeIncome() const {
+    return earned - spent;
+  }
+
+  MoneyState& operator+=(const MoneyState& other) {
+    earned += other.earned;
+    spent += other.spent;
+    return *this;
+  }
+
+  MoneyState operator+(const MoneyState& other) const {
+    return MoneyState(*this) += other;
+  }
+};
+
+array<double, VERTEX_COUNT> tree_add, tree_factor, tree_sub;
+array<MoneyState, VERTEX_COUNT> tree_values;
 
 void Init() {
-  tree_values.fill(0);
+  tree_values.fill({});
   tree_add.fill(0);
+  tree_sub.fill(0);
   tree_factor.fill(1);
 }
 
@@ -117,16 +137,20 @@ void Push(size_t v, size_t l, size_t r) {
     if (w < VERTEX_COUNT) {
       tree_factor[w] *= tree_factor[v];
       (tree_add[w] *= tree_factor[v]) += tree_add[v];
-      (tree_values[w] *= tree_factor[v]) += tree_add[v] * (r - l) / 2;
+      (tree_sub[w]) += tree_sub[v];
+      tree_values[w].earned *= tree_factor[v];
+      tree_values[w].earned += tree_add[v] * (r - l) / 2;
+      tree_values[w].spent += tree_sub[v] * (r - l) / 2;
     }
   }
   tree_factor[v] = 1;
   tree_add[v] = 0;
+  tree_sub[v] = 0;
 }
 
-double ComputeSum(size_t v, size_t l, size_t r, size_t ql, size_t qr) {
+MoneyState ComputeSum(size_t v, size_t l, size_t r, size_t ql, size_t qr) {
   if (v >= VERTEX_COUNT || qr <= l || r <= ql) {
-    return 0;
+    return {};
   }
   Push(v, l, r);
   if (ql <= l && r <= qr) {
@@ -143,14 +167,31 @@ void Add(size_t v, size_t l, size_t r, size_t ql, size_t qr, double value) {
   Push(v, l, r);
   if (ql <= l && r <= qr) {
     tree_add[v] += value;
-    tree_values[v] += value * (r - l);
+    tree_values[v].earned += value * (r - l);
     return;
   }
   Add(v * 2, l, (l + r) / 2, ql, qr, value);
   Add(v * 2 + 1, (l + r) / 2, r, ql, qr, value);
   tree_values[v] =
-      (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : 0)
-      + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : 0);
+      (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : MoneyState{0,0})
+      + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : MoneyState{0,0});
+}
+
+void Sub(size_t v, size_t l, size_t r, size_t ql, size_t qr, double value) {
+  if (v >= VERTEX_COUNT || qr <= l || r <= ql) {
+    return;
+  }
+  Push(v, l, r);
+  if (ql <= l && r <= qr) {
+    tree_sub[v] += value;
+    tree_values[v].spent += value * (r - l);
+    return;
+  }
+  Sub(v * 2, l, (l + r) / 2, ql, qr, value);
+  Sub(v * 2 + 1, (l + r) / 2, r, ql, qr, value);
+  tree_values[v] =
+      (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : MoneyState{0,0})
+      + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : MoneyState{0,0});
 }
 
 void Multiply(size_t v, size_t l, size_t r, size_t ql, size_t qr, double factor) {
@@ -161,14 +202,14 @@ void Multiply(size_t v, size_t l, size_t r, size_t ql, size_t qr, double factor)
   if (ql <= l && r <= qr) {
     tree_factor[v] *= factor;
     tree_add[v] *= factor;
-    tree_values[v] *= factor;
+    tree_values[v].earned *= factor;
     return;
   }
   Multiply(v * 2, l, (l + r) / 2, ql, qr, factor);
   Multiply(v * 2 + 1, (l + r) / 2, r, ql, qr, factor);
   tree_values[v] =
-      (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : 0)
-      + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : 0);
+      (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : MoneyState{0,0})
+      + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : MoneyState{0,0});
 }
 
 
@@ -178,18 +219,19 @@ int main() {
 
   Init();
 
-        istringstream is{
-    R"(8
-Earn 2000-01-02 2000-01-06 20
-ComputeIncome 2000-01-01 2001-01-01
-PayTax 2000-01-02 2000-01-03 13
-ComputeIncome 2000-01-01 2001-01-01
-ComputeIncome 2000-01-01 2001-01-01
-PayTax 2000-12-30 2000-12-30 13
-ComputeIncome 2000-01-01 2001-01-01
-    )"
-      };
-  cin.rdbuf(is.rdbuf());
+//         istringstream is{
+//     R"(8
+// Earn 2000-01-02 2000-01-06 20
+// ComputeIncome 2000-01-01 2001-01-01
+// PayTax 2000-01-02 2000-01-03 13
+// ComputeIncome 2000-01-01 2001-01-01
+// Spend 2000-12-30 2001-01-02 14
+// ComputeIncome 2000-01-01 2001-01-01
+// PayTax 2000-12-30 2000-12-30 13
+// ComputeIncome 2000-01-01 2001-01-01
+//     )"
+//       };
+//   cin.rdbuf(is.rdbuf());
 
   int q;
   cin >> q;
@@ -205,7 +247,7 @@ ComputeIncome 2000-01-01 2001-01-01
     auto idx_to = ComputeDayIndex(Date::FromString(date_to_str)) + 1;
 
     if (query_type == "ComputeIncome") {
-      cout << ComputeSum(1, 0, DAY_COUNT_P2, idx_from, idx_to) << endl;
+      cout << ComputeSum(1, 0, DAY_COUNT_P2, idx_from, idx_to).ComputeIncome() << endl;
     } else if (query_type == "PayTax") {
       size_t percentage;
       cin >> percentage;
@@ -214,6 +256,10 @@ ComputeIncome 2000-01-01 2001-01-01
       double value;
       cin >> value;
       Add(1, 0, DAY_COUNT_P2, idx_from, idx_to, value / (idx_to - idx_from));
+    } else if (query_type == "Spend") {
+      double value;
+      cin >> value;
+      Sub(1, 0, DAY_COUNT_P2, idx_from, idx_to, value / (idx_to - idx_from));
     }
   }
 
