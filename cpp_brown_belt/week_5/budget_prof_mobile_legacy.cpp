@@ -153,19 +153,19 @@ void Add(size_t v, size_t l, size_t r, size_t ql, size_t qr, double value) {
       + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : 0);
 }
 
-void Multiply(size_t v, size_t l, size_t r, size_t ql, size_t qr) {
+void Multiply(size_t v, size_t l, size_t r, size_t ql, size_t qr, double factor) {
   if (v >= VERTEX_COUNT || qr <= l || r <= ql) {
     return;
   }
   Push(v, l, r);
   if (ql <= l && r <= qr) {
-    tree_factor[v] *= 0.87;
-    tree_add[v] *= 0.87;
-    tree_values[v] *= 0.87;
+    tree_factor[v] *= factor;
+    tree_add[v] *= factor;
+    tree_values[v] *= factor;
     return;
   }
-  Multiply(v * 2, l, (l + r) / 2, ql, qr);
-  Multiply(v * 2 + 1, (l + r) / 2, r, ql, qr);
+  Multiply(v * 2, l, (l + r) / 2, ql, qr, factor);
+  Multiply(v * 2 + 1, (l + r) / 2, r, ql, qr, factor);
   tree_values[v] =
       (v * 2 < VERTEX_COUNT ? tree_values[v * 2] : 0)
       + (v * 2 + 1 < VERTEX_COUNT ? tree_values[v * 2 + 1] : 0);
@@ -177,6 +177,19 @@ int main() {
   assert(DAY_COUNT <= DAY_COUNT_P2 && DAY_COUNT_P2 < DAY_COUNT * 2);
 
   Init();
+
+        istringstream is{
+    R"(8
+Earn 2000-01-02 2000-01-06 20
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-01-02 2000-01-03 13
+ComputeIncome 2000-01-01 2001-01-01
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-12-30 2000-12-30 13
+ComputeIncome 2000-01-01 2001-01-01
+    )"
+      };
+  cin.rdbuf(is.rdbuf());
 
   int q;
   cin >> q;
@@ -194,7 +207,9 @@ int main() {
     if (query_type == "ComputeIncome") {
       cout << ComputeSum(1, 0, DAY_COUNT_P2, idx_from, idx_to) << endl;
     } else if (query_type == "PayTax") {
-      Multiply(1, 0, DAY_COUNT_P2, idx_from, idx_to);
+      size_t percentage;
+      cin >> percentage;
+      Multiply(1, 0, DAY_COUNT_P2, idx_from, idx_to, (100. - percentage) / 100);
     } else if (query_type == "Earn") {
       double value;
       cin >> value;
