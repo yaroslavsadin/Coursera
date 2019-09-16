@@ -72,7 +72,23 @@
         "unordered_set": "cpp",
         "random": "cpp",
         "*.rh": "cpp",
-        "__hash_table": "cpp"
+        "__hash_table": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp",
+        "codecvt": "cpp",
+        "complex": "cpp",
+        "csetjmp": "cpp",
+        "csignal": "cpp",
+        "cuchar": "cpp",
+        "memory_resource": "cpp",
+        "regex": "cpp",
+        "scoped_allocator": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     },
     "terminal.integrated.env.windows": {
         "PATH":"C:\\cygwin64\\bin;${env:PATH}"
