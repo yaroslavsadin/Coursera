@@ -251,8 +251,8 @@ struct AddMoneyRequest : ModifyRequest {
     const double daily_value = value * 1.0 / size(date_range);
     const MoneyState daily_change =
         SIGN == 1
-            ? MoneyState{.earned = daily_value}
-            : MoneyState{.spent = daily_value};
+            ? MoneyState{.earned = daily_value, .spent = 0}
+            : MoneyState{.earned = 0, .spent = daily_value};
     for (auto& money : date_range) {
       money += daily_change;
     }

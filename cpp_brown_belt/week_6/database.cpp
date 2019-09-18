@@ -20,11 +20,11 @@ double CalcDistance(const Stop& from, const Stop& to) {
     return dist;
 }
 
-void BusDB::AddStop(std::string_view name, double latitude, double longtitude) {
+void BusDatabase::AddStop(std::string_view name, double latitude, double longtitude) {
     stops_[string(name)] = {latitude,longtitude};
 }
 
-void BusDB::AddBus(size_t route, StopsRange stops) {
+void BusDatabase::AddBus(size_t route, StopsRange stops) {
     std::vector<Stops::const_iterator> bus_temp;
     bus_temp.reserve(stops.size());
     unordered_set<string> unique_stops;
@@ -42,16 +42,17 @@ void BusDB::AddBus(size_t route, StopsRange stops) {
 #undef CURRENT_STOP
 #undef PREVIOUS_STOP
 
-    bus_to_stops_[route] = make_unique<Bus>(
-        bus_temp.size(),
-        unique_stops.size(),
-        distance,
-        move(bus_temp));
+    bus_to_stops_[route] = {
+        .stops = bus_temp.size(),
+        .unique_stops = unique_stops.size(),
+        .route_length = distance,
+        .route = move(bus_temp)
+    };
 }
 
-optional<const Bus*>  BusDB::BusQuery (size_t route) const {
+optional<const Bus*>  BusDatabase::GetBusInfo (size_t route) const {
     if(bus_to_stops_.count(route))    
-        return bus_to_stops_.at(route).get();
+        return &bus_to_stops_.at(route);
     else
         return nullopt;
 }
