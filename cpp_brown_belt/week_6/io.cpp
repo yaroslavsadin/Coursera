@@ -72,7 +72,7 @@ BusRequest::BusRequest(std::string_view from_string)
     ReadToken(from_string);
     // Getting route number into the field
     stringstream ss(string(ReadToken(from_string)));
-    bus_route_ = GetObjectFromStream<size_t>(ss).value();
+    bus_name_ = GetObjectFromStream<string>(ss).value();
 }
 
 Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
@@ -90,7 +90,7 @@ AddBusRequest::AddBusRequest(std::string_view from_string)
     ReadToken(from_string);
     // Getting route number into the field
     stringstream ss(string(ReadToken(from_string,MODIFY_DELIMITER)));
-    bus_route_ = GetObjectFromStream<size_t>(ss).value();
+    bus_name_ = GetObjectFromStream<string>(ss).value();
     // Extra space
     ReadToken(from_string," ");
 
@@ -120,20 +120,20 @@ AddStopRequest::AddStopRequest(std::string_view from_string)
 ********************************/
 
 std::string BusRequest::Process(const BusDatabase& db) const {
-    auto info = db.GetBusInfo(bus_route_);
+    auto info = db.GetBusInfo(bus_name_);
     if(info.has_value()) {
         ostringstream os;
-        os << "Bus " << to_string(bus_route_) << ": " <<
+        os << "Bus " << bus_name_ << ": " <<
         (*info)->stops << " stops on route, " <<
         (*info)->unique_stops << " unique stops, " <<
-        setprecision(6) << db.GetBusDistance(bus_route_) << " route length";
+        setprecision(6) << db.GetBusDistance(bus_name_) << " route length";
         return os.str();
     } else {
-        return "Bus " + to_string(bus_route_) + ": " + "not found";
+        return "Bus " + bus_name_ + ": " + "not found";
     }
 }
 void AddBusRequest::Process(BusDatabase& db) const {
-    db.AddBus(bus_route_,move(stops_), (route_type_ == Bus::RouteType::CIRCULAR));
+    db.AddBus(bus_name_,move(stops_), (route_type_ == Bus::RouteType::CIRCULAR));
 }
 void AddStopRequest::Process(BusDatabase& db) const {
     db.AddStop(name_,stop_.latitude,stop_.longtitude);

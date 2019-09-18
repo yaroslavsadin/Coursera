@@ -31,7 +31,7 @@ struct AddBusRequest : public ModifyReqeust {
   AddBusRequest(std::string_view from_string);
   static Bus::RouteType GetRouteType(std::string_view request);
   void Process(BusDatabase& db) const override;
-  size_t bus_route_;
+  std::string bus_name_;
   std::vector<std::string> stops_;
   Bus::RouteType route_type_;
 };
@@ -45,7 +45,7 @@ struct AddStopRequest : public ModifyReqeust {
 
 struct BusRequest : public ReadReqeust<std::string> {
   BusRequest(std::string_view from_string);
-  size_t bus_route_;
+  std::string bus_name_;
   std::string Process(const BusDatabase& db) const override;
 };
 

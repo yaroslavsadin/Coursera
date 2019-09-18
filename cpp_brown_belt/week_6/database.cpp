@@ -36,7 +36,7 @@ double BusDatabase::ComputeDistance(const Bus& bus) const {
     return distance;
 }
 
-void BusDatabase::AddBus(size_t route, StopsRange stops, bool is_circular) {
+void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circular) {
     std::vector<std::string> bus_temp;
     bus_temp.reserve(stops.size());
 
@@ -44,7 +44,7 @@ void BusDatabase::AddBus(size_t route, StopsRange stops, bool is_circular) {
         bus_temp.push_back(stop);
     }
 
-    buses_[route] = {
+    buses_[name] = {
         .stops = is_circular ? bus_temp.size() : bus_temp.size() * 2 - 1,
         .unique_stops = is_circular ? bus_temp.size() - 1 : bus_temp.size(),
         .route_type = is_circular ? Bus::RouteType::CIRCULAR : Bus::RouteType::LINEAR,
@@ -52,16 +52,16 @@ void BusDatabase::AddBus(size_t route, StopsRange stops, bool is_circular) {
     };
 }
 
-optional<const Bus*>  BusDatabase::GetBusInfo (size_t route) const {
-    if(buses_.count(route))
-        return &buses_.at(route);
+optional<const Bus*>  BusDatabase::GetBusInfo (const std::string& name) const {
+    if(buses_.count(name))
+        return &buses_.at(name);
     else
         return nullopt;
 }
 
-double  BusDatabase::GetBusDistance(size_t bus_route) const {
-    if(!bus_to_distance_.count(bus_route)) {
-        bus_to_distance_[bus_route] = ComputeDistance(buses_.at(bus_route));
+double  BusDatabase::GetBusDistance(const std::string& name) const {
+    if(!bus_to_distance_.count(name)) {
+        bus_to_distance_[name] = ComputeDistance(buses_.at(name));
     }
-    return bus_to_distance_.at(bus_route);
+    return bus_to_distance_.at(name);
 }
