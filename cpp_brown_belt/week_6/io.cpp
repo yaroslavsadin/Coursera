@@ -1,6 +1,7 @@
 #include "misc.h"
 #include "io.h"
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -46,19 +47,19 @@ BusDatabaseHandler& BusDatabaseHandler::RequestsFromStream(int count, std::istre
     return *this;
 }
 
-  BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
-      for(const auto& request : requests_) {
-          if(request->type_ == Request::Type::GET_BUS_INFO) {
-            const auto& request_ = static_cast<const BusRequest&>(*request);
-            responses_.push_back(request_.Process(db));
-          } else {
-            const auto& request_ = static_cast<const ModifyReqeust&>(*request);
-            request_.Process(db);
-          }
-      }
-      requests_.clear();
-      return *this;
-  }
+BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
+    for(const auto& request : requests_) {
+        if(request->type_ == Request::Type::GET_BUS_INFO) {
+        const auto& request_ = static_cast<const BusRequest&>(*request);
+        responses_.push_back(request_.Process(db));
+        } else {
+        const auto& request_ = static_cast<const ModifyReqeust&>(*request);
+        request_.Process(db);
+        }
+    }
+    requests_.clear();
+    return *this;
+}
 
 /************************** 
     REQUEST CONSTRUCTORS  *
@@ -74,16 +75,16 @@ BusRequest::BusRequest(std::string_view from_string)
     bus_route_ = GetObjectFromStream<size_t>(ss).value();
 }
 
-bool AddBusRequest::IsCircularRoute(string_view request) {
+Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
     if(request.find(">") != request.npos) {
-        return true;
+        return Bus::RouteType::CIRCULAR;
     } else {
-        return false;
+        return Bus::RouteType::LINEAR;
     }
 }
 
 AddBusRequest::AddBusRequest(std::string_view from_string)
-: ModifyReqeust(Request::Type::ADD_BUS)
+: ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(from_string))
 {
     // Reading "Bus "
     ReadToken(from_string);
@@ -93,9 +94,8 @@ AddBusRequest::AddBusRequest(std::string_view from_string)
     // Extra space
     ReadToken(from_string," ");
 
-    string stops_delimiter = IsCircularRoute(from_string) ? " > " : " - ";
+    string stops_delimiter = (route_type_ == Bus::RouteType::CIRCULAR) ? " > " : " - ";
 
-    vector<string> reversed;
     while(!from_string.empty()) {
         stops_.push_back(string(ReadToken(from_string,stops_delimiter)));
     }
@@ -122,16 +122,18 @@ AddStopRequest::AddStopRequest(std::string_view from_string)
 std::string BusRequest::Process(const BusDatabase& db) const {
     auto info = db.GetBusInfo(bus_route_);
     if(info.has_value()) {
-        return "Bus " + to_string(bus_route_) + ": " +
-        to_string((*info)->stops) + " stops on route, " +
-        to_string((*info)->stops) + " unique stops, " +
-        to_string((*info)->route_length) + " route length";
+        ostringstream os;
+        os << "Bus " << to_string(bus_route_) << ": " <<
+        (*info)->stops << " stops on route, " <<
+        (*info)->unique_stops << " unique stops, " <<
+        setprecision(6) << db.GetBusDistance(bus_route_) << " route length";
+        return os.str();
     } else {
         return "Bus " + to_string(bus_route_) + ": " + "not found";
     }
 }
 void AddBusRequest::Process(BusDatabase& db) const {
-    db.AddBus(bus_route_,move(stops_));
+    db.AddBus(bus_route_,move(stops_), (route_type_ == Bus::RouteType::CIRCULAR));
 }
 void AddStopRequest::Process(BusDatabase& db) const {
     db.AddStop(name_,stop_.latitude,stop_.longtitude);

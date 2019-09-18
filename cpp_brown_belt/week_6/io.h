@@ -29,10 +29,11 @@ struct ReadReqeust : public Request {
 
 struct AddBusRequest : public ModifyReqeust {
   AddBusRequest(std::string_view from_string);
-  static bool IsCircularRoute(std::string_view request);
+  static Bus::RouteType GetRouteType(std::string_view request);
   void Process(BusDatabase& db) const override;
   size_t bus_route_;
   std::vector<std::string> stops_;
+  Bus::RouteType route_type_;
 };
 
 struct AddStopRequest : public ModifyReqeust {

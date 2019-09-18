@@ -16,7 +16,7 @@ double CalcDistance(const Stop& from, const Stop& to) {
             * cos(toRad(to.latitude)) * cos(toRad(from.longtitude - to.longtitude));
     dist = acos(dist);
     //got dist in radian, no need to change back to degree and convert to rad again.
-    dist = 6371 * dist;
+    dist = 6371 * 1000 * dist;
     return dist;
 }
 
@@ -24,35 +24,44 @@ void BusDatabase::AddStop(std::string_view name, double latitude, double longtit
     stops_[string(name)] = {latitude,longtitude};
 }
 
-void BusDatabase::AddBus(size_t route, StopsRange stops) {
-    std::vector<Stops::const_iterator> bus_temp;
-    bus_temp.reserve(stops.size());
-    unordered_set<string> unique_stops;
+double BusDatabase::ComputeDistance(const Bus& bus) const {
+    if(bus.route.size() < 2) return 0;
     double distance {.0};
-
-#define CURRENT_STOP (**prev(bus_temp.end())).second
-#define PREVIOUS_STOP (**prev(prev(bus_temp.end()))).second
-    for(const auto& stop : stops) {
-        bus_temp.push_back(stops_.find(stop));
-        unique_stops.insert(stop);
-        if(bus_temp.size() > 1) {
-            distance += CalcDistance(CURRENT_STOP,PREVIOUS_STOP);
-        }
+    for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
+        distance += CalcDistance(stops_.at(*(it-1)), stops_.at(*it));
     }
-#undef CURRENT_STOP
-#undef PREVIOUS_STOP
+    if(bus.route_type == Bus::RouteType::LINEAR) {
+        distance *= 2;
+    }
+    return distance;
+}
 
-    bus_to_stops_[route] = {
-        .stops = bus_temp.size(),
-        .unique_stops = unique_stops.size(),
-        .route_length = distance,
+void BusDatabase::AddBus(size_t route, StopsRange stops, bool is_circular) {
+    std::vector<std::string> bus_temp;
+    bus_temp.reserve(stops.size());
+
+    for(const auto& stop : stops) {
+        bus_temp.push_back(stop);
+    }
+
+    buses_[route] = {
+        .stops = is_circular ? bus_temp.size() : bus_temp.size() * 2 - 1,
+        .unique_stops = is_circular ? bus_temp.size() - 1 : bus_temp.size(),
+        .route_type = is_circular ? Bus::RouteType::CIRCULAR : Bus::RouteType::LINEAR,
         .route = move(bus_temp)
     };
 }
 
 optional<const Bus*>  BusDatabase::GetBusInfo (size_t route) const {
-    if(bus_to_stops_.count(route))    
-        return &bus_to_stops_.at(route);
+    if(buses_.count(route))
+        return &buses_.at(route);
     else
         return nullopt;
+}
+
+double  BusDatabase::GetBusDistance(size_t bus_route) const {
+    if(!bus_to_distance_.count(bus_route)) {
+        bus_to_distance_[bus_route] = ComputeDistance(buses_.at(bus_route));
+    }
+    return bus_to_distance_.at(bus_route);
 }

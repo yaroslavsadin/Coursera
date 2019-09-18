@@ -23,16 +23,17 @@ Bus 750: Tolstopaltsevo - Marushkino - Rasskazovka
 Bus 256
 Bus 750
 Bus 751
+
     )"
     };
-
+    
     BusDatabaseHandler handler;
     int num;
     try {
-        is >> num;
-        handler.RequestsFromStream(num,is);
-        is >> num;
-        auto responses = handler.RequestsFromStream(num,is).ProcessRequests().GetResponses();
+        cin >> num;
+        handler.RequestsFromStream(num,cin);
+        cin >> num;
+        auto responses = handler.RequestsFromStream(num,cin).ProcessRequests().GetResponses();
         for(const auto& resp : responses) {
             cout << resp << endl;
         }
