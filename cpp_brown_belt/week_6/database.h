@@ -13,7 +13,7 @@ struct Stop {
 };
 
 using Stops = std::unordered_map< std::string , Stop >;
-using StopsRange = Range<std::vector<std::string>::iterator>;
+using StopsRange = std::vector<std::string>;
 
 struct Bus {
     size_t stops;
