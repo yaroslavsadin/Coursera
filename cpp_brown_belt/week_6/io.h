@@ -8,7 +8,8 @@ struct Request {
   enum class Type {
     ADD_BUS,
     ADD_STOP,
-    GET_BUS_INFO
+    GET_BUS_INFO,
+    GET_STOP_INFO
   };
   Request(Type type) : type_(type) {}
   static std::unique_ptr<Request> MakeRequest(Type type);
@@ -46,6 +47,12 @@ struct AddStopRequest : public ModifyReqeust {
 struct BusRequest : public ReadReqeust<std::string> {
   BusRequest(std::string_view from_string);
   std::string bus_name_;
+  std::string Process(const BusDatabase& db) const override;
+};
+
+struct StopRequest : public ReadReqeust<std::string> {
+  StopRequest(std::string_view from_string);
+  std::string stop_name_;
   std::string Process(const BusDatabase& db) const override;
 };
 

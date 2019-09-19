@@ -17,7 +17,11 @@ Request::Type TypeFromString(string_view str) {
             return Request::Type::GET_BUS_INFO;
         }
     } else if (type_str == "Stop") {
-        return Request::Type::ADD_STOP;
+        if(is_modify_request) {
+            return Request::Type::ADD_STOP;
+        } else {
+            return Request::Type::GET_STOP_INFO;
+        }
     } else {
         throw invalid_argument("Unknown request type");
     }
@@ -40,6 +44,9 @@ BusDatabaseHandler& BusDatabaseHandler::RequestsFromStream(int count, std::istre
         case Request::Type::GET_BUS_INFO:
             requests_.push_back(make_unique<BusRequest>(request));
             break;
+        case Request::Type::GET_STOP_INFO:
+            requests_.push_back(make_unique<StopRequest>(request));
+            break;
         default:
             break;
         }
@@ -49,12 +56,13 @@ BusDatabaseHandler& BusDatabaseHandler::RequestsFromStream(int count, std::istre
 
 BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
     for(const auto& request : requests_) {
-        if(request->type_ == Request::Type::GET_BUS_INFO) {
-        const auto& request_ = static_cast<const BusRequest&>(*request);
-        responses_.push_back(request_.Process(db));
+        if(request->type_ == Request::Type::GET_BUS_INFO || 
+           request->type_ == Request::Type::GET_STOP_INFO) {
+            const auto& request_ = static_cast<const ReadReqeust<string>&>(*request);
+            responses_.push_back(request_.Process(db));
         } else {
-        const auto& request_ = static_cast<const ModifyReqeust&>(*request);
-        request_.Process(db);
+            const auto& request_ = static_cast<const ModifyReqeust&>(*request);
+            request_.Process(db);
         }
     }
     requests_.clear();
@@ -72,6 +80,15 @@ BusRequest::BusRequest(std::string_view from_string)
     ReadToken(from_string);
     // Getting route number into the field
     bus_name_ = string(ReadToken(from_string,"\n"));
+}
+
+StopRequest::StopRequest(std::string_view from_string) 
+: ReadReqeust<std::string>(Request::Type::GET_STOP_INFO) 
+{
+    // Reading "Stop "
+    ReadToken(from_string);
+    // Getting route number into the field
+    stop_name_ = string(ReadToken(from_string,"\n"));
 }
 
 Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
@@ -128,6 +145,23 @@ std::string BusRequest::Process(const BusDatabase& db) const {
         return os.str();
     } else {
         return "Bus " + bus_name_ + ": " + "not found";
+    }
+}
+std::string StopRequest::Process(const BusDatabase& db) const {
+    auto info = db.GetStopInfo(stop_name_);
+    if(info.has_value()) {
+        if((*info)->buses.size()) {
+            ostringstream os;
+            os << "Stop " << stop_name_ << ": buses ";
+            for(const auto& bus : (*info)->buses) {
+                os << bus << ' ';
+            }
+            return os.str();
+        } else {
+            return "Stop " + stop_name_ + ": " + "no buses";
+        }
+    } else {
+        return "Stop " + stop_name_ + ": " + "not found";
     }
 }
 void AddBusRequest::Process(BusDatabase& db) const {

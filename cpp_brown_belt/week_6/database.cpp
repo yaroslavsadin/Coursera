@@ -21,7 +21,8 @@ double CalcDistance(const Stop& from, const Stop& to) {
 }
 
 void BusDatabase::AddStop(std::string_view name, double latitude, double longtitude) {
-    stops_[string(name)] = {latitude,longtitude};
+    stops_[string(name)].latitude = latitude;
+    stops_[string(name)].longtitude = longtitude;
 }
 
 double BusDatabase::ComputeDistance(const Bus& bus) const {
@@ -44,6 +45,7 @@ void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circ
     for(const auto& stop : stops) {
         bus_temp.push_back(stop);
         unique_stops.insert(stop);
+        stops_[stop].buses.insert(name);
     }
 
     buses_[name] = {
@@ -57,6 +59,13 @@ void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circ
 optional<const Bus*>  BusDatabase::GetBusInfo (const std::string& name) const {
     if(buses_.count(name))
         return &buses_.at(name);
+    else
+        return nullopt;
+}
+
+optional<const Stop*>  BusDatabase::GetStopInfo (const std::string& name) const {
+    if(stops_.count(name))
+        return &stops_.at(name);
     else
         return nullopt;
 }

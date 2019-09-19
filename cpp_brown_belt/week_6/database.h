@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
+#include <set>
 #include <memory>
 #include "misc.h"
 
@@ -17,6 +18,7 @@ using Buses = std::unordered_map< std::string , Bus >;
 struct Stop {
     double latitude;
     double longtitude;
+    std::set<std::string> buses;
 };
 
 struct Bus {
@@ -37,6 +39,7 @@ public:
     void AddStop(std::string_view name, double latitude, double longtitude);
     void AddBus(const std::string& name, StopsRange stops, bool is_circular);
     std::optional<const Bus*>  GetBusInfo (const std::string& name) const;
+    std::optional<const Stop*>  GetStopInfo (const std::string& name) const;
     double GetBusDistance(const std::string& name) const;
 private:
     double ComputeDistance(const Bus& bus) const;
