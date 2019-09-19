@@ -167,8 +167,8 @@ std::string BusRequest::Process(const BusDatabase& db) const {
         os << "Bus " << bus_name_ << ": " <<
         (*info)->stops << " stops on route, " <<
         (*info)->unique_stops << " unique stops, " <<
-        db.GetBusDistance(bus_name_).second << " route length, " << setprecision(6) << 
-        db.GetBusDistance(bus_name_).second / db.GetBusDistance(bus_name_).first << " curvature";
+        db.GetBusDistance(bus_name_).road_distance << " route length, " << setprecision(6) << 
+        db.GetBusDistance(bus_name_).road_distance / db.GetBusDistance(bus_name_).linear_distance << " curvature";
         return os.str();
     } else {
         return "Bus " + bus_name_ + ": " + "not found";

@@ -37,7 +37,7 @@ void BusDatabase::AddStop(std::string name, double latitude, double longtitude,
     }
 }
 
-pair<double,unsigned int> BusDatabase::ComputeDistance(const Bus& bus) const {
+BusDatabase::Distances BusDatabase::ComputeDistance(const Bus& bus) const {
     if(bus.route.size() < 2) return {0,0};
     double distance_linear {.0};
     unsigned int distance_road {0};
@@ -49,9 +49,12 @@ pair<double,unsigned int> BusDatabase::ComputeDistance(const Bus& bus) const {
     }
     if(bus.route_type == Bus::RouteType::LINEAR) {
         distance_linear *= 2;
-        distance_road *= 2;
+        for(auto it = bus.route.rbegin() + 1; it < bus.route.rend(); it++) {
+            const auto& prev_stop = stops_.at(*(it-1));
+            distance_road += prev_stop.distance_to_stop_.at(*it);
+        }
     }
-    return {distance_linear, distance_road};
+    return {distance_road, distance_linear};
 }
 
 void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circular) {
@@ -87,7 +90,7 @@ optional<const Stop*>  BusDatabase::GetStopInfo (const std::string& name) const 
         return nullopt;
 }
 
-pair<double,double> BusDatabase::GetBusDistance(const std::string& name) const {
+const BusDatabase::Distances& BusDatabase::GetBusDistance(const std::string& name) const {
     if(!bus_to_distance_.count(name)) {
         bus_to_distance_[name] = ComputeDistance(buses_.at(name));
     }

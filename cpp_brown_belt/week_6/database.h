@@ -37,15 +37,19 @@ double CalcDistance(const Stop& from, const Stop& to);
 
 class BusDatabase {
 public:
+    struct Distances {
+        unsigned int road_distance;
+        double linear_distance;
+    };
     void AddStop(std::string name, double latitude, double longtitude, 
                     std::vector< std::pair< std::string, unsigned int > >);
     void AddBus(const std::string& name, StopsRange stops, bool is_circular);
     std::optional<const Bus*>  GetBusInfo (const std::string& name) const;
     std::optional<const Stop*>  GetStopInfo (const std::string& name) const;
-    std::pair<double,double> GetBusDistance(const std::string& name) const;
+    const Distances& GetBusDistance(const std::string& name) const;
 private:
-    std::pair<double,unsigned int> ComputeDistance(const Bus& bus) const;
+    Distances ComputeDistance(const Bus& bus) const;
     Stops stops_;
     Buses buses_;
-    mutable std::unordered_map<std::string_view,std::pair<double,unsigned int>> bus_to_distance_;
+    mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 };
