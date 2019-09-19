@@ -4,6 +4,10 @@
 #include "database.h"
 #include "misc.h"
 
+/******************************* 
+    REQUEST BASE CLASS         *
+********************************/
+
 struct Request {
   enum class Type {
     ADD_BUS,
@@ -17,16 +21,28 @@ struct Request {
   const Type type_;
 };
 
+/******************************* 
+    MODIFY REQUEST BASE CLASS  *
+********************************/
+
 struct ModifyReqeust : public Request {
   using Request::Request;
   virtual void Process(BusDatabase& db) const = 0;
 };
+
+/******************************* 
+    READ REQUEST BASE CLASS    *
+********************************/
 
 template<typename ResT>
 struct ReadReqeust : public Request {
   using Request::Request;
   virtual ResT Process(const BusDatabase& db) const = 0;
 };
+
+/******************************* 
+        MODIFY REQUESTS        *
+********************************/
 
 struct AddBusRequest : public ModifyReqeust {
   AddBusRequest(std::string_view from_string);
@@ -37,12 +53,19 @@ struct AddBusRequest : public ModifyReqeust {
   Bus::RouteType route_type_;
 };
 
+using StopDistances = std::vector< std::pair< std::string, unsigned int > >;
 struct AddStopRequest : public ModifyReqeust {
   AddStopRequest(std::string_view from_string);
   void Process(BusDatabase& db) const override;
   std::string name_;
-  Stop stop_;
+  double latitude;
+  double longtitude;
+  StopDistances distances_to_stops_;
 };
+
+/******************************* 
+         READ REQUESTS         *
+********************************/
 
 struct BusRequest : public ReadReqeust<std::string> {
   BusRequest(std::string_view from_string);
@@ -56,6 +79,10 @@ struct StopRequest : public ReadReqeust<std::string> {
   std::string Process(const BusDatabase& db) const override;
 };
 
+/******************************* 
+       DATABASE WRAPPER        *
+********************************/
+
 class BusDatabaseHandler {
 public:
   using Requests = std::vector<std::unique_ptr<Request>>;
@@ -64,8 +91,8 @@ public:
   BusDatabaseHandler() = default;
   BusDatabaseHandler& RequestsFromStream(int count, std::istream& is = std::cin);
   BusDatabaseHandler& ProcessRequests();
-  const Respones& GetResponses() {
-    return responses_;
+  Respones GetResponses() {
+    return move(responses_);
   }
 private:
   Requests requests_;

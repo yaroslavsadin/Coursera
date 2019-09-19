@@ -1,12 +1,12 @@
 #include <iostream>
 #include "test_runner.h"
-#include "database.h"
 #include "misc.h"
 #include "io.h"
 
 using namespace std;
 
-int main(void) {    
+int main(void) {
+#if 1
     BusDatabaseHandler handler;
     int num;
     try {
@@ -15,12 +15,13 @@ int main(void) {
         cin >> num;
         auto responses = handler.RequestsFromStream(num,cin).ProcessRequests().GetResponses();
         for(const auto& resp : responses) {
-            cout << resp << endl;
+            cout << resp << '\n';
         }
     } catch(exception& e) {
         cerr << e.what() << endl;
     }
-    // BusRequest bus_request("Bus lw5P H6");
-    // AddBusRequest add_bus_request("Bus lw5 PH6: Tolstopaltsevo - Marushkino - Rasskazovka");
+#else
+    AddStopRequest add_stop_request("Stop Universam: 55.587655, 37.645687, 5600m to Rossoshanskaya ulitsa, 900m to Biryulyovo Tovarnaya");
+#endif
     return 0;
 }

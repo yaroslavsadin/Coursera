@@ -19,6 +19,7 @@ struct Stop {
     double latitude;
     double longtitude;
     std::set<std::string> buses;
+    std::unordered_map<std::string,unsigned int> distance_to_stop_;
 };
 
 struct Bus {
@@ -36,14 +37,15 @@ double CalcDistance(const Stop& from, const Stop& to);
 
 class BusDatabase {
 public:
-    void AddStop(std::string_view name, double latitude, double longtitude);
+    void AddStop(std::string name, double latitude, double longtitude, 
+                    std::vector< std::pair< std::string, unsigned int > >);
     void AddBus(const std::string& name, StopsRange stops, bool is_circular);
     std::optional<const Bus*>  GetBusInfo (const std::string& name) const;
     std::optional<const Stop*>  GetStopInfo (const std::string& name) const;
-    double GetBusDistance(const std::string& name) const;
+    std::pair<double,double> GetBusDistance(const std::string& name) const;
 private:
-    double ComputeDistance(const Bus& bus) const;
+    std::pair<double,double> ComputeDistance(const Bus& bus) const;
     Stops stops_;
     Buses buses_;
-    mutable std::unordered_map<std::string_view,double> bus_to_distance_;
+    mutable std::unordered_map<std::string_view,std::pair<double,double>> bus_to_distance_;
 };

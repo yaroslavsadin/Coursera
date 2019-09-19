@@ -26,10 +26,3 @@ void ToNextLine(std::istream& is) {
   std::string dummy;
   std::getline(is,dummy);
 }
-
-double StringToDouble(string_view str) {
-    double res;
-    stringstream ss(string(ReadToken(str,", ")));
-    ss >> res;
-    return res;
-}

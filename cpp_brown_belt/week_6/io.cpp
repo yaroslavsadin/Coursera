@@ -5,7 +5,11 @@
 
 using namespace std;
 
-const string MODIFY_DELIMITER {":"};
+static const string MODIFY_DELIMITER {":"};
+static const string COMMA(", ");
+static const string STOP_DISTANCES_DELIM("m to ");
+static const string CICULAR_ROUTE_DELIM(" > ");
+static const string LINEAR_ROUTE_DELIM(" - ");
 
 Request::Type TypeFromString(string_view str) {
     bool is_modify_request = (str.find(MODIFY_DELIMITER) == str.npos) ? false : true;
@@ -109,11 +113,27 @@ AddBusRequest::AddBusRequest(std::string_view from_string)
     // Extra space
     ReadToken(from_string," ");
 
-    string stops_delimiter = (route_type_ == Bus::RouteType::CIRCULAR) ? " > " : " - ";
+    string stops_delimiter = (route_type_ == Bus::RouteType::CIRCULAR) ? CICULAR_ROUTE_DELIM 
+                                                                        : LINEAR_ROUTE_DELIM;
 
     while(!from_string.empty()) {
         stops_.push_back(string(ReadToken(from_string,stops_delimiter)));
     }
+}
+
+pair<string,unsigned int> ParseStopsDistance(string_view str) {
+    unsigned int distance = StringToOther<unsigned int>(ReadToken(str,STOP_DISTANCES_DELIM));
+    string name = string(ReadToken(str,STOP_DISTANCES_DELIM));
+    return {name,distance};
+}
+
+StopDistances GetStopDistances(const vector<string>& distances) {
+    StopDistances res;
+    res.reserve(distances.size());
+    for(string_view str : distances) {
+        res.push_back(ParseStopsDistance(str));
+    }
+    return res;
 }
 
 AddStopRequest::AddStopRequest(std::string_view from_string)
@@ -126,8 +146,14 @@ AddStopRequest::AddStopRequest(std::string_view from_string)
     // Extra space
     ReadToken(from_string," ");
     
-    stop_.latitude = StringToDouble(ReadToken(from_string, ", "));
-    stop_.longtitude = StringToDouble(ReadToken(from_string));
+    latitude = StringToOther<double>(ReadToken(from_string, COMMA));
+    longtitude = StringToOther<double>(ReadToken(from_string, COMMA));
+
+    vector<string> distances;
+    while(!from_string.empty()) {
+        distances.push_back(string(ReadToken(from_string,COMMA)));
+    }
+    distances_to_stops_ = GetStopDistances(distances);
 }
 
 /******************************* 
@@ -141,7 +167,8 @@ std::string BusRequest::Process(const BusDatabase& db) const {
         os << "Bus " << bus_name_ << ": " <<
         (*info)->stops << " stops on route, " <<
         (*info)->unique_stops << " unique stops, " <<
-        setprecision(6) << db.GetBusDistance(bus_name_) << " route length";
+        setprecision(6) << db.GetBusDistance(bus_name_).second << " route length, "
+        << db.GetBusDistance(bus_name_).second / db.GetBusDistance(bus_name_).first << " curvature";
         return os.str();
     } else {
         return "Bus " + bus_name_ + ": " + "not found";
@@ -165,8 +192,11 @@ std::string StopRequest::Process(const BusDatabase& db) const {
     }
 }
 void AddBusRequest::Process(BusDatabase& db) const {
-    db.AddBus(bus_name_,move(stops_), (route_type_ == Bus::RouteType::CIRCULAR));
+    db.AddBus(
+        bus_name_,move(stops_), 
+        (route_type_ == Bus::RouteType::CIRCULAR)
+    );
 }
 void AddStopRequest::Process(BusDatabase& db) const {
-    db.AddStop(name_,stop_.latitude,stop_.longtitude);
+    db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }

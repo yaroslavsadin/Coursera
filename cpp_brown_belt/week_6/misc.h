@@ -34,4 +34,11 @@ std::optional<ObjType> GetObjectFromStream(std::istream& is = std::cin) {
 }
 
 void ToNextLine(std::istream& is = std::cin);
-double StringToDouble(std::string_view str);
+
+template<typename T>
+T StringToOther(std::string_view str) {
+    T res;
+    std::stringstream ss(std::string(ReadToken(str,", ")));
+    ss >> res;
+    return res;
+}

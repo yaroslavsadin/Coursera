@@ -20,21 +20,38 @@ double CalcDistance(const Stop& from, const Stop& to) {
     return dist;
 }
 
-void BusDatabase::AddStop(std::string_view name, double latitude, double longtitude) {
-    stops_[string(name)].latitude = latitude;
-    stops_[string(name)].longtitude = longtitude;
+void BusDatabase::AddStop(std::string name, double latitude, double longtitude,
+                                std::vector< std::pair< std::string, unsigned int > > stop_distances) {
+    stops_[name].latitude = latitude;
+    stops_[name].longtitude = longtitude;
+
+    for(const auto& stop : stop_distances) {
+        stops_[name].distance_to_stop_[stop.first] = stop.second;
+        if(stops_.count(stop.first)) {
+            if(!stops_.at(stop.first).distance_to_stop_.count(name)) {
+                stops_[stop.first].distance_to_stop_.insert({name,stop.second});
+            }
+        } else {
+            stops_[stop.first].distance_to_stop_.insert({name,stop.second});
+        }
+    }
 }
 
-double BusDatabase::ComputeDistance(const Bus& bus) const {
-    if(bus.route.size() < 2) return 0;
-    double distance {.0};
+pair<double,double> BusDatabase::ComputeDistance(const Bus& bus) const {
+    if(bus.route.size() < 2) return {0,0};
+    double distance_linear {.0};
+    double distance_road {.0};
     for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
-        distance += CalcDistance(stops_.at(*(it-1)), stops_.at(*it));
+        const auto& prev_stop = stops_.at(*(it-1));
+        const auto& cur_stop = stops_.at(*it);
+        distance_linear += CalcDistance(prev_stop, cur_stop);
+        distance_road += prev_stop.distance_to_stop_.at(*it);
     }
     if(bus.route_type == Bus::RouteType::LINEAR) {
-        distance *= 2;
+        distance_linear *= 2;
+        distance_road *= 2;
     }
-    return distance;
+    return {distance_linear, distance_road};
 }
 
 void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circular) {
@@ -70,7 +87,7 @@ optional<const Stop*>  BusDatabase::GetStopInfo (const std::string& name) const 
         return nullopt;
 }
 
-double  BusDatabase::GetBusDistance(const std::string& name) const {
+pair<double,double> BusDatabase::GetBusDistance(const std::string& name) const {
     if(!bus_to_distance_.count(name)) {
         bus_to_distance_[name] = ComputeDistance(buses_.at(name));
     }
