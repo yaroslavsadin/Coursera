@@ -39,14 +39,16 @@ double BusDatabase::ComputeDistance(const Bus& bus) const {
 void BusDatabase::AddBus(const std::string& name, StopsRange stops, bool is_circular) {
     std::vector<std::string> bus_temp;
     bus_temp.reserve(stops.size());
+    unordered_set<string> unique_stops;
 
     for(const auto& stop : stops) {
         bus_temp.push_back(stop);
+        unique_stops.insert(stop);
     }
 
     buses_[name] = {
         .stops = is_circular ? bus_temp.size() : bus_temp.size() * 2 - 1,
-        .unique_stops = is_circular ? bus_temp.size() - 1 : bus_temp.size(),
+        .unique_stops = unique_stops.size(),
         .route_type = is_circular ? Bus::RouteType::CIRCULAR : Bus::RouteType::LINEAR,
         .route = move(bus_temp)
     };
