@@ -37,10 +37,10 @@ void BusDatabase::AddStop(std::string name, double latitude, double longtitude,
     }
 }
 
-pair<double,double> BusDatabase::ComputeDistance(const Bus& bus) const {
+pair<double,unsigned int> BusDatabase::ComputeDistance(const Bus& bus) const {
     if(bus.route.size() < 2) return {0,0};
     double distance_linear {.0};
-    double distance_road {.0};
+    unsigned int distance_road {0};
     for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
         const auto& prev_stop = stops_.at(*(it-1));
         const auto& cur_stop = stops_.at(*it);

@@ -44,8 +44,8 @@ public:
     std::optional<const Stop*>  GetStopInfo (const std::string& name) const;
     std::pair<double,double> GetBusDistance(const std::string& name) const;
 private:
-    std::pair<double,double> ComputeDistance(const Bus& bus) const;
+    std::pair<double,unsigned int> ComputeDistance(const Bus& bus) const;
     Stops stops_;
     Buses buses_;
-    mutable std::unordered_map<std::string_view,std::pair<double,double>> bus_to_distance_;
+    mutable std::unordered_map<std::string_view,std::pair<double,unsigned int>> bus_to_distance_;
 };
