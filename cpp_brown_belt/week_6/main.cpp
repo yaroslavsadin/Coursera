@@ -20,5 +20,7 @@ int main(void) {
     } catch(exception& e) {
         cerr << e.what() << endl;
     }
+    // BusRequest bus_request("Bus lw5P H6");
+    // AddBusRequest add_bus_request("Bus lw5 PH6: Tolstopaltsevo - Marushkino - Rasskazovka");
     return 0;
 }

@@ -71,8 +71,7 @@ BusRequest::BusRequest(std::string_view from_string)
     // Reading "Bus "
     ReadToken(from_string);
     // Getting route number into the field
-    stringstream ss(string(ReadToken(from_string)));
-    bus_name_ = GetObjectFromStream<string>(ss).value();
+    bus_name_ = string(ReadToken(from_string,"\n"));
 }
 
 Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
@@ -89,8 +88,7 @@ AddBusRequest::AddBusRequest(std::string_view from_string)
     // Reading "Bus "
     ReadToken(from_string);
     // Getting route number into the field
-    stringstream ss(string(ReadToken(from_string,MODIFY_DELIMITER)));
-    bus_name_ = GetObjectFromStream<string>(ss).value();
+    bus_name_ = string(ReadToken(from_string,MODIFY_DELIMITER));
     // Extra space
     ReadToken(from_string," ");
 
