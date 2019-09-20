@@ -46,13 +46,12 @@ BusDatabase::Distances BusDatabase::ComputeDistance(const Bus& bus) const {
         const auto& cur_stop = stops_.at(*it);
         distance_linear += CalcDistance(prev_stop, cur_stop);
         distance_road += prev_stop.distance_to_stop_.at(*it);
+        if (bus.route_type == Bus::RouteType::LINEAR) {
+            distance_road += cur_stop.distance_to_stop_.at(*(it-1));
+        }
     }
     if(bus.route_type == Bus::RouteType::LINEAR) {
         distance_linear *= 2;
-        for(auto it = bus.route.rbegin() + 1; it < bus.route.rend(); it++) {
-            const auto& prev_stop = stops_.at(*(it-1));
-            distance_road += prev_stop.distance_to_stop_.at(*it);
-        }
     }
     return {distance_road, distance_linear};
 }
