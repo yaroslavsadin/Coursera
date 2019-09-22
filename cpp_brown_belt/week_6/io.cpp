@@ -2,6 +2,7 @@
 #include "io.h"
 #include <sstream>
 #include <iomanip>
+#include <cassert>
 
 using namespace std;
 
@@ -11,8 +12,7 @@ static const string STOP_DISTANCES_DELIM("m to ");
 static const string CICULAR_ROUTE_DELIM(" > ");
 static const string LINEAR_ROUTE_DELIM(" - ");
 
-Request::Type TypeFromString(string_view str) {
-    bool is_modify_request = (str.find(MODIFY_DELIMITER) == str.npos) ? false : true;
+Request::Type TypeFromString(string_view str, bool is_modify_request) {
     string_view type_str = ReadToken(str);
     if(type_str == "Bus") {
         if(is_modify_request) {
@@ -31,30 +31,58 @@ Request::Type TypeFromString(string_view str) {
     }
 }
 
-BusDatabaseHandler& BusDatabaseHandler::RequestsFromStream(int count, std::istream& is) {
-    string request;
-    getline(is,request);
-    while(count--) {
-        getline(is,request);
-        Request::Type request_type = TypeFromString(request);
-
-        switch(request_type) {
+template<typename From>
+unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request) {
+    switch(request_type) {
         case Request::Type::ADD_BUS:
-            requests_.push_back(make_unique<AddBusRequest>(request));
+            return make_unique<AddBusRequest>(request);
             break;
         case Request::Type::ADD_STOP:
-            requests_.push_back(make_unique<AddStopRequest>(request));
+            return make_unique<AddStopRequest>(request);
             break;
         case Request::Type::GET_BUS_INFO:
-            requests_.push_back(make_unique<BusRequest>(request));
+            return make_unique<BusRequest>(request);
             break;
         case Request::Type::GET_STOP_INFO:
-            requests_.push_back(make_unique<StopRequest>(request));
+            return make_unique<StopRequest>(request);
             break;
         default:
             break;
         }
+    throw invalid_argument("Unknown request type");
+}
+
+BusDatabaseHandler& BusDatabaseHandler::ReadRequests(int count, std::istream& is) {
+    string request;
+    getline(is,request);
+    while(count--) {
+        getline(is,request);
+        Request::Type request_type = TypeFromString(request,
+                                    (request.find(MODIFY_DELIMITER) == request.npos) ? false : true);
+        requests_.push_back(MakeRequest(request_type,string_view(request)));
     }
+    return *this;
+}
+
+BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
+    const auto& root_ = doc.GetRoot().AsMap();
+
+    /* Read Base Requests*/
+    const auto& base_requests = root_.at("base_requests").AsArray();
+    for(const auto& node : base_requests) {
+        const auto& request = node.AsMap();
+        Request::Type request_type = TypeFromString(request.at("type").AsString(),true);
+        requests_.push_back(MakeRequest(request_type,node));
+    }
+
+    /* Read Stats Requests*/
+    const auto& stats_requests = root_.at("stat_requests").AsArray();
+    for(const auto& node : stats_requests) {
+        const auto& request = node.AsMap();
+        Request::Type request_type = TypeFromString(request.at("type").AsString(),false);
+        requests_.push_back(MakeRequest(request_type,node));
+    }
+
     return *this;
 }
 
@@ -77,6 +105,10 @@ BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
     REQUEST CONSTRUCTORS  *
 ***************************/
 
+inline size_t GetReqestId(const Json::Node& node) {
+    return node.AsMap().at("id").AsInt();
+}
+
 BusRequest::BusRequest(std::string_view from_string) 
 : ReadReqeust<std::string>(Request::Type::GET_BUS_INFO) 
 {
@@ -84,6 +116,13 @@ BusRequest::BusRequest(std::string_view from_string)
     ReadToken(from_string);
     // Getting route number into the field
     bus_name_ = string(ReadToken(from_string,"\n"));
+}
+
+BusRequest::BusRequest(const Json::Node& from_json_node) 
+: ReadReqeust<std::string>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO) 
+{
+    const auto& as_map = from_json_node.AsMap();
+    bus_name_ = as_map.at("name").AsString();
 }
 
 StopRequest::StopRequest(std::string_view from_string) 
@@ -95,8 +134,24 @@ StopRequest::StopRequest(std::string_view from_string)
     stop_name_ = string(ReadToken(from_string,"\n"));
 }
 
+StopRequest::StopRequest(const Json::Node& from_json_node) 
+: ReadReqeust<std::string>(GetReqestId(from_json_node), Request::Type::GET_STOP_INFO) 
+{
+    const auto& as_map = from_json_node.AsMap();
+    stop_name_ = as_map.at("name").AsString();
+}
+
 Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
     if(request.find(">") != request.npos) {
+        return Bus::RouteType::CIRCULAR;
+    } else {
+        return Bus::RouteType::LINEAR;
+    }
+}
+
+Bus::RouteType AddBusRequest::GetRouteType(const Json::Node& json_node) {
+    const auto& as_map = json_node.AsMap();
+    if(as_map.at("is_roundtrip").AsInt()) {
         return Bus::RouteType::CIRCULAR;
     } else {
         return Bus::RouteType::LINEAR;
@@ -118,6 +173,16 @@ AddBusRequest::AddBusRequest(std::string_view from_string)
 
     while(!from_string.empty()) {
         stops_.push_back(string(ReadToken(from_string,stops_delimiter)));
+    }
+}
+
+AddBusRequest::AddBusRequest(const Json::Node& json_node)
+: ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(json_node))
+{
+    const auto& as_map = json_node.AsMap();
+    bus_name_ = as_map.at("name").AsString();
+    for(const auto& stop : as_map.at("stops").AsArray()) {
+        stops_.push_back(stop.AsString());
     }
 }
 
@@ -156,40 +221,62 @@ AddStopRequest::AddStopRequest(std::string_view from_string)
     distances_to_stops_ = GetStopDistances(distances);
 }
 
+AddStopRequest::AddStopRequest(const Json::Node& json_node)
+: ModifyReqeust(Request::Type::ADD_STOP)
+{
+    const auto& as_map = json_node.AsMap();
+    name_ = as_map.at("name").AsString();
+    latitude = as_map.at("latitude").AsDouble();
+    longtitude = as_map.at("longitude").AsDouble();
+    StopDistances res;
+    const auto& distances = as_map.at("road_distances").AsMap();
+    res.reserve(distances.size());
+    for(const auto& distance : distances) {
+        res.push_back({distance.first,distance.second.AsInt()});
+    }
+    distances_to_stops_ = move(res);
+}
+
 /******************************* 
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
 
 std::string BusRequest::Process(const BusDatabase& db) const {
     auto info = db.GetBusInfo(bus_name_);
+    ostringstream os;
+    if(id_.has_value()) {
+        os << "ID: " << *id_ << '\n';
+    }
     if(info.has_value()) {
-        ostringstream os;
         os << "Bus " << bus_name_ << ": " <<
         (*info)->stops << " stops on route, " <<
         (*info)->unique_stops << " unique stops, " <<
         db.GetBusDistance(bus_name_).road_distance << " route length, " << setprecision(6) << 
         db.GetBusDistance(bus_name_).road_distance / db.GetBusDistance(bus_name_).linear_distance << " curvature";
-        return os.str();
     } else {
-        return "Bus " + bus_name_ + ": " + "not found";
+        os << "Bus " << bus_name_ << ": " << "not found";
     }
+    return os.str();
 }
 std::string StopRequest::Process(const BusDatabase& db) const {
     auto info = db.GetStopInfo(stop_name_);
+    ostringstream os;
+    if(id_.has_value()) {
+        os << "ID: " << *id_ << '\n';
+    }
     if(info.has_value()) {
         if((*info)->buses.size()) {
-            ostringstream os;
             os << "Stop " << stop_name_ << ": buses ";
             for(const auto& bus : (*info)->buses) {
                 os << bus << ' ';
             }
-            return os.str();
         } else {
-            return "Stop " + stop_name_ + ": " + "no buses";
+            os << "Stop " << stop_name_ << ": " << "no buses";
         }
     } else {
-        return "Stop " + stop_name_ + ": " + "not found";
+        os << "Stop " << stop_name_ << ": " << "not found";
     }
+    return os.str();
 }
 void AddBusRequest::Process(BusDatabase& db) const {
     db.AddBus(

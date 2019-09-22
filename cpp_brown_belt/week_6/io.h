@@ -3,6 +3,7 @@
 #include <iostream>
 #include "database.h"
 #include "misc.h"
+#include "json.h"
 
 /******************************* 
     REQUEST BASE CLASS         *
@@ -36,8 +37,10 @@ struct ModifyReqeust : public Request {
 
 template<typename ResT>
 struct ReadReqeust : public Request {
-  using Request::Request;
+  ReadReqeust(Request::Type type_) : Request(type_) {}
+  ReadReqeust(size_t id, Request::Type type_) : Request(type_), id_(id) {}
   virtual ResT Process(const BusDatabase& db) const = 0;
+  std::optional<int> id_;
 };
 
 /******************************* 
@@ -46,7 +49,9 @@ struct ReadReqeust : public Request {
 
 struct AddBusRequest : public ModifyReqeust {
   AddBusRequest(std::string_view from_string);
+  AddBusRequest(const Json::Node& json_node);
   static Bus::RouteType GetRouteType(std::string_view request);
+  static Bus::RouteType GetRouteType(const Json::Node& json_node);
   void Process(BusDatabase& db) const override;
   std::string bus_name_;
   std::vector<std::string> stops_;
@@ -56,6 +61,7 @@ struct AddBusRequest : public ModifyReqeust {
 using StopDistances = std::vector< std::pair< std::string, unsigned int > >;
 struct AddStopRequest : public ModifyReqeust {
   AddStopRequest(std::string_view from_string);
+  AddStopRequest(const Json::Node& json_node);
   void Process(BusDatabase& db) const override;
   std::string name_;
   double latitude;
@@ -69,12 +75,14 @@ struct AddStopRequest : public ModifyReqeust {
 
 struct BusRequest : public ReadReqeust<std::string> {
   BusRequest(std::string_view from_string);
+  BusRequest(const Json::Node& from_json_node);
   std::string bus_name_;
   std::string Process(const BusDatabase& db) const override;
 };
 
 struct StopRequest : public ReadReqeust<std::string> {
   StopRequest(std::string_view from_string);
+  StopRequest(const Json::Node& from_json_node);
   std::string stop_name_;
   std::string Process(const BusDatabase& db) const override;
 };
@@ -89,7 +97,8 @@ public:
   using Respones = std::vector<std::string>;
 
   BusDatabaseHandler() = default;
-  BusDatabaseHandler& RequestsFromStream(int count, std::istream& is = std::cin);
+  BusDatabaseHandler& ReadRequests(int count, std::istream& is = std::cin);
+  BusDatabaseHandler& ReadRequests(Json::Document doc);
   BusDatabaseHandler& ProcessRequests();
   Respones GetResponses() {
     return move(responses_);

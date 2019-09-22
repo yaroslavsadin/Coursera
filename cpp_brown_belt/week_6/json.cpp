@@ -1,4 +1,5 @@
 #include "json.h"
+#include "misc.h"
 
 using namespace std;
 
@@ -26,13 +27,18 @@ namespace Json {
     return Node(move(result));
   }
 
-  Node LoadInt(istream& input) {
-    int result = 0;
-    while (isdigit(input.peek())) {
-      result *= 10;
-      result += input.get() - '0';
+  Node LoadNum(istream& input) {
+    string str;
+    input >> str;
+
+    if(str.find('.') != str.npos) {
+      double result = StringToOther<double>(str);
+      return Node(result);
+    } else {
+      int result = StringToOther<int>(str);
+      return Node(result);
     }
-    return Node(result);
+    
   }
 
   Node LoadString(istream& input) {
@@ -69,7 +75,7 @@ namespace Json {
       return LoadString(input);
     } else {
       input.putback(c);
-      return LoadInt(input);
+      return LoadNum(input);
     }
   }
 
