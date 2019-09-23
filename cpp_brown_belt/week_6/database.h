@@ -37,6 +37,10 @@ double CalcDistance(const Stop& from, const Stop& to);
 
 class BusDatabase {
 public:
+    struct RouteSettings {
+        int bus_wait_time_ = 0;
+        int bus_velocity_ = 0;
+    };
     struct Distances {
         unsigned int road_distance;
         double linear_distance;
@@ -47,9 +51,12 @@ public:
     std::optional<const Bus*>  GetBusInfo (const std::string& name) const;
     std::optional<const Stop*>  GetStopInfo (const std::string& name) const;
     const Distances& GetBusDistance(const std::string& name) const;
+    void SetBusWaitTime(int x);
+    void SetBusVelocity(int x);
 private:
     Distances ComputeDistance(const Bus& bus) const;
     Stops stops_;
     Buses buses_;
+    RouteSettings route_settings_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 };

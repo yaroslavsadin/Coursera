@@ -95,3 +95,11 @@ const BusDatabase::Distances& BusDatabase::GetBusDistance(const std::string& nam
     }
     return bus_to_distance_.at(name);
 }
+
+void BusDatabase::SetBusWaitTime(int x) {
+    route_settings_.bus_wait_time_ = x;
+}
+
+void BusDatabase::SetBusVelocity(int x) {
+    route_settings_.bus_velocity_ = x;
+}

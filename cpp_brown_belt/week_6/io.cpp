@@ -67,6 +67,11 @@ BusDatabaseHandler& BusDatabaseHandler::ReadRequests(int count, std::istream& is
 BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
     const auto& root_ = doc.GetRoot().AsMap();
 
+    /* Setting route settings */
+    const auto& route_settings = root_.at("routing_settings").AsMap();
+    db.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
+    db.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
+
     /* Read Base Requests*/
     const auto& base_requests = root_.at("base_requests").AsArray();
     for(const auto& node : base_requests) {
