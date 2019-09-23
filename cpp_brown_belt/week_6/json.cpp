@@ -32,6 +32,11 @@ namespace Json {
   Node LoadNum(istream& input) {
     int result = 0;
     double fract = 0;
+    int sign = 1;
+    if(input.peek() == '-') {
+      sign = -1;
+      input.ignore(1);
+    }
     while (isdigit(input.peek())) {
       result *= 10;
       result += input.get() - '0';
@@ -45,9 +50,9 @@ namespace Json {
         count++;
       }
       fract /= pow(10,count);
-      return Node(result + fract);
+      return Node(sign*(result + fract));
     } else {
-      return Node(result);
+      return Node(sign*result);
     }
   }
 

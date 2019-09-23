@@ -228,21 +228,25 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
 {
     const auto& as_map = json_node.AsMap();
     name_ = as_map.at("name").AsString();
+    
     if(holds_alternative<int>(as_map.at("latitude"))) {
         latitude = static_cast<double>(as_map.at("latitude").AsInt());
     } else if(holds_alternative<double>(as_map.at("latitude"))) {
         latitude = as_map.at("latitude").AsDouble();
     }
+
     if(holds_alternative<int>(as_map.at("longitude"))) {
         longtitude = static_cast<double>(as_map.at("longitude").AsInt());
     } else if(holds_alternative<double>(as_map.at("longitude"))) {
         longtitude = as_map.at("longitude").AsDouble();
     }
     StopDistances res;
-    const auto& distances = as_map.at("road_distances").AsMap();
-    res.reserve(distances.size());
-    for(const auto& distance : distances) {
-        res.push_back({distance.first,distance.second.AsInt()});
+    if(as_map.count("road_distances")) {
+        const auto& distances = as_map.at("road_distances").AsMap();
+        res.reserve(distances.size());
+        for(const auto& distance : distances) {
+            res.push_back({distance.first,distance.second.AsInt()});
+        }
     }
     distances_to_stops_ = move(res);
 }
@@ -263,7 +267,7 @@ Json::Node BusRequest::Process(const BusDatabase& db) const {
         res["unique_stop_count"] = Json::Node(static_cast<int>((*info)->unique_stops));
     } else {
         res["request_id"] = Json::Node(*id_);
-        res["error_message"] = Json::Node("not found"s);
+        res["error_message"] = Json::Node(string("not found"));
     }
     return Json::Node(res);
 }
@@ -285,7 +289,7 @@ Json::Node StopRequest::Process(const BusDatabase& db) const {
         res["request_id"] = Json::Node(*id_);
     } else {
         res["request_id"] = Json::Node(*id_);
-        res["error_message"] = Json::Node("not found"s);
+        res["error_message"] = Json::Node(string("not found"));
     }
     return Json::Node(res);
 }

@@ -8,11 +8,6 @@
 
 using namespace std;
 
-template<typename From>
-auto MakeRequest(const From& request) {
-  return request;
-}
-
 void JsonPrint(const Json::Node& top, ostream& os) {
   if(holds_alternative<int>(top)) {
     os << top.AsInt();
@@ -56,14 +51,10 @@ int main(void) {
 #if 1
     BusDatabaseHandler handler;
 
-    // try {
-        Json::Document doc = Json::Load(cin);
-        auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
-        cout << setprecision(6);
-        JsonPrint(responses, cout);
-    // } catch(exception& e) {
-    //     cout << R"(")" << e.what() << R"(")" << endl;
-    // }
+    Json::Document doc = Json::Load(cin);
+    auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
+    cout << setprecision(6);
+    JsonPrint(responses, cout);
 #else
     try {
       Json::Node node{0.5};
