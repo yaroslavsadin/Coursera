@@ -73,18 +73,18 @@ struct AddStopRequest : public ModifyReqeust {
          READ REQUESTS         *
 ********************************/
 
-struct BusRequest : public ReadReqeust<std::string> {
+struct BusRequest : public ReadReqeust<Json::Node> {
   BusRequest(std::string_view from_string);
   BusRequest(const Json::Node& from_json_node);
   std::string bus_name_;
-  std::string Process(const BusDatabase& db) const override;
+  Json::Node Process(const BusDatabase& db) const override;
 };
 
-struct StopRequest : public ReadReqeust<std::string> {
+struct StopRequest : public ReadReqeust<Json::Node> {
   StopRequest(std::string_view from_string);
   StopRequest(const Json::Node& from_json_node);
   std::string stop_name_;
-  std::string Process(const BusDatabase& db) const override;
+  Json::Node Process(const BusDatabase& db) const override;
 };
 
 /******************************* 
@@ -94,7 +94,7 @@ struct StopRequest : public ReadReqeust<std::string> {
 class BusDatabaseHandler {
 public:
   using Requests = std::vector<std::unique_ptr<Request>>;
-  using Respones = std::vector<std::string>;
+  using Respones = Json::Node;
 
   BusDatabaseHandler() = default;
   BusDatabaseHandler& ReadRequests(int count, std::istream& is = std::cin);

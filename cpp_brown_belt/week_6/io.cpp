@@ -87,16 +87,18 @@ BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
 }
 
 BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
+    vector<Json::Node> responses;
     for(const auto& request : requests_) {
         if(request->type_ == Request::Type::GET_BUS_INFO || 
            request->type_ == Request::Type::GET_STOP_INFO) {
-            const auto& request_ = static_cast<const ReadReqeust<string>&>(*request);
-            responses_.push_back(request_.Process(db));
+            const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
+            responses.push_back(request_.Process(db));
         } else {
             const auto& request_ = static_cast<const ModifyReqeust&>(*request);
             request_.Process(db);
         }
     }
+    responses_ = Json::Node(move(responses));
     requests_.clear();
     return *this;
 }
@@ -110,7 +112,7 @@ inline size_t GetReqestId(const Json::Node& node) {
 }
 
 BusRequest::BusRequest(std::string_view from_string) 
-: ReadReqeust<std::string>(Request::Type::GET_BUS_INFO) 
+: ReadReqeust<Json::Node>(Request::Type::GET_BUS_INFO) 
 {
     // Reading "Bus "
     ReadToken(from_string);
@@ -119,14 +121,14 @@ BusRequest::BusRequest(std::string_view from_string)
 }
 
 BusRequest::BusRequest(const Json::Node& from_json_node) 
-: ReadReqeust<std::string>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO) 
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO) 
 {
     const auto& as_map = from_json_node.AsMap();
     bus_name_ = as_map.at("name").AsString();
 }
 
 StopRequest::StopRequest(std::string_view from_string) 
-: ReadReqeust<std::string>(Request::Type::GET_STOP_INFO) 
+: ReadReqeust<Json::Node>(Request::Type::GET_STOP_INFO) 
 {
     // Reading "Stop "
     ReadToken(from_string);
@@ -135,7 +137,7 @@ StopRequest::StopRequest(std::string_view from_string)
 }
 
 StopRequest::StopRequest(const Json::Node& from_json_node) 
-: ReadReqeust<std::string>(GetReqestId(from_json_node), Request::Type::GET_STOP_INFO) 
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_STOP_INFO) 
 {
     const auto& as_map = from_json_node.AsMap();
     stop_name_ = as_map.at("name").AsString();
@@ -151,7 +153,7 @@ Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
 
 Bus::RouteType AddBusRequest::GetRouteType(const Json::Node& json_node) {
     const auto& as_map = json_node.AsMap();
-    if(as_map.at("is_roundtrip").AsInt()) {
+    if(as_map.at("is_roundtrip").AsBool()) {
         return Bus::RouteType::CIRCULAR;
     } else {
         return Bus::RouteType::LINEAR;
@@ -241,42 +243,43 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
 
-std::string BusRequest::Process(const BusDatabase& db) const {
+Json::Node BusRequest::Process(const BusDatabase& db) const {
     auto info = db.GetBusInfo(bus_name_);
-    ostringstream os;
-    if(id_.has_value()) {
-        os << "ID: " << *id_ << '\n';
-    }
+    map<string,Json::Node> res;
     if(info.has_value()) {
-        os << "Bus " << bus_name_ << ": " <<
-        (*info)->stops << " stops on route, " <<
-        (*info)->unique_stops << " unique stops, " <<
-        db.GetBusDistance(bus_name_).road_distance << " route length, " << setprecision(6) << 
-        db.GetBusDistance(bus_name_).road_distance / db.GetBusDistance(bus_name_).linear_distance << " curvature";
+        res["route_length"] = Json::Node(static_cast<int>(db.GetBusDistance(bus_name_).road_distance));
+        res["request_id"] = Json::Node(*id_);
+        res["curvature"] = Json::Node(db.GetBusDistance(bus_name_).road_distance / 
+                                    db.GetBusDistance(bus_name_).linear_distance);
+        res["stop_count"] = Json::Node(static_cast<int>((*info)->stops));
+        res["unique_stop_count"] = Json::Node(static_cast<int>((*info)->unique_stops));
     } else {
-        os << "Bus " << bus_name_ << ": " << "not found";
+        res["request_id"] = Json::Node(*id_);
+        res["error_message"] = Json::Node("not found"s);
     }
-    return os.str();
+    return Json::Node(res);
 }
-std::string StopRequest::Process(const BusDatabase& db) const {
+
+Json::Node StopRequest::Process(const BusDatabase& db) const {
     auto info = db.GetStopInfo(stop_name_);
-    ostringstream os;
-    if(id_.has_value()) {
-        os << "ID: " << *id_ << '\n';
-    }
+    map<string,Json::Node> res;
     if(info.has_value()) {
-        if((*info)->buses.size()) {
-            os << "Stop " << stop_name_ << ": buses ";
-            for(const auto& bus : (*info)->buses) {
-                os << bus << ' ';
-            }
-        } else {
-            os << "Stop " << stop_name_ << ": " << "no buses";
-        }
+        res["buses"] = Json::Node(
+            [&]() {
+                vector<Json::Node> res;
+                res.reserve((*info)->buses.size());
+                for(string bus : (*info)->buses) {
+                    res.push_back(bus);
+                }
+                return move(res);
+            }()
+        );
+        res["request_id"] = Json::Node(*id_);
     } else {
-        os << "Stop " << stop_name_ << ": " << "not found";
+        res["request_id"] = Json::Node(*id_);
+        res["error_message"] = Json::Node("not found"s);
     }
-    return os.str();
+    return Json::Node(res);
 }
 void AddBusRequest::Process(BusDatabase& db) const {
     db.AddBus(

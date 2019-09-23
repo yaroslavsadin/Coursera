@@ -1,5 +1,7 @@
 #include "json.h"
 #include "misc.h"
+#include <cctype>
+#include <cmath>
 
 using namespace std;
 
@@ -28,17 +30,37 @@ namespace Json {
   }
 
   Node LoadNum(istream& input) {
-    string str;
-    input >> str;
-
-    if(str.find('.') != str.npos) {
-      double result = StringToOther<double>(str);
-      return Node(result);
+    int result = 0;
+    double fract = 0;
+    while (isdigit(input.peek())) {
+      result *= 10;
+      result += input.get() - '0';
+    }
+    if(input.peek() == '.') {
+      input.ignore(1);
+      int count = 0;
+      while (isdigit(input.peek())) {
+        fract *= 10;
+        fract += input.get() - '0';
+        count++;
+      }
+      fract /= pow(10,count);
+      return Node(result + fract);
     } else {
-      int result = StringToOther<int>(str);
       return Node(result);
     }
-    
+  }
+
+  Node LoadBool(istream& input) {
+    string str;
+    while(isalpha(input.peek())) {
+      str.push_back(input.get());
+    }
+    if(str == "false") {
+      return Node(false);
+    } else {
+      return Node(true);
+    }
   }
 
   Node LoadString(istream& input) {
@@ -73,6 +95,9 @@ namespace Json {
       return LoadDict(input);
     } else if (c == '"') {
       return LoadString(input);
+    } else if (isalpha(c)) {
+      input.putback(c);
+      return LoadBool(input);
     } else {
       input.putback(c);
       return LoadNum(input);
