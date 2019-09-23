@@ -24,35 +24,46 @@ void JsonPrint(const Json::Node& top, ostream& os) {
     os << top.AsBool();
   } else if (holds_alternative<std::vector<Json::Node>>(top)) {
     os << "[";
-    for(const auto& node : top.AsArray()) {
-      JsonPrint(node,os);
+    const auto& as_array = top.AsArray();
+    if(as_array.size()) { 
+      for(const auto& node : Range(as_array.begin(),prev(as_array.end()))) {
+        JsonPrint(node,os);
+        os << ',';
+      }
+     
+      JsonPrint(*prev(as_array.end()),os);
     }
     // os << '\b';
     os << "]";
   } else {
+    const auto& as_map = top.AsMap();
     os << "{";
-    for(const auto& [key,value] : top.AsMap()) {
-      os << "\"" << key << "\": ";
-      JsonPrint(value,os);
+    if(as_map.size()) {
+      for(const auto& pair_ : Range(as_map.begin(),prev(as_map.end()))) {
+        os << "\"" << pair_.first << "\": ";
+        JsonPrint(pair_.second,os);
+        os << ',';
+      } 
+      os << "\"" << prev(as_map.end())->first << "\": ";
+      JsonPrint(prev(as_map.end())->second,os);
     }
     // os << '\b';
     os << "}";
   }
-  os << ',';
 }
 
 int main(void) {
 #if 1
     BusDatabaseHandler handler;
 
-    try {
+    // try {
         Json::Document doc = Json::Load(cin);
         auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
         cout << setprecision(6);
         JsonPrint(responses, cout);
-    } catch(exception& e) {
-        cerr << e.what() << endl;
-    }
+    // } catch(exception& e) {
+    //     cout << R"(")" << e.what() << R"(")" << endl;
+    // }
 #else
     try {
       Json::Node node{0.5};

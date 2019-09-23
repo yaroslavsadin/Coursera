@@ -228,8 +228,16 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
 {
     const auto& as_map = json_node.AsMap();
     name_ = as_map.at("name").AsString();
-    latitude = as_map.at("latitude").AsDouble();
-    longtitude = as_map.at("longitude").AsDouble();
+    if(holds_alternative<int>(as_map.at("latitude"))) {
+        latitude = static_cast<double>(as_map.at("latitude").AsInt());
+    } else if(holds_alternative<double>(as_map.at("latitude"))) {
+        latitude = as_map.at("latitude").AsDouble();
+    }
+    if(holds_alternative<int>(as_map.at("longitude"))) {
+        longtitude = static_cast<double>(as_map.at("longitude").AsInt());
+    } else if(holds_alternative<double>(as_map.at("longitude"))) {
+        longtitude = as_map.at("longitude").AsDouble();
+    }
     StopDistances res;
     const auto& distances = as_map.at("road_distances").AsMap();
     res.reserve(distances.size());
