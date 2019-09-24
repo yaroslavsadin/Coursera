@@ -5,47 +5,10 @@
 #include "json.h"
 #include <string>
 #include <iomanip>
+#include "graph.h"
+#include "router.h"
 
 using namespace std;
-
-void JsonPrint(const Json::Node& top, ostream& os) {
-  if(holds_alternative<int>(top)) {
-    os << top.AsInt();
-  } else if (holds_alternative<double>(top)) {
-    os << top.AsDouble();
-  } else if (holds_alternative<string>(top)) {
-    os << "\"" << top.AsString() << "\"";
-  } else if (holds_alternative<bool>(top)) {
-    os << top.AsBool();
-  } else if (holds_alternative<std::vector<Json::Node>>(top)) {
-    os << "[";
-    const auto& as_array = top.AsArray();
-    if(as_array.size()) { 
-      for(const auto& node : Range(as_array.begin(),prev(as_array.end()))) {
-        JsonPrint(node,os);
-        os << ',';
-      }
-     
-      JsonPrint(*prev(as_array.end()),os);
-    }
-    // os << '\b';
-    os << "]";
-  } else {
-    const auto& as_map = top.AsMap();
-    os << "{";
-    if(as_map.size()) {
-      for(const auto& pair_ : Range(as_map.begin(),prev(as_map.end()))) {
-        os << "\"" << pair_.first << "\": ";
-        JsonPrint(pair_.second,os);
-        os << ',';
-      } 
-      os << "\"" << prev(as_map.end())->first << "\": ";
-      JsonPrint(prev(as_map.end())->second,os);
-    }
-    // os << '\b';
-    os << "}";
-  }
-}
 
 int main(void) {
 #if 1
@@ -130,6 +93,18 @@ int main(void) {
       "type": "Stop",
       "name": "Universam",
       "id": 3
+    },
+    {
+      "type": "Route",
+      "from": "Biryulyovo Zapadnoye",
+      "to": "Universam",
+      "id": 4
+    },
+    {
+      "type": "Route",
+      "from": "Biryulyovo Zapadnoye",
+      "to": "Prazhskaya",
+      "id": 5
     }
   ]
 }
@@ -137,17 +112,29 @@ int main(void) {
     BusDatabaseHandler handler;
 
     Json::Document doc = Json::Load(ss);
+    cerr << "HERE" << endl;
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
     cout << setprecision(6);
-    JsonPrint(responses, cout);
+    Json::Print(responses, cout);
 #else
-    try {
-      Json::Node node{0.5};
-      double lol = node.AsDouble();
-      cout << lol << endl;
-    } catch(exception& e) {
-        cerr << e.what() << endl;
-    }
+    Graph::DirectedWeightedGraph<int> graph(0);
+    cout << graph.GetEdgeCount() << endl;
+    cout << graph.GetVertexCount() << endl;
+    graph = Graph::DirectedWeightedGraph<int>(10);
+    cout << graph.GetEdgeCount() << endl;
+    cout << graph.GetVertexCount() << endl;
+    graph.AddEdge({0,5,6});
+    graph.AddEdge({5,6,5});
+    graph.AddEdge({5,6,6});
+    cout << graph.GetEdgeCount() << endl;
+    Graph::Router router(graph);
+    auto info = router.BuildRoute(0,6);
+    cout << endl;
+    cout << router.GetRouteEdge(info->id,0) << endl;
+    cout << router.GetRouteEdge(info->id,1) << endl;
+    cout << router.GetRouteEdge(info->id,2) << endl;
+    cout << router.GetRouteEdge(info->id,3) << endl;
+    cout << router.GetRouteEdge(info->id,4) << endl;
 #endif
     
     return 0;

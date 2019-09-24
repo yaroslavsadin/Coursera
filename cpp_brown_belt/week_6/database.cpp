@@ -2,6 +2,7 @@
 #include "database.h"
 #include <cmath>
 #include <variant>
+#include <cassert>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ double CalcDistance(const Stop& from, const Stop& to) {
 
 void BusDatabase::AddStop(std::string name, double latitude, double longtitude,
                                 std::vector< std::pair< std::string, unsigned int > > stop_distances) {
+    stops_[name].id_ = current_stop_id_++;
     stops_[name].latitude = latitude;
     stops_[name].longtitude = longtitude;
 
@@ -102,4 +104,34 @@ void BusDatabase::SetBusWaitTime(int x) {
 
 void BusDatabase::SetBusVelocity(int x) {
     route_settings_.bus_velocity_ = x;
+}
+
+Graph::Router<int> BusDatabase::InitRouter(void) const {
+    // Create a graph which uses stops as vertices and buses as edges
+     if(graph_.GetVertexCount() == 0) {
+        graph_ = Graph::DirectedWeightedGraph<int>(stops_.size());
+        for(const auto& bus : buses_) {
+            for(auto it = bus.second.route.begin() + 1; it < bus.second.route.end(); it++) {
+                const auto& prev_stop = stops_.at(*(it-1));
+                const auto& cur_stop = stops_.at(*it);
+                Graph::EdgeId edge =  graph_.AddEdge( { .from = prev_stop.id_, .to = cur_stop.id_,
+                                                .weight = prev_stop.distance_to_stop_.at(*it) } );
+                edge_id_to_bus_name_.push_back(bus.first);
+                assert(edge_id_to_bus_name_[edge] == bus.first);
+            }
+        }
+    }
+    return Graph::Router(graph_);
+}
+
+std::optional<Graph::Router<int>::RouteInfo> 
+BusDatabase::BuildRoute(const string& from, const string& to) const {
+    auto router = InitRouter();
+    if(auto route_info = router.BuildRoute(stops_.at(from).id_, stops_.at(to).id_); 
+    route_info.has_value()) {
+        cout << route_info->edge_count << ' ' << route_info->weight << endl;
+    } else {
+        cout << "Route not found\n";
+    }
+    return nullopt;
 }

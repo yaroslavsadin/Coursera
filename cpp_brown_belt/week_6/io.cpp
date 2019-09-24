@@ -26,6 +26,9 @@ Request::Type TypeFromString(string_view str, bool is_modify_request) {
         } else {
             return Request::Type::GET_STOP_INFO;
         }
+    }
+    else if (type_str == "Route") {
+        return Request::Type::GET_ROUTE;
     } else {
         throw invalid_argument("Unknown request type");
     }
@@ -45,6 +48,9 @@ unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request)
             break;
         case Request::Type::GET_STOP_INFO:
             return make_unique<StopRequest>(request);
+            break;
+        case Request::Type::GET_ROUTE:
+            return make_unique<RouteRequest>(request);
             break;
         default:
             break;
@@ -95,7 +101,8 @@ BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
     vector<Json::Node> responses;
     for(const auto& request : requests_) {
         if(request->type_ == Request::Type::GET_BUS_INFO || 
-           request->type_ == Request::Type::GET_STOP_INFO) {
+           request->type_ == Request::Type::GET_STOP_INFO ||
+           request->type_ == Request::Type::GET_ROUTE) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
             responses.push_back(request_.Process(db));
         } else {
@@ -256,6 +263,19 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
     distances_to_stops_ = move(res);
 }
 
+RouteRequest::RouteRequest(std::string_view from_string)
+: ReadReqeust(Request::Type::GET_ROUTE)
+{
+}
+
+RouteRequest::RouteRequest(const Json::Node& from_json_node)
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE) 
+{
+    const auto& as_map = from_json_node.AsMap();
+    from_ = as_map.at("from").AsString();
+    to_ = as_map.at("to").AsString();
+}
+
 /******************************* 
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
@@ -297,6 +317,10 @@ Json::Node StopRequest::Process(const BusDatabase& db) const {
         res["error_message"] = Json::Node(string("not found"));
     }
     return Json::Node(res);
+}
+Json::Node RouteRequest::Process(const BusDatabase& db) const {
+    db.BuildRoute(from_,to_);
+    return Json::Node(string("not found"));
 }
 void AddBusRequest::Process(BusDatabase& db) const {
     db.AddBus(

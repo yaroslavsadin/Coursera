@@ -14,7 +14,8 @@ struct Request {
     ADD_BUS,
     ADD_STOP,
     GET_BUS_INFO,
-    GET_STOP_INFO
+    GET_STOP_INFO,
+    GET_ROUTE
   };
   Request(Type type) : type_(type) {}
   static std::unique_ptr<Request> MakeRequest(Type type);
@@ -84,6 +85,14 @@ struct StopRequest : public ReadReqeust<Json::Node> {
   StopRequest(std::string_view from_string);
   StopRequest(const Json::Node& from_json_node);
   std::string stop_name_;
+  Json::Node Process(const BusDatabase& db) const override;
+};
+
+struct RouteRequest : public ReadReqeust<Json::Node> {
+  RouteRequest(std::string_view from_string);
+  RouteRequest(const Json::Node& from_json_node);
+  std::string from_;
+  std::string to_;
   Json::Node Process(const BusDatabase& db) const override;
 };
 

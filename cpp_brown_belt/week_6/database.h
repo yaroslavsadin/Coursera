@@ -7,6 +7,7 @@
 #include <set>
 #include <memory>
 #include "misc.h"
+#include "router.h"
 
 struct Stop;
 struct Bus;
@@ -14,12 +15,14 @@ struct Bus;
 using Stops = std::unordered_map< std::string , Stop >;
 using StopsRange = std::vector<std::string>;
 using Buses = std::unordered_map< std::string , Bus >;
+using StopId = size_t;
 
 struct Stop {
+    StopId id_;
     double latitude;
     double longtitude;
     std::set<std::string> buses;
-    std::unordered_map<std::string,unsigned int> distance_to_stop_;
+    std::unordered_map<std::string,int> distance_to_stop_;
 };
 
 struct Bus {
@@ -53,10 +56,15 @@ public:
     const Distances& GetBusDistance(const std::string& name) const;
     void SetBusWaitTime(int x);
     void SetBusVelocity(int x);
+    Graph::Router<int> InitRouter(void) const;
+    std::optional<Graph::Router<int>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
 private:
     Distances ComputeDistance(const Bus& bus) const;
+    StopId current_stop_id_ = 0;
     Stops stops_;
     Buses buses_;
     RouteSettings route_settings_;
+    mutable Graph::DirectedWeightedGraph<int> graph_ = Graph::DirectedWeightedGraph<int>(0);
+    mutable std::vector<std::string> edge_id_to_bus_name_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 };

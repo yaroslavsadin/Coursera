@@ -113,4 +113,43 @@ namespace Json {
     return Document{LoadNode(input)};
   }
 
+  void Print(const Json::Node& top, ostream& os) {
+    if(holds_alternative<int>(top)) {
+      os << top.AsInt();
+    } else if (holds_alternative<double>(top)) {
+      os << top.AsDouble();
+    } else if (holds_alternative<string>(top)) {
+      os << "\"" << top.AsString() << "\"";
+    } else if (holds_alternative<bool>(top)) {
+      os << top.AsBool();
+    } else if (holds_alternative<std::vector<Json::Node>>(top)) {
+      os << "[";
+      const auto& as_array = top.AsArray();
+      if(as_array.size()) { 
+        for(const auto& node : Range(as_array.begin(),prev(as_array.end()))) {
+          Print(node,os);
+          os << ',';
+        }
+      
+        Print(*prev(as_array.end()),os);
+      }
+      // os << '\b';
+      os << "]";
+    } else {
+      const auto& as_map = top.AsMap();
+      os << "{";
+      if(as_map.size()) {
+        for(const auto& pair_ : Range(as_map.begin(),prev(as_map.end()))) {
+          os << "\"" << pair_.first << "\": ";
+          Print(pair_.second,os);
+          os << ',';
+        } 
+        os << "\"" << prev(as_map.end())->first << "\": ";
+        Print(prev(as_map.end())->second,os);
+      }
+      // os << '\b';
+      os << "}";
+    }
+  }
+
 }

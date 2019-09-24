@@ -4,21 +4,20 @@
 #include <deque>
 #include <vector>
 
-template <typename It>
-class Range {
-public:
-  using ValueType = typename std::iterator_traits<It>::value_type;
-
-  Range(It begin, It end) : begin_(begin), end_(end) {}
-  It begin() const { return begin_; }
-  It end() const { return end_; }
-
-private:
-  It begin_;
-  It end_;
-};
-
 namespace Graph {
+  template <typename It>
+  class Range_ {
+  public:
+    using ValueType = typename std::iterator_traits<It>::value_type;
+
+    Range_(It begin, It end) : begin_(begin), end_(end) {}
+    It begin() const { return begin_; }
+    It end() const { return end_; }
+
+  private:
+    It begin_;
+    It end_;
+  };
 
   using VertexId = size_t;
   using EdgeId = size_t;
@@ -34,7 +33,7 @@ namespace Graph {
   class DirectedWeightedGraph {
   private:
     using IncidenceList = std::vector<EdgeId>;
-    using IncidentEdgesRange = Range<typename IncidenceList::const_iterator>;
+    using IncidentEdgesRange_ = Range_<typename IncidenceList::const_iterator>;
 
   public:
     DirectedWeightedGraph(size_t vertex_count);
@@ -43,7 +42,7 @@ namespace Graph {
     size_t GetVertexCount() const;
     size_t GetEdgeCount() const;
     const Edge<Weight>& GetEdge(EdgeId edge_id) const;
-    IncidentEdgesRange GetIncidentEdges(VertexId vertex) const;
+    IncidentEdgesRange_ GetIncidentEdges(VertexId vertex) const;
 
   private:
     std::vector<Edge<Weight>> edges_;
@@ -78,7 +77,7 @@ namespace Graph {
   }
 
   template <typename Weight>
-  typename DirectedWeightedGraph<Weight>::IncidentEdgesRange
+  typename DirectedWeightedGraph<Weight>::IncidentEdgesRange_
   DirectedWeightedGraph<Weight>::GetIncidentEdges(VertexId vertex) const {
     const auto& edges = incidence_lists_[vertex];
     return {std::begin(edges), std::end(edges)};

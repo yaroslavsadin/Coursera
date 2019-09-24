@@ -55,4 +55,5 @@ namespace Json {
 
   Document Load(std::istream& input);
 
+  void Print(const Node& top, std::ostream& os);
 }
