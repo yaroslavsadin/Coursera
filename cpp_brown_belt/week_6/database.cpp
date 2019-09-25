@@ -106,32 +106,44 @@ void BusDatabase::SetBusVelocity(int x) {
     route_settings_.bus_velocity_ = x;
 }
 
-Graph::Router<int> BusDatabase::InitRouter(void) const {
+Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
     // Create a graph which uses stops as vertices and buses as edges
      if(graph_.GetVertexCount() == 0) {
-        graph_ = Graph::DirectedWeightedGraph<int>(stops_.size());
+        graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(stops_.size());
+        size_t edge_check = 0;
         for(const auto& bus : buses_) {
             for(auto it = bus.second.route.begin() + 1; it < bus.second.route.end(); it++) {
                 const auto& prev_stop = stops_.at(*(it-1));
                 const auto& cur_stop = stops_.at(*it);
                 Graph::EdgeId edge =  graph_.AddEdge( { .from = prev_stop.id_, .to = cur_stop.id_,
-                                                .weight = prev_stop.distance_to_stop_.at(*it) } );
+                    .weight = { 
+                        bus.first, 
+                        (prev_stop.distance_to_stop_.at(*it) / 1000. / route_settings_.bus_velocity_) * 60,
+                        route_settings_.bus_wait_time_
+                    } 
+                    } );
                 edge_id_to_bus_name_.push_back(bus.first);
                 assert(edge_id_to_bus_name_[edge] == bus.first);
+                assert(edge == edge_check++);
             }
         }
     }
     return Graph::Router(graph_);
 }
 
-std::optional<Graph::Router<int>::RouteInfo> 
+std::optional<Graph::Router<EdgeWeight>::RouteInfo> 
 BusDatabase::BuildRoute(const string& from, const string& to) const {
     auto router = InitRouter();
     if(auto route_info = router.BuildRoute(stops_.at(from).id_, stops_.at(to).id_); 
     route_info.has_value()) {
-        cout << route_info->edge_count << ' ' << route_info->weight << endl;
+        cout << "Time: " << route_info->weight.time_ << endl;
+        for(size_t i = 0; i < route_info->edge_count; i++) {
+            auto edge = router.GetRouteEdge(route_info->id,i);
+            cout << edge_id_to_bus_name_[edge] << endl;
+        }
     } else {
         cout << "Route not found\n";
     }
+    cout << endl;
     return nullopt;
 }

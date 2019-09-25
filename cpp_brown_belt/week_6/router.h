@@ -49,10 +49,10 @@ namespace Graph {
     void InitializeRoutesInternalData(const Graph& graph) {
       const size_t vertex_count = graph.GetVertexCount();
       for (VertexId vertex = 0; vertex < vertex_count; ++vertex) {
-        routes_internal_data_[vertex][vertex] = RouteInternalData{0, std::nullopt};
+        routes_internal_data_[vertex][vertex] = RouteInternalData{Weight(0), std::nullopt};
         for (const EdgeId edge_id : graph.GetIncidentEdges(vertex)) {
           const auto& edge = graph.GetEdge(edge_id);
-          assert(edge.weight >= 0);
+          // assert(edge.weight >= 0);
           auto& route_internal_data = routes_internal_data_[vertex][edge.to];
           if (!route_internal_data || route_internal_data->weight > edge.weight) {
             route_internal_data = RouteInternalData{edge.weight, edge_id};

@@ -38,6 +38,50 @@ struct Bus {
 
 double CalcDistance(const Stop& from, const Stop& to);
 
+struct EdgeWeight {
+    std::string_view bus_;
+    double time_;
+    int stop_wait_time;
+
+    bool operator>(const EdgeWeight& other) const {
+        if(other.bus_ != this->bus_) {
+            return this->time_ > (other.time_ + stop_wait_time);
+        } else {
+            return this->time_ > other.time_;
+        }
+    }
+    bool operator>=(const EdgeWeight& other) const {
+        if(other.bus_ != this->bus_) {
+            return this->time_ >= (other.time_ + stop_wait_time);
+        } else {
+            return this->time_ >= other.time_;
+        }
+    }
+    bool operator<(const EdgeWeight& other) const {
+        if(other.bus_ != this->bus_) {
+            return this->time_ < (other.time_ + stop_wait_time);
+        } else {
+            return this->time_ < other.time_;
+        }
+    }
+    EdgeWeight operator + (const EdgeWeight& other) const{
+        EdgeWeight tmp(*this);       //create a copy of this to modify
+        tmp.time_ += other.time_;    //modify this new copy and not the original
+        if(other.bus_ != this->bus_) {
+            tmp.time_ += stop_wait_time;
+        }
+        return tmp;                  //return the modified copy
+    }
+
+//     operator double() const
+//    {
+//       return this->time_;
+//    }
+
+   explicit EdgeWeight(double x) : time_(x) {}
+   EdgeWeight(const std::string& s, double x, int t) : bus_(s), time_(x), stop_wait_time(t) {}
+};
+
 class BusDatabase {
 public:
     struct RouteSettings {
@@ -56,15 +100,15 @@ public:
     const Distances& GetBusDistance(const std::string& name) const;
     void SetBusWaitTime(int x);
     void SetBusVelocity(int x);
-    Graph::Router<int> InitRouter(void) const;
-    std::optional<Graph::Router<int>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
+    Graph::Router<EdgeWeight> InitRouter(void) const;
+    std::optional<Graph::Router<EdgeWeight>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
 private:
     Distances ComputeDistance(const Bus& bus) const;
     StopId current_stop_id_ = 0;
     Stops stops_;
     Buses buses_;
     RouteSettings route_settings_;
-    mutable Graph::DirectedWeightedGraph<int> graph_ = Graph::DirectedWeightedGraph<int>(0);
+    mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
     mutable std::vector<std::string> edge_id_to_bus_name_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 };
