@@ -239,7 +239,6 @@ int main(void) {
     BusDatabaseHandler handler;
 
     Json::Document doc = Json::Load(ss);
-    cerr << "HERE" << endl;
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
     cout << setprecision(6);
     Json::Print(responses, cout);

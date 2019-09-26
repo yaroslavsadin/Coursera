@@ -5,7 +5,9 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <set>
+#include <map>
 #include <memory>
+#include <algorithm>
 #include "misc.h"
 #include "router.h"
 
@@ -39,47 +41,32 @@ struct Bus {
 double CalcDistance(const Stop& from, const Stop& to);
 
 struct EdgeWeight {
-    std::string_view bus_;
+    std::set<std::string> buses_on_edge;
     double time_;
     int stop_wait_time;
 
     bool operator>(const EdgeWeight& other) const {
-        if(other.bus_ != this->bus_) {
-            return this->time_ > (other.time_ + stop_wait_time);
-        } else {
-            return this->time_ > other.time_;
-        }
-    }
-    bool operator>=(const EdgeWeight& other) const {
-        if(other.bus_ != this->bus_) {
-            return this->time_ >= (other.time_ + stop_wait_time);
-        } else {
-            return this->time_ >= other.time_;
-        }
+        return this->time_ > other.time_;
     }
     bool operator<(const EdgeWeight& other) const {
-        if(other.bus_ != this->bus_) {
-            return this->time_ < (other.time_ + stop_wait_time);
-        } else {
-            return this->time_ < other.time_;
-        }
+        return this->time_ < other.time_;
     }
-    EdgeWeight operator + (const EdgeWeight& other) const{
+    EdgeWeight operator + (const EdgeWeight& other) const {
         EdgeWeight tmp(*this);       //create a copy of this to modify
-        tmp.time_ += other.time_;    //modify this new copy and not the original
-        if(other.bus_ != this->bus_) {
-            tmp.time_ += stop_wait_time;
-        }
+        tmp.buses_on_edge.insert(other.buses_on_edge.begin(),other.buses_on_edge.end());
+        //modify this new copy and not the original
+        for(const auto bus_in_other : other.buses_on_edge) {
+            if(buses_on_edge.count(bus_in_other)){
+                return tmp;
+            }
+        }      
+        tmp.time_ += stop_wait_time;
         return tmp;                  //return the modified copy
     }
 
-//     operator double() const
-//    {
-//       return this->time_;
-//    }
-
    explicit EdgeWeight(double x) : time_(x) {}
-   EdgeWeight(const std::string& s, double x, int t) : bus_(s), time_(x), stop_wait_time(t) {}
+   EdgeWeight(const std::string s, double x, int t) 
+   : buses_on_edge({s}), time_(x), stop_wait_time(t) {}
 };
 
 class BusDatabase {
@@ -103,6 +90,9 @@ public:
     Graph::Router<EdgeWeight> InitRouter(void) const;
     std::optional<Graph::Router<EdgeWeight>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
 private:
+    void AddEdgesToGraph(const std::string& bus_name, const std::string& from, const std::string& to, 
+    std::map<std::pair<std::string_view,std::string_view>,int>& existing_edges, 
+    std::vector<Graph::Edge<EdgeWeight>>& edges) const;
     Distances ComputeDistance(const Bus& bus) const;
     StopId current_stop_id_ = 0;
     Stops stops_;
