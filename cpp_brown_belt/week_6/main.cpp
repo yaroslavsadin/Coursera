@@ -111,7 +111,7 @@ int main(void) {
     {
       "type": "Stop",
       "road_distances": {
-        "Pokrovskaya": 5000
+        "Pokrovskaya": 2850
       },
       "longitude": 37.642258,
       "name": "TETs 26",
@@ -233,18 +233,12 @@ int main(void) {
       "to": "Tolstopaltsevo",
       "id": 11
     }
-    {
-      "type": "Route",
-      "from": "Universam",
-      "to": "Pokrovskaya",
-      "id": 11
-    }
   ]
 }
   )"};
     BusDatabaseHandler handler;
 
-    Json::Document doc = Json::Load(ss);
+    Json::Document doc = Json::Load(cin);
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
     cout << setprecision(6);
     Json::Print(responses, cout);

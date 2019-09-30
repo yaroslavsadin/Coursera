@@ -190,7 +190,7 @@ BusDatabase::BuildRoute(const string& from, const string& to) const {
     for(const auto& stop_from : stop_to_id_list_.at(from)) {
         for(const auto& stop_to : stop_to_id_list_.at(to)) {
             if(auto route_info_new = router.BuildRoute(stop_from, stop_to)) {
-                if(!route_info || route_info->weight > route_info_new->weight) {
+                if(!route_info || route_info->weight.time_ > route_info_new->weight.time_) {
                     route_info = route_info_new;
                 }
             }
