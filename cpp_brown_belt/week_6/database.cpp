@@ -180,16 +180,5 @@ BusDatabase::BuildRoute(const string& from, const string& to) const {
             }
         }
     }
-    if(route_info) {
-        cout << route_info->weight.time_ << endl;
-        for(size_t i = 0; i < route_info->edge_count; i++) {
-            auto edge = graph_.GetEdge(router_->GetRouteEdge(route_info->id,i));
-            cout << "Edge: " << router_->GetRouteEdge(route_info->id,i) << " " 
-            << "Bus: " << edge.weight.item_name_ << " " << "Time: " << edge.weight.time_ << endl;
-        }
-    } else {
-        cout << "Route not found\n";
-    }
-    cout << endl;
-    return nullopt;
+    return route_info;
 }

@@ -320,23 +320,68 @@ Json::Node StopRequest::Process(const BusDatabase& db) const {
     return Json::Node(res);
 }
 Json::Node RouteRequest::Process(const BusDatabase& db) const {
-    db.BuildRoute(from_,to_);
+    auto route = db.BuildRoute(from_,to_);
     map<string,Json::Node> res;
     res["request_id"] = Json::Node(*id_);
-    // if(route) {
-    //     size_t route_id = route->id;
-    //     size_t num_edges = route->edge_count;
-    //     res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
-    //     string_view first_stop = db.GetRouteEdge(route_id,0).weight.bus_name_;
+    if(route) {
+        size_t route_id = route->id;
+        size_t num_edges = route->edge_count;
 
-    //     vector<Json::Node> items();
+        if(!num_edges) {
+            res["total_time"] = 0;
+            res["items"] = vector<Json::Node>();
+            return res;
+        }
 
-    //     while(num_edges--) {
-    //     }
-    // } else {
-    //     res["error_message"] = Json::Node(string("not found"));
-    // }
-    return Json::Node(res);
+        res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
+
+        vector<Json::Node> items;
+        items.push_back(map<string,Json::Node> {
+            {"name", from_},
+            {"time", db.GetRouteSettings().bus_wait_time_},
+            {"type", string("Wait")}
+        });
+
+        for(size_t i = 0; i < num_edges;) {
+            auto edge_info = db.GetRouteEdge(route_id,i).weight;
+            switch(edge_info.type_) {
+            case EdgeType::CHANGE:
+                items.push_back(map<string,Json::Node> {
+                    {"name", string(edge_info.item_name_)},
+                    {"time", db.GetRouteSettings().bus_wait_time_},
+                    {"type", string("Wait")}
+                });
+                i++;
+                break;
+            case EdgeType::RIDE: {
+                string bus_name = string(edge_info.item_name_);
+                int span_count = 1;
+                double time = edge_info.time_;
+                i++;
+                for(;i < num_edges; i++) {
+                    edge_info = db.GetRouteEdge(route_id,i).weight;
+                    if(edge_info.type_ != EdgeType::RIDE) break;
+                    span_count++;
+                    time += edge_info.time_;
+                }
+                items.push_back(map<string,Json::Node> {
+                    {"name", bus_name},
+                    {"time", time},
+                    {"span_count", span_count},
+                    {"type", string("Bus")}
+                });
+            }
+                break;
+            default:
+                throw runtime_error("Wrong edge type");
+                break;
+            }
+        }
+        res["items"] = move(items);
+    } else {
+        res["error_message"] = Json::Node(string("not found"));
+    }
+    return Json::Node(move(res));
 }
 void AddBusRequest::Process(BusDatabase& db) const {
     db.AddBus(
