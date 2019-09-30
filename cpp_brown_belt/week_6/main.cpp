@@ -111,7 +111,7 @@ int main(void) {
     {
       "type": "Stop",
       "road_distances": {
-        "Pokrovskaya": 2850
+        "Pokrovskaya": 5000
       },
       "longitude": 37.642258,
       "name": "TETs 26",
@@ -231,6 +231,12 @@ int main(void) {
       "type": "Route",
       "from": "Biryulyovo Zapadnoye",
       "to": "Tolstopaltsevo",
+      "id": 11
+    }
+    {
+      "type": "Route",
+      "from": "Universam",
+      "to": "Pokrovskaya",
       "id": 11
     }
   ]

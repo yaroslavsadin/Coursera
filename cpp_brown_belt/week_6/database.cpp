@@ -3,6 +3,7 @@
 #include <cmath>
 #include <variant>
 #include <cassert>
+#include <numeric>
 
 using namespace std;
 
@@ -106,34 +107,63 @@ void BusDatabase::SetBusVelocity(int x) {
     route_settings_.bus_velocity_ = x;
 }
 
-void BusDatabase::AddEdgesToGraph(const string& bus_name, const string& stop_from, const string& stop_to,
-map<pair<string_view,string_view>,int>& existing_edges, vector<Graph::Edge<EdgeWeight>>& edges) const {
-    if(existing_edges.count({stop_from,stop_to})) {
-        edges[existing_edges.at({stop_from,stop_to})].weight.buses_on_edge.insert(bus_name);
-    } else {
-        double distance = stops_.at(stop_from).distance_to_stop_.at(stop_to) 
-                                / 1000. / route_settings_.bus_velocity_ * 60;
-        edges.push_back( {  stops_.at(stop_from).id_,
-                            stops_.at(stop_to).id_,
-                            EdgeWeight( bus_name, distance, route_settings_.bus_wait_time_)
-                        } );
-        existing_edges[{stop_from,stop_to}] = edges.size() - 1;
-    }
-}
-
 Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
     // Create a graph which uses stops as vertices and buses as edges
      if(graph_.GetVertexCount() == 0) {
-        graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(stops_.size());
-        map<pair<string_view,string_view>,int> existing_edges;
-        vector<Graph::Edge<EdgeWeight>> edges;
+        size_t num_stops = accumulate(buses_.begin(),buses_.end(),0,
+        [](const size_t acc, const Buses::value_type& rhs){
+            return acc + (rhs.second.route_type == Bus::RouteType::LINEAR) ? 
+            rhs.second.stops * 2 : rhs.second.stops + 1;
+        });
+
+        graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(num_stops);
+        
+        // vector<Graph::Edge<EdgeWeight>> edges;
+        Graph::VertexId stop_vertex_id = 0;
         for(const auto& [name,bus] : buses_) {
+            for(const auto& stop : bus.route) {
+                stop_to_id_list_[stop].push_back(stop_vertex_id++);
+            }
             for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
                 const auto& stop_from = *prev(it);
                 const auto& stop_to = *it;
-                AddEdgesToGraph(name, stop_from, stop_to,existing_edges, edges);
+                edges.push_back(
+                    Graph::Edge<EdgeWeight> {
+                        stop_to_id_list_[stop_from].back(),
+                        stop_to_id_list_[stop_to].back(),
+                        EdgeWeight(EdgeType::RIDE, stops_.at(stop_from).distance_to_stop_.at(stop_to) 
+                        / 1000. / route_settings_.bus_velocity_ * 60, name)
+                    }
+                );
                 if(bus.route_type == Bus::RouteType::LINEAR) {
-                    AddEdgesToGraph(name, stop_to, stop_from,existing_edges, edges);
+                    edges.push_back(
+                        Graph::Edge<EdgeWeight> {
+                            stop_to_id_list_[stop_to].back(),
+                            stop_to_id_list_[stop_from].back(),
+                            EdgeWeight(EdgeType::RIDE, stops_.at(stop_to).distance_to_stop_.at(stop_from) 
+                            / 1000. / route_settings_.bus_velocity_ * 60, name)
+                        }
+                    );
+                }
+                if(bus.route_type == Bus::RouteType::CIRCULAR && next(it) == bus.route.end()) {
+                    //TODO
+                }
+            }
+        }
+        for(const auto& stop_vertices : stop_to_id_list_) {
+            const auto& vertex_indices = stop_vertices.second;
+            if(vertex_indices.size() > 1) {
+                for(auto it_from = vertex_indices.begin(); it_from < vertex_indices.end(); it_from++) {
+                    for(auto it_to = vertex_indices.begin(); it_to < vertex_indices.end(); it_to++)
+                        if(it_from != it_to) {
+                            edges.push_back(
+                                Graph::Edge<EdgeWeight> {
+                                    *it_from,
+                                    *it_to,
+                                    EdgeWeight(EdgeType::CHANGE, route_settings_.bus_wait_time_, "NONE")
+                                }
+                            );
+                        }
                 }
             }
         }
@@ -144,28 +174,21 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
     return Graph::Router(graph_);
 }
 
+#include "test_runner.h"
+
 std::optional<Graph::Router<EdgeWeight>::RouteInfo> 
 BusDatabase::BuildRoute(const string& from, const string& to) const {
     cerr << "Entered BuildRoute" << endl;
     auto router = InitRouter();
-    if(auto route_info = router.BuildRoute(stops_.at(from).id_, stops_.at(to).id_); 
+    if(auto route_info = router.BuildRoute(stop_to_id_list_.at(from).back(), stop_to_id_list_.at(to).back()); 
     route_info.has_value()) {
-        cout << "Time: " << route_info->weight.time_ << endl;
+        cout << route_info->weight.time_ << endl;
         for(size_t i = 0; i < route_info->edge_count; i++) {
-            auto edge = router.GetRouteEdge(route_info->id,i);
-            cout << edge_id_to_bus_name_[edge] << endl;
+            cout << edges[router.GetRouteEdge(route_info->id,i)].weight.bus_name_  << " " << edges[router.GetRouteEdge(route_info->id,i)].weight.time_ << endl;
         }
     } else {
         cout << "Route not found\n";
     }
-    // cerr << "Buses edge IDs:\n------------------------\n";
-    // for(size_t it = 0; it < edge_id_to_bus_name_.size(); it++) {
-    //     cerr << it << ": " << edge_id_to_bus_name_[it] << endl;
-    // }
-    // cerr << "Stop IDs:\n------------------------\n";
-    // for(const auto& [stop,data] : stops_) {
-    //     cerr << data.id_ << ": " << stop << endl;
-    // }
     cout << endl;
     return nullopt;
 }

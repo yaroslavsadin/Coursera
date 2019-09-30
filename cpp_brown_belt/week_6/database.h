@@ -40,33 +40,33 @@ struct Bus {
 
 double CalcDistance(const Stop& from, const Stop& to);
 
+enum class EdgeType {
+    CHANGE,
+    RIDE
+};
+
 struct EdgeWeight {
-    std::set<std::string> buses_on_edge;
+    EdgeType type_;
     double time_;
-    int stop_wait_time;
+    std::string_view bus_name_;
 
     bool operator>(const EdgeWeight& other) const {
         return this->time_ > other.time_;
     }
+
     bool operator<(const EdgeWeight& other) const {
         return this->time_ < other.time_;
     }
-    EdgeWeight operator + (const EdgeWeight& other) const {
-        EdgeWeight tmp(*this);       //create a copy of this to modify
-        tmp.buses_on_edge.insert(other.buses_on_edge.begin(),other.buses_on_edge.end());
-        //modify this new copy and not the original
-        for(const auto bus_in_other : other.buses_on_edge) {
-            if(buses_on_edge.count(bus_in_other)){
-                return tmp;
-            }
-        }      
-        tmp.time_ += stop_wait_time;
-        return tmp;                  //return the modified copy
+
+    EdgeWeight operator+(const EdgeWeight& other) const {
+        EdgeWeight tmp(*this);
+        tmp.time_ += other.time_;
+        return tmp;
     }
 
-   explicit EdgeWeight(double x) : time_(x) {}
-   EdgeWeight(const std::string s, double x, int t) 
-   : buses_on_edge({s}), time_(x), stop_wait_time(t) {}
+    EdgeWeight(double time) : time_(time) {}
+    EdgeWeight(EdgeType type, double time, std::string_view bus_name) 
+    : type_(type), time_(time), bus_name_(bus_name) {}
 };
 
 class BusDatabase {
@@ -90,15 +90,13 @@ public:
     Graph::Router<EdgeWeight> InitRouter(void) const;
     std::optional<Graph::Router<EdgeWeight>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
 private:
-    void AddEdgesToGraph(const std::string& bus_name, const std::string& from, const std::string& to, 
-    std::map<std::pair<std::string_view,std::string_view>,int>& existing_edges, 
-    std::vector<Graph::Edge<EdgeWeight>>& edges) const;
     Distances ComputeDistance(const Bus& bus) const;
     StopId current_stop_id_ = 0;
     Stops stops_;
     Buses buses_;
     RouteSettings route_settings_;
+    mutable std::vector<Graph::Edge<EdgeWeight>> edges;
+    mutable std::unordered_map<std::string_view,std::vector<size_t>> stop_to_id_list_;
     mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
-    mutable std::vector<std::string> edge_id_to_bus_name_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 };
