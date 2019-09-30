@@ -46,7 +46,7 @@ enum class EdgeType {
 struct EdgeWeight {
     EdgeType type_;
     double time_;
-    std::string_view bus_name_;
+    std::string_view item_name_;
 
     bool operator>(const EdgeWeight& other) const {
         return this->time_ > other.time_;
@@ -64,7 +64,7 @@ struct EdgeWeight {
 
     EdgeWeight(double time) : time_(time) {}
     EdgeWeight(EdgeType type, double time, std::string_view bus_name) 
-    : type_(type), time_(time), bus_name_(bus_name) {}
+    : type_(type), time_(time), item_name_(bus_name) {}
 };
 
 class BusDatabase {
@@ -87,6 +87,9 @@ public:
     void SetBusVelocity(int x);
     std::optional<Graph::Router<EdgeWeight>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
     const RouteSettings& GetRouteSettings() const { return route_settings_; };
+    const auto GetRouteEdge(size_t route_id, size_t edge_id) const { 
+        return graph_.GetEdge(router_->GetRouteEdge(route_id,edge_id)); 
+    }
 private:
     Distances ComputeDistance(const Bus& bus) const;
     Stops stops_;
@@ -99,8 +102,6 @@ private:
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
 
     template<typename It>
-    Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, 
-    Range<It> bus_range, Bus::RouteType route_type) const;
-    
+    Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, Range<It> bus_range) const;
     Graph::Router<EdgeWeight> InitRouter(void) const;
 };

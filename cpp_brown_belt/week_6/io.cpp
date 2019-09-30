@@ -324,10 +324,11 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
     map<string,Json::Node> res;
     res["request_id"] = Json::Node(*id_);
     // if(route) {
-    //     res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
-    //     string_view first_stop = 
-
+    //     size_t route_id = route->id;
     //     size_t num_edges = route->edge_count;
+    //     res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
+    //     string_view first_stop = db.GetRouteEdge(route_id,0).weight.bus_name_;
+
     //     vector<Json::Node> items();
 
     //     while(num_edges--) {
