@@ -107,13 +107,33 @@ void BusDatabase::SetBusVelocity(int x) {
     route_settings_.bus_velocity_ = x;
 }
 
+template<typename It>
+Graph::VertexId BusDatabase::AddRoute(Graph::VertexId stop_vertex_id, const string name, 
+Range<It> bus_range, Bus::RouteType route_type) const {
+    stop_to_id_list_[*bus_range.begin()].push_back(stop_vertex_id++);
+    for(auto it = bus_range.begin() + 1; it < bus_range.end(); it++) {
+        const auto& stop_from = *prev(it);
+        const auto& stop_to = *it;
+        stop_to_id_list_[stop_to].push_back(stop_vertex_id++);
+        edges.push_back(
+            Graph::Edge<EdgeWeight> {
+                stop_to_id_list_[stop_from].back(),
+                stop_to_id_list_[stop_to].back(),
+                EdgeWeight(EdgeType::RIDE, stops_.at(stop_from).distance_to_stop_.at(stop_to) 
+                / 1000. / route_settings_.bus_velocity_ * 60, name)
+            }
+        );
+    }
+    return stop_vertex_id;
+}
+
 Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
     // Create a graph which uses stops as vertices and buses as edges
      if(graph_.GetVertexCount() == 0) {
         size_t num_stops = accumulate(buses_.begin(),buses_.end(),0,
         [](const size_t acc, const Buses::value_type& rhs){
             return acc + ((rhs.second.route_type == Bus::RouteType::LINEAR) ? 
-            rhs.second.stops : rhs.second.stops + 1);
+            rhs.second.stops * 2 : rhs.second.stops + 1);
         });
 
         graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(num_stops);
@@ -122,38 +142,10 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
         Graph::VertexId stop_vertex_id = 0;
         for(const auto& [name,bus] : buses_) {
             if(bus.route_type == Bus::RouteType::LINEAR) {
-                for(const auto& stop : bus.route) {
-                    stop_to_id_list_[stop].push_back(stop_vertex_id++);
-                }
+                stop_vertex_id = AddRoute(stop_vertex_id, name, Range(bus.route.begin(),bus.route.end()), Bus::RouteType::LINEAR);
+                stop_vertex_id = AddRoute(stop_vertex_id, name, Range(bus.route.rbegin(),bus.route.rend()), Bus::RouteType::LINEAR);
             } else {
-                for(const auto& stop : Range(bus.route.begin(),bus.route.end()-1)) {
-                    stop_to_id_list_[stop].push_back(stop_vertex_id++);
-                }
-            }
-            for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
-                const auto& stop_from = *prev(it);
-                const auto& stop_to = *it;
-                if(bus.route_type == Bus::RouteType::CIRCULAR && next(it) == bus.route.end()) {
-                    stop_to_id_list_[stop_to].push_back(stop_vertex_id++);
-                }
-                edges.push_back(
-                    Graph::Edge<EdgeWeight> {
-                        stop_to_id_list_[stop_from].back(),
-                        stop_to_id_list_[stop_to].back(),
-                        EdgeWeight(EdgeType::RIDE, stops_.at(stop_from).distance_to_stop_.at(stop_to) 
-                        / 1000. / route_settings_.bus_velocity_ * 60, name)
-                    }
-                );
-                if(bus.route_type == Bus::RouteType::LINEAR) {
-                    edges.push_back(
-                        Graph::Edge<EdgeWeight> {
-                            stop_to_id_list_[stop_to].back(),
-                            stop_to_id_list_[stop_from].back(),
-                            EdgeWeight(EdgeType::RIDE, stops_.at(stop_to).distance_to_stop_.at(stop_from) 
-                            / 1000. / route_settings_.bus_velocity_ * 60, name)
-                        }
-                    );
-                }
+                stop_vertex_id = AddRoute(stop_vertex_id, name, Range(bus.route.begin(),bus.route.end()), Bus::RouteType::CIRCULAR);
             }
         }
         for(const auto& stop_vertices : stop_to_id_list_) {

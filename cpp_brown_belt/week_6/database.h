@@ -95,6 +95,8 @@ private:
     Stops stops_;
     Buses buses_;
     RouteSettings route_settings_;
+    template<typename It>
+    Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, Range<It> bus_range, Bus::RouteType route_type) const;
     mutable std::vector<Graph::Edge<EdgeWeight>> edges;
     mutable std::unordered_map<std::string_view,std::vector<size_t>> stop_to_id_list_;
     mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
