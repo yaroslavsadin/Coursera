@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <cassert>
+#include "router.h"
 
 using namespace std;
 
@@ -320,7 +321,21 @@ Json::Node StopRequest::Process(const BusDatabase& db) const {
 }
 Json::Node RouteRequest::Process(const BusDatabase& db) const {
     db.BuildRoute(from_,to_);
-    return Json::Node(string("not found"));
+    map<string,Json::Node> res;
+    res["request_id"] = Json::Node(*id_);
+    // if(route) {
+    //     res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
+    //     string_view first_stop = 
+
+    //     size_t num_edges = route->edge_count;
+    //     vector<Json::Node> items();
+
+    //     while(num_edges--) {
+    //     }
+    // } else {
+    //     res["error_message"] = Json::Node(string("not found"));
+    // }
+    return Json::Node(res);
 }
 void AddBusRequest::Process(BusDatabase& db) const {
     db.AddBus(

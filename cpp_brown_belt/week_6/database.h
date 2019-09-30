@@ -17,10 +17,8 @@ struct Bus;
 using Stops = std::unordered_map< std::string , Stop >;
 using StopsRange = std::vector<std::string>;
 using Buses = std::unordered_map< std::string , Bus >;
-using StopId = size_t;
 
 struct Stop {
-    StopId id_;
     double latitude;
     double longtitude;
     std::set<std::string> buses;
@@ -87,18 +85,22 @@ public:
     const Distances& GetBusDistance(const std::string& name) const;
     void SetBusWaitTime(int x);
     void SetBusVelocity(int x);
-    Graph::Router<EdgeWeight> InitRouter(void) const;
     std::optional<Graph::Router<EdgeWeight>::RouteInfo> BuildRoute(const std::string& from, const std::string& to) const;
+    const RouteSettings& GetRouteSettings() const { return route_settings_; };
 private:
     Distances ComputeDistance(const Bus& bus) const;
-    StopId current_stop_id_ = 0;
     Stops stops_;
     Buses buses_;
     RouteSettings route_settings_;
-    template<typename It>
-    Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, Range<It> bus_range, Bus::RouteType route_type) const;
-    mutable std::vector<Graph::Edge<EdgeWeight>> edges;
+
     mutable std::unordered_map<std::string_view,std::vector<size_t>> stop_to_id_list_;
     mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
+    mutable std::optional<Graph::Router<EdgeWeight>> router_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
+
+    template<typename It>
+    Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, 
+    Range<It> bus_range, Bus::RouteType route_type) const;
+    
+    Graph::Router<EdgeWeight> InitRouter(void) const;
 };
