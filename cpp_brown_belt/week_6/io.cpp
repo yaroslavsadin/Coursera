@@ -337,7 +337,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
 
         vector<Json::Node> items;
         items.push_back(map<string,Json::Node> {
-            {"name", from_},
+            {"stop_name", from_},
             {"time", db.GetRouteSettings().bus_wait_time_},
             {"type", string("Wait")}
         });
@@ -347,14 +347,14 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
             switch(edge_info.type_) {
             case EdgeType::CHANGE:
                 items.push_back(map<string,Json::Node> {
-                    {"name", string(edge_info.item_name_)},
+                    {"stop_name", edge_info.item_name_},
                     {"time", db.GetRouteSettings().bus_wait_time_},
                     {"type", string("Wait")}
                 });
                 i++;
                 break;
             case EdgeType::RIDE: {
-                string bus_name = string(edge_info.item_name_);
+                string bus_name = edge_info.item_name_;
                 int span_count = 1;
                 double time = edge_info.time_;
                 i++;
@@ -365,7 +365,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
                     time += edge_info.time_;
                 }
                 items.push_back(map<string,Json::Node> {
-                    {"name", bus_name},
+                    {"bus", bus_name},
                     {"time", time},
                     {"span_count", span_count},
                     {"type", string("Bus")}

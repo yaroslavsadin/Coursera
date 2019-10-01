@@ -46,7 +46,7 @@ enum class EdgeType {
 struct EdgeWeight {
     EdgeType type_;
     double time_;
-    std::string_view item_name_;
+    std::string item_name_;
 
     bool operator>(const EdgeWeight& other) const {
         return this->time_ > other.time_;
@@ -63,7 +63,7 @@ struct EdgeWeight {
     }
 
     EdgeWeight(double time) : time_(time) {}
-    EdgeWeight(EdgeType type, double time, std::string_view bus_name) 
+    EdgeWeight(EdgeType type, double time, std::string bus_name) 
     : type_(type), time_(time), item_name_(bus_name) {}
 };
 
@@ -96,7 +96,7 @@ private:
     Buses buses_;
     RouteSettings route_settings_;
 
-    mutable std::unordered_map<std::string_view,std::vector<size_t>> stop_to_id_list_;
+    mutable std::unordered_map<std::string,std::vector<size_t>> stop_to_id_list_;
     mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
     mutable std::optional<Graph::Router<EdgeWeight>> router_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
