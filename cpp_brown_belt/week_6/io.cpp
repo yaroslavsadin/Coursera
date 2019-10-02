@@ -333,16 +333,11 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
             return res;
         }
 
-        res["total_time"] = Json::Node(route->weight.time_ + db.GetRouteSettings().bus_wait_time_);
+        res["total_time"] = Json::Node(route->weight.time_ );
 
         vector<Json::Node> items;
-        items.push_back(map<string,Json::Node> {
-            {"stop_name", from_},
-            {"time", db.GetRouteSettings().bus_wait_time_},
-            {"type", string("Wait")}
-        });
 
-        for(size_t i = 0; i < num_edges;) {
+        for(size_t i = 0; i < num_edges;i++) {
             auto edge_info = db.GetRouteEdge(route_id,i).weight;
             switch(edge_info.type_) {
             case EdgeType::CHANGE:
@@ -351,29 +346,15 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
                     {"time", db.GetRouteSettings().bus_wait_time_},
                     {"type", string("Wait")}
                 });
-                i++;
                 break;
             case EdgeType::RIDE: {
-                string bus_name = edge_info.item_name_;
-                int span_count = 1;
-                double time = edge_info.time_;
-                i++;
-                for(;i < num_edges; i++) {
-                    edge_info = db.GetRouteEdge(route_id,i).weight;
-                    if(edge_info.type_ != EdgeType::RIDE) break;
-                    span_count++;
-                    time += edge_info.time_;
-                }
                 items.push_back(map<string,Json::Node> {
-                    {"bus", bus_name},
-                    {"time", time},
-                    {"span_count", span_count},
+                    {"bus", edge_info.item_name_},
+                    {"time", edge_info.time_},
+                    {"span_count", edge_info.span_count_},
                     {"type", string("Bus")}
                 });
             }
-                break;
-            case EdgeType::AUX:
-                i++;
                 break;
             default:
                 throw runtime_error("Wrong edge type");
