@@ -122,12 +122,14 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
                     EdgeWeight(EdgeType::CHANGE, route_settings_.bus_wait_time_, stop_from)
                 }
             );
-            double cumulative_distance = 0.;
+            double cumulative_distance_straight = 0.;
+            double cumulative_distance_reverse = 0.;
             for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
                 const auto& stop_to = *it_to;
                 if(stop_from != stop_to) {
                     const auto& prev_stop = *prev(it_to);
-                    cumulative_distance += GetRideTime(prev_stop, stop_to);
+                    cumulative_distance_straight += GetRideTime(prev_stop, stop_to);
+                    cumulative_distance_reverse += GetRideTime(stop_to, prev_stop);
                 }
                 graph_.AddEdge(
                     Graph::Edge<EdgeWeight> {
@@ -135,7 +137,7 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
                         stops_.at(stop_to).id_.change,
                         EdgeWeight(
                             EdgeType::RIDE, 
-                            cumulative_distance, 
+                            cumulative_distance_straight, 
                             bus_name,
                             it_to - it_from
                         )
@@ -148,7 +150,7 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
                         stops_.at(stop_from).id_.change,
                         EdgeWeight(
                             EdgeType::RIDE, 
-                            cumulative_distance, 
+                            cumulative_distance_reverse, 
                             bus_name,
                             it_to - it_from
                         )
