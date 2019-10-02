@@ -96,10 +96,11 @@ private:
     Buses buses_;
     RouteSettings route_settings_;
 
-    mutable std::unordered_map<std::string,std::vector<size_t>> stop_to_id_list_;
+    mutable std::unordered_map<std::string,std::vector<size_t>> stop_to_vertex_;
     mutable Graph::DirectedWeightedGraph<EdgeWeight> graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(0);
     mutable std::optional<Graph::Router<EdgeWeight>> router_;
     mutable std::unordered_map< std::string_view , Distances > bus_to_distance_;
+    mutable std::vector<int> routes;
 
     template<typename It>
     Graph::VertexId AddRoute(Graph::VertexId stop_vertex_id, const std::string name, Range<It> bus_range) const;

@@ -108,15 +108,15 @@ void BusDatabase::SetBusVelocity(int x) {
 
 template<typename It>
 Graph::VertexId BusDatabase::AddRoute(Graph::VertexId stop_vertex_id, const string name, Range<It> bus_range) const {
-    stop_to_id_list_[*bus_range.begin()].push_back(stop_vertex_id++);
+    stop_to_vertex_[*bus_range.begin()].push_back(stop_vertex_id++);
     for(auto it = bus_range.begin() + 1; it < bus_range.end(); it++) {
         const auto& stop_from = *prev(it);
         const auto& stop_to = *it;
-        stop_to_id_list_[stop_to].push_back(stop_vertex_id++);
+        stop_to_vertex_[stop_to].push_back(stop_vertex_id++);
         graph_.AddEdge(
             Graph::Edge<EdgeWeight> {
-                stop_to_id_list_[stop_from].back(),
-                stop_to_id_list_[stop_to].back(),
+                stop_to_vertex_[stop_from].back(),
+                stop_to_vertex_[stop_to].back(),
                 EdgeWeight(EdgeType::RIDE, stops_.at(stop_from).distance_to_stop_.at(stop_to) 
                 / 1000. / route_settings_.bus_velocity_ * 60, name)
             }
@@ -125,12 +125,14 @@ Graph::VertexId BusDatabase::AddRoute(Graph::VertexId stop_vertex_id, const stri
     return stop_vertex_id;
 }
 
+#include "test_runner.h"
+
 Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
     // Create a graph which uses stops as vertices and buses as edges
     size_t num_stops = accumulate(buses_.begin(),buses_.end(),0,
     [](const size_t acc, const Buses::value_type& rhs){
         return acc + ((rhs.second.route_type == Bus::RouteType::LINEAR) ? 
-        rhs.second.stops * 2 : rhs.second.stops + 1);
+        rhs.second.route.size() * 2 : rhs.second.route.size() + 1);
     });
 
     graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(num_stops);
@@ -145,7 +147,7 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
             stop_vertex_id = AddRoute(stop_vertex_id, name, Range(bus.route.begin(),bus.route.end()));
         }
     }
-    for(const auto& stop_vertices : stop_to_id_list_) {
+    for(const auto& stop_vertices : stop_to_vertex_) {
         const auto& vertex_indices = stop_vertices.second;
         if(vertex_indices.size() > 1) {
             for(auto it_from = vertex_indices.begin(); it_from < vertex_indices.end(); it_from++) {
@@ -163,16 +165,22 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
             }
         }
     }
+    cerr << "-----------> DEBUG" << endl;
+    cerr << "Edge Count: " << graph_.GetEdgeCount() << endl;
+    cerr << "Vertex Count: " << num_stops << endl;
+    cerr << "Last vertex ID: " << stop_vertex_id << endl;
+    cerr << endl << stop_to_vertex_ << endl;
+    cerr << "-----------" << endl;
     return Graph::Router(graph_);
 }
 
 std::optional<Graph::Router<EdgeWeight>::RouteInfo> 
 BusDatabase::BuildRoute(const string& from, const string& to) const {
     if(!router_) router_.emplace(InitRouter());
-    
+
     std::optional<Graph::Router<EdgeWeight>::RouteInfo> route_info;
-    for(const auto& stop_from : stop_to_id_list_.at(from)) {
-        for(const auto& stop_to : stop_to_id_list_.at(to)) {
+    for(const auto& stop_from : stop_to_vertex_.at(from)) {
+        for(const auto& stop_to : stop_to_vertex_.at(to)) {
             if(auto route_info_new = router_->BuildRoute(stop_from, stop_to)) {
                 if(!route_info || route_info->weight.time_ > route_info_new->weight.time_) {
                     route_info = route_info_new;
@@ -180,5 +188,6 @@ BusDatabase::BuildRoute(const string& from, const string& to) const {
             }
         }
     }
+    routes.push_back(route_info->id);
     return route_info;
 }
