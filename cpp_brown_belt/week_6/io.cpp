@@ -372,6 +372,9 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
                 });
             }
                 break;
+            case EdgeType::AUX:
+                i++;
+                break;
             default:
                 throw runtime_error("Wrong edge type");
                 break;

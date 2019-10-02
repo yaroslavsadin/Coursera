@@ -40,7 +40,8 @@ double CalcDistance(const Stop& from, const Stop& to);
 
 enum class EdgeType {
     CHANGE,
-    RIDE
+    RIDE,
+    AUX
 };
 
 struct EdgeWeight {
