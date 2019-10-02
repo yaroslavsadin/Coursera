@@ -141,6 +141,20 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
                         )
                     }
                 );
+                if(bus_data.route_type == Bus::RouteType::LINEAR) {
+                    graph_.AddEdge(
+                    Graph::Edge<EdgeWeight> {
+                        stops_.at(stop_to).id_.board,
+                        stops_.at(stop_from).id_.change,
+                        EdgeWeight(
+                            EdgeType::RIDE, 
+                            cumulative_distance, 
+                            bus_name,
+                            it_to - it_from
+                        )
+                    }
+                );
+                }
             }
         }
     }

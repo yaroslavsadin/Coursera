@@ -217,5 +217,11 @@
       "to": "Tolstopaltsevo",
       "id": 11
     }
+    {
+      "type": "Route",
+      "from": "Rossoshanskaya ulitsa",
+      "to": "Universam",
+      "id": 12
+    }
   ]
 }
