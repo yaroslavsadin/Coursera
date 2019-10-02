@@ -123,46 +123,24 @@ Graph::Router<EdgeWeight> BusDatabase::InitRouter(void) const {
                 }
             );
             double cumulative_distance = 0.;
-            if(bus_data.route_type == Bus::RouteType::LINEAR) {
-                for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
-                    const auto& stop_to = *it_to;
-                    if(stop_from != stop_to) {
-                        const auto& prev_stop = *prev(it_to);
-                        cumulative_distance += GetRideTime(prev_stop, stop_to);
-                    }
-                    graph_.AddEdge(
-                        Graph::Edge<EdgeWeight> {
-                            stops_.at(stop_from).id_.board,
-                            stops_.at(stop_to).id_.change,
-                            EdgeWeight(
-                                EdgeType::RIDE, 
-                                cumulative_distance, 
-                                bus_name,
-                                it_to - it_from
-                            )
-                        }
-                    );
+            for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
+                const auto& stop_to = *it_to;
+                if(stop_from != stop_to) {
+                    const auto& prev_stop = *prev(it_to);
+                    cumulative_distance += GetRideTime(prev_stop, stop_to);
                 }
-            } else {
-                for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
-                    const auto& stop_to = *it_to;
-                    if(stop_from != stop_to) {
-                        const auto& prev_stop = *prev(it_to);
-                        cumulative_distance += GetRideTime(prev_stop, stop_to);
+                graph_.AddEdge(
+                    Graph::Edge<EdgeWeight> {
+                        stops_.at(stop_from).id_.board,
+                        stops_.at(stop_to).id_.change,
+                        EdgeWeight(
+                            EdgeType::RIDE, 
+                            cumulative_distance, 
+                            bus_name,
+                            it_to - it_from
+                        )
                     }
-                    graph_.AddEdge(
-                        Graph::Edge<EdgeWeight> {
-                            stops_.at(stop_from).id_.board,
-                            stops_.at(stop_to).id_.change,
-                            EdgeWeight(
-                                EdgeType::RIDE, 
-                                cumulative_distance, 
-                                bus_name,
-                                it_to - it_from
-                            )
-                        }
-                    );
-                }
+                );
             }
         }
     }
