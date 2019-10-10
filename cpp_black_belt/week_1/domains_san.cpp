@@ -70,8 +70,11 @@ private:
 bool IsSubdomain(const Domain& subdomain, const Domain& domain) {
   const auto subdomain_reversed_parts = subdomain.GetReversedParts();
   const auto domain_reversed_parts = domain.GetReversedParts();
-  return subdomain.GetPartCount() >= domain.GetPartCount() && equal(begin(domain_reversed_parts), end(domain_reversed_parts),
-               begin(subdomain_reversed_parts), begin(subdomain_reversed_parts) + distance(begin(domain_reversed_parts),end(domain_reversed_parts)));
+  return subdomain.GetPartCount() >= domain.GetPartCount() && 
+        equal(begin(domain_reversed_parts), end(domain_reversed_parts),
+              begin(subdomain_reversed_parts), begin(subdomain_reversed_parts) 
+              + distance(begin(domain_reversed_parts),end(domain_reversed_parts))
+             );
 }
 
 bool IsSubOrSuperDomain(const Domain& lhs, const Domain& rhs) {
@@ -181,11 +184,11 @@ void TestIsSubdomain() {
     ASSERT(IsSubdomain(subdomain,domain));
   }
   {
-    string d1 {"synopsys.com"};
-    string d2 {"crm.synopsys.com"};
+    string d1 {"crm.synopsys.com"};
+    string d2 {"rm.synopsys.com"};
     Domain domain{d1};
     Domain subdomain{d2};
-    ASSERT(IsSubdomain(subdomain,domain));
+    ASSERT(!IsSubdomain(subdomain,domain));
   }
   {
     string d1 {"synopsys.com"};
@@ -207,7 +210,7 @@ ya.ru
 maps.me
 m.ya.ru
 com
-7
+10
 ya.ru
 ya.com
 m.maps.me
@@ -215,10 +218,13 @@ moscow.m.ya.ru
 maps.com
 maps.ru
 ya.ya
+com
+maps.maps.me
+a.ru
   )"
   };
-  const vector<Domain> banned_domains = ReadDomains(is);
-  const vector<Domain> domains_to_check = ReadDomains(is);
+  const vector<Domain> banned_domains = ReadDomains(cin);
+  const vector<Domain> domains_to_check = ReadDomains(cin);
   PrintCheckResults(CheckDomains(banned_domains, domains_to_check));
   return 0;
 }
