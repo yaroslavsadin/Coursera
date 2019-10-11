@@ -148,21 +148,22 @@ template <typename Data, typename BulkOperation>
 class BaseBulkOperation {
 public:
   using TreeHolder = SummingSegmentTreeHolder<Data, BulkOperation>;
-  BaseBulkOperation(const TreeHolder& tree) : tree_(tree.get()) {}
+  BaseBulkOperation(typename TreeHolder::element_type* tree) : tree_(tree) {}
+  virtual ~BaseBulkOperation() = default;
 private:
-  TreeHolder tree_;
+  typename TreeHolder::element_type* tree_;
 };
 
 class BulkLinearUpdater : BaseBulkOperation<MoneyState, BulkLinearUpdater> {
 public:
-  BulkLinearUpdater(const TreeHolder& tree = nullptr) : BaseBulkOperation(tree) {}
+  BulkLinearUpdater(typename TreeHolder::element_type* tree = nullptr) : BaseBulkOperation(tree) {}
 
-  BulkLinearUpdater(const TreeHolder& tree, const BulkMoneyAdder& add)
+  BulkLinearUpdater(typename TreeHolder::element_type* tree, const BulkMoneyAdder& add)
       : BaseBulkOperation(tree),
         add_(add)
   {}
 
-  BulkLinearUpdater(const TreeHolder& tree, const BulkTaxApplier& tax)
+  BulkLinearUpdater(typename TreeHolder::element_type* tree, const BulkTaxApplier& tax)
       : BaseBulkOperation(tree),
         tax_(tax)
   {}
@@ -203,8 +204,11 @@ private:
   struct Node;
 
   struct Node {
-    Node* left;
-    Node* right;
+    Node(unique_ptr<Node> left_, unique_ptr<Node> right_, IndexSegment segment_)
+    : left(move(left_)), right(move(right_)), segment(segment_) 
+    {}
+    unique_ptr<Node> left;
+    unique_ptr<Node> right;
     IndexSegment segment;
     Data data;
     BulkOperation postponed_bulk_operation;
@@ -212,22 +216,22 @@ private:
 
   std::unique_ptr<Node> root_;
 
-  static Node* Build(IndexSegment segment) {
+  static unique_ptr<Node> Build(IndexSegment segment) {
     if (segment.empty()) {
       return nullptr;
     } else if (segment.length() == 1) {
-      return new Node{
-        .left = nullptr,
-        .right = nullptr,
-        .segment = segment,
-      };
+      return make_unique<Node>(
+        nullptr,
+        nullptr,
+        segment
+      );
     } else {
       const size_t middle = segment.left + segment.length() / 2;
-      return new Node{
-        .left = Build({segment.left, middle}),
-        .right = Build({middle, segment.right}),
-        .segment = segment,
-      };
+      return make_unique<Node>(
+        Build({segment.left, middle}),
+        Build({middle, segment.right}),
+        segment
+      );
     }
   }
 
@@ -241,14 +245,14 @@ private:
         return visitor.ProcessFull(node);
       } else {
         if constexpr (is_void_v<typename Visitor::ResultType>) {
-          TraverseWithQuery(node->left, query_segment, visitor);
-          TraverseWithQuery(node->right, query_segment, visitor);
+          TraverseWithQuery(node->left.get(), query_segment, visitor);
+          TraverseWithQuery(node->right.get(), query_segment, visitor);
           return visitor.ProcessPartial(node, query_segment);
         } else {
           return visitor.ProcessPartial(
               node, query_segment,
-              TraverseWithQuery(node->left, query_segment, visitor),
-              TraverseWithQuery(node->right, query_segment, visitor)
+              TraverseWithQuery(node->left.get(), query_segment, visitor),
+              TraverseWithQuery(node->right.get(), query_segment, visitor)
           );
         }
       }
@@ -296,7 +300,7 @@ private:
   };
 
   static void PropagateBulkOperation(Node* node) {
-    for (auto* child_ptr : {node->left, node->right}) {
+    for (auto* child_ptr : {node->left.get(), node->right.get()}) {
       if (child_ptr) {
         child_ptr->postponed_bulk_operation.CombineWith(node->postponed_bulk_operation);
         child_ptr->data = node->postponed_bulk_operation.Collapse(child_ptr->data, child_ptr->segment);
@@ -365,9 +369,11 @@ class BudgetManager {
 public:
   using TreeHolder = SummingSegmentTreeHolder<MoneyState, BulkLinearUpdater>;
 
-  BudgetManager() : tree_(new SummingSegmentTree<MoneyState, BulkLinearUpdater>(DAY_COUNT)) {}
-  const TreeHolder& GetTree() const {
-    return tree_;
+  BudgetManager() : tree_(make_shared<SummingSegmentTree<MoneyState, BulkLinearUpdater>>(DAY_COUNT)) {}
+  typename TreeHolder::element_type* GetTree() const {
+    return tree_.get();
+  }
+  ~BudgetManager() {
   }
 private:
   TreeHolder tree_;
@@ -440,7 +446,7 @@ struct AddMoneyRequest : ModifyRequest {
   void Process(BudgetManager& manager) const override {
     const auto date_segment = MakeDateSegment(date_from, date_to);
     const double daily_value = value * 1.0 / date_segment.length();
-    const MoneyState daily_change = SIGN == 1 ? MoneyState{.earned = daily_value} : MoneyState{.spent = daily_value};
+    const MoneyState daily_change = SIGN == 1 ? MoneyState{.earned = daily_value, .spent = 0} : MoneyState{.earned = 0, .spent = daily_value};
     manager.GetTree()->AddBulkOperation(
         date_segment,
         BulkLinearUpdater(manager.GetTree(), BulkMoneyAdder{daily_change})
@@ -475,23 +481,19 @@ struct PayTaxRequest : ModifyRequest {
 RequestHolder Request::Create(Request::Type type) {
   switch (type) {
     case Request::Type::COMPUTE_INCOME: {
-      ComputeIncomeRequest r;
-      return RequestHolder(&r);
+      return make_unique<ComputeIncomeRequest>();
     }
     case Request::Type::EARN: {
-      AddMoneyRequest<+1> r;
-      return RequestHolder(&r);
+      return make_unique<AddMoneyRequest<+1>>();
     }
     case Request::Type::SPEND: {
-      AddMoneyRequest<-1> r;
-      return RequestHolder(&r);
+      return make_unique<AddMoneyRequest<-1>>();
     }
     case Request::Type::PAY_TAX: {
-      PayTaxRequest r;
-      return RequestHolder(&r);
+      return make_unique<PayTaxRequest>();;
     }
     default:
-      return nullptr;
+      throw runtime_error("Unknown request type");
   }
 }
 
@@ -564,6 +566,17 @@ void PrintResponses(const vector<double>& responses, ostream& stream = cout) {
 
 
 int main() {
+  istringstream is{R"(
+8
+Earn 2000-01-02 2000-01-06 20
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-01-02 2000-01-03 13
+ComputeIncome 2000-01-01 2001-01-01
+Spend 2000-12-30 2001-01-02 14
+ComputeIncome 2000-01-01 2001-01-01
+PayTax 2000-12-30 2000-12-30 13
+ComputeIncome 2000-01-01 2001-01-01
+  )"};
   cout.precision(25);
   const auto requests = ReadRequests();
   const auto responses = ProcessRequests(requests);
