@@ -27,6 +27,7 @@ TransportRouter::RoutingSettings TransportRouter::MakeRoutingSettings(const Json
 
 void TransportRouter::FillGraphWithStops(const Descriptions::StopsDict& stops_dict) {
   Graph::VertexId vertex_id = 0;
+  vertices_info_.resize(stops_dict.size() * 2);
 
   for (const auto& [stop_name, _] : stops_dict) {
     auto& vertex_ids = stops_vertex_ids_[stop_name];
@@ -60,7 +61,7 @@ void TransportRouter::FillGraphWithBuses(const Descriptions::StopsDict& stops_di
     for (size_t start_stop_idx = 0; start_stop_idx + 1 < stop_count; ++start_stop_idx) {
       const Graph::VertexId start_vertex = stops_vertex_ids_[bus.stops[start_stop_idx]].in;
       int total_distance = 0;
-      for (size_t finish_stop_idx = start_stop_idx + 1; finish_stop_idx <= stop_count; ++finish_stop_idx) {
+      for (size_t finish_stop_idx = start_stop_idx + 1; finish_stop_idx < stop_count; ++finish_stop_idx) {
         total_distance += compute_distance_from(finish_stop_idx - 1);
         edges_info_.push_back(BusEdgeInfo{
             .bus_name = bus.name,
