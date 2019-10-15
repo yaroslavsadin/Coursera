@@ -28,7 +28,7 @@ CFLAGS+=-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC
 endif
 
 ifeq ($(SANITIZE),1)
-CFLAGS+=-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
+CFLAGS+=-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls
 endif
 
 LDFLAGS=$(CFLAGS)
