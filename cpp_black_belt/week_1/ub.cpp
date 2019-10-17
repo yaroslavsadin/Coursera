@@ -89,7 +89,29 @@ void TestOverflow() {
     }
 }
 
+class A {
+public:
+    A() = default;
+    virtual ~A() {
+        cerr << __FUNCTION__ << endl;
+    }
+private:
+    string some = "";
+};
+
+class B : public A {
+public:
+    B() = default;
+    ~B() {
+        cerr << __FUNCTION__ << endl;
+    }
+private:
+    string some = "";
+};
+
 int main(void) {
+    A* base = new B();
+    delete base;
     TestRunner tr;
     RUN_TEST(tr,TestOverflow);
     std::int64_t a, b;
