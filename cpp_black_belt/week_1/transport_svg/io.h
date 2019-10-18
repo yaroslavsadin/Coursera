@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "database.h"
+#include "transport_router.h"
 #include "misc.h"
 #include "json.h"
 
@@ -29,7 +30,7 @@ struct Request {
 
 struct ModifyReqeust : public Request {
   using Request::Request;
-  virtual void Process(BusDatabase& db) const = 0;
+  virtual void Process(BusDatabase& db, TransportRouter& router) const = 0;
 };
 
 /******************************* 
@@ -40,7 +41,7 @@ template<typename ResT>
 struct ReadReqeust : public Request {
   ReadReqeust(Request::Type type_) : Request(type_) {}
   ReadReqeust(size_t id, Request::Type type_) : Request(type_), id_(id) {}
-  virtual ResT Process(const BusDatabase& db) const = 0;
+  virtual ResT Process(const BusDatabase& db, const TransportRouter& router) const = 0;
   std::optional<int> id_;
 };
 
@@ -53,7 +54,7 @@ struct AddBusRequest : public ModifyReqeust {
   AddBusRequest(const Json::Node& json_node);
   static Bus::RouteType GetRouteType(std::string_view request);
   static Bus::RouteType GetRouteType(const Json::Node& json_node);
-  void Process(BusDatabase& db) const override;
+  void Process(BusDatabase& db, TransportRouter& router) const override;
   std::string bus_name_;
   std::vector<std::string> stops_;
   Bus::RouteType route_type_;
@@ -63,7 +64,7 @@ using StopDistances = std::vector< std::pair< std::string, unsigned int > >;
 struct AddStopRequest : public ModifyReqeust {
   AddStopRequest(std::string_view from_string);
   AddStopRequest(const Json::Node& json_node);
-  void Process(BusDatabase& db) const override;
+  void Process(BusDatabase& db, TransportRouter& router) const override;
   std::string name_;
   double latitude;
   double longtitude;
@@ -78,14 +79,14 @@ struct BusRequest : public ReadReqeust<Json::Node> {
   BusRequest(std::string_view from_string);
   BusRequest(const Json::Node& from_json_node);
   std::string bus_name_;
-  Json::Node Process(const BusDatabase& db) const override;
+  Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
 struct StopRequest : public ReadReqeust<Json::Node> {
   StopRequest(std::string_view from_string);
   StopRequest(const Json::Node& from_json_node);
   std::string stop_name_;
-  Json::Node Process(const BusDatabase& db) const override;
+  Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
 struct RouteRequest : public ReadReqeust<Json::Node> {
@@ -93,7 +94,7 @@ struct RouteRequest : public ReadReqeust<Json::Node> {
   RouteRequest(const Json::Node& from_json_node);
   std::string from_;
   std::string to_;
-  Json::Node Process(const BusDatabase& db) const override;
+  Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
 /******************************* 
@@ -116,4 +117,5 @@ private:
   Requests requests_;
   Respones responses_;
   BusDatabase db;
+  TransportRouter router;
 };

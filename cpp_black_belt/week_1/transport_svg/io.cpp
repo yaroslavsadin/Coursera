@@ -8,10 +8,10 @@
 using namespace std;
 
 static const string MODIFY_DELIMITER {":"};
-static const string COMMA(", ");
-static const string STOP_DISTANCES_DELIM("m to ");
-static const string CICULAR_ROUTE_DELIM(" > ");
-static const string LINEAR_ROUTE_DELIM(" - ");
+static const string COMMA {", "};
+static const string STOP_DISTANCES_DELIM {"m to "};
+static const string CICULAR_ROUTE_DELIM {" > "};
+static const string LINEAR_ROUTE_DELIM {" - "};
 
 Request::Type TypeFromString(string_view str, bool is_modify_request) {
     string_view type_str = ReadToken(str);
@@ -76,8 +76,8 @@ BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
 
     /* Setting route settings */
     const auto& route_settings = root_.at("routing_settings").AsMap();
-    db.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
-    db.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
+    router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
+    router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
 
     /* Read Base Requests*/
     const auto& base_requests = root_.at("base_requests").AsArray();
@@ -105,10 +105,10 @@ BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
            request->type_ == Request::Type::GET_STOP_INFO ||
            request->type_ == Request::Type::GET_ROUTE) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
-            responses.push_back(request_.Process(db));
+            responses.push_back(request_.Process(db,router));
         } else {
             const auto& request_ = static_cast<const ModifyReqeust&>(*request);
-            request_.Process(db);
+            request_.Process(db,router);
         }
     }
     responses_ = Json::Node(move(responses));
@@ -281,7 +281,7 @@ RouteRequest::RouteRequest(const Json::Node& from_json_node)
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
 
-Json::Node BusRequest::Process(const BusDatabase& db) const {
+Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
     auto info = db.GetBusInfo(bus_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -298,7 +298,7 @@ Json::Node BusRequest::Process(const BusDatabase& db) const {
     return Json::Node(res);
 }
 
-Json::Node StopRequest::Process(const BusDatabase& db) const {
+Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
     auto info = db.GetStopInfo(stop_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -319,8 +319,8 @@ Json::Node StopRequest::Process(const BusDatabase& db) const {
     }
     return Json::Node(res);
 }
-Json::Node RouteRequest::Process(const BusDatabase& db) const {
-    auto route = db.BuildRoute(from_,to_);
+Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
+    auto route = router.BuildRoute(db.GetBuses(),db.GetStops(),from_,to_);
     map<string,Json::Node> res;
     res["request_id"] = Json::Node(*id_);
     if(route) {
@@ -338,12 +338,12 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
         vector<Json::Node> items;
 
         for(size_t i = 0; i < num_edges;i++) {
-            auto edge_info = db.GetRouteEdge(route_id,i).weight;
+            auto edge_info = router.GetRouteEdge(route_id,i).weight;
             switch(edge_info.type_) {
             case EdgeType::CHANGE:
                 items.push_back(map<string,Json::Node> {
                     {"stop_name", edge_info.item_name_},
-                    {"time", db.GetRouteSettings().bus_wait_time_},
+                    {"time", edge_info.time_},
                     {"type", string("Wait")}
                 });
                 break;
@@ -367,12 +367,13 @@ Json::Node RouteRequest::Process(const BusDatabase& db) const {
     }
     return Json::Node(move(res));
 }
-void AddBusRequest::Process(BusDatabase& db) const {
+void AddBusRequest::Process(BusDatabase& db, TransportRouter& router) const {
     db.AddBus(
         bus_name_,move(stops_), 
         (route_type_ == Bus::RouteType::CIRCULAR)
     );
 }
-void AddStopRequest::Process(BusDatabase& db) const {
+void AddStopRequest::Process(BusDatabase& db, TransportRouter& router) const {
+    router.AddVerticesForStop(name_);
     db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }
