@@ -16,7 +16,8 @@ struct Request {
     ADD_STOP,
     GET_BUS_INFO,
     GET_STOP_INFO,
-    GET_ROUTE
+    GET_ROUTE,
+    GET_MAP
   };
   Request(Type type) : type_(type) {}
   static std::unique_ptr<Request> MakeRequest(Type type);
@@ -50,7 +51,6 @@ struct ReadReqeust : public Request {
 ********************************/
 
 struct AddBusRequest : public ModifyReqeust {
-  AddBusRequest(std::string_view from_string);
   AddBusRequest(const Json::Node& json_node);
   static Bus::RouteType GetRouteType(std::string_view request);
   static Bus::RouteType GetRouteType(const Json::Node& json_node);
@@ -62,7 +62,6 @@ struct AddBusRequest : public ModifyReqeust {
 
 using StopDistances = std::vector< std::pair< std::string, unsigned int > >;
 struct AddStopRequest : public ModifyReqeust {
-  AddStopRequest(std::string_view from_string);
   AddStopRequest(const Json::Node& json_node);
   void Process(BusDatabase& db, TransportRouter& router) const override;
   std::string name_;
@@ -76,24 +75,26 @@ struct AddStopRequest : public ModifyReqeust {
 ********************************/
 
 struct BusRequest : public ReadReqeust<Json::Node> {
-  BusRequest(std::string_view from_string);
   BusRequest(const Json::Node& from_json_node);
   std::string bus_name_;
   Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
 struct StopRequest : public ReadReqeust<Json::Node> {
-  StopRequest(std::string_view from_string);
   StopRequest(const Json::Node& from_json_node);
   std::string stop_name_;
   Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
 struct RouteRequest : public ReadReqeust<Json::Node> {
-  RouteRequest(std::string_view from_string);
   RouteRequest(const Json::Node& from_json_node);
   std::string from_;
   std::string to_;
+  Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
+};
+
+struct MapRequest : public ReadReqeust<Json::Node> {
+  MapRequest(const Json::Node& from_json_node);
   Json::Node Process(const BusDatabase& db, const TransportRouter& router) const override;
 };
 
@@ -107,7 +108,6 @@ public:
   using Respones = Json::Node;
 
   BusDatabaseHandler() = default;
-  BusDatabaseHandler& ReadRequests(int count, std::istream& is = std::cin);
   BusDatabaseHandler& ReadRequests(Json::Document doc);
   BusDatabaseHandler& ProcessRequests();
   Respones GetResponses() {

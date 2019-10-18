@@ -7,11 +7,7 @@
 
 using namespace std;
 
-static const string MODIFY_DELIMITER {":"};
-static const string COMMA {", "};
 static const string STOP_DISTANCES_DELIM {"m to "};
-static const string CICULAR_ROUTE_DELIM {" > "};
-static const string LINEAR_ROUTE_DELIM {" - "};
 
 Request::Type TypeFromString(string_view str, bool is_modify_request) {
     string_view type_str = ReadToken(str);
@@ -30,6 +26,8 @@ Request::Type TypeFromString(string_view str, bool is_modify_request) {
     }
     else if (type_str == "Route") {
         return Request::Type::GET_ROUTE;
+    }else if (type_str == "Map") {
+        return Request::Type::GET_MAP;
     } else {
         throw invalid_argument("Unknown request type");
     }
@@ -53,22 +51,13 @@ unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request)
         case Request::Type::GET_ROUTE:
             return make_unique<RouteRequest>(request);
             break;
+        case Request::Type::GET_MAP:
+            return make_unique<MapRequest>(request);
+            break;
         default:
             break;
         }
     throw invalid_argument("Unknown request type");
-}
-
-BusDatabaseHandler& BusDatabaseHandler::ReadRequests(int count, std::istream& is) {
-    string request;
-    getline(is,request);
-    while(count--) {
-        getline(is,request);
-        Request::Type request_type = TypeFromString(request,
-                                    (request.find(MODIFY_DELIMITER) == request.npos) ? false : true);
-        requests_.push_back(MakeRequest(request_type,string_view(request)));
-    }
-    return *this;
 }
 
 BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
@@ -103,7 +92,8 @@ BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
     for(const auto& request : requests_) {
         if(request->type_ == Request::Type::GET_BUS_INFO || 
            request->type_ == Request::Type::GET_STOP_INFO ||
-           request->type_ == Request::Type::GET_ROUTE) {
+           request->type_ == Request::Type::GET_ROUTE ||
+           request->type_ == Request::Type::GET_MAP) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
             responses.push_back(request_.Process(db,router));
         } else {
@@ -124,29 +114,11 @@ inline size_t GetReqestId(const Json::Node& node) {
     return node.AsMap().at("id").AsInt();
 }
 
-BusRequest::BusRequest(std::string_view from_string) 
-: ReadReqeust<Json::Node>(Request::Type::GET_BUS_INFO) 
-{
-    // Reading "Bus "
-    ReadToken(from_string);
-    // Getting route number into the field
-    bus_name_ = string(ReadToken(from_string,"\n"));
-}
-
 BusRequest::BusRequest(const Json::Node& from_json_node) 
 : ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO) 
 {
     const auto& as_map = from_json_node.AsMap();
     bus_name_ = as_map.at("name").AsString();
-}
-
-StopRequest::StopRequest(std::string_view from_string) 
-: ReadReqeust<Json::Node>(Request::Type::GET_STOP_INFO) 
-{
-    // Reading "Stop "
-    ReadToken(from_string);
-    // Getting route number into the field
-    stop_name_ = string(ReadToken(from_string,"\n"));
 }
 
 StopRequest::StopRequest(const Json::Node& from_json_node) 
@@ -173,24 +145,6 @@ Bus::RouteType AddBusRequest::GetRouteType(const Json::Node& json_node) {
     }
 }
 
-AddBusRequest::AddBusRequest(std::string_view from_string)
-: ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(from_string))
-{
-    // Reading "Bus "
-    ReadToken(from_string);
-    // Getting route number into the field
-    bus_name_ = string(ReadToken(from_string,MODIFY_DELIMITER));
-    // Extra space
-    ReadToken(from_string," ");
-
-    string stops_delimiter = (route_type_ == Bus::RouteType::CIRCULAR) ? CICULAR_ROUTE_DELIM 
-                                                                        : LINEAR_ROUTE_DELIM;
-
-    while(!from_string.empty()) {
-        stops_.push_back(string(ReadToken(from_string,stops_delimiter)));
-    }
-}
-
 AddBusRequest::AddBusRequest(const Json::Node& json_node)
 : ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(json_node))
 {
@@ -214,26 +168,6 @@ StopDistances GetStopDistances(const vector<string>& distances) {
         res.push_back(ParseStopsDistance(str));
     }
     return res;
-}
-
-AddStopRequest::AddStopRequest(std::string_view from_string)
-: ModifyReqeust(Request::Type::ADD_STOP)
-{
-    // Reading "Stop "
-    ReadToken(from_string);
-    // Stop name
-    name_ = ReadToken(from_string,MODIFY_DELIMITER);
-    // Extra space
-    ReadToken(from_string," ");
-    
-    latitude = StringToOther<double>(ReadToken(from_string, COMMA));
-    longtitude = StringToOther<double>(ReadToken(from_string, COMMA));
-
-    vector<string> distances;
-    while(!from_string.empty()) {
-        distances.push_back(string(ReadToken(from_string,COMMA)));
-    }
-    distances_to_stops_ = GetStopDistances(distances);
 }
 
 AddStopRequest::AddStopRequest(const Json::Node& json_node)
@@ -264,17 +198,17 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
     distances_to_stops_ = move(res);
 }
 
-RouteRequest::RouteRequest(std::string_view from_string)
-: ReadReqeust(Request::Type::GET_ROUTE)
-{
-}
-
 RouteRequest::RouteRequest(const Json::Node& from_json_node)
 : ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE) 
 {
     const auto& as_map = from_json_node.AsMap();
     from_ = as_map.at("from").AsString();
     to_ = as_map.at("to").AsString();
+}
+
+MapRequest::MapRequest(const Json::Node& from_json_node)
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_MAP) 
+{
 }
 
 /******************************* 
@@ -367,6 +301,11 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
     }
     return Json::Node(move(res));
 }
+
+Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
+    return Json::Node();
+}
+
 void AddBusRequest::Process(BusDatabase& db, TransportRouter& router) const {
     db.AddBus(
         bus_name_,move(stops_), 
