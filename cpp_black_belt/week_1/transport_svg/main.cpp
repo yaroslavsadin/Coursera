@@ -13,94 +13,187 @@ using namespace std;
 int main(void) {
   stringstream ss{R"(
 {
-  "routing_settings": {
-    "bus_wait_time": 2,
-    "bus_velocity": 30
-  },
-  "base_requests": [
-    {
-      "type": "Bus",
-      "name": "289",
-      "stops": [
-        "Zagorye",
-        "Lipetskaya ulitsa 46",
-        "Lipetskaya ulitsa 40",
-        "Lipetskaya ulitsa 40",
-        "Lipetskaya ulitsa 46",
-        "Moskvorechye",
-        "Zagorye"
-      ],
-      "is_roundtrip": true
+    "routing_settings": {
+        "bus_wait_time": 2,
+        "bus_velocity": 30
     },
-    {
-      "type": "Stop",
-      "road_distances": {
-        "Lipetskaya ulitsa 46": 230
-      },
-      "longitude": 37.68372,
-      "name": "Zagorye",
-      "latitude": 55.579909
+    "render_settings": {
+        "width": 1200,
+        "height": 1200,
+        "padding": 50,
+        "stop_radius": 5,
+        "line_width": 14,
+        "stop_label_font_size": 20,
+        "stop_label_offset": [
+            7,
+            -3
+        ],
+        "underlayer_color": [
+            255,
+            255,
+            255,
+            0.85
+        ],
+        "underlayer_width": 3,
+        "color_palette": [
+            "green",
+            [
+                255,
+                160,
+                0
+            ],
+            "red"
+        ]
     },
-    {
-      "type": "Stop",
-      "road_distances": {
-        "Lipetskaya ulitsa 40": 390,
-        "Moskvorechye": 12400
-      },
-      "longitude": 37.682205,
-      "name": "Lipetskaya ulitsa 46",
-      "latitude": 55.581441
-    },
-    {
-      "type": "Stop",
-      "road_distances": {
-        "Lipetskaya ulitsa 40": 1090,
-        "Lipetskaya ulitsa 46": 380
-      },
-      "longitude": 37.679133,
-      "name": "Lipetskaya ulitsa 40",
-      "latitude": 55.584496
-    },
-    {
-      "type": "Stop",
-      "road_distances": {
-        "Zagorye": 10000
-      },
-      "longitude": 37.638433,
-      "name": "Moskvorechye",
-      "latitude": 55.638433
-    }
-  ],
-  "stat_requests": [
-    {
-      "type": "Bus",
-      "name": "289",
-      "id": 1
-    },
-    {
-      "type": "Route",
-      "from": "Zagorye",
-      "to": "Moskvorechye",
-      "id": 2
-    },
-    {
-      "type": "Route",
-      "from": "Moskvorechye",
-      "to": "Zagorye",
-      "id": 3
-    },
-    {
-      "type": "Route",
-      "from": "Lipetskaya ulitsa 40",
-      "to": "Lipetskaya ulitsa 40",
-      "id": 4
-    }
-  ]
+    "base_requests": [
+        {
+            "type": "Bus",
+            "name": "14",
+            "stops": [
+                "Улица Лизы Чайкиной",
+                "Электросети",
+                "Ривьерский мост",
+                "Гостиница Сочи",
+                "Кубанская улица",
+                "По требованию",
+                "Улица Докучаева",
+                "Улица Лизы Чайкиной"
+            ],
+            "is_roundtrip": true
+        },
+        {
+            "type": "Bus",
+            "name": "24",
+            "stops": [
+                "Улица Докучаева",
+                "Параллельная улица",
+                "Электросети",
+                "Санаторий Родина"
+            ],
+            "is_roundtrip": false
+        },
+        {
+            "type": "Bus",
+            "name": "114",
+            "stops": [
+                "Морской вокзал",
+                "Ривьерский мост"
+            ],
+            "is_roundtrip": false
+        },
+        {
+            "type": "Stop",
+            "name": "Улица Лизы Чайкиной",
+            "latitude": 43.590317,
+            "longitude": 39.746833,
+            "road_distances": {
+                "Электросети": 4300,
+                "Улица Докучаева": 2000
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Морской вокзал",
+            "latitude": 43.581969,
+            "longitude": 39.719848,
+            "road_distances": {
+                "Ривьерский мост": 850
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Электросети",
+            "latitude": 43.598701,
+            "longitude": 39.730623,
+            "road_distances": {
+                "Санаторий Родина": 4500,
+                "Параллельная улица": 1200,
+                "Ривьерский мост": 1900
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Ривьерский мост",
+            "latitude": 43.587795,
+            "longitude": 39.716901,
+            "road_distances": {
+                "Морской вокзал": 850,
+                "Гостиница Сочи": 1740
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Гостиница Сочи",
+            "latitude": 43.578079,
+            "longitude": 39.728068,
+            "road_distances": {
+                "Кубанская улица": 320
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Кубанская улица",
+            "latitude": 43.578509,
+            "longitude": 39.730959,
+            "road_distances": {
+                "По требованию": 370
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "По требованию",
+            "latitude": 43.579285,
+            "longitude": 39.733742,
+            "road_distances": {
+                "Улица Докучаева": 600
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Улица Докучаева",
+            "latitude": 43.585586,
+            "longitude": 39.733879,
+            "road_distances": {
+                "Параллельная улица": 1100
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Параллельная улица",
+            "latitude": 43.590041,
+            "longitude": 39.732886,
+            "road_distances": {}
+        },
+        {
+            "type": "Stop",
+            "name": "Санаторий Родина",
+            "latitude": 43.601202,
+            "longitude": 39.715498,
+            "road_distances": {}
+        }
+    ],
+    "stat_requests": [
+        {
+            "id": 826874078,
+            "type": "Bus",
+            "name": "14"
+        },
+        {
+            "id": 1086967114,
+            "type": "Route",
+            "from": "Морской вокзал",
+            "to": "Параллельная улица"
+        },
+        {
+            "id": 1218663236,
+            "type": "Map"
+        }
+    ]
 }
   )"};
-    BusDatabaseHandler handler;
+    TransportCatalog handler;
 
-    Json::Document doc = Json::Load(cin);
+    Json::Document doc = Json::Load(ss);
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
     cout << setprecision(6);
     Json::Print(responses, cout);

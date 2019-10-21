@@ -33,7 +33,11 @@ namespace Json {
       return std::get<int>(*this);
     }
     double AsDouble() const {
-      return std::get<double>(*this);
+      if(std::holds_alternative<int>(*this)) {
+        return std::get<int>(*this);
+      } else {
+        return std::get<double>(*this);
+      }
     }
     bool AsBool() const {
       return std::get<bool>(*this);

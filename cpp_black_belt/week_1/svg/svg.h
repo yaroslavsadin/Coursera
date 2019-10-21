@@ -15,12 +15,18 @@ namespace Svg {
 
     struct Rgb {
         uint8_t red, green, blue;
+        std::optional<double> alpha;
         Rgb() = default;
         Rgb(uint8_t r, uint8_t g, uint8_t b) : red(r), green(g), blue(b) {}
+        Rgb(uint8_t r, uint8_t g, uint8_t b, double al) : red(r), green(g), blue(b), alpha(al) {}
         friend std::ostream& operator<<(std::ostream& os, Rgb color) {
-            return os << "rgb(" << static_cast<int>(color.red) << "," 
-                                << static_cast<int>(color.green) << "," 
-                                << static_cast<int>(color.blue) << ")";
+            os << "rgb(" << static_cast<int>(color.red) << "," 
+                        << static_cast<int>(color.green) << "," 
+                        << static_cast<int>(color.blue);
+            if(color.alpha) {
+                os << "," << *color.alpha;
+            }
+            return os << ")";
         }
     };
 

@@ -15,6 +15,11 @@ SRCDIRS=. .. ../..
 ifneq ($(SRCDIRS_PLUS),)
 SRCDIRS+=$(SRCDIRS_PLUS)
 endif
+INCDIRS_=.. ../..
+ifneq ($(INCDIRS_PLUS),)
+INCDIRS_+=$(INCDIRS_PLUS)
+endif
+INCDIRS=$(addprefix -I,$(INCDIRS_))
 OBJDIR=./objs
 BINDIR=./bin
 DEPDIR=$(OBJDIR)
@@ -24,7 +29,7 @@ OBJS=$(SRCS:%.cpp=$(OBJDIR)/%.o)
 DEPS=$(SRCS:%.cpp=$(DEPDIR)/%.d)
 BIN=$(BINDIR)/$(PROG).$(XEXT)
 
-CFLAGS=-std=c++17 -Wall $(DEFINES) -I.. -I../.. -g -$(OPT_LEVEL)
+CFLAGS=-std=c++17 -Wall $(DEFINES) $(INCDIRS)  -g -$(OPT_LEVEL)
 
 ifeq ($(DEBUG_MACROS),1)
 CFLAGS+=-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC

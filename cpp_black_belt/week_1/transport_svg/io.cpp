@@ -60,13 +60,63 @@ unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request)
     throw invalid_argument("Unknown request type");
 }
 
-BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
+// Ugly because visitor doesn't work with vector<variant>... 
+Svg::Color ColorFromJsonNode(const Json::Node& underlayer_color_) {
+    if(holds_alternative<string>(underlayer_color_)) {
+        return Svg::Color(underlayer_color_.AsString());
+    } else {
+        const auto& underlayer_colors_array = underlayer_color_.AsArray();
+        if(underlayer_colors_array.size() == 4) {
+            return(Svg::Color(
+                Svg::Rgb (
+                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[2].AsInt()),
+                underlayer_colors_array[3].AsDouble()
+                )
+            ));
+        } else {
+            return (Svg::Color(
+                Svg::Rgb (
+                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[2].AsInt())
+                )
+            ));
+        }
+    }
+}
+
+TransportCatalog& TransportCatalog::ReadRequests(Json::Document doc) {                                   
     const auto& root_ = doc.GetRoot().AsMap();
 
     /* Setting route settings */
     const auto& route_settings = root_.at("routing_settings").AsMap();
     router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
     router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
+
+    /* Setting rendering settings */
+    const auto& render_settings = root_.at("render_settings").AsMap();
+    const auto& stop_label_offset_array = render_settings.at("stop_label_offset").AsArray();
+    renderer.SetWidth(render_settings.at("width").AsDouble())
+            .SetHeight(render_settings.at("height").AsDouble())
+            .SetPadding(render_settings.at("padding").AsDouble())
+            .SetStopRadius(render_settings.at("stop_radius").AsDouble())
+            .SetLineWidth(render_settings.at("line_width").AsDouble())
+            .SetFontSize(render_settings.at("stop_label_font_size").AsInt())
+            .SetStopLabelOffset({
+                                stop_label_offset_array[0].AsDouble(),
+                                stop_label_offset_array[1].AsDouble()
+                                })
+            .SetUnderlayerColor(ColorFromJsonNode(render_settings.at("underlayer_color")))
+            .SetUnderlayerWidth(render_settings.at("underlayer_width").AsDouble());
+
+    vector<Svg::Color> colors;
+    colors.reserve(render_settings.at("color_palette").AsArray().size());
+    for(const auto& color_node : render_settings.at("color_palette").AsArray()) {
+        colors.push_back(ColorFromJsonNode(color_node));
+    }
+    renderer.SetColorPalette(move(colors));
 
     /* Read Base Requests*/
     const auto& base_requests = root_.at("base_requests").AsArray();
@@ -87,7 +137,7 @@ BusDatabaseHandler& BusDatabaseHandler::ReadRequests(Json::Document doc) {
     return *this;
 }
 
-BusDatabaseHandler& BusDatabaseHandler::ProcessRequests() {
+TransportCatalog& TransportCatalog::ProcessRequests() {
     vector<Json::Node> responses;
     for(const auto& request : requests_) {
         if(request->type_ == Request::Type::GET_BUS_INFO || 

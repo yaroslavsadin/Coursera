@@ -5,6 +5,8 @@
 #include "transport_router.h"
 #include "misc.h"
 #include "json.h"
+#include "svg_render.h"
+#include <stdexcept>
 
 /******************************* 
     REQUEST BASE CLASS         *
@@ -102,14 +104,14 @@ struct MapRequest : public ReadReqeust<Json::Node> {
        DATABASE WRAPPER        *
 ********************************/
 
-class BusDatabaseHandler {
+class TransportCatalog {
 public:
   using Requests = std::vector<std::unique_ptr<Request>>;
   using Respones = Json::Node;
 
-  BusDatabaseHandler() = default;
-  BusDatabaseHandler& ReadRequests(Json::Document doc);
-  BusDatabaseHandler& ProcessRequests();
+  TransportCatalog() = default;
+  TransportCatalog& ReadRequests(Json::Document doc);
+  TransportCatalog& ProcessRequests();
   Respones GetResponses() {
     return move(responses_);
   }
@@ -118,4 +120,43 @@ private:
   Respones responses_;
   BusDatabase db;
   TransportRouter router;
+  SvgRender renderer;
+};
+
+struct ColorVisitor {
+    Svg::Color operator()(const std::vector<Json::Node>& underlayer_colors_array) const {
+        if(underlayer_colors_array.size() == 4) {
+            return (Svg::Color(
+                Svg::Rgb (
+                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[2].AsInt()),
+                underlayer_colors_array[3].AsDouble()
+                )
+            ));
+        } else {
+            return (Svg::Color(
+                Svg::Rgb (
+                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
+                static_cast<uint8_t>(underlayer_colors_array[2].AsInt())
+                )
+            ));
+        }
+    }
+    Svg::Color operator()(const std::string& underlayer_colors_string) const {
+        return Svg::Color(underlayer_colors_string);
+    }
+    Svg::Color operator()(bool) const {
+        return Svg::Color();
+    }
+    Svg::Color operator()(int) const {
+        return Svg::Color();
+    }
+    Svg::Color operator()(double) const {
+        return Svg::Color();
+    }
+    Svg::Color operator()(std::map<std::string, Json::Node>&) const {
+        return Svg::Color();
+    }
 };
