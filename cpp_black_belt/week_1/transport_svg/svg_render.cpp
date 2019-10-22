@@ -67,7 +67,7 @@ struct ColorGenerator {
 };
 
 Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
-    if(!cache) {
+    if(1) {
         min_lat = stops.begin()->second.latitude;
         min_lon = stops.begin()->second.longtitude;
         for(const auto& [_,stop] : stops) {
@@ -77,12 +77,22 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
             if(stop.longtitude > max_lon) max_lon = stop.longtitude;
         }
 
-        double width_zoom_coef = (max_lon - min_lon) ? 
-                                    (settings.width - 2 * settings.padding) / (max_lon - min_lon) : 0;
-        double height_zoom_coef = (max_lat - min_lat) ? 
-                                    (settings.height - 2 * settings.padding) / (max_lat - min_lat) : 0;
-        zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
+        double width_zoom_coef {0};
+        double height_zoom_coef {0};
+
+        if((max_lon - min_lon) && (max_lat - min_lat)) {
+            double width_zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
+            double height_zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
+            zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
+        } else if (max_lon - min_lon) {
+            zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
+        } else if (max_lat - min_lat) {
+            zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
+        } else {
+            zoom_coef = 0;
+        }
         
+
         Svg::Document doc;
         ColorGenerator color_generator(settings.color_palette);
         for(const auto& [_,bus] : buses) {
@@ -101,7 +111,7 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
             }
             doc.Add(bus_line);
         }
-        for(const auto& [name,stop] : stops) {
+        for(const auto& [_,stop] : stops) {
             doc.Add(
                 Svg::Circle{}
                 .SetFillColor("white")
