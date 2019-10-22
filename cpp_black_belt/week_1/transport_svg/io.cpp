@@ -145,10 +145,10 @@ TransportCatalog& TransportCatalog::ProcessRequests() {
            request->type_ == Request::Type::GET_ROUTE ||
            request->type_ == Request::Type::GET_MAP) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
-            responses.push_back(request_.Process(db,router));
+            responses.push_back(request_.Process(db,router,renderer));
         } else {
             const auto& request_ = static_cast<const ModifyReqeust&>(*request);
-            request_.Process(db,router);
+            request_.Process(db,router,renderer);
         }
     }
     responses_ = Json::Node(move(responses));
@@ -265,7 +265,7 @@ MapRequest::MapRequest(const Json::Node& from_json_node)
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
 
-Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
+Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
     auto info = db.GetBusInfo(bus_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -282,7 +282,7 @@ Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& rou
     return Json::Node(res);
 }
 
-Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
+Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
     auto info = db.GetStopInfo(stop_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -303,7 +303,7 @@ Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& ro
     }
     return Json::Node(res);
 }
-Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
+Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
     auto route = router.BuildRoute(db.GetBuses(),db.GetStops(),from_,to_);
     map<string,Json::Node> res;
     res["request_id"] = Json::Node(*id_);
@@ -352,17 +352,21 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
     return Json::Node(move(res));
 }
 
-Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& router) const {
-    return Json::Node();
+Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
+    std::map<string,Json::Node> res;
+    stringstream ss;
+    renderer.GetMap(db.GetBuses(),db.GetStops()).Render(ss);
+    res["map"] = Json::Node(ss.str());
+    return move(res);
 }
 
-void AddBusRequest::Process(BusDatabase& db, TransportRouter& router) const {
+void AddBusRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
     db.AddBus(
         bus_name_,move(stops_), 
         (route_type_ == Bus::RouteType::CIRCULAR)
     );
 }
-void AddStopRequest::Process(BusDatabase& db, TransportRouter& router) const {
+void AddStopRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
     router.AddVerticesForStop(name_);
     db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }

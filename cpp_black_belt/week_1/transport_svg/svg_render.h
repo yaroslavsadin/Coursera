@@ -1,6 +1,5 @@
 #pragma once
 
-#include "json.h"
 #include "descriptions.h"
 #include "svg.h"
 
@@ -32,9 +31,9 @@ public:
     SvgRender& SetUnderlayerWidth(double);
     SvgRender& SetColorPalette(std::vector<Svg::Color>);
 
-    void BuildMap(const std::vector<Bus>& buses, const std::vector<Stop>& stops);
-    Json::Node Render(void);
+    Svg::Document GetMap(const Buses& buses, const Stops& stops) const;
 private:
     RenderSettings settings;
-    Svg::Document svg;
+    mutable std::optional<Svg::Document> cache;
+    Svg::Point PointFromLocation(double lat, double lon) const;
 };
