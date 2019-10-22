@@ -61,6 +61,8 @@ TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const stri
     if(!router_) router_.emplace(InitRouter(buses_,stops_));
     std::optional<RouterT::RouteInfo> route_info = 
     router_->BuildRoute(stop_to_vertices_.at(from).change, stop_to_vertices_.at(to).change);
-    routes.push_back(route_info->id);
+    if(route_info) {
+        routes.push_back(route_info->id);
+    }
     return route_info;
 }

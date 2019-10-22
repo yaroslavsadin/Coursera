@@ -34,10 +34,7 @@ int main(void) {
         "padding": 50,
         "color_palette": [
             "red",
-            "green",
-            "blue",
-            "brown",
-            "orange"
+            "green"
         ],
         "stop_label_offset": [
             7,
@@ -76,6 +73,13 @@ int main(void) {
                 "Театральная"
             ],
             "name": "13",
+            "type": "Bus",
+            "is_roundtrip": false
+        },
+        {
+            "stops": [
+            ],
+            "name": "666",
             "type": "Bus",
             "is_roundtrip": false
         },
@@ -462,6 +466,7 @@ int main(void) {
 
     Json::Document doc = Json::Load(cin);
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
+    std::cerr << "After processing..." << std::endl;
     cout << setprecision(6);
     Json::Print(responses, cout);
     

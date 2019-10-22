@@ -52,8 +52,8 @@ Svg::Point SvgRender::PointFromLocation(double lat, double lon) const {
     return Svg::Point(x,y);
 }
 
-struct ColorsCircular {
-    ColorsCircular(const std::vector<Svg::Color>& palette)
+struct ColorGenerator {
+    ColorGenerator(const std::vector<Svg::Color>& palette)
     : palette(palette),cur_index(0) {}
     Svg::Color operator()() {
         auto res = palette[cur_index++];
@@ -84,17 +84,17 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
         zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
         
         Svg::Document doc;
-        ColorsCircular get_color(settings.color_palette);
+        ColorGenerator color_generator(settings.color_palette);
         for(const auto& [_,bus] : buses) {
             Svg::Polyline bus_line;
-            bus_line.SetStrokeColor(get_color())
+            bus_line.SetStrokeColor(color_generator())
                     .SetStrokeWidth(settings.line_width)
                     .SetStrokeLineCap("round")
                     .SetStrokeLineJoin("round");
             for(const auto& stop : bus.route) {
                 bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
             }
-            if(bus.route_type == Bus::RouteType::LINEAR) {
+            if(bus.route.size() && bus.route_type == Bus::RouteType::LINEAR) {
                 for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
                     bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
                 }
