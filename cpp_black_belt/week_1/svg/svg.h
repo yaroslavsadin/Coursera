@@ -20,9 +20,14 @@ namespace Svg {
         Rgb(uint8_t r, uint8_t g, uint8_t b) : red(r), green(g), blue(b) {}
         Rgb(uint8_t r, uint8_t g, uint8_t b, double al) : red(r), green(g), blue(b), alpha(al) {}
         friend std::ostream& operator<<(std::ostream& os, Rgb color) {
-            os << "rgb(" << static_cast<int>(color.red) << "," 
-                        << static_cast<int>(color.green) << "," 
-                        << static_cast<int>(color.blue);
+            if(color.alpha) {
+                os << "rgba(";
+            } else {
+                os << "rgb(";    
+            }
+            os << static_cast<int>(color.red) << "," 
+               << static_cast<int>(color.green) << "," 
+               << static_cast<int>(color.blue);
             if(color.alpha) {
                 os << "," << *color.alpha;
             }
@@ -73,13 +78,13 @@ namespace Svg {
         }
 
         void PrintCommon(std::ostream& os) const {
-            os << "fill=\"" << fill << "\" " << "stroke=\"" << stroke << "\" " <<
-            "stroke-width=\"" << stroke_width << "\" ";
+            os << "fill=\\\"" << fill << "\\\" " << "stroke=\\\"" << stroke << "\\\" " <<
+            "stroke-width=\\\"" << stroke_width << "\\\" ";
             if(stroke_linecap) {
-                os << "stroke-linecap=\"" << *stroke_linecap << "\" ";
+                os << "stroke-linecap=\\\"" << *stroke_linecap << "\\\" ";
             }
             if(stroke_linejoin) {
-                os << "stroke-linejoin=\"" << *stroke_linejoin << "\" ";
+                os << "stroke-linejoin=\\\"" << *stroke_linejoin << "\\\" ";
             }
         }
 

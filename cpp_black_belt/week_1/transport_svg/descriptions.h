@@ -2,13 +2,14 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <map>
 #include <unordered_map>
 
 struct Stop;
 struct Bus;
 
-using Stops = std::unordered_map< std::string , Stop >;
-using Buses = std::unordered_map< std::string , Bus >;
+using Stops = std::map< std::string , Stop >;
+using Buses = std::map< std::string , Bus >;
 
 struct Stop {
     double latitude;

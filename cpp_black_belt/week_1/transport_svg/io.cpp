@@ -357,6 +357,7 @@ Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& rou
     stringstream ss;
     renderer.GetMap(db.GetBuses(),db.GetStops()).Render(ss);
     res["map"] = Json::Node(ss.str());
+    res["request_id"] = Json::Node(*id_);
     return move(res);
 }
 

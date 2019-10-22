@@ -1,5 +1,6 @@
 #include "svg_render.h"
 #include <vector>
+#include "misc.h"
 
 SvgRender& SvgRender::SetWidth(double x){
     settings.width = x;
@@ -66,7 +67,7 @@ struct ColorsCircular {
 };
 
 Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
-    if(!cache) {    
+    if(!cache) {
         min_lat = stops.begin()->second.latitude;
         min_lon = stops.begin()->second.longtitude;
         for(const auto& [_,stop] : stops) {
@@ -93,7 +94,40 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
             for(const auto& stop : bus.route) {
                 bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
             }
+            if(bus.route_type == Bus::RouteType::LINEAR) {
+                for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
+                    bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
+                }
+            }
             doc.Add(bus_line);
+        }
+        for(const auto& [name,stop] : stops) {
+            doc.Add(
+                Svg::Circle{}
+                .SetFillColor("white")
+                .SetRadius(settings.stop_radius)
+                .SetCenter(PointFromLocation(stop.latitude, stop.longtitude))
+            );
+        }
+        for(const auto& [name,stop] : stops) {
+            Svg::Text common = Svg::Text{}
+                .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
+                .SetOffset(settings.stop_label_offset)
+                .SetFontSize(settings.stop_label_font_size)
+                .SetFontFamily("Verdana")
+                .SetData(name);
+            Svg::Text underlayer = common;
+            doc.Add(
+                underlayer
+                .SetFillColor(settings.underlayer_color)
+                .SetStrokeColor(settings.underlayer_color)
+                .SetStrokeWidth(settings.underlayer_width)
+                .SetStrokeLineCap("round")
+                .SetStrokeLineJoin("round")
+            );
+            doc.Add(
+                common.SetFillColor("black")
+            );
         }
         cache = std::move(doc);
     }
