@@ -147,6 +147,10 @@ namespace Svg {
             font_family = f;
             return *this;
         }
+        Text& SetFontWeight(const std::string& t) {
+            font_weight = t;
+            return *this;
+        }
         Text& SetData(const std::string& t) {
             text = t;
             return *this;
@@ -157,6 +161,7 @@ namespace Svg {
         double dx , dy;
         uint32_t font_size;
         std::optional<std::string> font_family;
+        std::optional<std::string> font_weight;
         std::string text; 
     };
 

@@ -22,7 +22,7 @@ SvgRender& SvgRender::SetLineWidth(double x){
     settings.line_width = x;
     return *this;
 }
-SvgRender& SvgRender::SetFontSize(int x){
+SvgRender& SvgRender::SetStopLabelFontSize(int x){
     settings.stop_label_font_size = x;
     return *this;
 }
@@ -36,6 +36,14 @@ SvgRender& SvgRender::SetUnderlayerColor(Svg::Color x){
 }
 SvgRender& SvgRender::SetUnderlayerWidth(double x){
     settings.underlayer_width = x;
+    return *this;
+}
+SvgRender& SvgRender::SetBusLabelFontSize(int x){
+    settings.bus_label_font_size = x;
+    return *this;
+}
+SvgRender& SvgRender::SetBusLabelOffset(Svg::Point x){
+    settings.bus_label_offset = x;
     return *this;
 }
 SvgRender& SvgRender::SetColorPalette(std::vector<Svg::Color> x){
@@ -62,9 +70,33 @@ struct ColorGenerator {
         }
         return res;
     }
+    void Reset(void) { cur_index = 0; }
     const std::vector<Svg::Color>& palette;
     size_t cur_index;
 };
+
+void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, 
+                                                        const Stops& stops, Svg::Color color) const {
+    Svg::Text common = Svg::Text{}
+        .SetPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude))
+        .SetOffset(settings.bus_label_offset)
+        .SetFontSize(settings.bus_label_font_size)
+        .SetFontFamily("Verdana")
+        .SetFontWeight("bold")
+        .SetData(bus_name);
+    Svg::Text underlayer = common;
+    doc.Add(
+        underlayer
+        .SetFillColor(settings.underlayer_color)
+        .SetStrokeColor(settings.underlayer_color)
+        .SetStrokeWidth(settings.underlayer_width)
+        .SetStrokeLineCap("round")
+        .SetStrokeLineJoin("round")
+    );
+    doc.Add(
+        common.SetFillColor(color)
+    );
+}
 
 Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
     if(1) {
@@ -110,6 +142,19 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
                 }
             }
             doc.Add(bus_line);
+        }
+        color_generator.Reset();
+        for(const auto& [name,bus] : buses) {
+            if(bus.route.size()) {
+                const auto& start_stop = *bus.route.begin();
+                const auto& finish_stop = *prev(bus.route.end());
+                auto bus_color = color_generator();
+
+                AddBusLabel(doc,name,start_stop,stops,bus_color);
+                if(start_stop != finish_stop) {
+                    AddBusLabel(doc,name,finish_stop,stops,bus_color);
+                }
+            }
         }
         for(const auto& [_,stop] : stops) {
             doc.Add(

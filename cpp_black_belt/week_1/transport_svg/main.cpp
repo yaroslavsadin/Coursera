@@ -13,460 +13,193 @@ using namespace std;
 int main(void) {
   stringstream ss{R"(
 {
-    "stat_requests": [
-        {
-            "type": "Map",
-            "id": 1821171961
-        }
-    ],
+    "routing_settings": {
+        "bus_wait_time": 2,
+        "bus_velocity": 30
+    },
     "render_settings": {
-        "underlayer_width": 3,
-        "height": 950,
-        "stop_radius": 3,
+        "width": 1200,
+        "height": 1200,
+        "padding": 50,
+        "stop_radius": 5,
+        "line_width": 14,
+        "bus_label_font_size": 20,
+        "bus_label_offset": [
+            7,
+            15
+        ],
+        "stop_label_font_size": 20,
+        "stop_label_offset": [
+            7,
+            -3
+        ],
         "underlayer_color": [
             255,
             255,
             255,
             0.85
         ],
-        "width": 1500,
-        "stop_label_font_size": 13,
-        "padding": 50,
+        "underlayer_width": 3,
         "color_palette": [
-            "red",
-            "green"
-        ],
-        "stop_label_offset": [
-            7,
-            -3
-        ],
-        "line_width": 10
+            "green",
+            [
+                255,
+                160,
+                0
+            ],
+            "red"
+        ]
     },
     "base_requests": [
         {
-            "stops": [
-                "Санаторий Салют",
-                "Санаторная улица",
-                "Пансионат Нева",
-                "Санаторий Радуга",
-                "Санаторий Родина",
-                "Спортивная",
-                "Парк Ривьера",
-                "Морской вокзал",
-                "Органный зал",
-                "Театральная",
-                "Пансионат Светлана",
-                "Цирк",
-                "Стадион",
-                "Санаторий Металлург",
-                "Улица Бытха"
-            ],
-            "name": "23",
             "type": "Bus",
-            "is_roundtrip": false
-        },
-        {
+            "name": "14",
             "stops": [
                 "Улица Лизы Чайкиной",
-                "Пионерская улица, 111",
-                "Садовая",
-                "Театральная"
+                "Электросети",
+                "Ривьерский мост",
+                "Гостиница Сочи",
+                "Кубанская улица",
+                "По требованию",
+                "Улица Докучаева",
+                "Улица Лизы Чайкиной"
             ],
-            "name": "13",
-            "type": "Bus",
-            "is_roundtrip": false
+            "is_roundtrip": true
         },
         {
+            "type": "Bus",
+            "name": "24",
             "stops": [
+                "Улица Докучаева",
+                "Параллельная улица",
+                "Электросети",
+                "Санаторий Родина"
             ],
-            "name": "666",
-            "type": "Bus",
             "is_roundtrip": false
         },
         {
+            "type": "Bus",
+            "name": "114",
             "stops": [
                 "Морской вокзал",
-                "Сбербанк",
-                "Автовокзал",
-                "Отель Звёздный",
-                "Магазин Быт",
-                "Хлебозавод",
-                "Кинотеатр Юбилейный",
-                "Новая Заря",
-                "Деревообр. комбинат",
-                "Целинная улица, 5",
-                "Целинная улица, 57",
-                "Целинная улица"
+                "Ривьерский мост"
             ],
-            "name": "36",
-            "type": "Bus",
             "is_roundtrip": false
         },
         {
-            "stops": [
-                "Пансионат Светлана",
-                "Улица Лысая Гора",
-                "Улица В. Лысая Гора"
-            ],
-            "name": "44к",
-            "type": "Bus",
-            "is_roundtrip": false
-        },
-        {
-            "stops": [
-                "Краево-Греческая улица",
-                "Улица Бытха",
-                "Санаторий им. Ворошилова",
-                "Санаторий Приморье",
-                "Санаторий Заря",
-                "Мацеста",
-                "Мацестинская долина"
-            ],
-            "name": "90",
-            "type": "Bus",
-            "is_roundtrip": false
-        },
-        {
-            "name": "Краево-Греческая улица",
-            "latitude": 43.565551,
             "type": "Stop",
-            "longitude": 39.776858,
-            "road_distances": {
-                "Улица Бытха": 1780
-            }
-        },
-        {
-            "name": "Санаторий им. Ворошилова",
-            "latitude": 43.557935,
-            "type": "Stop",
-            "longitude": 39.764452,
-            "road_distances": {
-                "Санаторий Приморье": 950
-            }
-        },
-        {
-            "name": "Санаторий Приморье",
-            "latitude": 43.554202,
-            "type": "Stop",
-            "longitude": 39.77256,
-            "road_distances": {
-                "Санаторий Заря": 2350
-            }
-        },
-        {
-            "name": "Санаторий Заря",
-            "latitude": 43.549618,
-            "type": "Stop",
-            "longitude": 39.780908,
-            "road_distances": {
-                "Мацеста": 800
-            }
-        },
-        {
-            "name": "Мацеста",
-            "latitude": 43.545509,
-            "type": "Stop",
-            "longitude": 39.788993,
-            "road_distances": {
-                "Мацестинская долина": 2350
-            }
-        },
-        {
-            "name": "Мацестинская долина",
-            "latitude": 43.560422,
-            "type": "Stop",
-            "longitude": 39.798219,
-            "road_distances": {}
-        },
-        {
-            "name": "Улица Лысая Гора",
-            "latitude": 43.577997,
-            "type": "Stop",
-            "longitude": 39.741685,
-            "road_distances": {
-                "Улица В. Лысая Гора": 640
-            }
-        },
-        {
-            "name": "Улица В. Лысая Гора",
-            "latitude": 43.58092,
-            "type": "Stop",
-            "longitude": 39.744749,
-            "road_distances": {}
-        },
-        {
-            "name": "Морской вокзал",
-            "latitude": 43.581969,
-            "type": "Stop",
-            "longitude": 39.719848,
-            "road_distances": {
-                "Сбербанк": 870,
-                "Органный зал": 570
-            }
-        },
-        {
-            "name": "Сбербанк",
-            "latitude": 43.585969,
-            "type": "Stop",
-            "longitude": 39.725175,
-            "road_distances": {
-                "Автовокзал": 870
-            }
-        },
-        {
-            "name": "Автовокзал",
-            "latitude": 43.592956,
-            "type": "Stop",
-            "longitude": 39.727798,
-            "road_distances": {
-                "Отель Звёздный": 700
-            }
-        },
-        {
-            "name": "Отель Звёздный",
-            "latitude": 43.596585,
-            "type": "Stop",
-            "longitude": 39.721151,
-            "road_distances": {
-                "Магазин Быт": 1000
-            }
-        },
-        {
-            "name": "Магазин Быт",
-            "latitude": 43.604025,
-            "type": "Stop",
-            "longitude": 39.724492,
-            "road_distances": {
-                "Хлебозавод": 420
-            }
-        },
-        {
-            "name": "Хлебозавод",
-            "latitude": 43.607364,
-            "type": "Stop",
-            "longitude": 39.726643,
-            "road_distances": {
-                "Кинотеатр Юбилейный": 2110
-            }
-        },
-        {
-            "name": "Кинотеатр Юбилейный",
-            "latitude": 43.623382,
-            "type": "Stop",
-            "longitude": 39.720626,
-            "road_distances": {
-                "Новая Заря": 450
-            }
-        },
-        {
-            "name": "Новая Заря",
-            "latitude": 43.626842,
-            "type": "Stop",
-            "longitude": 39.717802,
-            "road_distances": {
-                "Деревообр. комбинат": 530
-            }
-        },
-        {
-            "name": "Деревообр. комбинат",
-            "latitude": 43.631035,
-            "type": "Stop",
-            "longitude": 39.714624,
-            "road_distances": {
-                "Целинная улица, 5": 840
-            }
-        },
-        {
-            "name": "Целинная улица, 5",
-            "latitude": 43.633353,
-            "type": "Stop",
-            "longitude": 39.710257,
-            "road_distances": {
-                "Целинная улица, 57": 1270
-            }
-        },
-        {
-            "name": "Целинная улица, 57",
-            "latitude": 43.640536,
-            "type": "Stop",
-            "longitude": 39.713253,
-            "road_distances": {
-                "Целинная улица": 1050
-            }
-        },
-        {
-            "name": "Целинная улица",
-            "latitude": 43.647968,
-            "type": "Stop",
-            "longitude": 39.717733,
-            "road_distances": {}
-        },
-        {
-            "name": "Санаторий Салют",
-            "latitude": 43.623238,
-            "type": "Stop",
-            "longitude": 39.704646,
-            "road_distances": {
-                "Санаторная улица": 1500
-            }
-        },
-        {
-            "name": "Санаторная улица",
-            "latitude": 43.620766,
-            "type": "Stop",
-            "longitude": 39.719058,
-            "road_distances": {
-                "Пансионат Нева": 670
-            }
-        },
-        {
-            "name": "Пансионат Нева",
-            "latitude": 43.614288,
-            "type": "Stop",
-            "longitude": 39.718674,
-            "road_distances": {
-                "Санаторий Радуга": 520
-            }
-        },
-        {
-            "name": "Санаторий Радуга",
-            "latitude": 43.609951,
-            "type": "Stop",
-            "longitude": 39.72143,
-            "road_distances": {
-                "Санаторий Родина": 1190
-            }
-        },
-        {
-            "name": "Санаторий Родина",
-            "latitude": 43.601202,
-            "type": "Stop",
-            "longitude": 39.715498,
-            "road_distances": {
-                "Спортивная": 1100
-            }
-        },
-        {
-            "name": "Спортивная",
-            "latitude": 43.593689,
-            "type": "Stop",
-            "longitude": 39.717642,
-            "road_distances": {
-                "Парк Ривьера": 640
-            }
-        },
-        {
-            "name": "Парк Ривьера",
-            "latitude": 43.588296,
-            "type": "Stop",
-            "longitude": 39.715956,
-            "road_distances": {
-                "Морской вокзал": 730
-            }
-        },
-        {
-            "name": "Органный зал",
-            "latitude": 43.57926,
-            "type": "Stop",
-            "longitude": 39.725574,
-            "road_distances": {
-                "Театральная": 770
-            }
-        },
-        {
-            "name": "Пансионат Светлана",
-            "latitude": 43.571807,
-            "type": "Stop",
-            "longitude": 39.735866,
-            "road_distances": {
-                "Цирк": 520,
-                "Улица Лысая Гора": 1070
-            }
-        },
-        {
-            "name": "Цирк",
-            "latitude": 43.569207,
-            "type": "Stop",
-            "longitude": 39.739869,
-            "road_distances": {
-                "Стадион": 860
-            }
-        },
-        {
-            "name": "Стадион",
-            "latitude": 43.565301,
-            "type": "Stop",
-            "longitude": 39.749485,
-            "road_distances": {
-                "Санаторий Металлург": 950
-            }
-        },
-        {
-            "name": "Санаторий Металлург",
-            "latitude": 43.561005,
-            "type": "Stop",
-            "longitude": 39.760511,
-            "road_distances": {
-                "Улица Бытха": 900
-            }
-        },
-        {
-            "name": "Улица Бытха",
-            "latitude": 43.566135,
-            "type": "Stop",
-            "longitude": 39.762109,
-            "road_distances": {
-                "Санаторий им. Ворошилова": 1160
-            }
-        },
-        {
             "name": "Улица Лизы Чайкиной",
             "latitude": 43.590317,
-            "type": "Stop",
             "longitude": 39.746833,
             "road_distances": {
-                "Пионерская улица, 111": 950
+                "Электросети": 4300,
+                "Улица Докучаева": 2000
             }
         },
         {
-            "name": "Пионерская улица, 111",
-            "latitude": 43.587257,
             "type": "Stop",
-            "longitude": 39.740325,
+            "name": "Морской вокзал",
+            "latitude": 43.581969,
+            "longitude": 39.719848,
             "road_distances": {
-                "Садовая": 520
+                "Ривьерский мост": 850
             }
         },
         {
-            "name": "Садовая",
-            "latitude": 43.58395,
             "type": "Stop",
-            "longitude": 39.736938,
+            "name": "Электросети",
+            "latitude": 43.598701,
+            "longitude": 39.730623,
             "road_distances": {
-                "Театральная": 1300
+                "Санаторий Родина": 4500,
+                "Параллельная улица": 1200,
+                "Ривьерский мост": 1900
             }
         },
         {
-            "name": "Театральная",
-            "latitude": 43.57471,
             "type": "Stop",
-            "longitude": 39.731954,
+            "name": "Ривьерский мост",
+            "latitude": 43.587795,
+            "longitude": 39.716901,
             "road_distances": {
-                "Пансионат Светлана": 390
+                "Морской вокзал": 850,
+                "Гостиница Сочи": 1740
             }
+        },
+        {
+            "type": "Stop",
+            "name": "Гостиница Сочи",
+            "latitude": 43.578079,
+            "longitude": 39.728068,
+            "road_distances": {
+                "Кубанская улица": 320
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Кубанская улица",
+            "latitude": 43.578509,
+            "longitude": 39.730959,
+            "road_distances": {
+                "По требованию": 370
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "По требованию",
+            "latitude": 43.579285,
+            "longitude": 39.733742,
+            "road_distances": {
+                "Улица Докучаева": 600
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Улица Докучаева",
+            "latitude": 43.585586,
+            "longitude": 39.733879,
+            "road_distances": {
+                "Параллельная улица": 1100
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Параллельная улица",
+            "latitude": 43.590041,
+            "longitude": 39.732886,
+            "road_distances": {}
+        },
+        {
+            "type": "Stop",
+            "name": "Санаторий Родина",
+            "latitude": 43.601202,
+            "longitude": 39.715498,
+            "road_distances": {}
         }
     ],
-    "routing_settings": {
-        "bus_wait_time": 2,
-        "bus_velocity": 30
-    }
+    "stat_requests": [
+        {
+            "id": 826874078,
+            "type": "Bus",
+            "name": "14"
+        },
+        {
+            "id": 1086967114,
+            "type": "Route",
+            "from": "Морской вокзал",
+            "to": "Параллельная улица"
+        },
+        {
+            "id": 1218663236,
+            "type": "Map"
+        }
+    ]
 }
   )"};
     TransportCatalog handler;
 
     Json::Document doc = Json::Load(cin);
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
-    std::cerr << "After processing..." << std::endl;
     cout << setprecision(6);
     Json::Print(responses, cout);
     

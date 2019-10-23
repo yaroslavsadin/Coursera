@@ -42,6 +42,9 @@ namespace Svg {
         if(font_family) {
             os << " font-family=\\\"" << *font_family << "\\\" ";
         }
+        if(font_weight) {
+            os << " font-weight=\\\"" << *font_weight << "\\\" ";
+        }
         os << ">" << text << "</text>";
     }
 

@@ -98,18 +98,24 @@ TransportCatalog& TransportCatalog::ReadRequests(Json::Document doc) {
     /* Setting rendering settings */
     const auto& render_settings = root_.at("render_settings").AsMap();
     const auto& stop_label_offset_array = render_settings.at("stop_label_offset").AsArray();
+    const auto& bus_label_offset_array = render_settings.at("bus_label_offset").AsArray();
     renderer.SetWidth(render_settings.at("width").AsDouble())
             .SetHeight(render_settings.at("height").AsDouble())
             .SetPadding(render_settings.at("padding").AsDouble())
             .SetStopRadius(render_settings.at("stop_radius").AsDouble())
             .SetLineWidth(render_settings.at("line_width").AsDouble())
-            .SetFontSize(render_settings.at("stop_label_font_size").AsInt())
+            .SetStopLabelFontSize(render_settings.at("stop_label_font_size").AsInt())
             .SetStopLabelOffset({
                                 stop_label_offset_array[0].AsDouble(),
                                 stop_label_offset_array[1].AsDouble()
                                 })
             .SetUnderlayerColor(ColorFromJsonNode(render_settings.at("underlayer_color")))
-            .SetUnderlayerWidth(render_settings.at("underlayer_width").AsDouble());
+            .SetUnderlayerWidth(render_settings.at("underlayer_width").AsDouble())
+            .SetBusLabelFontSize(render_settings.at("bus_label_font_size").AsInt())
+            .SetBusLabelOffset({
+                                bus_label_offset_array[0].AsDouble(),
+                                bus_label_offset_array[1].AsDouble()
+                                });
 
     vector<Svg::Color> colors;
     colors.reserve(render_settings.at("color_palette").AsArray().size());
