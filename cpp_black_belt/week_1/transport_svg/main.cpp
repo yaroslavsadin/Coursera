@@ -48,6 +48,11 @@ int main(void) {
                 0
             ],
             "red"
+        ],
+        "layers": [
+            "bus_lines",
+            "stop_points",
+            "bus_labels"
         ]
     },
     "base_requests": [

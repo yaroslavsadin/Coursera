@@ -51,6 +51,11 @@ SvgRender& SvgRender::SetColorPalette(std::vector<Svg::Color> x){
     return *this;
 }
 
+SvgRender& SvgRender::SetLayers(std::vector<std::string> x){
+    settings.layers = move(x);
+    return *this;
+}
+
 static double min_lat {0}, max_lat {0}, min_lon {0}, max_lon {0};
 static double zoom_coef = 0;
 
@@ -98,6 +103,76 @@ void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, cons
     );
 }
 
+void SvgRender::RenderBuses(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+    ColorGenerator color_generator(settings.color_palette);
+    for(const auto& [_,bus] : buses) {
+        Svg::Polyline bus_line;
+        bus_line.SetStrokeColor(color_generator())
+                .SetStrokeWidth(settings.line_width)
+                .SetStrokeLineCap("round")
+                .SetStrokeLineJoin("round");
+        for(const auto& stop : bus.route) {
+            bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
+        }
+        if(bus.route.size() && bus.route_type == Bus::RouteType::LINEAR) {
+            for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
+                bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
+            }
+        }
+        doc.Add(bus_line);
+    }
+}
+
+void SvgRender::RenderStops(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+    for(const auto& [_,stop] : stops) {
+        doc.Add(
+            Svg::Circle{}
+            .SetFillColor("white")
+            .SetRadius(settings.stop_radius)
+            .SetCenter(PointFromLocation(stop.latitude, stop.longtitude))
+        );
+    }
+}
+
+void SvgRender::RenderBusLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+    ColorGenerator color_generator(settings.color_palette);
+    for(const auto& [name,bus] : buses) {
+        if(bus.route.size()) {
+            const auto& start_stop = *bus.route.begin();
+            const auto& finish_stop = *prev(bus.route.end());
+            auto bus_color = color_generator();
+
+            AddBusLabel(doc,name,start_stop,stops,bus_color);
+            if(start_stop != finish_stop) {
+                AddBusLabel(doc,name,finish_stop,stops,bus_color);
+            }
+        }
+    }
+}
+
+void SvgRender::RenderStopLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+    for(const auto& [name,stop] : stops) {
+        Svg::Text common = Svg::Text{}
+            .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
+            .SetOffset(settings.stop_label_offset)
+            .SetFontSize(settings.stop_label_font_size)
+            .SetFontFamily("Verdana")
+            .SetData(name);
+        Svg::Text underlayer = common;
+        doc.Add(
+            underlayer
+            .SetFillColor(settings.underlayer_color)
+            .SetStrokeColor(settings.underlayer_color)
+            .SetStrokeWidth(settings.underlayer_width)
+            .SetStrokeLineCap("round")
+            .SetStrokeLineJoin("round")
+        );
+        doc.Add(
+            common.SetFillColor("black")
+        );
+    }
+}
+
 Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
     if(1) {
         min_lat = stops.begin()->second.latitude;
@@ -124,66 +199,20 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
             zoom_coef = 0;
         }
         
-
         Svg::Document doc;
-        ColorGenerator color_generator(settings.color_palette);
-        for(const auto& [_,bus] : buses) {
-            Svg::Polyline bus_line;
-            bus_line.SetStrokeColor(color_generator())
-                    .SetStrokeWidth(settings.line_width)
-                    .SetStrokeLineCap("round")
-                    .SetStrokeLineJoin("round");
-            for(const auto& stop : bus.route) {
-                bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
-            }
-            if(bus.route.size() && bus.route_type == Bus::RouteType::LINEAR) {
-                for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
-                    bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
-                }
-            }
-            doc.Add(bus_line);
-        }
-        color_generator.Reset();
-        for(const auto& [name,bus] : buses) {
-            if(bus.route.size()) {
-                const auto& start_stop = *bus.route.begin();
-                const auto& finish_stop = *prev(bus.route.end());
-                auto bus_color = color_generator();
 
-                AddBusLabel(doc,name,start_stop,stops,bus_color);
-                if(start_stop != finish_stop) {
-                    AddBusLabel(doc,name,finish_stop,stops,bus_color);
-                }
+        for(const auto& layer : settings.layers) {
+            if(layer == "bus_lines") {
+                RenderBuses(doc,buses,stops);
+            } else if(layer == "bus_labels") {
+                RenderBusLabels(doc,buses,stops);
+            } else if(layer == "stop_points") {
+                RenderStops(doc,buses,stops);
+            } else {
+                RenderStopLabels(doc,buses,stops);
             }
         }
-        for(const auto& [_,stop] : stops) {
-            doc.Add(
-                Svg::Circle{}
-                .SetFillColor("white")
-                .SetRadius(settings.stop_radius)
-                .SetCenter(PointFromLocation(stop.latitude, stop.longtitude))
-            );
-        }
-        for(const auto& [name,stop] : stops) {
-            Svg::Text common = Svg::Text{}
-                .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
-                .SetOffset(settings.stop_label_offset)
-                .SetFontSize(settings.stop_label_font_size)
-                .SetFontFamily("Verdana")
-                .SetData(name);
-            Svg::Text underlayer = common;
-            doc.Add(
-                underlayer
-                .SetFillColor(settings.underlayer_color)
-                .SetStrokeColor(settings.underlayer_color)
-                .SetStrokeWidth(settings.underlayer_width)
-                .SetStrokeLineCap("round")
-                .SetStrokeLineJoin("round")
-            );
-            doc.Add(
-                common.SetFillColor("black")
-            );
-        }
+
         cache = std::move(doc);
     }
     return *cache;

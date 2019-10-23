@@ -124,6 +124,13 @@ TransportCatalog& TransportCatalog::ReadRequests(Json::Document doc) {
     }
     renderer.SetColorPalette(move(colors));
 
+    vector<string> layers;
+    colors.reserve(render_settings.at("layers").AsArray().size());
+    for(const auto& layer_node : render_settings.at("layers").AsArray()) {
+        layers.push_back(layer_node.AsString());
+    }
+    renderer.SetLayers(move(layers));
+
     /* Read Base Requests*/
     const auto& base_requests = root_.at("base_requests").AsArray();
     for(const auto& node : base_requests) {
