@@ -368,7 +368,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
 Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
     std::map<string,Json::Node> res;
     stringstream ss;
-    renderer.GetMap(db.GetBuses(),db.GetStops()).Render(ss);
+    renderer.Render().Render(ss);
     res["map"] = Json::Node(ss.str());
     res["request_id"] = Json::Node(*id_);
     return move(res);

@@ -2,6 +2,7 @@
 
 #include "descriptions.h"
 #include "svg.h"
+#include <functional>
 
 struct RenderSettings {
     double width;
@@ -21,7 +22,8 @@ struct RenderSettings {
 
 class SvgRender {
 public:
-    SvgRender() =  default;
+    SvgRender(const Buses& buses, const Stops& stops)
+    : buses(buses), stops(stops) {}
 
     SvgRender& SetWidth(double);
     SvgRender& SetHeight(double);
@@ -37,15 +39,21 @@ public:
     SvgRender& SetColorPalette(std::vector<Svg::Color>);
     SvgRender& SetLayers(std::vector<std::string>);
 
-    Svg::Document GetMap(const Buses& buses, const Stops& stops) const;
+    Svg::Document Render() const;
 private:
     RenderSettings settings;
+    const Buses& buses;
+    const Stops& stops;
     mutable std::optional<Svg::Document> cache;
+
     Svg::Point PointFromLocation(double lat, double lon) const;
-    void RenderBuses(Svg::Document& doc, const Buses& buses, const Stops& stops) const;
-    void RenderStops(Svg::Document& doc, const Buses& buses, const Stops& stops) const;
-    void RenderBusLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const;
-    void RenderStopLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const;
-    void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, 
-                                                        const Stops& stops, Svg::Color color) const;
+
+    void RenderBuses(Svg::Document& doc) const;
+    void RenderStops(Svg::Document& doc) const;
+    void RenderBusLabels(Svg::Document& doc) const;
+    void RenderStopLabels(Svg::Document& doc) const;
+
+    static const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> render_table;
+
+    void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
 };

@@ -109,7 +109,8 @@ public:
   using Requests = std::vector<std::unique_ptr<Request>>;
   using Respones = Json::Node;
 
-  TransportCatalog() = default;
+  TransportCatalog()
+  : db(), router(), renderer(db.GetBuses(),db.GetStops()) {}
   TransportCatalog& ReadRequests(Json::Document doc);
   TransportCatalog& ProcessRequests();
   Respones GetResponses() {

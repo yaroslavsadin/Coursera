@@ -2,6 +2,13 @@
 #include <vector>
 #include "misc.h"
 
+const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> SvgRender::render_table {
+        { "bus_lines" , &SvgRender::RenderBuses },
+        { "stop_points" , &SvgRender::RenderStops },
+        { "bus_labels" , &SvgRender::RenderBusLabels },
+        { "stop_labels" , &SvgRender::RenderStopLabels }
+    };
+
 SvgRender& SvgRender::SetWidth(double x){
     settings.width = x;
     return *this;
@@ -80,8 +87,8 @@ struct ColorGenerator {
     size_t cur_index;
 };
 
-void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, 
-                                                        const Stops& stops, Svg::Color color) const {
+void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, 
+                            const std::string& stop, Svg::Color color) const {
     Svg::Text common = Svg::Text{}
         .SetPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude))
         .SetOffset(settings.bus_label_offset)
@@ -103,7 +110,7 @@ void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, cons
     );
 }
 
-void SvgRender::RenderBuses(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+void SvgRender::RenderBuses(Svg::Document& doc) const {
     ColorGenerator color_generator(settings.color_palette);
     for(const auto& [_,bus] : buses) {
         Svg::Polyline bus_line;
@@ -123,7 +130,7 @@ void SvgRender::RenderBuses(Svg::Document& doc, const Buses& buses, const Stops&
     }
 }
 
-void SvgRender::RenderStops(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+void SvgRender::RenderStops(Svg::Document& doc) const {
     for(const auto& [_,stop] : stops) {
         doc.Add(
             Svg::Circle{}
@@ -134,7 +141,7 @@ void SvgRender::RenderStops(Svg::Document& doc, const Buses& buses, const Stops&
     }
 }
 
-void SvgRender::RenderBusLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+void SvgRender::RenderBusLabels(Svg::Document& doc) const {
     ColorGenerator color_generator(settings.color_palette);
     for(const auto& [name,bus] : buses) {
         if(bus.route.size()) {
@@ -142,15 +149,15 @@ void SvgRender::RenderBusLabels(Svg::Document& doc, const Buses& buses, const St
             const auto& finish_stop = *prev(bus.route.end());
             auto bus_color = color_generator();
 
-            AddBusLabel(doc,name,start_stop,stops,bus_color);
+            AddBusLabel(doc,name,start_stop,bus_color);
             if(start_stop != finish_stop) {
-                AddBusLabel(doc,name,finish_stop,stops,bus_color);
+                AddBusLabel(doc,name,finish_stop,bus_color);
             }
         }
     }
 }
 
-void SvgRender::RenderStopLabels(Svg::Document& doc, const Buses& buses, const Stops& stops) const {
+void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     for(const auto& [name,stop] : stops) {
         Svg::Text common = Svg::Text{}
             .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
@@ -173,7 +180,7 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const Buses& buses, const S
     }
 }
 
-Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
+Svg::Document SvgRender::Render() const {
     if(1) {
         min_lat = stops.begin()->second.latitude;
         min_lon = stops.begin()->second.longtitude;
@@ -183,9 +190,6 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
             if(stop.longtitude < min_lon) min_lon = stop.longtitude;
             if(stop.longtitude > max_lon) max_lon = stop.longtitude;
         }
-
-        double width_zoom_coef {0};
-        double height_zoom_coef {0};
 
         if((max_lon - min_lon) && (max_lat - min_lat)) {
             double width_zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
@@ -202,15 +206,7 @@ Svg::Document SvgRender::GetMap(const Buses& buses, const Stops& stops) const {
         Svg::Document doc;
 
         for(const auto& layer : settings.layers) {
-            if(layer == "bus_lines") {
-                RenderBuses(doc,buses,stops);
-            } else if(layer == "bus_labels") {
-                RenderBusLabels(doc,buses,stops);
-            } else if(layer == "stop_points") {
-                RenderStops(doc,buses,stops);
-            } else {
-                RenderStopLabels(doc,buses,stops);
-            }
+            render_table.at(layer)(this,doc);
         }
 
         cache = std::move(doc);
