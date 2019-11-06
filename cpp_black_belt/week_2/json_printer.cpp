@@ -38,13 +38,12 @@ void PrintJsonString(std::ostream& out, std::string_view str) {
   }
 }
 
+struct NullContext {};
+
 template<typename PrevType>
 class JsonArray;
 template<typename PrevType>
 class JsonObject;
-
-struct NullContext {};
-static NullContext null_context;
 
 using Array = std::vector<Json::Node>;
 using Object = std::map<std::string,Json::Node>;
@@ -54,7 +53,6 @@ class JsonArray {
 public:
   using ThisType = JsonArray<PrevType>;
 
-  JsonArray() : data_storage(Array()), data(*data_storage), prev(null_context) {}
   JsonArray(PrevType& prev, Array& data) : data(data), prev(prev) {}
 
   ThisType& Number(int64_t x)  {
@@ -74,7 +72,7 @@ public:
     return *this;
   }
 
-  JsonArray<ThisType> BeginArray(){
+  JsonArray<ThisType> BeginArray() {
     data.push_back(Json::Node(Array()));
     return JsonArray<ThisType>(*this,data.back().AsArray());
   }
@@ -88,7 +86,6 @@ public:
     return prev;
   }
 private:
-  std::optional<Array> data_storage;
   Array& data;
   PrevType& prev;
 };
@@ -139,7 +136,6 @@ private:
 template<typename PrevType>
 class JsonObject {
 public:
-  JsonObject() : data_storage(Object()), data(*data_storage), temp(*this), prev(null_context) {}
   JsonObject(PrevType& prev, Object& data) : data(data), temp(*this), prev(prev) {}
   
   JsonValue<JsonObject<PrevType>>& Key(std::string key) {
@@ -151,25 +147,90 @@ public:
   PrevType& EndObject() {
     return *prev;
   }
-protected:
-  std::optional<Object> data_storage;
+private:
   Object& data;
   JsonValue<JsonObject<PrevType>> temp;
   PrevType& prev;
 };
 
+template<>
+class JsonArray<NullContext> {
+public:
+  using ThisType = JsonArray<NullContext>;
 
+  JsonArray(std::ostream& stream) : stream(stream), data(Array()) {}
+
+  ThisType& Number(int64_t x)  {
+    data.push_back(static_cast<int>(x));
+    return *this;
+  }
+  ThisType& String(std::string_view x)  {
+    data.push_back(std::string(x));
+    return *this;
+  }
+  ThisType& Boolean(bool x)  {
+    data.push_back(x);
+    return *this;
+  }
+  ThisType& Null()  {
+    data.push_back(Json::Node());
+    return *this;
+  }
+
+  JsonArray<ThisType> BeginArray(){
+    data.push_back(Json::Node(Array()));
+    return JsonArray<ThisType>(*this,data.back().AsArray());
+  }
+
+  JsonObject<ThisType> BeginObject() {
+    data.push_back(Json::Node(Object()));
+    return JsonObject<ThisType>(*this,data.back().AsMap());
+  }
+
+  void EndArray() {}
+  
+  ~JsonArray() {
+    Json::Print(Json::Node(data),stream);
+  }
+private:
+  Array data;
+  std::ostream& stream;
+};
+
+template<>
+class JsonObject<NullContext> {
+public:
+  JsonObject(std::ostream& stream) 
+  : data(), temp(*this), stream(stream)
+  {}
+  
+  JsonValue<JsonObject<NullContext>>& Key(std::string key) {
+    data[key] = Json::Node();
+    temp.SetValue(&data[key]);
+    return temp;
+  }
+
+  void EndObject() {}
+
+  ~JsonObject() {
+    Json::Print(Json::Node(data),stream);
+  }
+private:
+  Object data;
+  JsonValue<JsonObject<NullContext>> temp;
+  std::ostream& stream;
+};
 
 using ArrayContext = JsonArray<NullContext>;  // Замените это объявление на определение типа ArrayContext
 ArrayContext PrintJsonArray(std::ostream& out) {
   // реализуйте функцию
-  return ArrayContext();
+  return ArrayContext(out);
 }
 
 using ObjectContext = JsonObject<NullContext>;  // Замените это объявление на определение типа ObjectContext
 ObjectContext PrintJsonObject(std::ostream& out) {
   // реализуйте функцию
-  return ObjectContext();
+  return ObjectContext(out);
 }
 
 void TestArray() {
