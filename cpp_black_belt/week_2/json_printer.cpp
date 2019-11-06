@@ -8,8 +8,69 @@
 #include <string>
 #include <variant>
 #include <memory>
-#include "json.h"
-#include "misc.h"
+
+namespace Json {
+
+  class Node : public std::variant<std::monostate,
+                            std::vector<Node>,
+                            std::map<std::string, Node>,
+                            int64_t,
+                            std::string,
+                            double,
+                            bool> {
+  public:
+    using variant::variant;
+    Node(std::monostate x) : variant(x) {}
+    Node(int64_t x) : variant(x) {}
+    Node(bool x) : variant(x) {}
+    Node(double x) : variant(x) {}
+    Node(std::string x) : variant(x) {}
+    Node(std::vector<Node> x) : variant(x) {}
+    Node(std::map<std::string, Node> x) : variant(x) {}
+
+    const auto& AsArray() const {
+      return std::get<std::vector<Node>>(*this);
+    }
+    auto& AsArray() {
+      return std::get<std::vector<Node>>(*this);
+    }
+    const auto& AsMap() const {
+      return std::get<std::map<std::string, Node>>(*this);
+    }
+    auto& AsMap() {
+      return std::get<std::map<std::string, Node>>(*this);
+    }
+    int AsInt() const {
+      return std::get<int64_t>(*this);
+    }
+    double AsDouble() const {
+      if(std::holds_alternative<int64_t>(*this)) {
+        return std::get<int64_t>(*this);
+      } else {
+        return std::get<double>(*this);
+      }
+    }
+    bool AsBool() const {
+      return std::get<bool>(*this);
+    }
+    const auto& AsString() const {
+      return std::get<std::string>(*this);
+    }
+  };
+}
+
+template<typename It>
+class Range {
+public:
+  Range(It begin, It end) : begin_(begin), end_(end) {}
+  It begin() const { return begin_; }
+  It end() const { return end_; }
+  size_t size() { return std::distance(begin_,end_); }
+
+private:
+  It begin_;
+  It end_;
+};
 
 using Array = std::vector<Json::Node>;
 using Object = std::map<std::string,Json::Node>;
@@ -45,7 +106,7 @@ void JsonPrint(const Json::Node& node, std::ostream& stream) {
   if (std::holds_alternative<std::monostate>(node)) {
     stream << "null";
   }
-  else if (std::holds_alternative<int>(node)) {
+  else if (std::holds_alternative<int64_t>(node)) {
     stream << node.AsInt();
   }
   else if (std::holds_alternative<double>(node)) {
@@ -101,7 +162,7 @@ public:
   JsonArray(PrevType& prev, Array& data) : data(data), prev(prev) {}
 
   ThisType& Number(int64_t x)  {
-    data.push_back(static_cast<int>(x));
+    data.push_back(x);
     return *this;
   }
   ThisType& String(std::string_view x)  {
@@ -135,16 +196,16 @@ private:
   PrevType& prev;
 };
 
-template<typename Object>
+template<typename Parent>
 class JsonValue {
 public:
-  using ThisType = Object;
-  // friend class PrevType;
+  using ThisType = Parent;
+  template<typename PrevType> friend class JsonObject;
 
   JsonValue(ThisType& parent) : obj(parent) {}
 
   ThisType& Number(int64_t x)  {
-    *value = static_cast<int>(x);
+    *value = x;
     return obj;
   }
   ThisType& String(std::string_view x)  {
@@ -166,16 +227,15 @@ public:
 
   JsonObject<ThisType> BeginObject() {
     *value = Json::Node(Object());
-    return JsonArray<ThisType>(obj,value->AsMap());
-  }
-
-  void SetValue(Json::Node* val) {
-    value = val;
+    return JsonObject<ThisType>(obj,value->AsMap());
   }
 
 private:
   Json::Node* value;
   ThisType& obj;
+  void SetValue(Json::Node* val) {
+    value = val;
+  }
 };
 
 template<typename PrevType>
@@ -183,14 +243,14 @@ class JsonObject {
 public:
   JsonObject(PrevType& prev, Object& data) : data(data), temp(*this), prev(prev) {}
   
-  JsonValue<JsonObject<PrevType>>& Key(const std::string& key) {
-    data[key] = Json::Node();
-    temp.SetValue(&data[key]);
+  JsonValue<JsonObject<PrevType>>& Key(std::string_view key) {
+    data[std::string(key)] = Json::Node();
+    temp.SetValue(&data[std::string(key)]);
     return temp;
   }
 
   PrevType& EndObject() {
-    return *prev;
+    return prev;
   }
 private:
   Object& data;
@@ -206,7 +266,7 @@ public:
   JsonArray(std::ostream& stream) : stream(stream), data(Array()) {}
 
   ThisType& Number(int64_t x)  {
-    data.push_back(static_cast<int>(x));
+    data.push_back(x);
     return *this;
   }
   ThisType& String(std::string_view x)  {
@@ -249,9 +309,9 @@ public:
   : data(), temp(*this), stream(stream)
   {}
   
-  JsonValue<JsonObject<void>>& Key(const std::string& key) {
-    data[key] = Json::Node();
-    temp.SetValue(&data[key]);
+  JsonValue<JsonObject<void>>& Key(std::string_view key) {
+    data[std::string(key)] = Json::Node();
+    temp.SetValue(&data[std::string(key)]);
     return temp;
   }
 
@@ -324,20 +384,46 @@ void TestAutoClose() {
 
 void TestPrintJsonString() {
   {
-    ostringstream os;
+    std::ostringstream os;
     PrintJsonString(os, "Hello, \"world\"");
     ASSERT_EQUAL(os.str(),R"("Hello, \"world\"")");
   }
   {
-    ostringstream os;
+    std::ostringstream os;
     PrintJsonString(os, R"(")");
     ASSERT_EQUAL(os.str(),R"("\"")");
   }
   {
-    ostringstream os;
+    std::ostringstream os;
     PrintJsonString(os, R"(\)");
     ASSERT_EQUAL(os.str(),R"("\\")");
   }
+}
+
+void TestAll() {
+  std::ostringstream output;
+
+  {
+    auto json = PrintJsonObject(std::cout);
+    json
+      .Key("id1").Number(1234)
+      .Key("id2").Boolean(false)
+      .Key("").Null()
+      .Key("\"").String("\\")
+      .Key("test\"")
+      .BeginArray()
+        .BeginObject()
+          .Key("lol").Number(42)
+          .Key("kek").Boolean(true)
+        .EndObject()
+        .Boolean(false)
+        .String("\"keklol")
+        .Number(43)
+      .EndArray()
+      .Key("1").Boolean(true);
+  }
+
+  // ASSERT_EQUAL(output.str(), R"({"":null,"\"":"\\","id1":1234,"id2":false})");
 }
 
 int main() {
@@ -346,6 +432,7 @@ int main() {
   RUN_TEST(tr, TestArray);
   RUN_TEST(tr, TestObject);
   RUN_TEST(tr, TestAutoClose);
+  // RUN_TEST(tr, TestAll);
 
   return 0;
 }
