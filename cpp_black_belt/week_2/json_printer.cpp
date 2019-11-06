@@ -9,8 +9,12 @@
 #include <variant>
 #include <memory>
 #include "json.h"
+#include "misc.h"
 
-size_t IsEscape(char c) {
+using Array = std::vector<Json::Node>;
+using Object = std::map<std::string,Json::Node>;
+
+bool IsEscape(char c) {
   switch (c) {
     case '\b':
     case '\f':
@@ -18,9 +22,10 @@ size_t IsEscape(char c) {
     case '\r':
     case '\t':
     case '\"':
+    case '\\':
       return true;
     default:
-      return false;;
+      return false;
   }
   return false;
 }
@@ -29,21 +34,64 @@ void PrintJsonString(std::ostream& out, std::string_view str) {
   // реализуйте фукнцию
   out << "\"";
   for(size_t i = 0; i < str.size(); i++) {
-    if(IsEscape(str[i])) {
-      out << '\\';
-    }
+    if(IsEscape(str[i])) 
+      out << R"(\)";
     out << str[i];
   }
   out << "\"";
 }
 
+void JsonPrint(const Json::Node& node, std::ostream& stream) {
+  if (std::holds_alternative<std::monostate>(node)) {
+    stream << "null";
+  }
+  else if (std::holds_alternative<int>(node)) {
+    stream << node.AsInt();
+  }
+  else if (std::holds_alternative<double>(node)) {
+    stream << node.AsDouble();
+  }
+  else if (std::holds_alternative<bool>(node)) {
+    stream << std::boolalpha << node.AsBool();
+  }
+  else if (std::holds_alternative<std::string>(node)) {
+    PrintJsonString(stream,node.AsString());
+  }
+  else if (std::holds_alternative<Array>(node)) {
+    stream << "[";
+    const auto& x = node.AsArray();
+    if(x.size()) { 
+      for(const auto& node : Range(x.begin(),prev(x.end()))) {
+        JsonPrint(node, stream);
+        stream << ',';
+      }
+    
+      JsonPrint(*prev(x.end()),stream);
+    }
+    stream << "]";
+  }
+  else {
+    stream << "{";
+    const auto& x = node.AsMap();
+    if(x.size()) {
+      for(const auto& pair_ : Range(x.begin(),prev(x.end()))) {
+        JsonPrint(pair_.first, stream);
+        stream << ":";
+        JsonPrint(pair_.second, stream);
+        stream << ',';
+      } 
+      JsonPrint(prev(x.end())->first, stream);
+      stream << ":";
+      JsonPrint(prev(x.end())->second, stream);
+    }
+    stream << "}";
+  }
+};
+
 template<typename PrevType>
 class JsonArray;
 template<typename PrevType>
 class JsonObject;
-
-using Array = std::vector<Json::Node>;
-using Object = std::map<std::string,Json::Node>;
 
 template<typename PrevType>
 class JsonArray {
@@ -187,7 +235,7 @@ public:
   void EndArray() {}
   
   ~JsonArray() {
-    Json::Print(Json::Node(data),stream);
+    JsonPrint(Json::Node(data), stream);
   }
 private:
   Array data;
@@ -210,7 +258,7 @@ public:
   void EndObject() {}
 
   ~JsonObject() {
-    Json::Print(Json::Node(data),stream);
+    JsonPrint(Json::Node(data), stream);
   }
 private:
   Object data;
@@ -260,7 +308,7 @@ void TestObject() {
       .Key("\"").String("\\");
   }
 
-  ASSERT_EQUAL(output.str(), R"({"id1":1234,"id2":false,"":null,"\"":"\\"})");
+  ASSERT_EQUAL(output.str(), R"({"":null,"\"":"\\","id1":1234,"id2":false})");
 }
 
 void TestAutoClose() {
@@ -284,6 +332,11 @@ void TestPrintJsonString() {
     ostringstream os;
     PrintJsonString(os, R"(")");
     ASSERT_EQUAL(os.str(),R"("\"")");
+  }
+  {
+    ostringstream os;
+    PrintJsonString(os, R"(\)");
+    ASSERT_EQUAL(os.str(),R"("\\")");
   }
 }
 
