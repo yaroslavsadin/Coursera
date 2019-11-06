@@ -10,35 +10,32 @@
 #include <memory>
 #include "json.h"
 
-size_t FindEscape(std::string_view str) {
-  for(size_t i; i < str.size(); i++) {
-    switch (str[i]) {
-      case '\\': return i; break;
-      case '\"': return i; break;
-      default:
-          break;
-    }
+size_t IsEscape(char c) {
+  switch (c) {
+    case '\b':
+    case '\f':
+    case '\n':
+    case '\r':
+    case '\t':
+    case '\"':
+      return true;
+    default:
+      return false;;
   }
-  return str.npos;
-}
-
-void PrintEscape(char c, std::ostream& out) {
-  out << R"(\)" << c;
+  return false;
 }
 
 void PrintJsonString(std::ostream& out, std::string_view str) {
   // реализуйте фукнцию
-  size_t cur_pos = 0;
-  while(cur_pos != str.npos) {
-    cur_pos = FindEscape(str);
-    out << str.substr(cur_pos-1);
-    if(cur_pos != str.npos) {
-      PrintEscape(str[cur_pos], out);
+  out << "\"";
+  for(size_t i = 0; i < str.size(); i++) {
+    if(IsEscape(str[i])) {
+      out << '\\';
     }
+    out << str[i];
   }
+  out << "\"";
 }
-
-struct NullContext {};
 
 template<typename PrevType>
 class JsonArray;
@@ -138,7 +135,7 @@ class JsonObject {
 public:
   JsonObject(PrevType& prev, Object& data) : data(data), temp(*this), prev(prev) {}
   
-  JsonValue<JsonObject<PrevType>>& Key(std::string key) {
+  JsonValue<JsonObject<PrevType>>& Key(const std::string& key) {
     data[key] = Json::Node();
     temp.SetValue(&data[key]);
     return temp;
@@ -154,9 +151,9 @@ private:
 };
 
 template<>
-class JsonArray<NullContext> {
+class JsonArray<void> {
 public:
-  using ThisType = JsonArray<NullContext>;
+  using ThisType = JsonArray<void>;
 
   JsonArray(std::ostream& stream) : stream(stream), data(Array()) {}
 
@@ -198,13 +195,13 @@ private:
 };
 
 template<>
-class JsonObject<NullContext> {
+class JsonObject<void> {
 public:
   JsonObject(std::ostream& stream) 
   : data(), temp(*this), stream(stream)
   {}
   
-  JsonValue<JsonObject<NullContext>>& Key(std::string key) {
+  JsonValue<JsonObject<void>>& Key(const std::string& key) {
     data[key] = Json::Node();
     temp.SetValue(&data[key]);
     return temp;
@@ -217,17 +214,17 @@ public:
   }
 private:
   Object data;
-  JsonValue<JsonObject<NullContext>> temp;
+  JsonValue<JsonObject<void>> temp;
   std::ostream& stream;
 };
 
-using ArrayContext = JsonArray<NullContext>;  // Замените это объявление на определение типа ArrayContext
+using ArrayContext = JsonArray<void>;  // Замените это объявление на определение типа ArrayContext
 ArrayContext PrintJsonArray(std::ostream& out) {
   // реализуйте функцию
   return ArrayContext(out);
 }
 
-using ObjectContext = JsonObject<NullContext>;  // Замените это объявление на определение типа ObjectContext
+using ObjectContext = JsonObject<void>;  // Замените это объявление на определение типа ObjectContext
 ObjectContext PrintJsonObject(std::ostream& out) {
   // реализуйте функцию
   return ObjectContext(out);
@@ -277,8 +274,22 @@ void TestAutoClose() {
   ASSERT_EQUAL(output.str(), R"([[{}]])");
 }
 
+void TestPrintJsonString() {
+  {
+    ostringstream os;
+    PrintJsonString(os, "Hello, \"world\"");
+    ASSERT_EQUAL(os.str(),R"("Hello, \"world\"")");
+  }
+  {
+    ostringstream os;
+    PrintJsonString(os, R"(")");
+    ASSERT_EQUAL(os.str(),R"("\"")");
+  }
+}
+
 int main() {
   TestRunner tr;
+  RUN_TEST(tr, TestPrintJsonString);
   RUN_TEST(tr, TestArray);
   RUN_TEST(tr, TestObject);
   RUN_TEST(tr, TestAutoClose);
