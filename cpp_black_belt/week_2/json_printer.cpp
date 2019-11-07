@@ -7,13 +7,12 @@
 #include <stack>
 #include <string>
 #include <variant>
-#include <memory>
 
 namespace Json {
 
   class Node : public std::variant<std::monostate,
                             std::vector<Node>,
-                            std::map<std::string, Node>,
+                            std::vector<std::pair<std::string,Node>>,
                             int64_t,
                             std::string,
                             double,
@@ -26,7 +25,7 @@ namespace Json {
     Node(double x) : variant(x) {}
     Node(std::string x) : variant(x) {}
     Node(std::vector<Node> x) : variant(x) {}
-    Node(std::map<std::string, Node> x) : variant(x) {}
+    Node(std::vector<std::pair<std::string,Node>> x) : variant(x) {}
 
     const auto& AsArray() const {
       return std::get<std::vector<Node>>(*this);
@@ -35,10 +34,10 @@ namespace Json {
       return std::get<std::vector<Node>>(*this);
     }
     const auto& AsMap() const {
-      return std::get<std::map<std::string, Node>>(*this);
+      return std::get<std::vector<std::pair<std::string,Node>>>(*this);
     }
     auto& AsMap() {
-      return std::get<std::map<std::string, Node>>(*this);
+      return std::get<std::vector<std::pair<std::string,Node>>>(*this);
     }
     int AsInt() const {
       return std::get<int64_t>(*this);
@@ -73,7 +72,7 @@ private:
 };
 
 using Array = std::vector<Json::Node>;
-using Object = std::map<std::string,Json::Node>;
+using Object = std::vector<std::pair<std::string,Json::Node>>;
 
 bool IsEscape(char c) {
   switch (c) {
@@ -244,8 +243,8 @@ public:
   JsonObject(PrevType& prev, Object& data) : data(data), temp(*this), prev(prev) {}
   
   JsonValue<JsonObject<PrevType>>& Key(std::string_view key) {
-    data[std::string(key)] = Json::Node();
-    temp.SetValue(&data[std::string(key)]);
+    data.push_back({std::string(key), Json::Node()});
+    temp.SetValue(&data.back().second);
     return temp;
   }
 
@@ -310,8 +309,8 @@ public:
   {}
   
   JsonValue<JsonObject<void>>& Key(std::string_view key) {
-    data[std::string(key)] = Json::Node();
-    temp.SetValue(&data[std::string(key)]);
+    data.push_back({std::string(key), Json::Node()});
+    temp.SetValue(&data.back().second);
     return temp;
   }
 
@@ -368,7 +367,7 @@ void TestObject() {
       .Key("\"").String("\\");
   }
 
-  ASSERT_EQUAL(output.str(), R"({"":null,"\"":"\\","id1":1234,"id2":false})");
+  ASSERT_EQUAL(output.str(), R"({"id1":1234,"id2":false,"":null,"\"":"\\"})");
 }
 
 void TestAutoClose() {
@@ -404,26 +403,18 @@ void TestAll() {
   std::ostringstream output;
 
   {
-    auto json = PrintJsonObject(std::cout);
+    auto json = PrintJsonObject(output);
     json
-      .Key("id1").Number(1234)
-      .Key("id2").Boolean(false)
-      .Key("").Null()
-      .Key("\"").String("\\")
-      .Key("test\"")
+      .Key("foo")
       .BeginArray()
-        .BeginObject()
-          .Key("lol").Number(42)
-          .Key("kek").Boolean(true)
-        .EndObject()
-        .Boolean(false)
-        .String("\"keklol")
-        .Number(43)
+        .String("Hello")
       .EndArray()
-      .Key("1").Boolean(true);
+      .Key("foo")  // повторяющиеся ключи допускаются
+      .BeginObject()
+        .Key("foo");  // закрытие объекта в таком состоянии допишет null в качестве значения
   }
 
-  // ASSERT_EQUAL(output.str(), R"({"":null,"\"":"\\","id1":1234,"id2":false})");
+  ASSERT_EQUAL(output.str(), R"({"foo":["Hello"],"foo":{"foo":null}})");
 }
 
 int main() {
@@ -432,7 +423,7 @@ int main() {
   RUN_TEST(tr, TestArray);
   RUN_TEST(tr, TestObject);
   RUN_TEST(tr, TestAutoClose);
-  // RUN_TEST(tr, TestAll);
+  RUN_TEST(tr, TestAll);
 
   return 0;
 }
