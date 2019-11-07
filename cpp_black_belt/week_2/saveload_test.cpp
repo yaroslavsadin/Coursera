@@ -79,8 +79,30 @@ void TestSaveLoad() {
   ASSERT_EQUAL(m, m2);
 }
 
+void TestVectorMap() {
+  vector<map<string,string>> m = {
+    {
+      {"lol","kek"},
+      {"kek","lol"}
+    },
+    {
+      {"dasd","fsdssd"},
+      {"das","erwedsf"}
+    }
+  };
+
+  stringstream ss;
+  Serialize(m, ss);
+
+  vector<map<string,string>> m2;
+  Deserialize(ss, m2);
+
+  ASSERT_EQUAL(m, m2);
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestSaveLoad);
+  RUN_TEST(tr, TestVectorMap);
   return 0;
 }

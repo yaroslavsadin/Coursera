@@ -16,6 +16,9 @@ void Serialize(const std::string& str, std::ostream& out) {
     out.write(str.c_str(),str.size());
 }
 
+template <typename T1, typename T2>
+void Serialize(const std::map<T1, T2>& data, std::ostream& out);
+
 template <typename T>
 void Serialize(const std::vector<T>& data, std::ostream& out) {
     size_t size = data.size();
@@ -54,6 +57,9 @@ void Deserialize(std::istream& in, std::string& str) {
     }
 }
 
+template <typename T1, typename T2>
+void Deserialize(std::istream& in, std::map<T1, T2>& data);
+
 template <typename T>
 void Deserialize(std::istream& in, std::vector<T>& data) {
     size_t size {0};
@@ -62,7 +68,7 @@ void Deserialize(std::istream& in, std::vector<T>& data) {
     while(size--) {
         T item;
         Deserialize(in,item);
-        data.push_back(item);
+        data.push_back(std::move(item));
     }
 }
 
@@ -75,6 +81,6 @@ void Deserialize(std::istream& in, std::map<T1, T2>& data) {
         Deserialize(in,key);
         T2 value;
         Deserialize(in,value);
-        data[key] = value;
+        data[std::move(key)] = std::move(value);
     }
 }
