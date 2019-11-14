@@ -204,6 +204,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+phone_book.o: phone_book.cpp.o
+
+.PHONY : phone_book.o
+
+# target to build an object file
+phone_book.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/phone_book.cpp.o
+.PHONY : phone_book.cpp.o
+
+phone_book.i: phone_book.cpp.i
+
+.PHONY : phone_book.i
+
+# target to preprocess a source file
+phone_book.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/phone_book.cpp.i
+.PHONY : phone_book.cpp.i
+
+phone_book.s: phone_book.cpp.s
+
+.PHONY : phone_book.s
+
+# target to generate assembly for a file
+phone_book.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/phone_book.cpp.s
+.PHONY : phone_book.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... phone_book.o"
+	@echo "... phone_book.i"
+	@echo "... phone_book.s"
 .PHONY : help
 
 

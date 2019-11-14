@@ -9,5 +9,5 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}) # В ${CMAKE_CURRENT_BINARY_DIR
 include_directories(../..)
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS contact.proto) # Здесь надо перечислить все ваши .proto-файлы
-add_executable(main main.cpp ../../test_runner.cpp ${PROTO_SRCS} ${PROTO_HDRS}) # Здесь надо перечислить все ваши .cpp-файлы, в том числе и сгенерированные protoc'ом
+add_executable(main main.cpp phone_book.cpp ../../test_runner.cpp ${PROTO_SRCS} ${PROTO_HDRS}) # Здесь надо перечислить все ваши .cpp-файлы, в том числе и сгенерированные protoc'ом
 target_link_libraries(main ${Protobuf_LIBRARIES}) # компонуем наш исполняемый файл с библиотекой libprotobuf 

@@ -7,10 +7,6 @@
 
 using namespace std;
 
-void PhoneBook::SaveTo(std::ostream& output) const {
-  
-}
-
 void TestSerialization() {
   const PhoneBook ab({
     {"Ivan Ivanov", Date{1980, 1, 13}, {"+79850685521"}},

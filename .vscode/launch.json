@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_black_belt/week_2/address-book/main.exe",
+            "program": "${workspaceFolder}/cpp_black_belt/week_2/phone-book/main.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
