@@ -96,7 +96,7 @@
         "__functional_03": "cpp"
     },
     "terminal.integrated.env.windows": {
-        "PATH":"C:\\cygwin64\\bin;${env:PATH}"
+        "PATH":"C:\\cygwin64\\bin"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

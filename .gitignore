@@ -13,3 +13,7 @@
 *.zip
 *.7z
 *.rar
+protobuf*/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
