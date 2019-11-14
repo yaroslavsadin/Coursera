@@ -5,9 +5,13 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(Protobuf REQUIRED)
 find_path(TEST_RUNNER_PATH test_runner.h)
 
+add_compile_options(-g -O0)
+add_link_options(-g -O0)
+
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${TEST_RUNNER_PATH})
+include_directories(${Protobuf_INCLUDE_DIRS}/google/protobuf/util)
 
 protobuf_generate_cpp(
     PROTO_SRCS
