@@ -335,6 +335,103 @@ void RunLexerTests(TestRunner& tr) {
 
 } /* namespace Parse */
 
+static std::unordered_map<std::string_view,Parse::Token> keywords {
+  { "class", Parse::Token(Parse::TokenType::Class{}) },
+  { "return", Parse::Token(Parse::TokenType::Return{}) },
+  { "if", Parse::Token(Parse::TokenType::If{}) },
+  { "else", Parse::Token(Parse::TokenType::Else{}) },
+  { "def", Parse::Token(Parse::TokenType::Def{}) },
+  { "print",Parse::Token(Parse::TokenType::Print{}) },
+  { "and", Parse::Token(Parse::TokenType::And{}) },
+  { "or", Parse::Token(Parse::TokenType::Or{}) },
+  { "not", Parse::Token(Parse::TokenType::Not{}) },
+  { "None", Parse::Token(Parse::TokenType::None{}) },
+  { "True", Parse::Token(Parse::TokenType::True{}) },
+  { "False", Parse::Token(Parse::TokenType::False{}) }
+};
+
+static std::unordered_map<std::string_view,Parse::Token> compares {
+  { "==", Parse::Token(Parse::TokenType::Eq{}) },
+  { "!=", Parse::Token(Parse::TokenType::NotEq{}) },
+  { "<=", Parse::Token(Parse::TokenType::LessOrEq{}) },
+  { ">=", Parse::Token(Parse::TokenType::GreaterOrEq{}) }
+};
+
+std::vector<Parse::Token> MythonParse(istream& is) {
+  std::vector<Parse::Token> res;
+  std::string str;
+  size_t current_indent = 0;
+  while(getline(is,str)) {
+    string_view view = str;
+    
+    // Checking for tabs to identify indent
+    size_t indent = 0;
+    while(isblank(view[0])) {
+      view.remove_prefix(1);
+      indent++;
+    }
+    if(view.empty()) {
+      continue;
+    }
+    if(current_indent < indent) {
+      while(current_indent != indent) {  
+        res.push_back(Parse::Token(Parse::TokenType::Indent{}));
+        current_indent +=2;
+      }
+    } else if(current_indent > indent) {
+      while(current_indent != indent) {      
+        res.push_back(Parse::Token(Parse::TokenType::Dedent{}));
+        current_indent -=2;
+      }
+    }
+
+    // Checking on actual tokens
+    while(view.size()) {
+      while(isblank(view[0])) {
+        view.remove_prefix(1);
+      }
+      if(!view.size()) {
+        break;
+      }
+      if(isalpha(view[0]) || view[0] == '_') {
+        // Keyword or identifier
+        size_t pos = 0;
+        while(isalnum(view[pos]) || view[pos] == '_') { pos++; }
+        // Check if this is a keyword or an id...
+        if(keywords.count(view.substr(0,pos))) {
+          res.push_back(keywords.at(view.substr(0,pos)));
+        } else {
+          res.push_back(Parse::Token(Parse::TokenType::Id{std::string(view.substr(0,pos))}));
+        }
+        view.remove_prefix(pos);
+      } else if(isalnum(view[0])) {
+        //Number
+        size_t pos = 0;
+        while(isalnum(view[pos])) { pos++; }
+        res.push_back(Parse::Token(Parse::TokenType::Number{stoi(std::string(view.substr(0,pos)))}));
+        view.remove_prefix(pos);
+      } else if(view[0] == '\'' || view[0] == '\"') {
+        // String
+        char delim = view[0];
+        size_t pos = view.find(delim,1);
+        res.push_back(Parse::Token(Parse::TokenType::String{std::string(view.substr(1,pos-1))}));
+        view.remove_prefix(pos+1);
+      } else {
+        // Eq, NotEq... or Char
+        if(view.size() >= 2 && compares.count(view.substr(0,2))) {
+          res.push_back(compares.at(view.substr(0,2)));
+          view.remove_prefix(2);
+        } else {
+          res.push_back(Parse::Token(Parse::TokenType::Char{view[0]}));
+          view.remove_prefix(1);
+        }
+      }
+    }
+    res.push_back(Parse::Token(Parse::TokenType::Newline{}));
+  }
+  return res;
+}
+
 int main() {
   TestRunner tr;
   Parse::RunLexerTests(tr);

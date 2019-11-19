@@ -8,6 +8,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "ostream_color.h"
 
 namespace TestRunnerPrivate {
   template <
@@ -69,9 +70,9 @@ template<class T, class U>
 void AssertEqual(const T& t, const U& u, const std::string& hint = {}) {
   if (!(t == u)) {
     std::ostringstream os;
-    os << "Assertion failed: " << t << " != " << u;
+    os << "Assertion failed: " << t << " != " << u << std::endl;
     if (!hint.empty()) {
-       os << " hint: " << hint;
+       os << "Hint: " << hint;
     }
     throw std::runtime_error(os.str());
   }
@@ -83,21 +84,25 @@ inline void Assert(bool b, const std::string& hint) {
 
 class TestRunner {
 public:
+  TestRunner() {
+    std::cerr << BLUE_TEXT_START << "============== Test Runner Start ==============" << TEXT_COLOR_RESET << std::endl;
+  }
   template <class TestFunc>
   void RunTest(TestFunc func, const std::string& test_name) {
     try {
       func();
-      std::cerr << test_name << " OK" << std::endl;
+      std::cerr << CYAN_TEXT_START << test_name << " OK" << TEXT_COLOR_RESET << std::endl;
     } catch (std::exception& e) {
       ++fail_count;
-      std::cerr << test_name << " fail: " << e.what() << std::endl;
+      std::cerr << RED_TEXT_START << test_name << " fail: " << std::endl << TEXT_COLOR_RESET << e.what() << std::endl;
     } catch (...) {
       ++fail_count;
-      std::cerr << "Unknown exception caught" << std::endl;
+      std::cerr << RED_TEXT_START << "Unknown exception caught" << TEXT_COLOR_RESET << std::endl;
     }
   }
 
   ~TestRunner() {
+    std::cerr << BLUE_TEXT_START << "============= Test Runner Finished ============" << TEXT_COLOR_RESET << std::endl;
     std::cerr.flush();
     if (fail_count > 0) {
       std::cerr << fail_count << " unit tests failed. Terminate" << std::endl;
@@ -116,15 +121,15 @@ private:
 #define ASSERT_EQUAL(x, y) {                          \
   std::ostringstream __assert_equal_private_os;       \
   __assert_equal_private_os                           \
-    << #x << " != " << #y << ", "                     \
+    << #x << " != " << #y << std::endl                \
     << FILE_NAME << ":" << __LINE__;                  \
   AssertEqual(x, y, __assert_equal_private_os.str()); \
 }
 
 #define ASSERT(x) {                           \
   std::ostringstream __assert_private_os;     \
-  __assert_private_os << #x << " is false, "  \
-    << FILE_NAME << ":" << __LINE__;          \
+  __assert_private_os << #x << " is false "   \
+  << std::endl  << FILE_NAME << ":" << __LINE__;          \
   Assert(static_cast<bool>(x), __assert_private_os.str());       \
 }
 
@@ -140,13 +145,13 @@ private:
   } catch (...) {                                                                           \
     std::ostringstream __assert_private_os;                                                 \
     __assert_private_os << "Expression " #expr " threw an unexpected exception"             \
-      " " FILE_NAME ":" << __LINE__;                                                        \
+    << std::endl <<  " " FILE_NAME ":" << __LINE__;                                         \
     Assert(false, __assert_private_os.str());                                               \
   }                                                                                         \
   if (!__assert_private_flag){                                                              \
     std::ostringstream __assert_private_os;                                                 \
     __assert_private_os << "Expression " #expr " is expected to throw " #expected_exception \
-      " " FILE_NAME ":" << __LINE__;                                                        \
+    << std::endl <<  " " FILE_NAME ":" << __LINE__;                                         \
     Assert(false, __assert_private_os.str());                                               \
   }                                                                                         \
 }

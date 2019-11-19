@@ -6,6 +6,7 @@
 #include <variant>
 #include <stdexcept>
 #include <optional>
+#include <vector>
 
 class TestRunner;
 
@@ -122,21 +123,38 @@ public:
 
   template <typename T>
   const T& Expect() const {
+    if(!tokens[current_token].Is<T>()) {
+      throw LexerError("Unexpected");
+    } else {
+      return tokens[current_token].As<T>();
+    }
   }
 
   template <typename T, typename U>
   void Expect(const U& value) const {
+    Expect<T>();
+    if(tokens[current_token].As<T>().value != value) {
+      throw LexerError("Unexpected");
+    }
   }
 
   template <typename T>
   const T& ExpectNext() {
+    auto next = NextToken();
+    Expect<T>();
+    return next.As<T>();
   }
 
   template <typename T, typename U>
   void ExpectNext(const U& value) {
+    auto next = NextToken();
+    Expect<T>(value);
   }
 
 private:
+  std::istream& input;
+  std::vector<Token> tokens;
+  size_t current_token;
 };
 
 void RunLexerTests(TestRunner& test_runner);
