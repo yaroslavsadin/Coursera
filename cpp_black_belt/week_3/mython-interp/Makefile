@@ -177,6 +177,33 @@ cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.cpp.s:
 	$(MAKE) -f CMakeFiles/mython_interp.dir/build.make CMakeFiles/mython_interp.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.cpp.s
 .PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.cpp.s
 
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.o: cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.o
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.o
+
+# target to build an object file
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.o:
+	$(MAKE) -f CMakeFiles/mython_interp.dir/build.make CMakeFiles/mython_interp.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.o
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.o
+
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.i: cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.i
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.i
+
+# target to preprocess a source file
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.i:
+	$(MAKE) -f CMakeFiles/mython_interp.dir/build.make CMakeFiles/mython_interp.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.i
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.i
+
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.s: cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.s
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.s
+
+# target to generate assembly for a file
+cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.s:
+	$(MAKE) -f CMakeFiles/mython_interp.dir/build.make CMakeFiles/mython_interp.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.s
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.cpp.s
+
 mython.o: mython.cpp.o
 
 .PHONY : mython.o
@@ -435,6 +462,9 @@ help:
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.o"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.i"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer.s"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.o"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.i"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_3/mython-lexer/lexer_test.s"
 	@echo "... mython.o"
 	@echo "... mython.i"
 	@echo "... mython.s"

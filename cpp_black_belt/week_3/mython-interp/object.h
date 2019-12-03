@@ -57,10 +57,16 @@ struct Method {
 
 class Class : public Object {
 public:
+  using Vtable = std::unordered_map<std::string_view,Method*>;
   explicit Class(std::string name, std::vector<Method> methods, const Class* parent);
   const Method* GetMethod(const std::string& name) const;
   const std::string& GetName() const;
   void Print(std::ostream& os) override;
+  const Vtable* GetVptr() const { return &vtable; }
+private:
+  std::string name;
+  std::vector<Method> methods;
+  Vtable vtable;
 };
 
 class ClassInstance : public Object {
@@ -74,6 +80,9 @@ public:
 
   Closure& Fields();
   const Closure& Fields() const;
+private:
+  const Class& cls;
+  Runtime::Closure fields;
 };
 
 void RunObjectsTests(TestRunner& test_runner);

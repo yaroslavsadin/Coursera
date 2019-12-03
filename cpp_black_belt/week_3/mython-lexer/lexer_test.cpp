@@ -431,9 +431,10 @@ std::vector<Parse::Token> MythonParse(istream& is) {
   }
   return res;
 }
-
+#if 0
 int main() {
   TestRunner tr;
   Parse::RunLexerTests(tr);
   return 0;
 }
+#endif

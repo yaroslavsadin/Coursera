@@ -13,7 +13,7 @@ include_directories(${UTILSDIR} ${LEXER_DIR})
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
  
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES *.cpp ${LEXER_DIR}/lexer.cpp)
+file(GLOB SOURCES *.cpp ${LEXER_DIR}/*.cpp)
 
 #Set preprocessor definitions
 add_compile_definitions()
