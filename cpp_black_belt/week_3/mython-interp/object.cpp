@@ -9,7 +9,11 @@ using namespace std;
 namespace Runtime {
 
 void ClassInstance::Print(std::ostream& os) {
-    /// ???
+    if(this->HasMethod("__str__",0)) {    
+        this->Call("__str__",{})->Print(os);
+    } else {
+        os << std::hex << this;
+    }
 }
 
 bool ClassInstance::HasMethod(const std::string& method, size_t argument_count) const {

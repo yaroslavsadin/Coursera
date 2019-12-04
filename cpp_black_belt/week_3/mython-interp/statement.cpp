@@ -1,5 +1,6 @@
 #include "statement.h"
 #include "object.h"
+#include "misc.h"
 
 #include <iostream>
 #include <sstream>
@@ -47,6 +48,7 @@ ObjectHolder VariableValue::Execute(Closure& closure) {
 }
 
 unique_ptr<Print> Print::Variable(std::string var) {
+  return make_unique<Print>(make_unique<VariableValue>(var));
 }
 
 Print::Print(unique_ptr<Statement> argument)
@@ -61,9 +63,22 @@ Print::Print(vector<unique_ptr<Statement>> args)
 }
 
 ObjectHolder Print::Execute(Closure& closure) {
-  for(auto& arg : args) {
-    arg->Execute(closure).Get()->Print(*output);
+  if(args.size() < 1) return {};
+  ostream& stream = *output;
+  for(const auto& arg : Range(args.begin(),prev(args.end()))) {
+    if(auto ptr = arg->Execute(closure).Get(); ptr != nullptr) {
+      ptr->Print(stream);
+    } else {
+      stream << "None";
+    }
+    stream << ' ';
   }
+  if(auto ptr = args.back()->Execute(closure).Get(); ptr != nullptr) {
+    ptr->Print(stream);
+  } else {
+    stream << "None";
+  }
+  stream << '\n';
   return {};
 }
 
@@ -107,10 +122,14 @@ ObjectHolder Add::Execute(Closure& closure) {
 
   auto lhs_eval = lhs->Execute(closure);
   auto rhs_eval = rhs->Execute(closure);
+
+  if(auto lhs_class = lhs_eval.TryAs<Runtime::ClassInstance>(); lhs_class) {
+    return lhs_class->Call("__add__",{rhs_eval});
+  }
   
   // Probably there's a better way...
   if(String* str_p1 = lhs_eval.TryAs<String>(); str_p1) {
-    if(String* str_p2 = lhs_eval.TryAs<String>(); str_p2) {
+    if(String* str_p2 = rhs_eval.TryAs<String>(); str_p2) {
       return ObjectHolder::Own(String(str_p1->GetValue() + str_p2->GetValue()));
     }
   } else if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {
@@ -125,9 +144,8 @@ ObjectHolder Add::Execute(Closure& closure) {
     } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
       return ObjectHolder::Own(Number(num_p1->GetValue() + num_p2->GetValue()));
     }
-  } else {
-    throw runtime_error("Bad add");
   }
+  throw runtime_error("Bad add");
 }
 
 ObjectHolder Sub::Execute(Closure& closure) {
@@ -148,9 +166,8 @@ ObjectHolder Sub::Execute(Closure& closure) {
     } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
       return ObjectHolder::Own(Number(num_p1->GetValue() - num_p2->GetValue()));
     }
-  } else {
-    throw runtime_error("Bad sub");
   }
+  throw runtime_error("Bad sub");
 }
 
 ObjectHolder Mult::Execute(Runtime::Closure& closure) {
@@ -171,9 +188,8 @@ ObjectHolder Mult::Execute(Runtime::Closure& closure) {
     } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
       return ObjectHolder::Own(Number(num_p1->GetValue() * num_p2->GetValue()));
     }
-  } else {
-    throw runtime_error("Bad mult");
   }
+  throw runtime_error("Bad mult");
 }
 
 ObjectHolder Div::Execute(Runtime::Closure& closure) {
@@ -194,9 +210,8 @@ ObjectHolder Div::Execute(Runtime::Closure& closure) {
     } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
       return ObjectHolder::Own(Number(num_p1->GetValue() / num_p2->GetValue()));
     }
-  } else {
-    throw runtime_error("Bad div");
   }
+  throw runtime_error("Bad div");
 }
 
 ObjectHolder Compound::Execute(Closure& closure) {
@@ -238,11 +253,16 @@ IfElse::IfElse(
   std::unique_ptr<Statement> condition,
   std::unique_ptr<Statement> if_body,
   std::unique_ptr<Statement> else_body
-)
+) : condition(move(condition)), if_body(move(if_body)), else_body(move(else_body))
 {
 }
 
 ObjectHolder IfElse::Execute(Runtime::Closure& closure) {
+  if(condition->Execute(closure)) {
+    return if_body->Execute(closure);
+  } else {
+    return else_body->Execute(closure);
+  }
 }
 
 ObjectHolder Or::Execute(Runtime::Closure& closure) {
@@ -274,6 +294,7 @@ NewInstance::NewInstance(const Runtime::Class& class_) : NewInstance(class_, {})
 }
 
 ObjectHolder NewInstance::Execute(Runtime::Closure& closure) {
+  // How to deal with args ???
   return ObjectHolder::Own(Runtime::ClassInstance(class_));
 }
 
