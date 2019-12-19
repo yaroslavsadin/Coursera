@@ -140,14 +140,13 @@ public:
 
   template <typename T>
   const T& ExpectNext() {
-    auto next = NextToken();
-    Expect<T>();
-    return next.As<T>();
+    NextToken();
+    return Expect<T>();
   }
 
   template <typename T, typename U>
   void ExpectNext(const U& value) {
-    auto next = NextToken();
+    const auto& next = NextToken();
     Expect<T>(value);
   }
 

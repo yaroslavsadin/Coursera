@@ -38,19 +38,30 @@ Closure& ClassInstance::Fields() {
 }
 
 ClassInstance::ClassInstance(const Class& cls)
-: cls(cls), fields(Runtime::Closure{{"self",ObjectHolder::Share(*this)}})
+// TODO: Check why if I share this object here directly to the "fields" instead of line 54
+// VariableValue::Execute fails with "self"
+: cls(cls), fields()
 {
 }
 
 ObjectHolder ClassInstance::Call(const std::string& method, const std::vector<ObjectHolder>& actual_args) {
     if(this->HasMethod(method,actual_args.size())) {
-        const Method* m = cls.GetMethod(method);
-        auto& formal = m->formal_params;
+        const Method* method_p = cls.GetMethod(method);
+        const vector<string>& formal = method_p->formal_params;
         Runtime::Closure method_closure = this->Fields();
-        for(size_t i = 0; i < actual_args.size(); i++) {
+        for(size_t i = 0; i < formal.size(); i++) {
             method_closure[formal[i]] = actual_args[i];
         }
-        return m->body->Execute(method_closure);
+        method_closure["self"] = ObjectHolder::Share(*this);
+        
+        // To work around the various tests, tak either body statement's return value
+        // Or something Return would give back...
+        auto ret = method_p->body->Execute(method_closure);
+        if(method_closure.count("*ret")) {
+            return method_closure.at("*ret");
+        } else {
+            return move(ret);
+        }
     } else {
         throw runtime_error("No such method");
     }

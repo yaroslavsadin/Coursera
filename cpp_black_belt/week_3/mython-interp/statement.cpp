@@ -32,19 +32,23 @@ VariableValue::VariableValue(std::vector<std::string> dotted_ids)
 }
 
 ObjectHolder VariableValue::Execute(Closure& closure) {
-  Closure final = closure;
+  Closure* final = &closure;
   for(auto it = dotted_ids.begin(); it < dotted_ids.end(); it++) {
     auto id = *it;
-    if(!final.count(id)) throw runtime_error("Variable not found");
-    if(auto next = final.at(id).TryAs<Runtime::ClassInstance>(); next) {
+    if(!final->count(id)) {
+      throw runtime_error("Variable not found");
+    }
+    if(auto* next = final->at(id).TryAs<Runtime::ClassInstance>(); next) {
       if(it == prev(dotted_ids.end())) {
-        return final.at(id);
+        return final->at(id);
       } else { 
-        final = next->Fields();
+        final = &next->Fields();
       }
-    } else break;
+    } else {
+      break;
+    }
   }
-  return final.at(dotted_ids.back());
+  return final->at(dotted_ids.back());
 }
 
 unique_ptr<Print> Print::Variable(std::string var) {
@@ -66,15 +70,15 @@ ObjectHolder Print::Execute(Closure& closure) {
   if(args.size() < 1) return {};
   ostream& stream = *output;
   for(const auto& arg : Range(args.begin(),prev(args.end()))) {
-    if(auto ptr = arg->Execute(closure).Get(); ptr != nullptr) {
-      ptr->Print(stream);
+    if(auto obj_hldr = arg->Execute(closure); obj_hldr) {
+      obj_hldr->Print(stream);
     } else {
       stream << "None";
     }
     stream << ' ';
   }
-  if(auto ptr = args.back()->Execute(closure).Get(); ptr != nullptr) {
-    ptr->Print(stream);
+  if(auto obj_hldr = args.back()->Execute(closure); obj_hldr) {
+    obj_hldr->Print(stream);
   } else {
     stream << "None";
   }
@@ -102,8 +106,8 @@ ObjectHolder MethodCall::Execute(Closure& closure) {
   if(cls->HasMethod(method,args.size())) {
     vector<ObjectHolder> actual_args;
     actual_args.reserve(args.size());
-    for(const auto& arg : args) {
-      actual_args.push_back(arg->Execute(closure));
+    for(size_t i = 0; i < args.size(); i++) {
+      actual_args.push_back((args[i])->Execute(closure));
     }
     return cls->Call(method,actual_args);
   } else {
@@ -215,14 +219,15 @@ ObjectHolder Div::Execute(Runtime::Closure& closure) {
 }
 
 ObjectHolder Compound::Execute(Closure& closure) {
-  for(const auto& stmnt : statements) {
+  for(const auto& stmnt : Range(statements.begin(),statements.end())) {
     stmnt->Execute(closure);
   }
-  return {};
+  return ObjectHolder::None();
 }
 
 ObjectHolder Return::Execute(Closure& closure) {
-  return statement->Execute(closure);
+  closure["*ret"] = statement->Execute(closure);
+  return ObjectHolder::None();
 }
 
 ClassDefinition::ClassDefinition(ObjectHolder class_) 
@@ -294,8 +299,17 @@ NewInstance::NewInstance(const Runtime::Class& class_) : NewInstance(class_, {})
 }
 
 ObjectHolder NewInstance::Execute(Runtime::Closure& closure) {
-  // How to deal with args ???
-  return ObjectHolder::Own(Runtime::ClassInstance(class_));
+  if(args.empty()) {
+    return ObjectHolder::Own(Runtime::ClassInstance(class_));
+  } else {
+    auto inst = ObjectHolder::Own(Runtime::ClassInstance(class_));
+    vector<ObjectHolder> actual;
+    for(auto&& arg : args) {
+      actual.push_back(arg->Execute(closure));
+    }
+    inst.TryAs<Runtime::ClassInstance>()->Call("__init__",std::move(actual));
+    return inst;
+  }
 }
 
 
