@@ -27,6 +27,19 @@ public:
   virtual bool operator!() { throw std::runtime_error(""); };
 };
 
+#define LOGIC_BIN_OP(op)                                                              \
+if constexpr(std::is_convertible<T,int>::value) {                                     \
+  if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {           \
+    return this->value op other_->GetValue();                                         \
+  } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {   \
+    return this->value op other_->GetValue();                                         \
+  } else {                                                                            \
+    throw std::runtime_error("LOGIC_BIN_OP "#op);                                     \
+  }                                                                                   \
+} else {                                                                              \
+  throw std::runtime_error("LOGIC_BIN_OP "#op);                                       \
+}                                             
+
 template <typename T>
 class ValueObject : public Object {
 public:
@@ -58,30 +71,10 @@ public:
   }
 
   bool operator|(const Object& other) { 
-    if constexpr(std::is_convertible<T,int>::value) {
-      if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {
-        return this->value | other_->GetValue();
-      } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {
-        return this->value | other_->GetValue();
-      } else {
-        throw std::runtime_error("");  
-      }
-    } else {
-      throw std::runtime_error("");
-    }
+    LOGIC_BIN_OP(|)
   };
   bool operator&(const Object& other) {
-    if constexpr(std::is_convertible<T,int>::value) {
-      if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {
-        return this->value & other_->GetValue();
-      } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {
-        return this->value & other_->GetValue();
-      } else {
-        throw std::runtime_error("");  
-      }
-    } else {
-      throw std::runtime_error("");
-    }
+    LOGIC_BIN_OP(&)
   };
   bool operator!() { 
     if constexpr(std::is_convertible<T,int>::value) {

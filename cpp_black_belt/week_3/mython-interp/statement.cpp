@@ -124,6 +124,22 @@ ObjectHolder Stringify::Execute(Closure& closure) {
   return ObjectHolder::Own(Runtime::String(ss.str()));
 }
 
+#define BINARY_OP(op)                                                                 \
+  if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {                                \
+    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {                              \
+      return ObjectHolder::Own(Bool(bool_p1->GetValue() op bool_p2->GetValue()));     \
+    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {                       \
+      return ObjectHolder::Own(Number(bool_p1->GetValue() op num_p2->GetValue()));    \
+    }                                                                                 \
+  } else if(auto num_p1 = lhs_eval.TryAs<Number>(); num_p1) {                         \
+    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {                              \
+      return ObjectHolder::Own(Number(num_p1->GetValue() op bool_p2->GetValue()));    \
+    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {                       \
+      return ObjectHolder::Own(Number(num_p1->GetValue() op num_p2->GetValue()));     \
+    }                                                                                 \
+  }                                                                                   \
+  throw runtime_error("Bad " #op)
+
 ObjectHolder Add::Execute(Closure& closure) {
   using namespace Runtime;
 
@@ -133,26 +149,12 @@ ObjectHolder Add::Execute(Closure& closure) {
   if(auto lhs_class = lhs_eval.TryAs<Runtime::ClassInstance>(); lhs_class) {
     return lhs_class->Call("__add__",{rhs_eval});
   }
-  
-  // Probably there's a better way...
   if(String* str_p1 = lhs_eval.TryAs<String>(); str_p1) {
     if(String* str_p2 = rhs_eval.TryAs<String>(); str_p2) {
       return ObjectHolder::Own(String(str_p1->GetValue() + str_p2->GetValue()));
     }
-  } else if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Bool(bool_p1->GetValue() + bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(bool_p1->GetValue() + num_p2->GetValue()));
-    }
-  } else if(auto num_p1 = lhs_eval.TryAs<Number>(); num_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() + bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() + num_p2->GetValue()));
-    }
   }
-  throw runtime_error("Bad add");
+  BINARY_OP(+);
 }
 
 ObjectHolder Sub::Execute(Closure& closure) {
@@ -161,20 +163,7 @@ ObjectHolder Sub::Execute(Closure& closure) {
   auto lhs_eval = lhs->Execute(closure);
   auto rhs_eval = rhs->Execute(closure);
   
-  if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Bool(bool_p1->GetValue() - bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(bool_p1->GetValue() - num_p2->GetValue()));
-    }
-  } else if(auto num_p1 = lhs_eval.TryAs<Number>(); num_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() - bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() - num_p2->GetValue()));
-    }
-  }
-  throw runtime_error("Bad sub");
+  BINARY_OP(-);
 }
 
 ObjectHolder Mult::Execute(Runtime::Closure& closure) {
@@ -183,20 +172,7 @@ ObjectHolder Mult::Execute(Runtime::Closure& closure) {
   auto lhs_eval = lhs->Execute(closure);
   auto rhs_eval = rhs->Execute(closure);
   
-  if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Bool(bool_p1->GetValue() * bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(bool_p1->GetValue() * num_p2->GetValue()));
-    }
-  } else if(auto num_p1 = lhs_eval.TryAs<Number>(); num_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() * bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() * num_p2->GetValue()));
-    }
-  }
-  throw runtime_error("Bad mult");
+  BINARY_OP(*);
 }
 
 ObjectHolder Div::Execute(Runtime::Closure& closure) {
@@ -205,20 +181,7 @@ ObjectHolder Div::Execute(Runtime::Closure& closure) {
   auto lhs_eval = lhs->Execute(closure);
   auto rhs_eval = rhs->Execute(closure);
   
-  if(auto bool_p1 = lhs_eval.TryAs<Bool>(); bool_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Number(bool_p1->GetValue() / bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(bool_p1->GetValue() / num_p2->GetValue()));
-    }
-  } else if(auto num_p1 = lhs_eval.TryAs<Number>(); num_p1) {
-    if(auto bool_p2 = rhs_eval.TryAs<Bool>(); bool_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() / bool_p2->GetValue()));
-    } else if(auto num_p2 = rhs_eval.TryAs<Number>(); num_p2) {
-      return ObjectHolder::Own(Number(num_p1->GetValue() / num_p2->GetValue()));
-    }
-  }
-  throw runtime_error("Bad div");
+  BINARY_OP(/);
 }
 
 ObjectHolder Compound::Execute(Closure& closure) {
