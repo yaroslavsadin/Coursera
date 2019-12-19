@@ -91,7 +91,11 @@ const std::string& Class::GetName() const {
 }
 
 void Bool::Print(std::ostream& os) {
-    os << std::boolalpha << GetValue();
+    if(GetValue()) {
+        os << "True";
+    } else {
+        os << "False";
+    }
 }
 
 } /* namespace Runtime */

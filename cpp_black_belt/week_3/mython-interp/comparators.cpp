@@ -11,9 +11,11 @@ using namespace std;
 namespace Runtime {
 
 bool Equal(ObjectHolder lhs, ObjectHolder rhs) {
+    return *lhs == *rhs;
 }
 
 bool Less(ObjectHolder lhs, ObjectHolder rhs) {
+    return *lhs < *rhs;
 }
 
 } /* namespace Runtime */

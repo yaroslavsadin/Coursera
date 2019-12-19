@@ -20,6 +20,11 @@ class Object {
 public:
   virtual ~Object() = default;
   virtual void Print(std::ostream& os) = 0;
+  virtual bool operator==(const Object& other) { throw std::runtime_error(""); };
+  virtual bool operator<(const Object& other) { throw std::runtime_error(""); };
+  virtual bool operator|(const Object& other) { throw std::runtime_error(""); };
+  virtual bool operator&(const Object& other) { throw std::runtime_error(""); };
+  virtual bool operator!() { throw std::runtime_error(""); };
 };
 
 template <typename T>
@@ -35,6 +40,56 @@ public:
   const T& GetValue() const {
     return value;
   }
+
+  bool operator<(const Object& other) {
+    if(auto* other_ = dynamic_cast<const ValueObject<T>*>(&other); other_) {
+      return this->value < other_->value;
+    } else {
+      throw std::runtime_error("");
+    }
+  }
+
+  bool operator==(const Object& other) {
+    if(auto* other_ = dynamic_cast<const ValueObject<T>*>(&other); other_) {
+      return this->value == other_->value;
+    } else {
+      throw std::runtime_error("");
+    }
+  }
+
+  bool operator|(const Object& other) { 
+    if constexpr(std::is_convertible<T,int>::value) {
+      if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {
+        return this->value | other_->GetValue();
+      } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {
+        return this->value | other_->GetValue();
+      } else {
+        throw std::runtime_error("");  
+      }
+    } else {
+      throw std::runtime_error("");
+    }
+  };
+  bool operator&(const Object& other) {
+    if constexpr(std::is_convertible<T,int>::value) {
+      if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {
+        return this->value & other_->GetValue();
+      } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {
+        return this->value & other_->GetValue();
+      } else {
+        throw std::runtime_error("");  
+      }
+    } else {
+      throw std::runtime_error("");
+    }
+  };
+  bool operator!() { 
+    if constexpr(std::is_convertible<T,int>::value) {
+      return !value;
+    } else {
+      throw std::runtime_error("");
+    }
+  };
 
 private:
   T value;
