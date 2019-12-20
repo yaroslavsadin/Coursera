@@ -232,14 +232,15 @@ IfElse::IfElse(
 }
 
 ObjectHolder IfElse::Execute(Runtime::Closure& closure) {
-  if(!*condition->Execute(closure)) {
+  ObjectHolder cond_res = condition->Execute(closure);
+  if(cond_res && !!*cond_res) {
+    return if_body->Execute(closure);
+  } else {
     if(else_body) {  
       return else_body->Execute(closure);
     } else {
       return ObjectHolder::None();
     }
-  } else {
-    return if_body->Execute(closure);
   }
 }
 

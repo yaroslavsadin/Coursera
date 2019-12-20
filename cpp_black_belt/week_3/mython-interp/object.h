@@ -20,11 +20,11 @@ class Object {
 public:
   virtual ~Object() = default;
   virtual void Print(std::ostream& os) = 0;
-  virtual bool operator==(const Object& other) { throw std::runtime_error(""); };
-  virtual bool operator<(const Object& other) { throw std::runtime_error(""); };
-  virtual bool operator|(const Object& other) { throw std::runtime_error(""); };
-  virtual bool operator&(const Object& other) { throw std::runtime_error(""); };
-  virtual bool operator!() { throw std::runtime_error(""); };
+  virtual bool operator==(const Object& other) { throw std::runtime_error("virtual bool operator=="); };
+  virtual bool operator<(const Object& other) { throw std::runtime_error("virtual bool operator<"); };
+  virtual bool operator|(const Object& other) { throw std::runtime_error("virtual bool operator|"); };
+  virtual bool operator&(const Object& other) { throw std::runtime_error("virtual bool operator&"); };
+  virtual bool operator!() { throw std::runtime_error("virtual bool operator!"); };
 };
 
 #define LOGIC_BIN_OP(op)                                                              \
@@ -54,33 +54,35 @@ public:
     return value;
   }
 
-  bool operator<(const Object& other) {
+  bool operator<(const Object& other) override {
     if(auto* other_ = dynamic_cast<const ValueObject<T>*>(&other); other_) {
       return this->value < other_->value;
     } else {
-      throw std::runtime_error("");
+      throw std::runtime_error("operator<");
     }
   }
 
-  bool operator==(const Object& other) {
+  bool operator==(const Object& other) override {
     if(auto* other_ = dynamic_cast<const ValueObject<T>*>(&other); other_) {
       return this->value == other_->value;
     } else {
-      throw std::runtime_error("");
+      throw std::runtime_error("operator==");
     }
   }
 
-  bool operator|(const Object& other) { 
+  bool operator|(const Object& other) override { 
     LOGIC_BIN_OP(|)
   };
-  bool operator&(const Object& other) {
+  bool operator&(const Object& other) override {
     LOGIC_BIN_OP(&)
   };
-  bool operator!() { 
+  bool operator!() override { 
     if constexpr(std::is_convertible<T,int>::value) {
       return !value;
+    } else if(std::is_convertible<T,std::string>::value) {
+      return !value.size();
     } else {
-      throw std::runtime_error("");
+      return true;
     }
   };
 
