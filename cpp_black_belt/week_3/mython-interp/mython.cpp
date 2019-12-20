@@ -178,7 +178,8 @@ print result1, result2, result3, result4, result5, result6, result7, result8, re
 )");
 
   ostringstream output;
-  RunMythonProgram(input, cerr);
+  RunMythonProgram(input, output);
+  ASSERT_EQUAL(output.str(),"False True True False True False False 0 100 None True True True\n")
 }
 
 

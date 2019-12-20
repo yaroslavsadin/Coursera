@@ -248,28 +248,28 @@ ObjectHolder Or::Execute(Runtime::Closure& closure) {
   ObjectHolder lhs_eval = lhs->Execute(closure);
   ObjectHolder rhs_eval = rhs->Execute(closure);
 
-  if(lhs_eval) {
-    if(*lhs_eval) {
-      return lhs_eval;
-    }
-  }
-  return rhs_eval;
+  if(lhs_eval && rhs_eval) {
+    return ObjectHolder::Own(Runtime::Bool(*lhs_eval || *rhs_eval));
+  } else if(!rhs_eval) {
+    return lhs_eval;
+  } else if(!lhs_eval) {
+    return rhs_eval;
+  } else {
+    return ObjectHolder::Own(Runtime::Bool(false));
+  } 
 }
 
 ObjectHolder And::Execute(Runtime::Closure& closure) {
   ObjectHolder lhs_eval = lhs->Execute(closure);
   ObjectHolder rhs_eval = rhs->Execute(closure);
   
-  if(!lhs_eval || !rhs_eval) {
-    return ObjectHolder::None();
-  }
-
-  if(lhs_eval) {
-    if(!*lhs_eval) {
-      return lhs_eval;
-    }
-  }
-  return rhs_eval;
+  if(lhs_eval && rhs_eval) {
+    return ObjectHolder::Own(Runtime::Bool(*lhs_eval && *rhs_eval));
+  } else if(lhs_eval) {
+    return lhs_eval;
+  } else {
+    return ObjectHolder::Own(Runtime::Bool(false));
+  } 
 }
 
 ObjectHolder Not::Execute(Runtime::Closure& closure) {
