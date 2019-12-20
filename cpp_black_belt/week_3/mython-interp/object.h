@@ -16,29 +16,18 @@ class TestRunner;
 
 namespace Runtime {
 
+template <typename T>
+class ValueObject;
+
 class Object {
 public:
   virtual ~Object() = default;
   virtual void Print(std::ostream& os) = 0;
   virtual bool operator==(const Object& other) { throw std::runtime_error("virtual bool operator=="); };
   virtual bool operator<(const Object& other) { throw std::runtime_error("virtual bool operator<"); };
-  virtual bool operator|(const Object& other) { throw std::runtime_error("virtual bool operator|"); };
-  virtual bool operator&(const Object& other) { throw std::runtime_error("virtual bool operator&"); };
   virtual bool operator!() { throw std::runtime_error("virtual bool operator!"); };
+  virtual operator bool() { throw std::runtime_error("virtual operator bool"); };;
 };
-
-#define LOGIC_BIN_OP(op)                                                              \
-if constexpr(std::is_convertible<T,int>::value) {                                     \
-  if(auto other_ = dynamic_cast<const ValueObject<int>*>(&other); other_) {           \
-    return this->value op other_->GetValue();                                         \
-  } else if(auto other_ = dynamic_cast<const ValueObject<bool>*>(&other); other_) {   \
-    return this->value op other_->GetValue();                                         \
-  } else {                                                                            \
-    throw std::runtime_error("LOGIC_BIN_OP "#op);                                     \
-  }                                                                                   \
-} else {                                                                              \
-  throw std::runtime_error("LOGIC_BIN_OP "#op);                                       \
-}                                             
 
 template <typename T>
 class ValueObject : public Object {
@@ -70,12 +59,10 @@ public:
     }
   }
 
-  bool operator|(const Object& other) override { 
-    LOGIC_BIN_OP(|)
-  };
-  bool operator&(const Object& other) override {
-    LOGIC_BIN_OP(&)
-  };
+  operator bool() {
+    return !!*this;
+  }
+  
   bool operator!() override { 
     if constexpr(std::is_convertible<T,int>::value) {
       return !value;

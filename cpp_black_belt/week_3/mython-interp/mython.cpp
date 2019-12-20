@@ -120,76 +120,61 @@ print y.value
   ASSERT_EQUAL(output.str(), "2\n3\n");
 }
 
-void TestCase6() {
+void TestCase8() {
   istringstream input(R"(
-x = 4
-y = 5
+a = 1
+b = 2
+c = 3
 
-if x > y:
-  print "x > y"
-else:
-  print "x <= y"
+result1 = a + b > c and a + c > b and b + c > a
 
-if x > 0:
-  if y < 0:
-    print "y < 0"
-  else:
-    print "y >= 0"
-else:
-  print 'x <= 0'
+a = False
+b = False
+c = True
 
-x = 3
-y = -3
+result2 = not a and b or c
+result3 = not a and (b or c)
+result4 = not(not a and (b or c))
 
-if x > 0:
-  if y < 0:
-    print "y < 0"
-else:
-  print 'x <= 0'
+a = 'this'
+b = 'is'
+c = 'test'
 
-x = -4
-y = -4
+result5 = a > b and a > c and c > b
+result6 = a < b or a < c or c < b
 
-if x > 0:
-  if y < 0:
-    print "y < 0"
-else:
-  print 'x <= 0'
+a = ''
+b = ""
+c = 0
 
-x = ""
+result7 = a > b
+result8 = a or b or c
 
-if x:
-  print '"" is True'
-else:
-  print '"" is False'
+a = 0
+b = 100
+c = ''
 
-x = 'non-empty string'
+result9 = a or b or c
 
-if x:
-  print 'non-empty string is True'
-else:
-  print 'non-empty string is False'
+a = None
+b = None
 
-x = 0
+result10 = a and b
+result11 = not a or b
 
-if x:
-  print '0 is True'
-else:
-  print '0 is False'
+a = 1
+b = 1
+c = 2
 
-x = 100
+result12 = a == b and a != c
 
-if x:
-  print '100 is True'
-else:
-  print '100 is False'
+a = '1'
+b = '1'
+c = "2"
 
-x = None
+result13 = a == b and a != c
 
-if x:
-  print 'None is True'
-else:
-  print 'None is False'
+print result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13
 )");
 
   ostringstream output;
@@ -209,5 +194,5 @@ void TestAll() {
   RUN_TEST(tr, TestAssignments);
   RUN_TEST(tr, TestArithmetics);
   RUN_TEST(tr, TestVariablesArePointers);
-  RUN_TEST(tr, TestCase6);
+  RUN_TEST(tr, TestCase8);
 }

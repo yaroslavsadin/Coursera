@@ -233,7 +233,7 @@ IfElse::IfElse(
 
 ObjectHolder IfElse::Execute(Runtime::Closure& closure) {
   ObjectHolder cond_res = condition->Execute(closure);
-  if(cond_res && !!*cond_res) {
+  if(cond_res && *cond_res) {
     return if_body->Execute(closure);
   } else {
     if(else_body) {  
@@ -245,15 +245,39 @@ ObjectHolder IfElse::Execute(Runtime::Closure& closure) {
 }
 
 ObjectHolder Or::Execute(Runtime::Closure& closure) {
-  return ObjectHolder::Own(Runtime::Bool(*lhs->Execute(closure) | *rhs->Execute(closure)));
+  ObjectHolder lhs_eval = lhs->Execute(closure);
+  ObjectHolder rhs_eval = rhs->Execute(closure);
+
+  if(lhs_eval) {
+    if(*lhs_eval) {
+      return lhs_eval;
+    }
+  }
+  return rhs_eval;
 }
 
 ObjectHolder And::Execute(Runtime::Closure& closure) {
-  return ObjectHolder::Own(Runtime::Bool(*lhs->Execute(closure) & *rhs->Execute(closure)));
+  ObjectHolder lhs_eval = lhs->Execute(closure);
+  ObjectHolder rhs_eval = rhs->Execute(closure);
+  
+  if(!lhs_eval || !rhs_eval) {
+    return ObjectHolder::None();
+  }
+
+  if(lhs_eval) {
+    if(!*lhs_eval) {
+      return lhs_eval;
+    }
+  }
+  return rhs_eval;
 }
 
 ObjectHolder Not::Execute(Runtime::Closure& closure) {
-  return ObjectHolder::Own(Runtime::Bool(!*argument->Execute(closure)));
+  auto eval = argument->Execute(closure);
+  if(!eval) {
+    return ObjectHolder::Own(Runtime::Bool(true));
+  }
+  return ObjectHolder::Own(Runtime::Bool(!*eval));
 }
 
 Comparison::Comparison(
