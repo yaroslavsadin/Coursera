@@ -19,7 +19,7 @@ int main(void) {
     },
     "render_settings": {
         "width": 1200,
-        "height": 1200,
+        "height": 500,
         "padding": 50,
         "stop_radius": 5,
         "line_width": 14,
@@ -28,7 +28,7 @@ int main(void) {
             7,
             15
         ],
-        "stop_label_font_size": 20,
+        "stop_label_font_size": 18,
         "stop_label_offset": [
             7,
             -3
@@ -51,8 +51,9 @@ int main(void) {
         ],
         "layers": [
             "bus_lines",
+            "bus_labels",
             "stop_points",
-            "bus_labels"
+            "stop_labels"
         ]
     },
     "base_requests": [
@@ -203,7 +204,7 @@ int main(void) {
   )"};
     TransportCatalog handler;
 
-    Json::Document doc = Json::Load(ss);
+    Json::Document doc = Json::Load(cin);
     auto responses = handler.ReadRequests(doc).ProcessRequests().GetResponses();
     cout << setprecision(6);
     Json::Print(responses, cout);

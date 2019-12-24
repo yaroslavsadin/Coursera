@@ -90,7 +90,7 @@ struct ColorGenerator {
 void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name, 
                             const std::string& stop, Svg::Color color) const {
     Svg::Text common = Svg::Text{}
-        .SetPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude))
+        .SetPoint(PointFromLocation(stops_compressed.at(stop).latitude, stops_compressed.at(stop).longtitude))
         .SetOffset(settings.bus_label_offset)
         .SetFontSize(settings.bus_label_font_size)
         .SetFontFamily("Verdana")
@@ -119,11 +119,11 @@ void SvgRender::RenderBuses(Svg::Document& doc) const {
                 .SetStrokeLineCap("round")
                 .SetStrokeLineJoin("round");
         for(const auto& stop : bus.route) {
-            bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
+            bus_line.AddPoint(PointFromLocation(stops_compressed.at(stop).latitude, stops_compressed.at(stop).longtitude));
         }
         if(bus.route.size() && bus.route_type == Bus::RouteType::LINEAR) {
             for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
-                bus_line.AddPoint(PointFromLocation(stops.at(stop).latitude, stops.at(stop).longtitude));
+                bus_line.AddPoint(PointFromLocation(stops_compressed.at(stop).latitude, stops_compressed.at(stop).longtitude));
             }
         }
         doc.Add(bus_line);
@@ -131,7 +131,7 @@ void SvgRender::RenderBuses(Svg::Document& doc) const {
 }
 
 void SvgRender::RenderStops(Svg::Document& doc) const {
-    for(const auto& [_,stop] : stops) {
+    for(const auto& [_,stop] : stops_compressed) {
         doc.Add(
             Svg::Circle{}
             .SetFillColor("white")
@@ -158,13 +158,13 @@ void SvgRender::RenderBusLabels(Svg::Document& doc) const {
 }
 
 void SvgRender::RenderStopLabels(Svg::Document& doc) const {
-    for(const auto& [name,stop] : stops) {
+    for(const auto& [name,stop] : stops_compressed) {
         Svg::Text common = Svg::Text{}
             .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
             .SetOffset(settings.stop_label_offset)
             .SetFontSize(settings.stop_label_font_size)
             .SetFontFamily("Verdana")
-            .SetData(name);
+            .SetData(std::string(name));
         Svg::Text underlayer = common;
         doc.Add(
             underlayer
@@ -181,35 +181,73 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
 }
 
 Svg::Document SvgRender::Render() const {
-    if(1) {
-        min_lat = stops.begin()->second.latitude;
-        min_lon = stops.begin()->second.longtitude;
-        for(const auto& [_,stop] : stops) {
-            if(stop.latitude < min_lat) min_lat = stop.latitude;
-            if(stop.latitude > max_lat) max_lat = stop.latitude;
-            if(stop.longtitude < min_lon) min_lon = stop.longtitude;
-            if(stop.longtitude > max_lon) max_lon = stop.longtitude;
-        }
-
-        if((max_lon - min_lon) && (max_lat - min_lat)) {
-            double width_zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
-            double height_zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
-            zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
-        } else if (max_lon - min_lon) {
-            zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
-        } else if (max_lat - min_lat) {
-            zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
-        } else {
-            zoom_coef = 0;
-        }
-        
-        Svg::Document doc;
-
-        for(const auto& layer : settings.layers) {
-            render_table.at(layer)(this,doc);
-        }
-
-        cache = std::move(doc);
+    std::map<double,std::string_view> lat_sorted;
+    std::map<double,std::string_view> lon_sorted;
+    for(const auto& [name,stop] : stops) {
+        lat_sorted[stop.latitude] = name;
+        lon_sorted[stop.longtitude] = name;
     }
-    return *cache;
+    {
+        if(!stops.size()) {
+            throw std::runtime_error("stops.size() == 0");
+        } else if(stops.size() == 1) {
+            stops_compressed[lon_sorted.begin()->second].longtitude = settings.padding;
+        } else {
+            double x_step = (settings.width - 2 * settings.padding) / (stops.size() - 1);
+            size_t idx = 0;
+            for(const auto& [_,name] : lon_sorted) {
+                stops_compressed[name].longtitude = idx++ * x_step + settings.padding;
+            }
+        }
+    }
+    {
+        if(!stops.size()) {
+            throw std::runtime_error("stops.size() == 0");
+        } else if(stops.size() == 1) {
+            stops_compressed[lat_sorted.begin()->second].latitude = settings.height - settings.padding;
+        } else {
+            double y_step = (settings.height - 2 * settings.padding) / (stops.size() - 1);
+            size_t idx = 0;
+            for(const auto& [_,name] : Range(lat_sorted.rbegin(),lat_sorted.rend())) {
+                stops_compressed[name].latitude = settings.height - settings.padding - (idx++ * y_step);
+            }
+        }
+    }
+
+    using elem_type = std::pair<std::string_view, SvgRender::StopsPos>;
+    auto [min_lat_it,max_lat_it] = minmax_element(stops_compressed.begin(),stops_compressed.end(),
+    [](const elem_type& one, const elem_type& another)
+    {
+        return one.second.latitude < another.second.latitude;
+    });
+    min_lat = min_lat_it->second.latitude;
+    max_lat = max_lat_it->second.latitude;
+
+    auto [min_lon_it,max_lon_it] = minmax_element(stops_compressed.begin(),stops_compressed.end(),
+    [](const elem_type& one, const elem_type& another)
+    {
+        return one.second.longtitude < another.second.longtitude;
+    });
+    min_lon = min_lon_it->second.longtitude;
+    max_lon = max_lon_it->second.longtitude;
+
+    if((max_lon - min_lon) && (max_lat - min_lat)) {
+        double width_zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
+        double height_zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
+        zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
+    } else if (max_lon - min_lon) {
+        zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
+    } else if (max_lat - min_lat) {
+        zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
+    } else {
+        zoom_coef = 0;
+    }
+    
+    Svg::Document doc;
+
+    for(const auto& layer : settings.layers) {
+        render_table.at(layer)(this,doc);
+    }
+
+    return doc;
 }

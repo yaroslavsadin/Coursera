@@ -22,8 +22,14 @@ struct RenderSettings {
 
 class SvgRender {
 public:
+    struct StopsPos {
+        double latitude;
+        double longtitude;
+    };
+
     SvgRender(const Buses& buses, const Stops& stops)
-    : buses(buses), stops(stops) {}
+    : buses(buses), stops(stops) {
+    }
 
     SvgRender& SetWidth(double);
     SvgRender& SetHeight(double);
@@ -44,7 +50,7 @@ private:
     RenderSettings settings;
     const Buses& buses;
     const Stops& stops;
-    mutable std::optional<Svg::Document> cache;
+    mutable std::map<std::string_view,StopsPos> stops_compressed;
 
     Svg::Point PointFromLocation(double lat, double lon) const;
 
