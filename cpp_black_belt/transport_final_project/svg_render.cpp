@@ -63,13 +63,8 @@ SvgRender& SvgRender::SetLayers(std::vector<std::string> x){
     return *this;
 }
 
-static double min_lat {0}, max_lat {0}, min_lon {0}, max_lon {0};
-static double zoom_coef = 0;
-
 Svg::Point SvgRender::PointFromLocation(double lat, double lon) const {
-    double x = (lon - min_lon) * zoom_coef + settings.padding;
-    double y = (max_lat - lat) * zoom_coef + settings.padding;
-    return Svg::Point(x,y);
+    return Svg::Point(lon,lat);
 }
 
 struct ColorGenerator {
@@ -187,62 +182,23 @@ Svg::Document SvgRender::Render() const {
         lat_sorted[stop.latitude] = name;
         lon_sorted[stop.longtitude] = name;
     }
-    {
-        if(!stops.size()) {
-            throw std::runtime_error("stops.size() == 0");
-        } else if(stops.size() == 1) {
-            stops_compressed[lon_sorted.begin()->second].longtitude = settings.padding;
-        } else {
-            double x_step = (settings.width - 2 * settings.padding) / (stops.size() - 1);
-            size_t idx = 0;
-            for(const auto& [_,name] : lon_sorted) {
-                stops_compressed[name].longtitude = idx++ * x_step + settings.padding;
-            }
-        }
-    }
-    {
-        if(!stops.size()) {
-            throw std::runtime_error("stops.size() == 0");
-        } else if(stops.size() == 1) {
-            stops_compressed[lat_sorted.begin()->second].latitude = settings.height - settings.padding;
-        } else {
-            double y_step = (settings.height - 2 * settings.padding) / (stops.size() - 1);
-            size_t idx = 0;
-            for(const auto& [_,name] : Range(lat_sorted.rbegin(),lat_sorted.rend())) {
-                stops_compressed[name].latitude = settings.height - settings.padding - (idx++ * y_step);
-            }
-        }
-    }
-
-    using elem_type = std::pair<std::string_view, SvgRender::StopsPos>;
-    auto [min_lat_it,max_lat_it] = minmax_element(stops_compressed.begin(),stops_compressed.end(),
-    [](const elem_type& one, const elem_type& another)
-    {
-        return one.second.latitude < another.second.latitude;
-    });
-    min_lat = min_lat_it->second.latitude;
-    max_lat = max_lat_it->second.latitude;
-
-    auto [min_lon_it,max_lon_it] = minmax_element(stops_compressed.begin(),stops_compressed.end(),
-    [](const elem_type& one, const elem_type& another)
-    {
-        return one.second.longtitude < another.second.longtitude;
-    });
-    min_lon = min_lon_it->second.longtitude;
-    max_lon = max_lon_it->second.longtitude;
-
-    if((max_lon - min_lon) && (max_lat - min_lat)) {
-        double width_zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
-        double height_zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
-        zoom_coef = std::min(width_zoom_coef,height_zoom_coef);
-    } else if (max_lon - min_lon) {
-        zoom_coef = (settings.width - 2 * settings.padding) / (max_lon - min_lon);
-    } else if (max_lat - min_lat) {
-        zoom_coef = (settings.height - 2 * settings.padding) / (max_lat - min_lat);
+    if(stops.size() == 1) {
+        stops_compressed[lon_sorted.begin()->second].longtitude = settings.padding;
+        stops_compressed[lat_sorted.begin()->second].latitude = settings.height - settings.padding;
     } else {
-        zoom_coef = 0;
+        double x_step = (settings.width - 2 * settings.padding) / (stops.size() - 1);
+        size_t idx = 0;
+        for(const auto& [_,name] : lon_sorted) {
+            stops_compressed[name].longtitude = idx++ * x_step + settings.padding;
+        }
+
+        double y_step = (settings.height - 2 * settings.padding) / (stops.size() - 1);
+        idx = 0;
+        for(const auto& [_,name] : Range(lat_sorted.begin(),lat_sorted.end())) {
+            stops_compressed[name].latitude = settings.height - settings.padding - (idx++ * y_step);
+        }
     }
-    
+
     Svg::Document doc;
 
     for(const auto& layer : settings.layers) {
