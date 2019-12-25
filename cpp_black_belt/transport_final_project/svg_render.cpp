@@ -176,7 +176,6 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     }
 }
 
-#include "test_runner.h"
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
     const Stop& lhs = stops.at(one);
     const Stop& rhs = stops.at(another);
@@ -199,6 +198,36 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     return false;
 }
 
+size_t SvgRender::AdjustCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const {
+    size_t idx = 0;
+    std::unordered_set<std::string> current_bundle;
+    for(auto it = sorted_map.begin(); it != sorted_map.end(); it++) {
+        auto name = it->second;
+        stops_compressed[name].*field = idx;
+        if(auto it_next = next(it); it_next != sorted_map.end()) {
+            if(current_bundle.size()) {
+                current_bundle.insert(std::string(name));
+                bool some_is_adjacent = false;
+                for(const auto& stop_name : current_bundle) {
+                    some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
+                    if(some_is_adjacent) {
+                        idx++;
+                        current_bundle.clear();
+                        break;
+                    }
+                }
+            } else {
+                if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
+                    idx++;
+                } else {
+                    current_bundle.insert(std::string(name));
+                }
+            }
+        }
+    }
+    return idx;
+}
+
 Svg::Document SvgRender::Render() const {
     std::map<double,std::string_view> lat_sorted;
     std::map<double,std::string_view> lon_sorted;
@@ -207,69 +236,21 @@ Svg::Document SvgRender::Render() const {
         lon_sorted[stop.longtitude] = name;
     }
     
-    size_t x_idx = 0;
-    std::unordered_set<std::string> current_bundle;
-    for(auto lon_it = lon_sorted.begin(); lon_it != lon_sorted.end(); lon_it++) {
-        auto name = lon_it->second;
-        stops_compressed[name].longtitude = x_idx;
-        if(auto it_next = next(lon_it); it_next != lon_sorted.end()) {
-            if(current_bundle.size()) {
-                current_bundle.insert(std::string(name));
-                bool some_is_adjacent = false;
-                for(const auto& stop_name : current_bundle) {
-                    some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
-                    if(some_is_adjacent) break;
-                }
-                if(some_is_adjacent) {
-                    x_idx++;
-                    current_bundle.clear();
-                }
-            } else {
-                if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
-                    x_idx++;
-                } else {
-                    current_bundle.insert(std::string(name));
-                }
-            }
-        }
-    }
-    size_t y_idx = 0;
-    current_bundle.clear();
-    for(auto lat_it = lat_sorted.begin(); lat_it != lat_sorted.end(); lat_it++) {
-        auto name = lat_it->second;
-        stops_compressed[name].latitude = y_idx;
-        if(auto it_next = next(lat_it); it_next != lat_sorted.end()) {
-            if(current_bundle.size()) {
-                current_bundle.insert(std::string(name));
-                bool some_is_adjacent = false;
-                for(const auto& stop_name : current_bundle) {
-                    some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
-                    if(some_is_adjacent) break;
-                }
-                if(some_is_adjacent) {
-                    y_idx++;
-                    current_bundle.clear();
-                }
-            } else {
-                if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
-                    y_idx++;
-                } else {
-                    current_bundle.insert(std::string(name));
-                }
-            }
-        }
-    }
+    size_t x_idx = AdjustCoordinates(lon_sorted, &StopsPos::longtitude);
+    size_t y_idx = AdjustCoordinates(lat_sorted, &StopsPos::latitude);
+    
+    double x_step = 0;
+    double y_step = 0;
 
-    if(stops.size() == 1) {
-        stops_compressed[lon_sorted.begin()->second].longtitude = settings.padding;
-        stops_compressed[lat_sorted.begin()->second].latitude = settings.height - settings.padding;
-    } else {
-        double x_step = (settings.width - 2 * settings.padding) / (x_idx);
-        double y_step = (settings.height - 2 * settings.padding) / (y_idx);
-        for(auto& [name,coordinates] : stops_compressed) {
-            coordinates.longtitude = coordinates.longtitude * x_step + settings.padding;
-            coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
-        }
+    if(x_idx != 0) {
+        x_step = (settings.width - 2 * settings.padding) / (x_idx);
+    }
+    if(y_idx != 0) {
+        y_step = (settings.height - 2 * settings.padding) / (y_idx);
+    }
+    for(auto& [name,coordinates] : stops_compressed) {
+        coordinates.longtitude = coordinates.longtitude * x_step + settings.padding;
+        coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
     }
 
     Svg::Document doc;
