@@ -198,29 +198,20 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     return false;
 }
 
-size_t SvgRender::AdjustCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const {
+size_t SvgRender::BundleCoordinates(
+    const std::map<double,std::string_view>& sorted_map, 
+    double StopsPos::*field) const 
+{
     size_t idx = 0;
-    std::unordered_set<std::string> current_bundle;
+    std::unordered_set<std::string_view> current_bundle;
     for(auto it = sorted_map.begin(); it != sorted_map.end(); it++) {
         auto name = it->second;
         stops_compressed[name].*field = idx;
+        current_bundle.insert(name);
         if(auto it_next = next(it); it_next != sorted_map.end()) {
-            if(current_bundle.size()) {
-                current_bundle.insert(std::string(name));
-                bool some_is_adjacent = false;
-                for(const auto& stop_name : current_bundle) {
-                    some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
-                    if(some_is_adjacent) {
-                        idx++;
-                        current_bundle.clear();
-                        break;
-                    }
-                }
-            } else {
-                if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
-                    idx++;
-                } else {
-                    current_bundle.insert(std::string(name));
+            for(const auto& stop_name : current_bundle) {
+                if(StopsAreAdjacent(std::string(stop_name),std::string(it_next->second))) {
+                    idx++; current_bundle.clear();  break;
                 }
             }
         }
@@ -236,19 +227,13 @@ Svg::Document SvgRender::Render() const {
         lon_sorted[stop.longtitude] = name;
     }
     
-    size_t x_idx = AdjustCoordinates(lon_sorted, &StopsPos::longtitude);
-    size_t y_idx = AdjustCoordinates(lat_sorted, &StopsPos::latitude);
+    size_t x_idx = BundleCoordinates(lon_sorted, &StopsPos::longtitude);
+    size_t y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
     
-    double x_step = 0;
-    double y_step = 0;
+    double x_step = (x_idx == 0) ? 0 : (settings.width - 2 * settings.padding) / (x_idx);
+    double y_step = (y_idx == 0) ? 0 : (settings.height - 2 * settings.padding) / (y_idx);
 
-    if(x_idx != 0) {
-        x_step = (settings.width - 2 * settings.padding) / (x_idx);
-    }
-    if(y_idx != 0) {
-        y_step = (settings.height - 2 * settings.padding) / (y_idx);
-    }
-    for(auto& [name,coordinates] : stops_compressed) {
+    for(auto& [_,coordinates] : stops_compressed) {
         coordinates.longtitude = coordinates.longtitude * x_step + settings.padding;
         coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
     }
