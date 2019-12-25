@@ -62,4 +62,5 @@ private:
     static const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> render_table;
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
+    bool StopsAreAdjacent(const std::string& one, const std::string& another) const;
 };

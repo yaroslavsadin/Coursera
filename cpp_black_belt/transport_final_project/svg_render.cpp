@@ -1,5 +1,6 @@
 #include "svg_render.h"
 #include <vector>
+#include <unordered_set>
 #include "misc.h"
 
 const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> SvgRender::render_table {
@@ -175,6 +176,29 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     }
 }
 
+#include "test_runner.h"
+bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
+    const Stop& lhs = stops.at(one);
+    const Stop& rhs = stops.at(another);
+    std::unordered_set<std::string> intersection;
+    std::set_intersection(lhs.buses.begin(), lhs.buses.end(),
+                          rhs.buses.begin(), rhs.buses.end(),
+                          std::inserter(intersection,intersection.begin()));
+    if(!intersection.size()) {
+        return false;
+    }
+    for(const auto& bus_name : intersection) {
+        const Bus& bus = buses.at(bus_name);
+        // Using reverse iterators to deal with roundtrip routes
+        auto it1 = std::find(bus.route.rbegin(),bus.route.rend(),one);
+        auto it2 = std::find(bus.route.rbegin(),bus.route.rend(),another);
+        if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
 Svg::Document SvgRender::Render() const {
     std::map<double,std::string_view> lat_sorted;
     std::map<double,std::string_view> lon_sorted;
@@ -188,14 +212,58 @@ Svg::Document SvgRender::Render() const {
     } else {
         double x_step = (settings.width - 2 * settings.padding) / (stops.size() - 1);
         size_t idx = 0;
-        for(const auto& [_,name] : lon_sorted) {
-            stops_compressed[name].longtitude = idx++ * x_step + settings.padding;
+        std::unordered_set<std::string> current_bundle;
+        for(auto it = lon_sorted.begin(); it != lon_sorted.end(); it++) {
+            auto name = it->second;
+            stops_compressed[name].longtitude = idx * x_step + settings.padding;
+            if(auto it_next = next(it); it_next != lon_sorted.end()) {
+                if(current_bundle.size()) {
+                    current_bundle.insert(std::string(name));
+                    bool some_is_adjacent = false;
+                    for(const auto& stop_name : current_bundle) {
+                        some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
+                        if(some_is_adjacent) break;
+                    }
+                    if(some_is_adjacent) {
+                        idx++;
+                        current_bundle.clear();
+                    }
+                } else {
+                    if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
+                        idx++;
+                    } else {
+                        current_bundle.insert(std::string(name));
+                    }
+                }
+            }
         }
 
         double y_step = (settings.height - 2 * settings.padding) / (stops.size() - 1);
         idx = 0;
-        for(const auto& [_,name] : Range(lat_sorted.begin(),lat_sorted.end())) {
+        current_bundle.clear();
+        for(auto it = lat_sorted.begin(); it != lat_sorted.end(); it++) {
+            auto name = it->second;
             stops_compressed[name].latitude = settings.height - settings.padding - (idx++ * y_step);
+            // if(auto it_next = next(it); it_next != lat_sorted.end()) {
+            //     if(current_bundle.size()) {
+            //         current_bundle.insert(std::string(name));
+            //         bool some_is_adjacent = false;
+            //         for(const auto& stop_name : current_bundle) {
+            //             some_is_adjacent = StopsAreAdjacent(stop_name,std::string(it_next->second));
+            //             if(some_is_adjacent) break;
+            //         }
+            //         if(some_is_adjacent) {
+            //             idx++;
+            //             current_bundle.clear();
+            //         }
+            //     } else {
+            //         if(StopsAreAdjacent(std::string(name),std::string(it_next->second))) {
+            //             idx++;
+            //         } else {
+            //             current_bundle.insert(std::string(name));
+            //         }
+            //     }
+            // }
         }
     }
 
