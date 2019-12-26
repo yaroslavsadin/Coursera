@@ -1,6 +1,7 @@
 #include "svg_render.h"
 #include <vector>
 #include <unordered_set>
+#include <cassert>
 #include "misc.h"
 
 const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> SvgRender::render_table {
@@ -176,6 +177,7 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     }
 }
 
+#include "test_runner.h"
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
     const Stop& lhs = stops.at(one);
     const Stop& rhs = stops.at(another);
@@ -191,30 +193,39 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
         // Using reverse iterators to deal with roundtrip routes
         auto it1 = std::find(bus.route.rbegin(),bus.route.rend(),one);
         auto it2 = std::find(bus.route.rbegin(),bus.route.rend(),another);
+        std::cerr << bus.route << std::endl;
         if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
             return true;
+        }
+        // Have to handle a case when one stop is second one in roundtrip route and another
+        // is the first and the last
+        if(bus.route_type == Bus::RouteType::CIRCULAR) {
+            if((it1 == bus.route.rbegin() && it2 == bus.route.rend() - 2) ||
+                (it2 == bus.route.rbegin() && it1 == bus.route.rend() - 2)) {
+                    return true;
+            }
         }
     }
     return false;
 }
 
-size_t SvgRender::BundleCoordinates(
-    const std::map<double,std::string_view>& sorted_map, 
-    double StopsPos::*field) const 
+double SvgRender::BundleCoordinates(
+        const std::map<double,std::string_view>& sorted_map, 
+        double StopsPos::*field
+    ) const 
 {
-    size_t idx = 0;
+    double idx = 0;
     std::unordered_set<std::string_view> current_bundle;
-    for(auto it = sorted_map.begin(); it != sorted_map.end(); it++) {
-        auto name = it->second;
-        stops_compressed[name].*field = idx;
-        current_bundle.insert(name);
-        if(auto it_next = next(it); it_next != sorted_map.end()) {
+    for(const auto [_,name] : sorted_map) {
+        if(!current_bundle.empty()) {
             for(const auto& stop_name : current_bundle) {
-                if(StopsAreAdjacent(std::string(stop_name),std::string(it_next->second))) {
-                    idx++; current_bundle.clear();  break;
+                if(StopsAreAdjacent(std::string(stop_name),std::string(name))) {
+                    idx++; current_bundle.clear(); break;
                 }
             }
         }
+        stops_compressed[name].*field = idx;
+        current_bundle.insert(name);
     }
     return idx;
 }
@@ -227,15 +238,21 @@ Svg::Document SvgRender::Render() const {
         lon_sorted[stop.longtitude] = name;
     }
     
-    size_t x_idx = BundleCoordinates(lon_sorted, &StopsPos::longtitude);
-    size_t y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
+    double x_idx = BundleCoordinates(lon_sorted, &StopsPos::longtitude);
+    double y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
     
     double x_step = (x_idx == 0) ? 0 : (settings.width - 2 * settings.padding) / (x_idx);
     double y_step = (y_idx == 0) ? 0 : (settings.height - 2 * settings.padding) / (y_idx);
 
-    for(auto& [_,coordinates] : stops_compressed) {
+    for(auto& [name,coordinates] : stops_compressed) {
+        std::cerr << "_____________ " << name << " _______________" << std::endl
+        << coordinates.longtitude << std::endl << coordinates.latitude << std::endl;
+        assert(coordinates.latitude <= y_idx);
+        assert(coordinates.latitude >= 0);
         coordinates.longtitude = coordinates.longtitude * x_step + settings.padding;
         coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
+        assert(coordinates.latitude <= settings.height - settings.padding);
+        std::cerr << coordinates.longtitude << std::endl << coordinates.latitude << std::endl;
     }
 
     Svg::Document doc;
