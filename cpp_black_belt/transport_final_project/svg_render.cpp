@@ -191,18 +191,20 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     for(const auto& bus_name : intersection) {
         const Bus& bus = buses.at(bus_name);
         // Using reverse iterators to deal with roundtrip routes
-        auto it1 = std::find(bus.route.rbegin(),bus.route.rend(),one);
-        auto it2 = std::find(bus.route.rbegin(),bus.route.rend(),another);
-        std::cerr << bus.route << std::endl;
-        if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
-            return true;
+        {
+            auto it1 = std::find(bus.route.rbegin(),bus.route.rend(),one);
+            auto it2 = std::find(bus.route.rbegin(),bus.route.rend(),another);
+            if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
+                return true;
+            }
         }
         // Have to handle a case when one stop is second one in roundtrip route and another
         // is the first and the last
-        if(bus.route_type == Bus::RouteType::CIRCULAR) {
-            if((it1 == bus.route.rbegin() && it2 == bus.route.rend() - 2) ||
-                (it2 == bus.route.rbegin() && it1 == bus.route.rend() - 2)) {
-                    return true;
+        {
+            auto it1 = std::find(bus.route.begin(),bus.route.end(),one);
+            auto it2 = std::find(bus.route.begin(),bus.route.end(),another);
+            if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
+                return true;
             }
         }
     }
@@ -245,14 +247,8 @@ Svg::Document SvgRender::Render() const {
     double y_step = (y_idx == 0) ? 0 : (settings.height - 2 * settings.padding) / (y_idx);
 
     for(auto& [name,coordinates] : stops_compressed) {
-        std::cerr << "_____________ " << name << " _______________" << std::endl
-        << coordinates.longtitude << std::endl << coordinates.latitude << std::endl;
-        assert(coordinates.latitude <= y_idx);
-        assert(coordinates.latitude >= 0);
         coordinates.longtitude = coordinates.longtitude * x_step + settings.padding;
         coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
-        assert(coordinates.latitude <= settings.height - settings.padding);
-        std::cerr << coordinates.longtitude << std::endl << coordinates.latitude << std::endl;
     }
 
     Svg::Document doc;
