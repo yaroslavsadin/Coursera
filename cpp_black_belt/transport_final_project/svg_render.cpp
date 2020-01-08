@@ -177,7 +177,6 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     }
 }
 
-#include "test_runner.h"
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
     const Stop& lhs = stops.at(one);
     const Stop& rhs = stops.at(another);
@@ -190,20 +189,13 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     }
     for(const auto& bus_name : intersection) {
         const Bus& bus = buses.at(bus_name);
-        // Using reverse iterators to deal with roundtrip routes
+        
+        for (auto it1 = std::find(bus.route.begin(),bus.route.end(),one); 
+                it1 != bus.route.end();
+                it1 = std::find(next(it1),bus.route.end(),one)) 
         {
-            auto it1 = std::find(bus.route.rbegin(),bus.route.rend(),one);
-            auto it2 = std::find(bus.route.rbegin(),bus.route.rend(),another);
-            if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
-                return true;
-            }
-        }
-        // Have to handle a case when one stop is second one in roundtrip route and another
-        // is the first and the last
-        {
-            auto it1 = std::find(bus.route.begin(),bus.route.end(),one);
-            auto it2 = std::find(bus.route.begin(),bus.route.end(),another);
-            if(std::distance(it1,it2) == 1 || std::distance(it2,it1) == 1) {
+            if((it1 != bus.route.begin() && *prev(it1) == another) || 
+                (next(it1) != bus.route.end() && *next(it1) == another)) {
                 return true;
             }
         }
@@ -211,17 +203,17 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     return false;
 }
 
-double SvgRender::BundleCoordinates(
+size_t SvgRender::BundleCoordinates(
         const std::map<double,std::string_view>& sorted_map, 
         double StopsPos::*field
     ) const 
 {
-    double idx = 0;
+    size_t idx = 0;
     std::unordered_set<std::string_view> current_bundle;
     for(const auto [_,name] : sorted_map) {
         if(!current_bundle.empty()) {
-            for(const auto& stop_name : current_bundle) {
-                if(StopsAreAdjacent(std::string(stop_name),std::string(name))) {
+            for(const auto prev_stop : current_bundle) {
+                if(StopsAreAdjacent(std::string(prev_stop),std::string(name))) {
                     idx++; current_bundle.clear(); break;
                 }
             }
@@ -240,8 +232,8 @@ Svg::Document SvgRender::Render() const {
         lon_sorted[stop.longtitude] = name;
     }
     
-    double x_idx = BundleCoordinates(lon_sorted, &StopsPos::longtitude);
-    double y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
+    size_t x_idx = BundleCoordinates(lon_sorted, &StopsPos::longtitude);
+    size_t y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
     
     double x_step = (x_idx == 0) ? 0 : (settings.width - 2 * settings.padding) / (x_idx);
     double y_step = (y_idx == 0) ? 0 : (settings.height - 2 * settings.padding) / (y_idx);

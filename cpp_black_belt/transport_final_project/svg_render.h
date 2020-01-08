@@ -63,5 +63,5 @@ private:
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
     bool StopsAreAdjacent(const std::string& one, const std::string& another) const;
-    double BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const;
+    size_t BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const;
 };
