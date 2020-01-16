@@ -3,6 +3,7 @@
 #include "descriptions.h"
 #include "svg.h"
 #include <functional>
+#include <unordered_set>
 
 struct RenderSettings {
     double width;
@@ -65,4 +66,5 @@ private:
     bool StopsAreAdjacent(const std::string& one, const std::string& another) const;
     size_t BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const;
     bool StopIsBase(const std::string& stop) const;
+    std::vector<std::string_view> GetAdjacentStops(const std::string_view stop_name, const std::unordered_set<std::string_view>& considered) const;
 };

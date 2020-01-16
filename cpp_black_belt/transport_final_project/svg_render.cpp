@@ -1,6 +1,5 @@
 #include "svg_render.h"
 #include <vector>
-#include <unordered_set>
 #include <cassert>
 #include "misc.h"
 
@@ -203,25 +202,39 @@ bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& anot
     return false;
 }
 
-size_t SvgRender::BundleCoordinates(
-        const std::map<double,std::string_view>& sorted_map, 
-        double StopsPos::*field
-    ) const 
-{
-    size_t idx = 0;
-    std::unordered_set<std::string_view> current_bundle;
-    for(const auto [_,name] : sorted_map) {
-        if(!current_bundle.empty()) {
-            for(const auto prev_stop : current_bundle) {
-                if(StopsAreAdjacent(std::string(prev_stop),std::string(name))) {
-                    idx++; current_bundle.clear(); break;
-                }
+std::vector<std::string_view> SvgRender::GetAdjacentStops(const std::string_view stop_name, const std::unordered_set<std::string_view>& considered) const {
+    const Stop& stop = stops.at(std::string(stop_name));
+    std::vector<std::string_view> res;
+    for(const auto& bus_name : stop.buses) {
+        const Bus& bus = buses.at(bus_name);
+        for (auto it = std::find(bus.route.begin(),bus.route.end(),stop_name); 
+                it != bus.route.end();
+                it = std::find(next(it),bus.route.end(),stop_name)) {
+            if(it != bus.route.begin() && considered.count(*prev(it))) {
+                res.push_back(*prev(it));
+            }
+            if(it != prev(bus.route.end()) && considered.count(*next(it))) {
+                res.push_back(*next(it));
             }
         }
-        stops_compressed[name].*field = idx;
-        current_bundle.insert(name);
     }
-    return idx;
+    return res;
+}
+
+size_t SvgRender::BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const {
+    size_t idx, max_idx = 0;
+    std::unordered_set<std::string_view> considered;
+    for(const auto [_,name] : sorted_map) {
+        auto neighbours = GetAdjacentStops(name,considered);
+        idx = 0;
+        for(const std::string_view stop : neighbours) {
+            idx = std::max(idx,static_cast<size_t>(stops_compressed.at(stop).*field) + 1);
+        }
+        stops_compressed[name].*field = idx;
+        considered.insert(name);
+        max_idx = std::max(idx,max_idx);
+    }
+    return max_idx;
 }
 
 bool SvgRender::StopIsBase(const std::string& stop_name) const {
