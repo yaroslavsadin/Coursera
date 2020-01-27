@@ -56,10 +56,18 @@ public:
     return *this;
   }
   Optional& operator=(const Optional& other) {
-    return *this = reinterpret_cast<const T&>(other.data);
+    if(other.defined) {
+      return *this = reinterpret_cast<const T&>(other.data);
+    }
+    this->Reset();
+    return *this;
   }
   Optional& operator=(Optional&& other) {
-    return *this = std::move(reinterpret_cast<T&&>(other.data));
+    if(other.defined) {
+      return *this = std::move(reinterpret_cast<T&&>(other.data));
+    }
+    this->Reset();
+    return *this;
   } 
 
   bool HasValue() const {

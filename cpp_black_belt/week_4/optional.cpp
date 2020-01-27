@@ -94,8 +94,8 @@ void TestAssignString() {
     std::string c;
     o1 = c;
   }
-  { // Assign a non-empty to empty
-    o2 = o1;
+  { // Assign a empty to non-empty
+    o1 = o2;
   }
   { // Assign non-empty to non-empty
     o2 = o1;
@@ -113,5 +113,10 @@ int main() {
   RUN_TEST(tr, TestReset);
   RUN_TEST(tr, TestHasValue);
   RUN_TEST(tr, TestAssignString);
+  std::optional<int> full(1);
+  std::cerr << full.has_value() << std::endl;
+  std::optional<int> empty;
+  full = empty;
+  std::cerr << full.has_value() << std::endl;
   return 0;
 }
