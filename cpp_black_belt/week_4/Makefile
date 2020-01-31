@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named optional
+# Target rules for targets named apply_to_many
 
 # Build rule for target.
-optional: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 optional
-.PHONY : optional
+apply_to_many: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 apply_to_many
+.PHONY : apply_to_many
 
 # fast build rule for target.
-optional/fast:
-	$(MAKE) -f CMakeFiles/optional.dir/build.make CMakeFiles/optional.dir/build
-.PHONY : optional/fast
+apply_to_many/fast:
+	$(MAKE) -f CMakeFiles/apply_to_many.dir/build.make CMakeFiles/apply_to_many.dir/build
+.PHONY : apply_to_many/fast
 
-optional.o: optional.cpp.o
+apply_to_many.o: apply_to_many.cpp.o
 
-.PHONY : optional.o
+.PHONY : apply_to_many.o
 
 # target to build an object file
-optional.cpp.o:
-	$(MAKE) -f CMakeFiles/optional.dir/build.make CMakeFiles/optional.dir/optional.cpp.o
-.PHONY : optional.cpp.o
+apply_to_many.cpp.o:
+	$(MAKE) -f CMakeFiles/apply_to_many.dir/build.make CMakeFiles/apply_to_many.dir/apply_to_many.cpp.o
+.PHONY : apply_to_many.cpp.o
 
-optional.i: optional.cpp.i
+apply_to_many.i: apply_to_many.cpp.i
 
-.PHONY : optional.i
+.PHONY : apply_to_many.i
 
 # target to preprocess a source file
-optional.cpp.i:
-	$(MAKE) -f CMakeFiles/optional.dir/build.make CMakeFiles/optional.dir/optional.cpp.i
-.PHONY : optional.cpp.i
+apply_to_many.cpp.i:
+	$(MAKE) -f CMakeFiles/apply_to_many.dir/build.make CMakeFiles/apply_to_many.dir/apply_to_many.cpp.i
+.PHONY : apply_to_many.cpp.i
 
-optional.s: optional.cpp.s
+apply_to_many.s: apply_to_many.cpp.s
 
-.PHONY : optional.s
+.PHONY : apply_to_many.s
 
 # target to generate assembly for a file
-optional.cpp.s:
-	$(MAKE) -f CMakeFiles/optional.dir/build.make CMakeFiles/optional.dir/optional.cpp.s
-.PHONY : optional.cpp.s
+apply_to_many.cpp.s:
+	$(MAKE) -f CMakeFiles/apply_to_many.dir/build.make CMakeFiles/apply_to_many.dir/apply_to_many.cpp.s
+.PHONY : apply_to_many.cpp.s
 
 # Help Target
 help:
@@ -157,11 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... optional"
+	@echo "... apply_to_many"
 	@echo "... edit_cache"
-	@echo "... optional.o"
-	@echo "... optional.i"
-	@echo "... optional.s"
+	@echo "... apply_to_many.o"
+	@echo "... apply_to_many.i"
+	@echo "... apply_to_many.s"
 .PHONY : help
 
 

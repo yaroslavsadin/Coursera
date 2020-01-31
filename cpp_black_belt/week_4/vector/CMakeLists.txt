@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
-project(apply_to_many)
+project(vector)
 
 set(UTILSDIR ..)
 
@@ -12,7 +12,7 @@ include_directories(${UTILSDIR})
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
  
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES apply_to_many.cpp)
+file(GLOB SOURCES test.cpp)
 
 #Set preprocessor definitions
 add_compile_definitions()
@@ -31,4 +31,4 @@ endif()
 add_compile_options(${COMMON_FLAGS})
 add_link_options(${COMMON_FLAGS})
 
-add_executable(apply_to_many ${SOURCES})
+add_executable(vector ${SOURCES})
