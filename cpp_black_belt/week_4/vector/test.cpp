@@ -79,5 +79,47 @@ int main() {
   RUN_TEST(tr, TestInit);
   RUN_TEST(tr, TestAssign);
   RUN_TEST(tr, TestPushBack);
+  {
+    vector<int> test;
+    test.resize(1);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+    test.resize(2);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+    test.resize(3);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+    test.resize(2);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+    test.resize(1);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+    test.resize(0);
+    cerr << test.capacity() << ' ' << test.size();
+    cerr << endl;
+  }
+  {
+    Vector<int> test;
+    test.Resize(1);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+    test.Resize(2);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+    test.Resize(3);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+    test.Resize(2);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+    test.Resize(1);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+    test.Resize(0);
+    cerr << test.Capacity() << ' ' << test.Size();
+    cerr << endl;
+  }
   return 0;
 }

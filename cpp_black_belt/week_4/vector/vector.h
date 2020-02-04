@@ -32,12 +32,8 @@ public:
     }
   }
   void Swap(RawMem& other) noexcept {
-    T* data_ = data;
-    size_t cp_ = cp;
-    data = other.data;
-    cp = other.cp;
-    other.data = data_;
-    other.cp = cp_;
+    std::swap(cp,other.cp);
+    std::swap(data,other.data);
   }
 private:
   T* data;
@@ -62,13 +58,9 @@ public:
     );
     sz = other.Size();
   }
-  Vector(Vector&& other) : data(other.Size()) {
-    std::uninitialized_move(
-      other.data.Get(), 
-      (other.data.Get() + other.sz), 
-      data.Get()
-    );
-    sz = other.Size();
+  Vector(Vector&& other) {
+    data.Swap(other.data);
+    std::swap(sz,other.sz);
   }
 
   ~Vector() {
@@ -76,11 +68,11 @@ public:
   }
 
   Vector& operator = (const Vector& other) {
-    if(sz >= other.Size()) {
+    if(data.Cp() >= other.Size()) {
       for(size_t i = 0; i < other.sz; i++) {
         data[i] = other.data[i];
       }
-      if(sz != other.Size()) {
+      if(sz > other.Size()) {
         std::destroy_n(data.Get(), sz - other.sz);
       }
     } else {
@@ -98,26 +90,8 @@ public:
   }
 
   Vector& operator = (Vector&& other) noexcept {
-    if(sz >= other.Size()) {
-      std::uninitialized_move(
-        other.data.Get(), 
-        (other.data.Get() + other.sz), 
-        data.Get()
-      );
-      if(sz != other.Size()) {
-        std::destroy_n(data.Get(), sz - other.sz);
-      }
-    } else {
-      RawMem<T> new_mem(other.Size());
-      std::uninitialized_move(
-        other.data.Get(), 
-        (other.data.Get() + other.sz), 
-        new_mem.Get()
-      );
-      data.Swap(new_mem);
-      std::destroy_n(new_mem.Get(), sz);
-    }
-    sz = other.Size();
+    data.Swap(other.data);
+    std::swap(sz,other.sz);
     return *this;
   }
 
@@ -138,22 +112,32 @@ public:
     if(data.Cp() < n) {
       Reserve(n);
     }
-    std::uninitialized_default_construct_n(
-      (data + sz),
-      n - sz
-    );
+    if(sz < n) {
+      std::uninitialized_default_construct_n(
+        (data + sz),
+        n - sz
+      );
+    } else if(sz > n) {
+      std::destroy_n(data.Get() + n, sz - n);
+    }
     sz = n;
   }
 
   void PushBack(const T& elem) {
-    if(sz <= data.Cp() || data.Cp() == 0) {
+    if(data.Cp() == 0) {
+      Reserve(1);
+    }
+    else if(sz == data.Cp()) {
       Reserve(sz * 2);
     }
     new (data + sz) T(elem);
     sz++;
   }
   void PushBack(T&& elem) {
-    if(sz <= data.Cp() || data.Cp() == 0) {
+    if(data.Cp() == 0) {
+      Reserve(1);
+    }
+    else if(sz == data.Cp()) {
       Reserve(sz * 2);
     }
     new (data + sz) T(std::move(elem));
@@ -162,10 +146,13 @@ public:
 
   template <typename ... Args>
   T& EmplaceBack(Args&&... args) {
-    if(sz <= data.Cp() || data.Cp() == 0) {
+    if(data.Cp() == 0) {
+      Reserve(1);
+    }
+    else if(sz == data.Cp()) {
       Reserve(sz * 2);
     }
-    new (data + sz) T(args...);
+    new (data + sz) T(std::forward<Args>(args)...);
     sz++;
     return data[sz-1];
   }
