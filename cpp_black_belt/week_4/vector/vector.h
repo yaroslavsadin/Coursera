@@ -49,9 +49,9 @@ class Vector {
 public:
   Vector() : sz(0) {}
   Vector(size_t n) : data(n) {
-    for(size_t i = 0; i < n; i++) {
-      new (data + i) T;
-    }
+    std::uninitialized_default_construct_n(
+        data.Get(), n
+      );
     sz = n;
   }
   Vector(const Vector& other) : data(other.Size()) {
@@ -88,7 +88,7 @@ public:
       std::uninitialized_copy(
         other.data.Get(), 
         (other.data.Get() + other.sz), 
-        data.Get()
+        new_mem.Get()
       );
       data.Swap(new_mem);
       std::destroy_n(new_mem.Get(), sz);
@@ -112,7 +112,7 @@ public:
       std::uninitialized_move(
         other.data.Get(), 
         (other.data.Get() + other.sz), 
-        data.Get()
+        new_mem.Get()
       );
       data.Swap(new_mem);
       std::destroy_n(new_mem.Get(), sz);
@@ -145,13 +145,35 @@ public:
     sz = n;
   }
 
-  void PushBack(const T& elem);
-  void PushBack(T&& elem);
+  void PushBack(const T& elem) {
+    if(sz <= data.Cp() || data.Cp() == 0) {
+      Reserve(sz * 2);
+    }
+    new (data + sz) T(elem);
+    sz++;
+  }
+  void PushBack(T&& elem) {
+    if(sz <= data.Cp() || data.Cp() == 0) {
+      Reserve(sz * 2);
+    }
+    new (data + sz) T(std::move(elem));
+    sz++;
+  }
 
   template <typename ... Args>
-  T& EmplaceBack(Args&&... args);
+  T& EmplaceBack(Args&&... args) {
+    if(sz <= data.Cp() || data.Cp() == 0) {
+      Reserve(sz * 2);
+    }
+    new (data + sz) T(args...);
+    sz++;
+    return data[sz-1];
+  }
 
-  void PopBack();
+  void PopBack() {
+    data[sz - 1].~T();
+    sz--;
+  }
 
   size_t Size() const noexcept {
     return sz;

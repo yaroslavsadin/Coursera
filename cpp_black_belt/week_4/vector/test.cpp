@@ -60,7 +60,6 @@ void TestAssign() {
   ASSERT(C::deleted == 5);
 }
 
-/*
 void TestPushBack() {
   {
     C::Reset();
@@ -74,18 +73,11 @@ void TestPushBack() {
   }
   ASSERT(C::deleted == 4);
 }
-*/
 
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestInit);
   RUN_TEST(tr, TestAssign);
-  // RUN_TEST(tr, TestPushBack);
-  C::Reset();
-  std::vector<C> test(4);
-  test.reserve(10);
-  cerr << C::created << ' ' << C::assigned<< ' ' << C::deleted<< ' ' << endl;
-  test.resize(10);
-  cerr << C::created<< ' ' << C::assigned<< ' ' << C::deleted<< ' ' << endl;
+  RUN_TEST(tr, TestPushBack);
   return 0;
 }
