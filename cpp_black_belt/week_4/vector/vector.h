@@ -8,6 +8,7 @@ class RawMem {
 public:
   RawMem() : data(nullptr), cp(0) {}
   RawMem(size_t n) { // may throw
+    // return static_cast<T*>(operator new(n * sizeof(T)));
     data = reinterpret_cast<T*>(new char[sizeof(T) * n]);
     cp = n;
   }
@@ -176,6 +177,34 @@ public:
   T& operator[](size_t i) {
     return data[i];
   }
+
+  // В данной части задачи реализуйте дополнительно эти функции:
+  using iterator = T*;
+  using const_iterator = const T*;
+
+  iterator begin() noexcept;
+  iterator end() noexcept;
+
+  const_iterator begin() const noexcept;
+  const_iterator end() const noexcept;
+
+  // Тут должна быть такая же реализация, как и для константных версий begin/end
+  const_iterator cbegin() const noexcept;
+  const_iterator cend() const noexcept;
+
+  // Вставляет элемент перед pos
+  // Возвращает итератор на вставленный элемент
+  iterator Insert(const_iterator pos, const T& elem);
+  iterator Insert(const_iterator pos, T&& elem);
+
+  // Конструирует элемент по заданным аргументам конструктора перед pos
+  // Возвращает итератор на вставленный элемент
+  template <typename ... Args>
+  iterator Emplace(const_iterator it, Args&&... args);
+
+  // Удаляет элемент на позиции pos
+  // Возвращает итератор на элемент, следующий за удалённым
+  iterator Erase(const_iterator it);
 private:
   RawMem<T> data;
   size_t sz;
