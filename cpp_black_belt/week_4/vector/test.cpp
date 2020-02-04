@@ -60,6 +60,7 @@ void TestAssign() {
   ASSERT(C::deleted == 5);
 }
 
+/*
 void TestPushBack() {
   {
     C::Reset();
@@ -73,11 +74,12 @@ void TestPushBack() {
   }
   ASSERT(C::deleted == 4);
 }
+*/
 
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestInit);
   RUN_TEST(tr, TestAssign);
-  RUN_TEST(tr, TestPushBack);
+  // RUN_TEST(tr, TestPushBack);
   return 0;
 }
