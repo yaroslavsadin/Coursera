@@ -81,5 +81,11 @@ int main() {
   RUN_TEST(tr, TestInit);
   RUN_TEST(tr, TestAssign);
   // RUN_TEST(tr, TestPushBack);
+  C::Reset();
+  std::vector<C> test(4);
+  test.reserve(10);
+  cerr << C::created << ' ' << C::assigned<< ' ' << C::deleted<< ' ' << endl;
+  test.resize(10);
+  cerr << C::created<< ' ' << C::assigned<< ' ' << C::deleted<< ' ' << endl;
   return 0;
 }

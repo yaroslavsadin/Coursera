@@ -107,7 +107,6 @@ public:
       if(sz != other.Size()) {
         std::destroy_n(data.Get(), sz - other.sz);
       }
-      sz = other.Size();
     } else {
       RawMem<T> new_mem(other.Size());
       std::uninitialized_move(
@@ -116,13 +115,35 @@ public:
         data.Get()
       );
       data.Swap(new_mem);
+      std::destroy_n(new_mem.Get(), sz);
     }
+    sz = other.Size();
     return *this;
   }
 
-  void Reserve(size_t n);
+  void Reserve(size_t n) {
+    if(data.Cp() < n) {
+      RawMem<T> new_mem(n);
+      std::uninitialized_move(
+        data.Get(), 
+        (data.Get() + sz), 
+        new_mem.Get()
+      );
+      data.Swap(new_mem);
+      std::destroy_n(new_mem.Get(), sz);
+    }
+  }
 
-  void Resize(size_t n);
+  void Resize(size_t n) {
+    if(data.Cp() < n) {
+      Reserve(n);
+    }
+    std::uninitialized_default_construct_n(
+      (data + sz),
+      n - sz
+    );
+    sz = n;
+  }
 
   void PushBack(const T& elem);
   void PushBack(T&& elem);
