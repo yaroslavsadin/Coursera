@@ -12,7 +12,7 @@ include_directories(${UTILSDIR})
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
  
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES test2.cpp)
+file(GLOB SOURCES test.cpp)
 
 #Set preprocessor definitions
 add_compile_definitions()

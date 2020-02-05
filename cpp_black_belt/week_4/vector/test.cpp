@@ -4,6 +4,45 @@
 
 using namespace std;
 
+class ClassWithStrangeConstructor {
+public:
+  int x, y;
+
+  ClassWithStrangeConstructor(int& r, const int& cr): x(r), y(cr) {
+  }
+};
+
+void TestInsert() {
+  Vector<int> v;
+  v.PushBack(1);
+  v.PushBack(2);
+  auto it = v.Insert(v.cbegin(), 0);
+  ASSERT(v.Size() == 3 && v[0] == 0 && v[1] == 1 && v[2] == 2 && it == v.begin());
+
+  it = v.Insert(v.cend(), 3);
+  ASSERT(v.Size() == 4 && v[0] == 0 && v[1] == 1 && v[2] == 2 && v[3] == 3 && it + 1 == v.end());
+};
+
+void TestEmplace() {
+  Vector<ClassWithStrangeConstructor> v;
+  int x = 1;
+  const int y = 2;
+  int z = 3;
+  ClassWithStrangeConstructor c(z, z);
+  v.PushBack(c);
+  auto it = v.Emplace(v.cbegin(), x, y);
+  ASSERT(v.Size() == 2 && v[0].x == x && v[0].y == y && v[1].x == z && v[1].y == z && it == v.begin());
+};
+
+void TestErase() {
+  Vector<int> v;
+  v.PushBack(1);
+  v.PushBack(2);
+  v.PushBack(3);
+  auto it = v.Erase(v.cbegin() + 1);
+  ASSERT(v.Size() == 2 && v[0] == 1 && v[1] == 3 && it == v.begin() + 1);
+};
+
 class C {
 public:
   inline static int created = 0;
@@ -79,47 +118,19 @@ int main() {
   RUN_TEST(tr, TestInit);
   RUN_TEST(tr, TestAssign);
   RUN_TEST(tr, TestPushBack);
-  {
-    vector<int> test;
-    test.resize(1);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-    test.resize(2);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-    test.resize(3);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-    test.resize(2);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-    test.resize(1);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-    test.resize(0);
-    cerr << test.capacity() << ' ' << test.size();
-    cerr << endl;
-  }
-  {
-    Vector<int> test;
-    test.Resize(1);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
-    test.Resize(2);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
-    test.Resize(3);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
-    test.Resize(2);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
-    test.Resize(1);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
-    test.Resize(0);
-    cerr << test.Capacity() << ' ' << test.Size();
-    cerr << endl;
+  RUN_TEST(tr, TestInsert);
+  RUN_TEST(tr, TestEmplace);
+  RUN_TEST(tr, TestErase);
+  Vector<string> test;
+  test.Insert(test.begin(),"ppp"s);
+  test.Insert(test.end(),"aaa"s);
+  test.Erase(test.begin());
+  test.Erase(test.begin());
+  test.Erase(test.begin());
+  test.Erase(test.end());
+  test.Erase(test.end());
+  for(const string& i : test) {
+    cout << i << ' ';
   }
   return 0;
 }
