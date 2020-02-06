@@ -344,14 +344,16 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
                     {"type", string("Wait")}
                 });
                 break;
-            case EdgeType::RIDE: {
+            case EdgeType::RIDE:
                 items.push_back(map<string,Json::Node> {
                     {"bus", edge_info.item_name_},
                     {"time", edge_info.time_},
                     {"span_count", edge_info.span_count_},
                     {"type", string("Bus")}
                 });
-            }
+                for(string_view stop : edge_info.stops_)    
+                    cerr << stop << ' ';
+                cerr << endl;
                 break;
             default:
                 throw runtime_error("Wrong edge type");

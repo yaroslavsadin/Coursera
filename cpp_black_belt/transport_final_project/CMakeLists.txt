@@ -16,7 +16,7 @@ include_directories(${UTILSDIR} ${SVGLIBDIR})
 file(GLOB SOURCES *.cpp ${SVGLIBDIR}/svg.cpp)
 
 #Set preprocessor definitions
-add_compile_definitions()
+add_compile_definitions(DEBUG)
 
 #Set compile and link flags
 set(COMMON_FLAGS -g -O0 -Wall)

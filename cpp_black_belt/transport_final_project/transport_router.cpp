@@ -2,7 +2,6 @@
 using namespace std;
 
 RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const {
-    // Create a graph which uses stops as vertices and buses as edges
     graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(current_vertex_id * 2);
     
     for(const auto& [bus_name,bus_data] : buses_) {
@@ -17,6 +16,8 @@ RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) co
             );
             double cumulative_distance_straight = 0.;
             double cumulative_distance_reverse = 0.;
+            deque<string_view> stops_along_straight;
+            deque<string_view> stops_along_reverse;
             for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
                 const auto& stop_to = *it_to;
                 if(stop_from != stop_to) {
@@ -24,6 +25,8 @@ RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) co
                     cumulative_distance_straight += GetRideTime(stops_, prev_stop, stop_to);
                     cumulative_distance_reverse += GetRideTime(stops_, stop_to, prev_stop);
                 }
+                stops_along_straight.push_back(stop_to);
+                stops_along_reverse.push_front(stop_to);
                 graph_.AddEdge(
                     Graph::Edge<EdgeWeight> {
                         stop_to_vertices_.at(stop_from).board,
@@ -32,7 +35,8 @@ RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) co
                             EdgeType::RIDE, 
                             cumulative_distance_straight, 
                             bus_name,
-                            it_to - it_from
+                            it_to - it_from,
+                            (stop_from != stop_to) ? stops_along_straight : deque<string_view>{}
                         )
                     }
                 );
@@ -45,7 +49,8 @@ RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) co
                             EdgeType::RIDE, 
                             cumulative_distance_reverse, 
                             bus_name,
-                            it_to - it_from
+                            it_to - it_from,
+                            (stop_from != stop_to) ? stops_along_reverse : deque<string_view>{}
                         )
                     }
                 );

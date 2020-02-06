@@ -53,6 +53,8 @@ private:
     const Stops& stops;
     mutable std::map<std::string_view,StopsPos> stops_compressed;
 
+    mutable std::optional<Svg::Document> base_map_cache;
+
     Svg::Point PointFromLocation(double lat, double lon) const;
 
     void RenderBuses(Svg::Document& doc) const;
