@@ -98,6 +98,27 @@ namespace Svg {
     };
 
     // CRTP-----------------------\/
+    class Rect : public Shape<Rect> {
+    public:
+        Rect() = default;
+
+        Rect& SetPoint(Point p) {
+            x = p.x; y = p.y;
+            return *this;
+        }
+        Rect& SetDimensions(double w_, double h_) {
+            w = w_; h = h_;
+            return *this;
+        }
+        void Print(std::ostream& os) const override;
+    private:
+        double x = .0;
+        double y = .0;
+        double h = .0;
+        double w = .0;
+    };
+
+    // CRTP-----------------------\/
     class Circle : public Shape<Circle> {
     public:
         Circle() = default;
@@ -167,7 +188,7 @@ namespace Svg {
 
     class Document {
     public:
-        using ShapeHolder = std::variant<Circle,Polyline,Text>;
+        using ShapeHolder = std::variant<Circle,Polyline,Text,Rect>;
         Document() = default;
         void Add(const ShapeHolder& shape) {
             data.push_back(shape);

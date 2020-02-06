@@ -4,13 +4,26 @@ namespace Svg {
 
     void Document::Render(std::ostream& stream) {
         stream << R"(<?xml version=\"1.0\" encoding=\"UTF-8\" ?>)"
-                << R"(<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">)";
-
+                << R"(<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\")"
+#ifdef DEBUG                
+                << R"( width=\"2000\" height=\"1000\")"
+#endif
+                << R"(>)";
         for(const auto& item : data) {
             std::visit( [&stream](const auto& item) { item.Print(stream); }, item );
         }
 
         stream << R"(</svg>)";
+    }
+
+    void Rect::Print(std::ostream& os) const {
+        os << "<rect ";
+        PrintCommon(os);
+        os << "x=\\\"" << x << "\\\" " <<
+        "y=\\\"" << y << "\\\" " <<
+        "height=\\\"" << h << "\\\" " <<
+        "width=\\\"" << w << "\\\" ";
+        os << "/>";
     }
 
     void Circle::Print(std::ostream& os) const {

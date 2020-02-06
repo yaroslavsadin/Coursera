@@ -44,5 +44,12 @@ int main(void) {
         .SetData("C++")
     );
 
+    svg.Add(
+        Svg::Rect{}
+        .SetPoint({250, 250})
+        .SetDimensions(200, 100)
+        .SetStrokeColor("black")
+    );
+
     svg.Render(std::cout);
 }
