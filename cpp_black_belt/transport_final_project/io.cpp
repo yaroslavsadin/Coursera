@@ -115,7 +115,8 @@ TransportCatalog& TransportCatalog::ReadRequests(Json::Document doc) {
             .SetBusLabelOffset({
                                 bus_label_offset_array[0].AsDouble(),
                                 bus_label_offset_array[1].AsDouble()
-                                });
+                                })
+            .SetOuterMargin(render_settings.at("outer_margin").AsDouble());
 
     vector<Svg::Color> colors;
     colors.reserve(render_settings.at("color_palette").AsArray().size());
@@ -333,9 +334,9 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
         res["total_time"] = Json::Node(route->weight.time_ );
 
         vector<Json::Node> items;
-
+        SvgRender::RouteMap route_map;
         for(size_t i = 0; i < num_edges;i++) {
-            auto edge_info = router.GetRouteEdge(route_id,i).weight;
+            const EdgeWeight& edge_info = router.GetRouteEdge(route_id,i).weight;
             switch(edge_info.type_) {
             case EdgeType::CHANGE:
                 items.push_back(map<string,Json::Node> {
@@ -351,9 +352,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
                     {"span_count", edge_info.span_count_},
                     {"type", string("Bus")}
                 });
-                for(string_view stop : edge_info.stops_)    
-                    cerr << stop << ' ';
-                cerr << endl;
+                route_map[edge_info.item_name_] = &edge_info.stops_;
                 break;
             default:
                 throw runtime_error("Wrong edge type");
@@ -361,6 +360,9 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
             }
         }
         res["items"] = move(items);
+        stringstream ss;
+        renderer.RenderRoute(std::move(route_map)).Render(ss);
+        res["map"] = Json::Node(ss.str());
     } else {
         res["error_message"] = Json::Node(string("not found"));
     }

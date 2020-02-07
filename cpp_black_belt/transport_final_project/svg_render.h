@@ -2,6 +2,7 @@
 
 #include "descriptions.h"
 #include "svg.h"
+#include <deque>
 #include <functional>
 #include <unordered_set>
 
@@ -19,10 +20,14 @@ struct RenderSettings {
     Svg::Point bus_label_offset;
     std::vector<Svg::Color> color_palette;
     std::vector<std::string> layers;
+    double outer_margin; 
 };
 
 class SvgRender {
 public:
+    using RouteMap = std::unordered_map<std::string_view,const std::deque<std::string_view>*>;
+    using BaseRenderFP = void(SvgRender::*)(Svg::Document&) const;
+    using RouteRenderFP = void(SvgRender::*)(Svg::Document&,const RouteMap&) const;
     struct StopsPos {
         double latitude;
         double longtitude;
@@ -45,8 +50,10 @@ public:
     SvgRender& SetBusLabelOffset(Svg::Point);
     SvgRender& SetColorPalette(std::vector<Svg::Color>);
     SvgRender& SetLayers(std::vector<std::string>);
+    SvgRender& SetOuterMargin (double);
 
     Svg::Document Render() const;
+    Svg::Document RenderRoute(RouteMap route) const;
 private:
     RenderSettings settings;
     const Buses& buses;
@@ -62,7 +69,19 @@ private:
     void RenderBusLabels(Svg::Document& doc) const;
     void RenderStopLabels(Svg::Document& doc) const;
 
-    static const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> render_table;
+    void RenderBuses(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderStops(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const;
+
+    static const std::unordered_map<
+        std::string,
+        std::function<void(const SvgRender*,Svg::Document&)>
+    > render_table;
+    static const std::unordered_map<
+        std::string,
+        std::function<void(const SvgRender*,Svg::Document&,const RouteMap&)>
+    > render_table_route;
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
     bool StopsAreAdjacent(const std::string& one, const std::string& another) const;

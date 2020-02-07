@@ -3,11 +3,26 @@
 #include <cassert>
 #include "misc.h"
 
-const std::unordered_map<std::string,std::function<void(const SvgRender*,Svg::Document&)>> SvgRender::render_table {
-        { "bus_lines" , &SvgRender::RenderBuses },
-        { "stop_points" , &SvgRender::RenderStops },
-        { "bus_labels" , &SvgRender::RenderBusLabels },
-        { "stop_labels" , &SvgRender::RenderStopLabels }
+const std::unordered_map<
+    std::string,
+    std::function<void(const SvgRender*,Svg::Document&)>
+> SvgRender::render_table 
+    {
+        { "bus_lines" , static_cast<BaseRenderFP>(SvgRender::RenderBuses) },
+        { "stop_points" , static_cast<BaseRenderFP>(SvgRender::RenderStops) },
+        { "bus_labels" , static_cast<BaseRenderFP>(SvgRender::RenderBusLabels) },
+        { "stop_labels" , static_cast<BaseRenderFP>(SvgRender::RenderStopLabels) }
+    };
+
+const std::unordered_map<
+    std::string,
+    std::function<void(const SvgRender*,Svg::Document&,const SvgRender::RouteMap&)>
+> SvgRender::render_table_route 
+    {
+        { "bus_lines" , static_cast<RouteRenderFP>(SvgRender::RenderBuses) },
+        { "stop_points" , static_cast<RouteRenderFP>(SvgRender::RenderStops) },
+        { "bus_labels" , static_cast<RouteRenderFP>(SvgRender::RenderBusLabels) },
+        { "stop_labels" , static_cast<RouteRenderFP>(SvgRender::RenderStopLabels) }
     };
 
 SvgRender& SvgRender::SetWidth(double x){
@@ -64,6 +79,11 @@ SvgRender& SvgRender::SetLayers(std::vector<std::string> x){
     return *this;
 }
 
+SvgRender& SvgRender::SetOuterMargin (double x) {
+    settings.outer_margin = x;
+    return *this;
+}
+
 Svg::Point SvgRender::PointFromLocation(double lat, double lon) const {
     return Svg::Point(lon,lat);
 }
@@ -72,10 +92,7 @@ struct ColorGenerator {
     ColorGenerator(const std::vector<Svg::Color>& palette)
     : palette(palette),cur_index(0) {}
     Svg::Color operator()() {
-        auto res = palette[cur_index++];
-        if(cur_index == palette.size()) {
-            cur_index = 0;
-        }
+        auto res = palette[cur_index++ % palette.size()];
         return res;
     }
     void Reset(void) { cur_index = 0; }
@@ -176,6 +193,19 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
     }
 }
 
+void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const {
+    
+}
+void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const {
+
+}
+void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const{
+
+}
+void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const{
+
+}
+
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
     const Stop& lhs = stops.at(one);
     const Stop& rhs = stops.at(another);
@@ -264,6 +294,21 @@ bool SvgRender::StopIsBase(const std::string& stop_name) const {
     }
 
     return false;
+}
+
+Svg::Document SvgRender::RenderRoute(RouteMap route) const {
+    auto doc = Render();
+    doc.Add(
+        Svg::Rect{}
+        .SetPoint({-settings.outer_margin,-settings.outer_margin})
+        .SetDimensions
+        (
+            settings.width + settings.outer_margin * 2,
+            settings.height + settings.outer_margin * 2
+        )
+        .SetFillColor(settings.underlayer_color)
+    );
+    return doc;
 }
 
 Svg::Document SvgRender::Render() const {

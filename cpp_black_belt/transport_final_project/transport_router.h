@@ -76,7 +76,7 @@ public:
         route_settings_.bus_velocity_ = x;
     }
     
-    const auto GetRouteEdge(size_t route_id, size_t edge_id) const { 
+    const auto& GetRouteEdge(size_t route_id, size_t edge_id) const { 
         return graph_.GetEdge(router_->GetRouteEdge(route_id,edge_id)); 
     }
 
