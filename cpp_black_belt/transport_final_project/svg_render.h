@@ -59,6 +59,7 @@ private:
     const Buses& buses;
     const Stops& stops;
     mutable std::map<std::string_view,StopsPos> stops_compressed;
+    mutable std::unordered_map<std::string_view,Svg::Color> bus_to_color;
 
     mutable std::optional<Svg::Document> base_map_cache;
 

@@ -161,6 +161,7 @@ void SvgRender::RenderBusLabels(Svg::Document& doc) const {
             const auto& start_stop = *bus.route.begin();
             const auto& finish_stop = *prev(bus.route.end());
             auto bus_color = color_generator();
+            bus_to_color[name] = bus_color;
 
             AddBusLabel(doc,name,start_stop,bus_color);
             if(start_stop != finish_stop) {
@@ -194,16 +195,98 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
 }
 
 void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const {
-    
+    for(const auto& [bus_name,stop_names] : route_map) {
+        Svg::Polyline bus_line;
+        bus_line.SetStrokeColor(bus_to_color[bus_name])
+                .SetStrokeWidth(settings.line_width)
+                .SetStrokeLineCap("round")
+                .SetStrokeLineJoin("round");
+        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
+            bus_line.AddPoint(
+                PointFromLocation(
+                    stops_compressed.at(*it).latitude, 
+                    stops_compressed.at(*it).longtitude)
+                );
+        }
+        doc.Add(std::move(bus_line));
+    }
 }
 void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const {
-
+    std::unordered_set<std::string_view> drawn;
+    for(const auto& [bus_name,stop_names] : route_map) {
+        std::string_view stop_begin = *stop_names->begin();
+        std::string_view stop_end = *prev(stop_names->end());
+        auto f_add_label = [this,&doc](std::string_view stop_name){
+             const auto& stop = stops_compressed.at(stop_name);
+             Svg::Text common = Svg::Text{}
+                .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
+                .SetOffset(settings.stop_label_offset)
+                .SetFontSize(settings.stop_label_font_size)
+                .SetFontFamily("Verdana")
+                .SetData(std::string(stop_name));
+            Svg::Text underlayer = common;
+            doc.Add(
+                underlayer
+                .SetFillColor(settings.underlayer_color)
+                .SetStrokeColor(settings.underlayer_color)
+                .SetStrokeWidth(settings.underlayer_width)
+                .SetStrokeLineCap("round")
+                .SetStrokeLineJoin("round")
+            );
+            doc.Add(
+                common.SetFillColor("black")
+            );
+        };
+        if(!drawn.count(stop_begin)) {
+            f_add_label(stop_begin);
+            drawn.insert(stop_begin);
+        }
+        if(!drawn.count(stop_end)) {
+            f_add_label(stop_end);
+            drawn.insert(stop_end);
+        }
+    }
 }
 void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const{
-
+    for(const auto& [bus_name,stop_names] : route_map) {
+        std::string_view stop_begin = *stop_names->begin();
+        std::string_view stop_end = *prev(stop_names->end());
+        auto f_is_terminal = 
+        [this] (std::string_view bus_name, std::string_view stop_name) -> bool {
+            const auto& bus = buses.at(std::string(bus_name));
+            if(*bus.route.begin() == stop_name || *prev(bus.route.end()) == stop_name) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        if(f_is_terminal(bus_name,stop_begin)) {
+            AddBusLabel(doc,std::string(bus_name),std::string(stop_begin),bus_to_color.at(bus_name));
+        }
+        if(f_is_terminal(bus_name,stop_end)) {
+            AddBusLabel(doc,std::string(bus_name),std::string(stop_end),bus_to_color.at(bus_name));
+        }
+    }
 }
 void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const{
-
+        std::unordered_set<std::string_view> drawn;
+    for(const auto& [bus_name,stop_names] : route_map) {
+        /// TODO: Take care of empty stop_names?
+        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
+            if(!drawn.count(*it)) { 
+                doc.Add(
+                    Svg::Circle{}
+                    .SetFillColor("white")
+                    .SetRadius(settings.stop_radius)
+                    .SetCenter(PointFromLocation(
+                        stops_compressed.at(*it).latitude, 
+                        stops_compressed.at(*it).longtitude
+                    ))
+                );
+                drawn.insert(*it);
+            }
+        }
+    }
 }
 
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
@@ -296,6 +379,7 @@ bool SvgRender::StopIsBase(const std::string& stop_name) const {
     return false;
 }
 
+////// TODO: pass by reference? --------------\/\/\/
 Svg::Document SvgRender::RenderRoute(RouteMap route) const {
     auto doc = Render();
     doc.Add(
@@ -308,6 +392,9 @@ Svg::Document SvgRender::RenderRoute(RouteMap route) const {
         )
         .SetFillColor(settings.underlayer_color)
     );
+    for(const auto& layer : settings.layers) {
+        render_table_route.at(layer)(this,doc,route);
+    }
     return doc;
 }
 
