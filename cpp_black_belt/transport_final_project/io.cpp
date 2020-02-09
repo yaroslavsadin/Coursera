@@ -325,41 +325,40 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
         size_t route_id = route->id;
         size_t num_edges = route->edge_count;
 
+        SvgRender::RouteMap route_map;
         if(!num_edges) {
             res["total_time"] = 0;
             res["items"] = vector<Json::Node>();
-            return res;
-        }
+        } else {
+            res["total_time"] = Json::Node(route->weight.time_ );
 
-        res["total_time"] = Json::Node(route->weight.time_ );
-
-        vector<Json::Node> items;
-        SvgRender::RouteMap route_map;
-        for(size_t i = 0; i < num_edges;i++) {
-            const EdgeWeight& edge_info = router.GetRouteEdge(route_id,i).weight;
-            switch(edge_info.type_) {
-            case EdgeType::CHANGE:
-                items.push_back(map<string,Json::Node> {
-                    {"stop_name", edge_info.item_name_},
-                    {"time", edge_info.time_},
-                    {"type", string("Wait")}
-                });
-                break;
-            case EdgeType::RIDE:
-                items.push_back(map<string,Json::Node> {
-                    {"bus", edge_info.item_name_},
-                    {"time", edge_info.time_},
-                    {"span_count", edge_info.span_count_},
-                    {"type", string("Bus")}
-                });
-                route_map.push_back(&edge_info);
-                break;
-            default:
-                throw runtime_error("Wrong edge type");
-                break;
+            vector<Json::Node> items;
+            for(size_t i = 0; i < num_edges;i++) {
+                const EdgeWeight& edge_info = router.GetRouteEdge(route_id,i).weight;
+                switch(edge_info.type_) {
+                case EdgeType::CHANGE:
+                    items.push_back(map<string,Json::Node> {
+                        {"stop_name", edge_info.item_name_},
+                        {"time", edge_info.time_},
+                        {"type", string("Wait")}
+                    });
+                    break;
+                case EdgeType::RIDE:
+                    items.push_back(map<string,Json::Node> {
+                        {"bus", edge_info.item_name_},
+                        {"time", edge_info.time_},
+                        {"span_count", edge_info.span_count_},
+                        {"type", string("Bus")}
+                    });
+                    route_map.push_back(&edge_info);
+                    break;
+                default:
+                    throw runtime_error("Wrong edge type");
+                    break;
+                }
             }
+            res["items"] = move(items);
         }
-        res["items"] = move(items);
         stringstream ss;
         renderer.RenderRoute(std::move(route_map)).Render(ss);
         res["map"] = Json::Node(ss.str());

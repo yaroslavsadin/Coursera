@@ -225,6 +225,7 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) 
         const auto& stop_names = edge->stops_;
         std::string_view stop_begin = *stop_names.begin();
         std::string_view stop_end = *prev(stop_names.end());
+        /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
         auto f_add_label = [this,&doc](std::string_view stop_name){
              const auto& stop = stops_compressed.at(stop_name);
              Svg::Text common = Svg::Text{}
