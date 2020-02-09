@@ -352,7 +352,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
                     {"span_count", edge_info.span_count_},
                     {"type", string("Bus")}
                 });
-                route_map[edge_info.item_name_] = &edge_info.stops_;
+                route_map.push_back(&edge_info);
                 break;
             default:
                 throw runtime_error("Wrong edge type");

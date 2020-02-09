@@ -8,10 +8,10 @@ const std::unordered_map<
     std::function<void(const SvgRender*,Svg::Document&)>
 > SvgRender::render_table 
     {
-        { "bus_lines" , static_cast<BaseRenderFP>(SvgRender::RenderBuses) },
-        { "stop_points" , static_cast<BaseRenderFP>(SvgRender::RenderStops) },
-        { "bus_labels" , static_cast<BaseRenderFP>(SvgRender::RenderBusLabels) },
-        { "stop_labels" , static_cast<BaseRenderFP>(SvgRender::RenderStopLabels) }
+        { "bus_lines" , static_cast<BaseRenderFP>(&SvgRender::RenderBuses) },
+        { "stop_points" , static_cast<BaseRenderFP>(&SvgRender::RenderStops) },
+        { "bus_labels" , static_cast<BaseRenderFP>(&SvgRender::RenderBusLabels) },
+        { "stop_labels" , static_cast<BaseRenderFP>(&SvgRender::RenderStopLabels) }
     };
 
 const std::unordered_map<
@@ -19,10 +19,10 @@ const std::unordered_map<
     std::function<void(const SvgRender*,Svg::Document&,const SvgRender::RouteMap&)>
 > SvgRender::render_table_route 
     {
-        { "bus_lines" , static_cast<RouteRenderFP>(SvgRender::RenderBuses) },
-        { "stop_points" , static_cast<RouteRenderFP>(SvgRender::RenderStops) },
-        { "bus_labels" , static_cast<RouteRenderFP>(SvgRender::RenderBusLabels) },
-        { "stop_labels" , static_cast<RouteRenderFP>(SvgRender::RenderStopLabels) }
+        { "bus_lines" , static_cast<RouteRenderFP>(&SvgRender::RenderBuses) },
+        { "stop_points" , static_cast<RouteRenderFP>(&SvgRender::RenderStops) },
+        { "bus_labels" , static_cast<RouteRenderFP>(&SvgRender::RenderBusLabels) },
+        { "stop_labels" , static_cast<RouteRenderFP>(&SvgRender::RenderStopLabels) }
     };
 
 SvgRender& SvgRender::SetWidth(double x){
@@ -195,13 +195,15 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
 }
 
 void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const {
-    for(const auto& [bus_name,stop_names] : route_map) {
+    for(auto edge: route_map) {
+        std::string_view bus_name = edge->item_name_;
+        const auto& stop_names = edge->stops_;
         Svg::Polyline bus_line;
         bus_line.SetStrokeColor(bus_to_color[bus_name])
                 .SetStrokeWidth(settings.line_width)
                 .SetStrokeLineCap("round")
                 .SetStrokeLineJoin("round");
-        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
+        for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
             bus_line.AddPoint(
                 PointFromLocation(
                     stops_compressed.at(*it).latitude, 
@@ -211,11 +213,13 @@ void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const
         doc.Add(std::move(bus_line));
     }
 }
-void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const {
+void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const {
     std::unordered_set<std::string_view> drawn;
-    for(const auto& [bus_name,stop_names] : route_map) {
-        std::string_view stop_begin = *stop_names->begin();
-        std::string_view stop_end = *prev(stop_names->end());
+    for(auto edge : route_map) {
+        std::string_view bus_name = edge->item_name_;
+        const auto& stop_names = edge->stops_;
+        std::string_view stop_begin = *stop_names.begin();
+        std::string_view stop_end = *prev(stop_names.end());
         auto f_add_label = [this,&doc](std::string_view stop_name){
              const auto& stop = stops_compressed.at(stop_name);
              Svg::Text common = Svg::Text{}
@@ -248,9 +252,11 @@ void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const
     }
 }
 void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const{
-    for(const auto& [bus_name,stop_names] : route_map) {
-        std::string_view stop_begin = *stop_names->begin();
-        std::string_view stop_end = *prev(stop_names->end());
+    for(auto edge : route_map) {
+        std::string_view bus_name = edge->item_name_;
+        const auto& stop_names = edge->stops_;
+        std::string_view stop_begin = *stop_names.begin();
+        std::string_view stop_end = *prev(stop_names.end());
         auto f_is_terminal = 
         [this] (std::string_view bus_name, std::string_view stop_name) -> bool {
             const auto& bus = buses.at(std::string(bus_name));
@@ -268,12 +274,13 @@ void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) c
         }
     }
 }
-void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const{
-        std::unordered_set<std::string_view> drawn;
-    for(const auto& [bus_name,stop_names] : route_map) {
+void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const{
+        // std::unordered_set<std::string_view> drawn;
+    for(auto edge : route_map) {
+        std::string_view bus_name = edge->item_name_;
+        const auto& stop_names = edge->stops_;
         /// TODO: Take care of empty stop_names?
-        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
-            if(!drawn.count(*it)) { 
+        for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
                 doc.Add(
                     Svg::Circle{}
                     .SetFillColor("white")
@@ -283,8 +290,6 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) 
                         stops_compressed.at(*it).longtitude
                     ))
                 );
-                drawn.insert(*it);
-            }
         }
     }
 }
