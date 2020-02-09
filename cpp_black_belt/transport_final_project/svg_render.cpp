@@ -124,10 +124,9 @@ void SvgRender::AddBusLabel(Svg::Document& doc,const std::string& bus_name,
 }
 
 void SvgRender::RenderBuses(Svg::Document& doc) const {
-    ColorGenerator color_generator(settings.color_palette);
-    for(const auto& [_,bus] : buses) {
+    for(const auto& [name,bus] : buses) {
         Svg::Polyline bus_line;
-        bus_line.SetStrokeColor(color_generator())
+        bus_line.SetStrokeColor(bus_to_color.at(name))
                 .SetStrokeWidth(settings.line_width)
                 .SetStrokeLineCap("round")
                 .SetStrokeLineJoin("round");
@@ -154,14 +153,20 @@ void SvgRender::RenderStops(Svg::Document& doc) const {
     }
 }
 
-void SvgRender::RenderBusLabels(Svg::Document& doc) const {
+void SvgRender::FillBusColors() const {
     ColorGenerator color_generator(settings.color_palette);
     for(const auto& [name,bus] : buses) {
+        auto bus_color = color_generator();
+        bus_to_color[name] = bus_color;
+    }
+}
+
+void SvgRender::RenderBusLabels(Svg::Document& doc) const {
+    for(const auto& [name,bus] : buses) {
+        auto bus_color = bus_to_color.at(name);
         if(bus.route.size()) {
             const auto& start_stop = *bus.route.begin();
             const auto& finish_stop = *prev(bus.route.end());
-            auto bus_color = color_generator();
-            bus_to_color[name] = bus_color;
 
             AddBusLabel(doc,name,start_stop,bus_color);
             if(start_stop != finish_stop) {
@@ -199,7 +204,7 @@ void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const
         std::string_view bus_name = edge->item_name_;
         const auto& stop_names = edge->stops_;
         Svg::Polyline bus_line;
-        bus_line.SetStrokeColor(bus_to_color[bus_name])
+        bus_line.SetStrokeColor(bus_to_color.at(bus_name))
                 .SetStrokeWidth(settings.line_width)
                 .SetStrokeLineCap("round")
                 .SetStrokeLineJoin("round");
@@ -466,6 +471,7 @@ Svg::Document SvgRender::Render() const {
         }
 
         Svg::Document doc;
+        FillBusColors();
 
         for(const auto& layer : settings.layers) {
             render_table.at(layer)(this,doc);

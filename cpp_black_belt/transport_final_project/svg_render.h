@@ -65,6 +65,8 @@ private:
 
     Svg::Point PointFromLocation(double lat, double lon) const;
 
+    void FillBusColors() const;
+
     void RenderBuses(Svg::Document& doc) const;
     void RenderStops(Svg::Document& doc) const;
     void RenderBusLabels(Svg::Document& doc) const;
