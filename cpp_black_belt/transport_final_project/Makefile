@@ -177,6 +177,33 @@ database.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.cpp.s
 .PHONY : database.cpp.s
 
+database.pb.o: database.pb.cc.o
+
+.PHONY : database.pb.o
+
+# target to build an object file
+database.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.o
+.PHONY : database.pb.cc.o
+
+database.pb.i: database.pb.cc.i
+
+.PHONY : database.pb.i
+
+# target to preprocess a source file
+database.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.i
+.PHONY : database.pb.cc.i
+
+database.pb.s: database.pb.cc.s
+
+.PHONY : database.pb.s
+
+# target to generate assembly for a file
+database.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.s
+.PHONY : database.pb.cc.s
+
 disances.o: disances.cpp.o
 
 .PHONY : disances.o
@@ -285,6 +312,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+main_serdes.o: main_serdes.cpp.o
+
+.PHONY : main_serdes.o
+
+# target to build an object file
+main_serdes.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.o
+.PHONY : main_serdes.cpp.o
+
+main_serdes.i: main_serdes.cpp.i
+
+.PHONY : main_serdes.i
+
+# target to preprocess a source file
+main_serdes.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.i
+.PHONY : main_serdes.cpp.i
+
+main_serdes.s: main_serdes.cpp.s
+
+.PHONY : main_serdes.s
+
+# target to generate assembly for a file
+main_serdes.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.s
+.PHONY : main_serdes.cpp.s
+
 misc.o: misc.cpp.o
 
 .PHONY : misc.o
@@ -381,6 +435,9 @@ help:
 	@echo "... database.o"
 	@echo "... database.i"
 	@echo "... database.s"
+	@echo "... database.pb.o"
+	@echo "... database.pb.i"
+	@echo "... database.pb.s"
 	@echo "... disances.o"
 	@echo "... disances.i"
 	@echo "... disances.s"
@@ -393,6 +450,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... main_serdes.o"
+	@echo "... main_serdes.i"
+	@echo "... main_serdes.s"
 	@echo "... misc.o"
 	@echo "... misc.i"
 	@echo "... misc.s"
