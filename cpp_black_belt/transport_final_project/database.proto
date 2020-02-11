@@ -1,13 +1,15 @@
 syntax = "proto3";
 
-message PBStop {
+package ProtoTransport;
+
+message Stop {
     double lat = 1;
     double lon = 2;
     repeated string buses = 3;
     map<string, int32> distance_to_stop_ = 4;
 }
 
-message PBBus {
+message Bus {
     enum RouteType {
         ONEWAY = 0;
         ROUNDTRIP = 1;
@@ -18,7 +20,7 @@ message PBBus {
     repeated string route = 4;
 }
 
-message PBDatabase {
-    map<string,PBStop> stops = 1;
-    map<string,PBBus> buses = 2;
+message Database {
+    map<string,Stop> stops = 1;
+    map<string,Bus> buses = 2;
 }

@@ -9,6 +9,9 @@
 #include "svg_render.h"
 #include <stdexcept>
 
+#include "database.pb.h"
+#include "transport_catalog.pb.h"
+
 /******************************* 
     REQUEST BASE CLASS         *
 ********************************/
@@ -116,7 +119,7 @@ public:
     return move(responses_);
   }
   TransportCatalog& Serialize() {
-    PBTransport t;
+    ProtoTransport::TransportCatalog t;
     std::ofstream serial(
         serial_file, std::ios::binary
     );
@@ -129,7 +132,7 @@ public:
     std::ifstream serial(
         serial_file, std::ios::binary
     );
-    PBTransport t;
+    ProtoTransport::TransportCatalog t;
     t.ParseFromIstream(&serial);
     assert(!serial.bad());
     db.Deserialize(t.db());

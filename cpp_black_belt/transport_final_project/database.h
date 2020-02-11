@@ -11,6 +11,8 @@
 #include "misc.h"
 #include "distances.h"
 #include "descriptions.h"
+
+#include "database.pb.h"
 #include "transport_catalog.pb.h"
 
 class BusDatabase {
@@ -27,8 +29,8 @@ public:
 
     const Distances& GetBusDistance(const std::string& name) const;
 
-    PBDatabase Serialize() const;
-    void Deserialize(const PBDatabase&);
+    ProtoTransport::Database Serialize() const;
+    void Deserialize(const ProtoTransport::Database&);
 private:
     Stops stops_;
     Buses buses_;

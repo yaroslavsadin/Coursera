@@ -1,9 +1,10 @@
 syntax = "proto3";
 
+package ProtoTransport;
 import "database.proto";
 
-message PBTransport {
-    PBDatabase db = 1;
+message TransportCatalog {
+    Database db = 1;
     // Router router = 2;
     // Renderer renderer = 3;
 }

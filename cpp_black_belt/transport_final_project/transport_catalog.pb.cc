@@ -16,28 +16,30 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_PBDatabase_database_2eproto;
-class PBTransportDefaultTypeInternal {
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Database_database_2eproto;
+namespace ProtoTransport {
+class TransportCatalogDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<PBTransport> _instance;
-} _PBTransport_default_instance_;
-static void InitDefaultsPBTransport_transport_5fcatalog_2eproto() {
+  ::google::protobuf::internal::ExplicitlyConstructed<TransportCatalog> _instance;
+} _TransportCatalog_default_instance_;
+}  // namespace ProtoTransport
+static void InitDefaultsTransportCatalog_transport_5fcatalog_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::_PBTransport_default_instance_;
-    new (ptr) ::PBTransport();
+    void* ptr = &::ProtoTransport::_TransportCatalog_default_instance_;
+    new (ptr) ::ProtoTransport::TransportCatalog();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::PBTransport::InitAsDefaultInstance();
+  ::ProtoTransport::TransportCatalog::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_PBTransport_transport_5fcatalog_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsPBTransport_transport_5fcatalog_2eproto}, {
-      &scc_info_PBDatabase_database_2eproto.base,}};
+::google::protobuf::internal::SCCInfo<1> scc_info_TransportCatalog_transport_5fcatalog_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsTransportCatalog_transport_5fcatalog_2eproto}, {
+      &scc_info_Database_database_2eproto.base,}};
 
 void InitDefaults_transport_5fcatalog_2eproto() {
-  ::google::protobuf::internal::InitSCC(&scc_info_PBTransport_transport_5fcatalog_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_TransportCatalog_transport_5fcatalog_2eproto.base);
 }
 
 ::google::protobuf::Metadata file_level_metadata_transport_5fcatalog_2eproto[1];
@@ -46,18 +48,18 @@ constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descr
 
 const ::google::protobuf::uint32 TableStruct_transport_5fcatalog_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::PBTransport, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::TransportCatalog, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::PBTransport, db_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::TransportCatalog, db_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::PBTransport)},
+  { 0, -1, sizeof(::ProtoTransport::TransportCatalog)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBTransport_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_TransportCatalog_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_transport_5fcatalog_2eproto = {
@@ -67,14 +69,15 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 };
 
 const char descriptor_table_protodef_transport_5fcatalog_2eproto[] =
-  "\n\027transport_catalog.proto\032\016database.prot"
-  "o\"&\n\013PBTransport\022\027\n\002db\030\001 \001(\0132\013.PBDatabas"
-  "eb\006proto3"
+  "\n\027transport_catalog.proto\022\016ProtoTranspor"
+  "t\032\016database.proto\"8\n\020TransportCatalog\022$\n"
+  "\002db\030\001 \001(\0132\030.ProtoTransport.Databaseb\006pro"
+  "to3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_transport_5fcatalog_2eproto = {
   false, InitDefaults_transport_5fcatalog_2eproto, 
   descriptor_table_protodef_transport_5fcatalog_2eproto,
-  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 89,
+  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 123,
 };
 
 void AddDescriptors_transport_5fcatalog_2eproto() {
@@ -87,75 +90,76 @@ void AddDescriptors_transport_5fcatalog_2eproto() {
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_transport_5fcatalog_2eproto = []() { AddDescriptors_transport_5fcatalog_2eproto(); return true; }();
+namespace ProtoTransport {
 
 // ===================================================================
 
-void PBTransport::InitAsDefaultInstance() {
-  ::_PBTransport_default_instance_._instance.get_mutable()->db_ = const_cast< ::PBDatabase*>(
-      ::PBDatabase::internal_default_instance());
+void TransportCatalog::InitAsDefaultInstance() {
+  ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->db_ = const_cast< ::ProtoTransport::Database*>(
+      ::ProtoTransport::Database::internal_default_instance());
 }
-class PBTransport::HasBitSetters {
+class TransportCatalog::HasBitSetters {
  public:
-  static const ::PBDatabase& db(const PBTransport* msg);
+  static const ::ProtoTransport::Database& db(const TransportCatalog* msg);
 };
 
-const ::PBDatabase&
-PBTransport::HasBitSetters::db(const PBTransport* msg) {
+const ::ProtoTransport::Database&
+TransportCatalog::HasBitSetters::db(const TransportCatalog* msg) {
   return *msg->db_;
 }
-void PBTransport::clear_db() {
+void TransportCatalog::clear_db() {
   if (GetArenaNoVirtual() == nullptr && db_ != nullptr) {
     delete db_;
   }
   db_ = nullptr;
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int PBTransport::kDbFieldNumber;
+const int TransportCatalog::kDbFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-PBTransport::PBTransport()
+TransportCatalog::TransportCatalog()
   : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:PBTransport)
+  // @@protoc_insertion_point(constructor:ProtoTransport.TransportCatalog)
 }
-PBTransport::PBTransport(const PBTransport& from)
+TransportCatalog::TransportCatalog(const TransportCatalog& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_db()) {
-    db_ = new ::PBDatabase(*from.db_);
+    db_ = new ::ProtoTransport::Database(*from.db_);
   } else {
     db_ = nullptr;
   }
-  // @@protoc_insertion_point(copy_constructor:PBTransport)
+  // @@protoc_insertion_point(copy_constructor:ProtoTransport.TransportCatalog)
 }
 
-void PBTransport::SharedCtor() {
+void TransportCatalog::SharedCtor() {
   ::google::protobuf::internal::InitSCC(
-      &scc_info_PBTransport_transport_5fcatalog_2eproto.base);
+      &scc_info_TransportCatalog_transport_5fcatalog_2eproto.base);
   db_ = nullptr;
 }
 
-PBTransport::~PBTransport() {
-  // @@protoc_insertion_point(destructor:PBTransport)
+TransportCatalog::~TransportCatalog() {
+  // @@protoc_insertion_point(destructor:ProtoTransport.TransportCatalog)
   SharedDtor();
 }
 
-void PBTransport::SharedDtor() {
+void TransportCatalog::SharedDtor() {
   if (this != internal_default_instance()) delete db_;
 }
 
-void PBTransport::SetCachedSize(int size) const {
+void TransportCatalog::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const PBTransport& PBTransport::default_instance() {
-  ::google::protobuf::internal::InitSCC(&::scc_info_PBTransport_transport_5fcatalog_2eproto.base);
+const TransportCatalog& TransportCatalog::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_TransportCatalog_transport_5fcatalog_2eproto.base);
   return *internal_default_instance();
 }
 
 
-void PBTransport::Clear() {
-// @@protoc_insertion_point(message_clear_start:PBTransport)
+void TransportCatalog::Clear() {
+// @@protoc_insertion_point(message_clear_start:ProtoTransport.TransportCatalog)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -168,9 +172,9 @@ void PBTransport::Clear() {
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* PBTransport::_InternalParse(const char* begin, const char* end, void* object,
+const char* TransportCatalog::_InternalParse(const char* begin, const char* end, void* object,
                   ::google::protobuf::internal::ParseContext* ctx) {
-  auto msg = static_cast<PBTransport*>(object);
+  auto msg = static_cast<TransportCatalog*>(object);
   ::google::protobuf::int32 size; (void)size;
   int depth; (void)depth;
   ::google::protobuf::uint32 tag;
@@ -180,12 +184,12 @@ const char* PBTransport::_InternalParse(const char* begin, const char* end, void
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // .PBDatabase db = 1;
+      // .ProtoTransport.Database db = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        parser_till_end = ::PBDatabase::_InternalParse;
+        parser_till_end = ::ProtoTransport::Database::_InternalParse;
         object = msg->mutable_db();
         if (size > end - ptr) goto len_delim_till_end;
         ptr += size;
@@ -213,17 +217,17 @@ len_delim_till_end:
                                {parser_till_end, object}, size);
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool PBTransport::MergePartialFromCodedStream(
+bool TransportCatalog::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:PBTransport)
+  // @@protoc_insertion_point(parse_start:ProtoTransport.TransportCatalog)
   for (;;) {
     ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .PBDatabase db = 1;
+      // .ProtoTransport.Database db = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
@@ -246,22 +250,22 @@ bool PBTransport::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:PBTransport)
+  // @@protoc_insertion_point(parse_success:ProtoTransport.TransportCatalog)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:PBTransport)
+  // @@protoc_insertion_point(parse_failure:ProtoTransport.TransportCatalog)
   return false;
 #undef DO_
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
-void PBTransport::SerializeWithCachedSizes(
+void TransportCatalog::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:PBTransport)
+  // @@protoc_insertion_point(serialize_start:ProtoTransport.TransportCatalog)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .PBDatabase db = 1;
+  // .ProtoTransport.Database db = 1;
   if (this->has_db()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, HasBitSetters::db(this), output);
@@ -271,16 +275,16 @@ void PBTransport::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:PBTransport)
+  // @@protoc_insertion_point(serialize_end:ProtoTransport.TransportCatalog)
 }
 
-::google::protobuf::uint8* PBTransport::InternalSerializeWithCachedSizesToArray(
+::google::protobuf::uint8* TransportCatalog::InternalSerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:PBTransport)
+  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.TransportCatalog)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .PBDatabase db = 1;
+  // .ProtoTransport.Database db = 1;
   if (this->has_db()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
@@ -291,12 +295,12 @@ void PBTransport::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:PBTransport)
+  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.TransportCatalog)
   return target;
 }
 
-size_t PBTransport::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:PBTransport)
+size_t TransportCatalog::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.TransportCatalog)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -308,7 +312,7 @@ size_t PBTransport::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .PBDatabase db = 1;
+  // .ProtoTransport.Database db = 1;
   if (this->has_db()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -320,72 +324,73 @@ size_t PBTransport::ByteSizeLong() const {
   return total_size;
 }
 
-void PBTransport::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:PBTransport)
+void TransportCatalog::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.TransportCatalog)
   GOOGLE_DCHECK_NE(&from, this);
-  const PBTransport* source =
-      ::google::protobuf::DynamicCastToGenerated<PBTransport>(
+  const TransportCatalog* source =
+      ::google::protobuf::DynamicCastToGenerated<TransportCatalog>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:PBTransport)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.TransportCatalog)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:PBTransport)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.TransportCatalog)
     MergeFrom(*source);
   }
 }
 
-void PBTransport::MergeFrom(const PBTransport& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:PBTransport)
+void TransportCatalog::MergeFrom(const TransportCatalog& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.TransportCatalog)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
   if (from.has_db()) {
-    mutable_db()->::PBDatabase::MergeFrom(from.db());
+    mutable_db()->::ProtoTransport::Database::MergeFrom(from.db());
   }
 }
 
-void PBTransport::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:PBTransport)
+void TransportCatalog::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.TransportCatalog)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void PBTransport::CopyFrom(const PBTransport& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:PBTransport)
+void TransportCatalog::CopyFrom(const TransportCatalog& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.TransportCatalog)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool PBTransport::IsInitialized() const {
+bool TransportCatalog::IsInitialized() const {
   return true;
 }
 
-void PBTransport::Swap(PBTransport* other) {
+void TransportCatalog::Swap(TransportCatalog* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void PBTransport::InternalSwap(PBTransport* other) {
+void TransportCatalog::InternalSwap(TransportCatalog* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(db_, other->db_);
 }
 
-::google::protobuf::Metadata PBTransport::GetMetadata() const {
+::google::protobuf::Metadata TransportCatalog::GetMetadata() const {
   ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_transport_5fcatalog_2eproto);
   return ::file_level_metadata_transport_5fcatalog_2eproto[kIndexInFileMessages];
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
+}  // namespace ProtoTransport
 namespace google {
 namespace protobuf {
-template<> PROTOBUF_NOINLINE ::PBTransport* Arena::CreateMaybeMessage< ::PBTransport >(Arena* arena) {
-  return Arena::CreateInternal< ::PBTransport >(arena);
+template<> PROTOBUF_NOINLINE ::ProtoTransport::TransportCatalog* Arena::CreateMaybeMessage< ::ProtoTransport::TransportCatalog >(Arena* arena) {
+  return Arena::CreateInternal< ::ProtoTransport::TransportCatalog >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

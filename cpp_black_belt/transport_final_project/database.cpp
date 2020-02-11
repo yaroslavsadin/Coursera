@@ -85,12 +85,12 @@ const Distances& BusDatabase::GetBusDistance(const std::string& name) const {
 }
 
 #include <cassert>
-PBDatabase BusDatabase::Serialize() const {
-    PBDatabase db;
+ProtoTransport::Database BusDatabase::Serialize() const {
+    ProtoTransport::Database db;
 
     auto stops = db.mutable_stops();
     for(auto [name,stop] : stops_) {
-        PBStop item;
+        ProtoTransport::Stop item;
         item.set_lat(stop.latitude);
         item.set_lon(stop.longtitude);
         auto buses = item.mutable_buses();
@@ -107,13 +107,13 @@ PBDatabase BusDatabase::Serialize() const {
 
     auto buses = db.mutable_buses();
     for(auto [name,bus] : buses_) {
-        PBBus item;
+        ProtoTransport::Bus item;
         item.set_stops(bus.stops);
         item.set_unique_stops(bus.unique_stops);
         item.set_route_type(
             (bus.route_type == Bus::RouteType::CIRCULAR) ? 
-            PBBus_RouteType::PBBus_RouteType_ROUNDTRIP :
-            PBBus_RouteType::PBBus_RouteType_ONEWAY
+            ProtoTransport::Bus_RouteType::Bus_RouteType_ROUNDTRIP :
+            ProtoTransport::Bus_RouteType::Bus_RouteType_ONEWAY
         );
         auto route = item.mutable_route();
         for(const auto& stop : bus.route) {
@@ -126,7 +126,7 @@ PBDatabase BusDatabase::Serialize() const {
     return db;
 }
 
-void BusDatabase::Deserialize(const PBDatabase& db) {
+void BusDatabase::Deserialize(const ProtoTransport::Database& db) {
     const auto& stops = db.stops();
     for(auto [name,stop] : stops) {
         stops_[name].latitude = stop.lat();
@@ -145,7 +145,7 @@ void BusDatabase::Deserialize(const PBDatabase& db) {
         buses_[name].stops = bus.stops();
         buses_[name].unique_stops = bus.unique_stops();
         buses_[name].route_type = 
-            (bus.route_type() == PBBus_RouteType::PBBus_RouteType_ROUNDTRIP) ?
+            (bus.route_type() == ProtoTransport::Bus_RouteType::Bus_RouteType_ROUNDTRIP) ?
             Bus::RouteType::CIRCULAR :
             Bus::RouteType::LINEAR;
         

@@ -49,36 +49,39 @@ struct TableStruct_transport_5fcatalog_2eproto {
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors_transport_5fcatalog_2eproto();
-class PBTransport;
-class PBTransportDefaultTypeInternal;
-extern PBTransportDefaultTypeInternal _PBTransport_default_instance_;
+namespace ProtoTransport {
+class TransportCatalog;
+class TransportCatalogDefaultTypeInternal;
+extern TransportCatalogDefaultTypeInternal _TransportCatalog_default_instance_;
+}  // namespace ProtoTransport
 namespace google {
 namespace protobuf {
-template<> ::PBTransport* Arena::CreateMaybeMessage<::PBTransport>(Arena*);
+template<> ::ProtoTransport::TransportCatalog* Arena::CreateMaybeMessage<::ProtoTransport::TransportCatalog>(Arena*);
 }  // namespace protobuf
 }  // namespace google
+namespace ProtoTransport {
 
 // ===================================================================
 
-class PBTransport :
-    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:PBTransport) */ {
+class TransportCatalog :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.TransportCatalog) */ {
  public:
-  PBTransport();
-  virtual ~PBTransport();
+  TransportCatalog();
+  virtual ~TransportCatalog();
 
-  PBTransport(const PBTransport& from);
+  TransportCatalog(const TransportCatalog& from);
 
-  inline PBTransport& operator=(const PBTransport& from) {
+  inline TransportCatalog& operator=(const TransportCatalog& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  PBTransport(PBTransport&& from) noexcept
-    : PBTransport() {
+  TransportCatalog(TransportCatalog&& from) noexcept
+    : TransportCatalog() {
     *this = ::std::move(from);
   }
 
-  inline PBTransport& operator=(PBTransport&& from) noexcept {
+  inline TransportCatalog& operator=(TransportCatalog&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -90,34 +93,34 @@ class PBTransport :
   static const ::google::protobuf::Descriptor* descriptor() {
     return default_instance().GetDescriptor();
   }
-  static const PBTransport& default_instance();
+  static const TransportCatalog& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const PBTransport* internal_default_instance() {
-    return reinterpret_cast<const PBTransport*>(
-               &_PBTransport_default_instance_);
+  static inline const TransportCatalog* internal_default_instance() {
+    return reinterpret_cast<const TransportCatalog*>(
+               &_TransportCatalog_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  void Swap(PBTransport* other);
-  friend void swap(PBTransport& a, PBTransport& b) {
+  void Swap(TransportCatalog* other);
+  friend void swap(TransportCatalog& a, TransportCatalog& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline PBTransport* New() const final {
-    return CreateMaybeMessage<PBTransport>(nullptr);
+  inline TransportCatalog* New() const final {
+    return CreateMaybeMessage<TransportCatalog>(nullptr);
   }
 
-  PBTransport* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<PBTransport>(arena);
+  TransportCatalog* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<TransportCatalog>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const PBTransport& from);
-  void MergeFrom(const PBTransport& from);
+  void CopyFrom(const TransportCatalog& from);
+  void MergeFrom(const TransportCatalog& from);
   PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
   bool IsInitialized() const final;
 
@@ -139,7 +142,7 @@ class PBTransport :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(PBTransport* other);
+  void InternalSwap(TransportCatalog* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return nullptr;
@@ -155,21 +158,21 @@ class PBTransport :
 
   // accessors -------------------------------------------------------
 
-  // .PBDatabase db = 1;
+  // .ProtoTransport.Database db = 1;
   bool has_db() const;
   void clear_db();
   static const int kDbFieldNumber = 1;
-  const ::PBDatabase& db() const;
-  ::PBDatabase* release_db();
-  ::PBDatabase* mutable_db();
-  void set_allocated_db(::PBDatabase* db);
+  const ::ProtoTransport::Database& db() const;
+  ::ProtoTransport::Database* release_db();
+  ::ProtoTransport::Database* mutable_db();
+  void set_allocated_db(::ProtoTransport::Database* db);
 
-  // @@protoc_insertion_point(class_scope:PBTransport)
+  // @@protoc_insertion_point(class_scope:ProtoTransport.TransportCatalog)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PBDatabase* db_;
+  ::ProtoTransport::Database* db_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_transport_5fcatalog_2eproto;
 };
@@ -182,35 +185,35 @@ class PBTransport :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// PBTransport
+// TransportCatalog
 
-// .PBDatabase db = 1;
-inline bool PBTransport::has_db() const {
+// .ProtoTransport.Database db = 1;
+inline bool TransportCatalog::has_db() const {
   return this != internal_default_instance() && db_ != nullptr;
 }
-inline const ::PBDatabase& PBTransport::db() const {
-  const ::PBDatabase* p = db_;
-  // @@protoc_insertion_point(field_get:PBTransport.db)
-  return p != nullptr ? *p : *reinterpret_cast<const ::PBDatabase*>(
-      &::_PBDatabase_default_instance_);
+inline const ::ProtoTransport::Database& TransportCatalog::db() const {
+  const ::ProtoTransport::Database* p = db_;
+  // @@protoc_insertion_point(field_get:ProtoTransport.TransportCatalog.db)
+  return p != nullptr ? *p : *reinterpret_cast<const ::ProtoTransport::Database*>(
+      &::ProtoTransport::_Database_default_instance_);
 }
-inline ::PBDatabase* PBTransport::release_db() {
-  // @@protoc_insertion_point(field_release:PBTransport.db)
+inline ::ProtoTransport::Database* TransportCatalog::release_db() {
+  // @@protoc_insertion_point(field_release:ProtoTransport.TransportCatalog.db)
   
-  ::PBDatabase* temp = db_;
+  ::ProtoTransport::Database* temp = db_;
   db_ = nullptr;
   return temp;
 }
-inline ::PBDatabase* PBTransport::mutable_db() {
+inline ::ProtoTransport::Database* TransportCatalog::mutable_db() {
   
   if (db_ == nullptr) {
-    auto* p = CreateMaybeMessage<::PBDatabase>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::ProtoTransport::Database>(GetArenaNoVirtual());
     db_ = p;
   }
-  // @@protoc_insertion_point(field_mutable:PBTransport.db)
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.TransportCatalog.db)
   return db_;
 }
-inline void PBTransport::set_allocated_db(::PBDatabase* db) {
+inline void TransportCatalog::set_allocated_db(::ProtoTransport::Database* db) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(db_);
@@ -226,7 +229,7 @@ inline void PBTransport::set_allocated_db(::PBDatabase* db) {
     
   }
   db_ = db;
-  // @@protoc_insertion_point(field_set_allocated:PBTransport.db)
+  // @@protoc_insertion_point(field_set_allocated:ProtoTransport.TransportCatalog.db)
 }
 
 #ifdef __GNUC__
@@ -235,6 +238,7 @@ inline void PBTransport::set_allocated_db(::PBDatabase* db) {
 
 // @@protoc_insertion_point(namespace_scope)
 
+}  // namespace ProtoTransport
 
 // @@protoc_insertion_point(global_scope)
 
