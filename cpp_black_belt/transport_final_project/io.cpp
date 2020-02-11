@@ -207,18 +207,18 @@ StopRequest::StopRequest(const Json::Node& from_json_node)
 
 Bus::RouteType AddBusRequest::GetRouteType(string_view request) {
     if(request.find(">") != request.npos) {
-        return Bus::RouteType::CIRCULAR;
+        return Bus::RouteType::ROUNDTRIP;
     } else {
-        return Bus::RouteType::LINEAR;
+        return Bus::RouteType::ONEWAY;
     }
 }
 
 Bus::RouteType AddBusRequest::GetRouteType(const Json::Node& json_node) {
     const auto& as_map = json_node.AsMap();
     if(as_map.at("is_roundtrip").AsBool()) {
-        return Bus::RouteType::CIRCULAR;
+        return Bus::RouteType::ROUNDTRIP;
     } else {
-        return Bus::RouteType::LINEAR;
+        return Bus::RouteType::ONEWAY;
     }
 }
 
@@ -393,7 +393,7 @@ Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& rou
 void AddBusRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
     db.AddBus(
         bus_name_,move(stops_), 
-        (route_type_ == Bus::RouteType::CIRCULAR)
+        (route_type_ == Bus::RouteType::ROUNDTRIP)
     );
 }
 void AddStopRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {

@@ -21,8 +21,8 @@ struct Stop {
 
 struct Bus {
     enum class RouteType {
-        LINEAR,
-        CIRCULAR
+        ONEWAY,
+        ROUNDTRIP
     };
     size_t stops;
     size_t unique_stops;

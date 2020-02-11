@@ -40,7 +40,7 @@ RouterT TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) co
                         )
                     }
                 );
-                if(bus_data.route_type == Bus::RouteType::LINEAR) {
+                if(bus_data.route_type == Bus::RouteType::ONEWAY) {
                     graph_.AddEdge(
                     Graph::Edge<EdgeWeight> {
                         stop_to_vertices_.at(stop_to).board,

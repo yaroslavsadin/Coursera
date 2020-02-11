@@ -5,19 +5,14 @@ package ProtoTransport;
 message Stop {
     double lat = 1;
     double lon = 2;
-    repeated string buses = 3;
-    map<string, int32> distance_to_stop_ = 4;
+    map<string, int32> distance_to_stop_ = 3;
 }
 
 message Bus {
-    enum RouteType {
-        ONEWAY = 0;
-        ROUNDTRIP = 1;
-    }
     uint64 stops = 1;
     uint64 unique_stops = 2;
-    RouteType route_type = 3;
-    repeated string route = 4;
+    bool is_round_trip = 3;
+    repeated uint32 route = 4;
 }
 
 message Database {

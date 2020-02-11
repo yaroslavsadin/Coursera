@@ -133,7 +133,7 @@ void SvgRender::RenderBuses(Svg::Document& doc) const {
         for(const auto& stop : bus.route) {
             bus_line.AddPoint(PointFromLocation(stops_compressed.at(stop).latitude, stops_compressed.at(stop).longtitude));
         }
-        if(bus.route.size() && bus.route_type == Bus::RouteType::LINEAR) {
+        if(bus.route.size() && bus.route_type == Bus::RouteType::ONEWAY) {
             for(const auto& stop : Range(bus.route.rbegin() + 1,bus.route.rend())) {
                 bus_line.AddPoint(PointFromLocation(stops_compressed.at(stop).latitude, stops_compressed.at(stop).longtitude));
             }
@@ -380,7 +380,7 @@ bool SvgRender::StopIsBase(const std::string& stop_name) const {
     //  через которые проходит один автобус, но более чем дважды за весь маршрут
     const Bus& bus = buses.at(*stop.buses.begin());
     size_t stop_cnt = std::count(bus.route.begin(),bus.route.end(),stop_name);
-    if(bus.route_type == Bus::RouteType::LINEAR) {
+    if(bus.route_type == Bus::RouteType::ONEWAY) {
         stop_cnt *= 2;
     }
     if(stop_cnt > 2) {

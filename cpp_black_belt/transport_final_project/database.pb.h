@@ -33,7 +33,6 @@
 #include <google/protobuf/map.h>  // IWYU pragma: export
 #include <google/protobuf/map_entry.h>
 #include <google/protobuf/map_field_inl.h>
-#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -84,27 +83,6 @@ template<> ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse* Arena::CreateMay
 }  // namespace google
 namespace ProtoTransport {
 
-enum Bus_RouteType {
-  Bus_RouteType_ONEWAY = 0,
-  Bus_RouteType_ROUNDTRIP = 1,
-  Bus_RouteType_Bus_RouteType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
-  Bus_RouteType_Bus_RouteType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
-};
-bool Bus_RouteType_IsValid(int value);
-const Bus_RouteType Bus_RouteType_RouteType_MIN = Bus_RouteType_ONEWAY;
-const Bus_RouteType Bus_RouteType_RouteType_MAX = Bus_RouteType_ROUNDTRIP;
-const int Bus_RouteType_RouteType_ARRAYSIZE = Bus_RouteType_RouteType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* Bus_RouteType_descriptor();
-inline const ::std::string& Bus_RouteType_Name(Bus_RouteType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    Bus_RouteType_descriptor(), value);
-}
-inline bool Bus_RouteType_Parse(
-    const ::std::string& name, Bus_RouteType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<Bus_RouteType>(
-    Bus_RouteType_descriptor(), name, value);
-}
 // ===================================================================
 
 class Stop_DistanceToStopEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<Stop_DistanceToStopEntry_DoNotUse, 
@@ -227,32 +205,10 @@ class Stop :
 
   // accessors -------------------------------------------------------
 
-  // repeated string buses = 3;
-  int buses_size() const;
-  void clear_buses();
-  static const int kBusesFieldNumber = 3;
-  const ::std::string& buses(int index) const;
-  ::std::string* mutable_buses(int index);
-  void set_buses(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_buses(int index, ::std::string&& value);
-  #endif
-  void set_buses(int index, const char* value);
-  void set_buses(int index, const char* value, size_t size);
-  ::std::string* add_buses();
-  void add_buses(const ::std::string& value);
-  #if LANG_CXX11
-  void add_buses(::std::string&& value);
-  #endif
-  void add_buses(const char* value);
-  void add_buses(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField<::std::string>& buses() const;
-  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_buses();
-
-  // map<string, int32> distance_to_stop_ = 4;
+  // map<string, int32> distance_to_stop_ = 3;
   int distance_to_stop__size() const;
   void clear_distance_to_stop_();
-  static const int kDistanceToStopFieldNumber = 4;
+  static const int kDistanceToStopFieldNumber = 3;
   const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
       distance_to_stop_() const;
   ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
@@ -275,7 +231,6 @@ class Stop :
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField<::std::string> buses_;
   ::google::protobuf::internal::MapField<
       Stop_DistanceToStopEntry_DoNotUse,
       ::std::string, ::google::protobuf::int32,
@@ -382,55 +337,19 @@ class Bus :
 
   // nested types ----------------------------------------------------
 
-  typedef Bus_RouteType RouteType;
-  static const RouteType ONEWAY =
-    Bus_RouteType_ONEWAY;
-  static const RouteType ROUNDTRIP =
-    Bus_RouteType_ROUNDTRIP;
-  static inline bool RouteType_IsValid(int value) {
-    return Bus_RouteType_IsValid(value);
-  }
-  static const RouteType RouteType_MIN =
-    Bus_RouteType_RouteType_MIN;
-  static const RouteType RouteType_MAX =
-    Bus_RouteType_RouteType_MAX;
-  static const int RouteType_ARRAYSIZE =
-    Bus_RouteType_RouteType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  RouteType_descriptor() {
-    return Bus_RouteType_descriptor();
-  }
-  static inline const ::std::string& RouteType_Name(RouteType value) {
-    return Bus_RouteType_Name(value);
-  }
-  static inline bool RouteType_Parse(const ::std::string& name,
-      RouteType* value) {
-    return Bus_RouteType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // repeated string route = 4;
+  // repeated uint32 route = 4;
   int route_size() const;
   void clear_route();
   static const int kRouteFieldNumber = 4;
-  const ::std::string& route(int index) const;
-  ::std::string* mutable_route(int index);
-  void set_route(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_route(int index, ::std::string&& value);
-  #endif
-  void set_route(int index, const char* value);
-  void set_route(int index, const char* value, size_t size);
-  ::std::string* add_route();
-  void add_route(const ::std::string& value);
-  #if LANG_CXX11
-  void add_route(::std::string&& value);
-  #endif
-  void add_route(const char* value);
-  void add_route(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField<::std::string>& route() const;
-  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_route();
+  ::google::protobuf::uint32 route(int index) const;
+  void set_route(int index, ::google::protobuf::uint32 value);
+  void add_route(::google::protobuf::uint32 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      route() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_route();
 
   // uint64 stops = 1;
   void clear_stops();
@@ -444,21 +363,22 @@ class Bus :
   ::google::protobuf::uint64 unique_stops() const;
   void set_unique_stops(::google::protobuf::uint64 value);
 
-  // .ProtoTransport.Bus.RouteType route_type = 3;
-  void clear_route_type();
-  static const int kRouteTypeFieldNumber = 3;
-  ::ProtoTransport::Bus_RouteType route_type() const;
-  void set_route_type(::ProtoTransport::Bus_RouteType value);
+  // bool is_round_trip = 3;
+  void clear_is_round_trip();
+  static const int kIsRoundTripFieldNumber = 3;
+  bool is_round_trip() const;
+  void set_is_round_trip(bool value);
 
   // @@protoc_insertion_point(class_scope:ProtoTransport.Bus)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField<::std::string> route_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > route_;
+  mutable std::atomic<int> _route_cached_byte_size_;
   ::google::protobuf::uint64 stops_;
   ::google::protobuf::uint64 unique_stops_;
-  int route_type_;
+  bool is_round_trip_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_database_2eproto;
 };
@@ -687,76 +607,7 @@ inline void Stop::set_lon(double value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.Stop.lon)
 }
 
-// repeated string buses = 3;
-inline int Stop::buses_size() const {
-  return buses_.size();
-}
-inline void Stop::clear_buses() {
-  buses_.Clear();
-}
-inline const ::std::string& Stop::buses(int index) const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Stop.buses)
-  return buses_.Get(index);
-}
-inline ::std::string* Stop::mutable_buses(int index) {
-  // @@protoc_insertion_point(field_mutable:ProtoTransport.Stop.buses)
-  return buses_.Mutable(index);
-}
-inline void Stop::set_buses(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.buses)
-  buses_.Mutable(index)->assign(value);
-}
-#if LANG_CXX11
-inline void Stop::set_buses(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.buses)
-  buses_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void Stop::set_buses(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  buses_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ProtoTransport.Stop.buses)
-}
-inline void Stop::set_buses(int index, const char* value, size_t size) {
-  buses_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Stop.buses)
-}
-inline ::std::string* Stop::add_buses() {
-  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Stop.buses)
-  return buses_.Add();
-}
-inline void Stop::add_buses(const ::std::string& value) {
-  buses_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ProtoTransport.Stop.buses)
-}
-#if LANG_CXX11
-inline void Stop::add_buses(::std::string&& value) {
-  buses_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ProtoTransport.Stop.buses)
-}
-#endif
-inline void Stop::add_buses(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  buses_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ProtoTransport.Stop.buses)
-}
-inline void Stop::add_buses(const char* value, size_t size) {
-  buses_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Stop.buses)
-}
-inline const ::google::protobuf::RepeatedPtrField<::std::string>&
-Stop::buses() const {
-  // @@protoc_insertion_point(field_list:ProtoTransport.Stop.buses)
-  return buses_;
-}
-inline ::google::protobuf::RepeatedPtrField<::std::string>*
-Stop::mutable_buses() {
-  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Stop.buses)
-  return &buses_;
-}
-
-// map<string, int32> distance_to_stop_ = 4;
+// map<string, int32> distance_to_stop_ = 3;
 inline int Stop::distance_to_stop__size() const {
   return distance_to_stop__.size();
 }
@@ -806,84 +657,45 @@ inline void Bus::set_unique_stops(::google::protobuf::uint64 value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.Bus.unique_stops)
 }
 
-// .ProtoTransport.Bus.RouteType route_type = 3;
-inline void Bus::clear_route_type() {
-  route_type_ = 0;
+// bool is_round_trip = 3;
+inline void Bus::clear_is_round_trip() {
+  is_round_trip_ = false;
 }
-inline ::ProtoTransport::Bus_RouteType Bus::route_type() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.route_type)
-  return static_cast< ::ProtoTransport::Bus_RouteType >(route_type_);
+inline bool Bus::is_round_trip() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.is_round_trip)
+  return is_round_trip_;
 }
-inline void Bus::set_route_type(::ProtoTransport::Bus_RouteType value) {
+inline void Bus::set_is_round_trip(bool value) {
   
-  route_type_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.route_type)
+  is_round_trip_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.is_round_trip)
 }
 
-// repeated string route = 4;
+// repeated uint32 route = 4;
 inline int Bus::route_size() const {
   return route_.size();
 }
 inline void Bus::clear_route() {
   route_.Clear();
 }
-inline const ::std::string& Bus::route(int index) const {
+inline ::google::protobuf::uint32 Bus::route(int index) const {
   // @@protoc_insertion_point(field_get:ProtoTransport.Bus.route)
   return route_.Get(index);
 }
-inline ::std::string* Bus::mutable_route(int index) {
-  // @@protoc_insertion_point(field_mutable:ProtoTransport.Bus.route)
-  return route_.Mutable(index);
-}
-inline void Bus::set_route(int index, const ::std::string& value) {
+inline void Bus::set_route(int index, ::google::protobuf::uint32 value) {
+  route_.Set(index, value);
   // @@protoc_insertion_point(field_set:ProtoTransport.Bus.route)
-  route_.Mutable(index)->assign(value);
 }
-#if LANG_CXX11
-inline void Bus::set_route(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.route)
-  route_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void Bus::set_route(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  route_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ProtoTransport.Bus.route)
-}
-inline void Bus::set_route(int index, const char* value, size_t size) {
-  route_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Bus.route)
-}
-inline ::std::string* Bus::add_route() {
-  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Bus.route)
-  return route_.Add();
-}
-inline void Bus::add_route(const ::std::string& value) {
-  route_.Add()->assign(value);
+inline void Bus::add_route(::google::protobuf::uint32 value) {
+  route_.Add(value);
   // @@protoc_insertion_point(field_add:ProtoTransport.Bus.route)
 }
-#if LANG_CXX11
-inline void Bus::add_route(::std::string&& value) {
-  route_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ProtoTransport.Bus.route)
-}
-#endif
-inline void Bus::add_route(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  route_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ProtoTransport.Bus.route)
-}
-inline void Bus::add_route(const char* value, size_t size) {
-  route_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Bus.route)
-}
-inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
 Bus::route() const {
   // @@protoc_insertion_point(field_list:ProtoTransport.Bus.route)
   return route_;
 }
-inline ::google::protobuf::RepeatedPtrField<::std::string>*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
 Bus::mutable_route() {
   // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Bus.route)
   return &route_;
@@ -950,18 +762,6 @@ Database::mutable_buses() {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace ProtoTransport
-
-namespace google {
-namespace protobuf {
-
-template <> struct is_proto_enum< ::ProtoTransport::Bus_RouteType> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::ProtoTransport::Bus_RouteType>() {
-  return ::ProtoTransport::Bus_RouteType_descriptor();
-}
-
-}  // namespace protobuf
-}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 
