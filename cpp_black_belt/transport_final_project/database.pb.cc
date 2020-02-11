@@ -16,29 +16,232 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 
-void InitDefaults_database_2eproto() {
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_PBBus_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_PBStop_DistanceToStopEntry_DoNotUse_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_PBDatabase_BusesEntry_DoNotUse_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_PBDatabase_StopsEntry_DoNotUse_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_PBStop_database_2eproto;
+class PBStop_DistanceToStopEntry_DoNotUseDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBStop_DistanceToStopEntry_DoNotUse> _instance;
+} _PBStop_DistanceToStopEntry_DoNotUse_default_instance_;
+class PBStopDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBStop> _instance;
+} _PBStop_default_instance_;
+class PBBusDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBBus> _instance;
+} _PBBus_default_instance_;
+class PBDatabase_StopsEntry_DoNotUseDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBDatabase_StopsEntry_DoNotUse> _instance;
+} _PBDatabase_StopsEntry_DoNotUse_default_instance_;
+class PBDatabase_BusesEntry_DoNotUseDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBDatabase_BusesEntry_DoNotUse> _instance;
+} _PBDatabase_BusesEntry_DoNotUse_default_instance_;
+class PBDatabaseDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<PBDatabase> _instance;
+} _PBDatabase_default_instance_;
+static void InitDefaultsPBStop_DistanceToStopEntry_DoNotUse_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBStop_DistanceToStopEntry_DoNotUse_default_instance_;
+    new (ptr) ::PBStop_DistanceToStopEntry_DoNotUse();
+  }
+  ::PBStop_DistanceToStopEntry_DoNotUse::InitAsDefaultInstance();
 }
 
-constexpr ::google::protobuf::Metadata* file_level_metadata_database_2eproto = nullptr;
-constexpr ::google::protobuf::EnumDescriptor const** file_level_enum_descriptors_database_2eproto = nullptr;
+::google::protobuf::internal::SCCInfo<0> scc_info_PBStop_DistanceToStopEntry_DoNotUse_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsPBStop_DistanceToStopEntry_DoNotUse_database_2eproto}, {}};
+
+static void InitDefaultsPBStop_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBStop_default_instance_;
+    new (ptr) ::PBStop();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::PBStop::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_PBStop_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsPBStop_database_2eproto}, {
+      &scc_info_PBStop_DistanceToStopEntry_DoNotUse_database_2eproto.base,}};
+
+static void InitDefaultsPBBus_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBBus_default_instance_;
+    new (ptr) ::PBBus();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::PBBus::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_PBBus_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsPBBus_database_2eproto}, {}};
+
+static void InitDefaultsPBDatabase_StopsEntry_DoNotUse_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBDatabase_StopsEntry_DoNotUse_default_instance_;
+    new (ptr) ::PBDatabase_StopsEntry_DoNotUse();
+  }
+  ::PBDatabase_StopsEntry_DoNotUse::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_PBDatabase_StopsEntry_DoNotUse_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsPBDatabase_StopsEntry_DoNotUse_database_2eproto}, {
+      &scc_info_PBStop_database_2eproto.base,}};
+
+static void InitDefaultsPBDatabase_BusesEntry_DoNotUse_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBDatabase_BusesEntry_DoNotUse_default_instance_;
+    new (ptr) ::PBDatabase_BusesEntry_DoNotUse();
+  }
+  ::PBDatabase_BusesEntry_DoNotUse::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_PBDatabase_BusesEntry_DoNotUse_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsPBDatabase_BusesEntry_DoNotUse_database_2eproto}, {
+      &scc_info_PBBus_database_2eproto.base,}};
+
+static void InitDefaultsPBDatabase_database_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_PBDatabase_default_instance_;
+    new (ptr) ::PBDatabase();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::PBDatabase::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<2> scc_info_PBDatabase_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsPBDatabase_database_2eproto}, {
+      &scc_info_PBDatabase_StopsEntry_DoNotUse_database_2eproto.base,
+      &scc_info_PBDatabase_BusesEntry_DoNotUse_database_2eproto.base,}};
+
+void InitDefaults_database_2eproto() {
+  ::google::protobuf::internal::InitSCC(&scc_info_PBStop_DistanceToStopEntry_DoNotUse_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PBStop_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PBBus_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PBDatabase_StopsEntry_DoNotUse_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PBDatabase_BusesEntry_DoNotUse_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_PBDatabase_database_2eproto.base);
+}
+
+::google::protobuf::Metadata file_level_metadata_database_2eproto[6];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors_database_2eproto[1];
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_database_2eproto = nullptr;
-const ::google::protobuf::uint32 TableStruct_database_2eproto::offsets[1] = {};
-static constexpr ::google::protobuf::internal::MigrationSchema* schemas = nullptr;
-static constexpr ::google::protobuf::Message* const* file_default_instances = nullptr;
+
+const ::google::protobuf::uint32 TableStruct_database_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  PROTOBUF_FIELD_OFFSET(::PBStop_DistanceToStopEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::PBStop_DistanceToStopEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBStop_DistanceToStopEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::PBStop_DistanceToStopEntry_DoNotUse, value_),
+  0,
+  1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::PBStop, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBStop, lat_),
+  PROTOBUF_FIELD_OFFSET(::PBStop, lon_),
+  PROTOBUF_FIELD_OFFSET(::PBStop, buses_),
+  PROTOBUF_FIELD_OFFSET(::PBStop, distance_to_stop__),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::PBBus, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBBus, stops_),
+  PROTOBUF_FIELD_OFFSET(::PBBus, unique_stops_),
+  PROTOBUF_FIELD_OFFSET(::PBBus, route_type_),
+  PROTOBUF_FIELD_OFFSET(::PBBus, route_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_StopsEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_StopsEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_StopsEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_StopsEntry_DoNotUse, value_),
+  0,
+  1,
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_BusesEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_BusesEntry_DoNotUse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_BusesEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase_BusesEntry_DoNotUse, value_),
+  0,
+  1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::PBDatabase, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::PBDatabase, stops_),
+  PROTOBUF_FIELD_OFFSET(::PBDatabase, buses_),
+};
+static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  { 0, 7, sizeof(::PBStop_DistanceToStopEntry_DoNotUse)},
+  { 9, -1, sizeof(::PBStop)},
+  { 18, -1, sizeof(::PBBus)},
+  { 27, 34, sizeof(::PBDatabase_StopsEntry_DoNotUse)},
+  { 36, 43, sizeof(::PBDatabase_BusesEntry_DoNotUse)},
+  { 45, -1, sizeof(::PBDatabase)},
+};
+
+static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBStop_DistanceToStopEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBStop_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBBus_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBDatabase_StopsEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBDatabase_BusesEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::_PBDatabase_default_instance_),
+};
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_database_2eproto = {
   {}, AddDescriptors_database_2eproto, "database.proto", schemas,
   file_default_instances, TableStruct_database_2eproto::offsets,
-  file_level_metadata_database_2eproto, 0, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
+  file_level_metadata_database_2eproto, 6, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
 };
 
 const char descriptor_table_protodef_database_2eproto[] =
-  "\n\016database.protob\006proto3"
+  "\n\016database.proto\"\240\001\n\006PBStop\022\013\n\003lat\030\001 \001(\001"
+  "\022\013\n\003lon\030\002 \001(\001\022\r\n\005buses\030\003 \003(\t\0226\n\021distance"
+  "_to_stop_\030\004 \003(\0132\033.PBStop.DistanceToStopE"
+  "ntry\0325\n\023DistanceToStopEntry\022\013\n\003key\030\001 \001(\t"
+  "\022\r\n\005value\030\002 \001(\005:\0028\001\"\211\001\n\005PBBus\022\r\n\005stops\030\001"
+  " \001(\004\022\024\n\014unique_stops\030\002 \001(\004\022$\n\nroute_type"
+  "\030\003 \001(\0162\020.PBBus.RouteType\022\r\n\005route\030\004 \003(\t\""
+  "&\n\tRouteType\022\n\n\006ONEWAY\020\000\022\r\n\tROUNDTRIP\020\001\""
+  "\307\001\n\nPBDatabase\022%\n\005stops\030\001 \003(\0132\026.PBDataba"
+  "se.StopsEntry\022%\n\005buses\030\002 \003(\0132\026.PBDatabas"
+  "e.BusesEntry\0325\n\nStopsEntry\022\013\n\003key\030\001 \001(\t\022"
+  "\026\n\005value\030\002 \001(\0132\007.PBStop:\0028\001\0324\n\nBusesEntr"
+  "y\022\013\n\003key\030\001 \001(\t\022\025\n\005value\030\002 \001(\0132\006.PBBus:\0028"
+  "\001b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_database_2eproto = {
   false, InitDefaults_database_2eproto, 
   descriptor_table_protodef_database_2eproto,
-  "database.proto", &assign_descriptors_table_database_2eproto, 24,
+  "database.proto", &assign_descriptors_table_database_2eproto, 529,
 };
 
 void AddDescriptors_database_2eproto() {
@@ -50,10 +253,1641 @@ void AddDescriptors_database_2eproto() {
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_database_2eproto = []() { AddDescriptors_database_2eproto(); return true; }();
+const ::google::protobuf::EnumDescriptor* PBBus_RouteType_descriptor() {
+  ::google::protobuf::internal::AssignDescriptors(&assign_descriptors_table_database_2eproto);
+  return file_level_enum_descriptors_database_2eproto[0];
+}
+bool PBBus_RouteType_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const PBBus_RouteType PBBus::ONEWAY;
+const PBBus_RouteType PBBus::ROUNDTRIP;
+const PBBus_RouteType PBBus::RouteType_MIN;
+const PBBus_RouteType PBBus::RouteType_MAX;
+const int PBBus::RouteType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+// ===================================================================
+
+PBStop_DistanceToStopEntry_DoNotUse::PBStop_DistanceToStopEntry_DoNotUse() {}
+PBStop_DistanceToStopEntry_DoNotUse::PBStop_DistanceToStopEntry_DoNotUse(::google::protobuf::Arena* arena)
+    : SuperType(arena) {}
+void PBStop_DistanceToStopEntry_DoNotUse::MergeFrom(const PBStop_DistanceToStopEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::google::protobuf::Metadata PBStop_DistanceToStopEntry_DoNotUse::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[0];
+}
+void PBStop_DistanceToStopEntry_DoNotUse::MergeFrom(
+    const ::google::protobuf::Message& other) {
+  ::google::protobuf::Message::MergeFrom(other);
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBStop_DistanceToStopEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
+  using MF = ::google::protobuf::internal::MapField<
+      PBStop_DistanceToStopEntry_DoNotUse, EntryKeyType, EntryValueType,
+      kEntryKeyFieldType, kEntryValueFieldType,
+      kEntryDefaultEnumValue>;
+  auto mf = static_cast<MF*>(object);
+  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
+#define DO_(x) if (!(x)) return false
+  DO_(parser.ParseMap(begin, end));
+  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    parser.key().data(), static_cast<int>(parser.key().length()),
+    ::google::protobuf::internal::WireFormatLite::PARSE,
+    "PBStop.DistanceToStopEntry.key"));
+#undef DO_
+  return true;
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+
+// ===================================================================
+
+void PBStop::InitAsDefaultInstance() {
+}
+class PBStop::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int PBStop::kLatFieldNumber;
+const int PBStop::kLonFieldNumber;
+const int PBStop::kBusesFieldNumber;
+const int PBStop::kDistanceToStopFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+PBStop::PBStop()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:PBStop)
+}
+PBStop::PBStop(const PBStop& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr),
+      buses_(from.buses_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  distance_to_stop__.MergeFrom(from.distance_to_stop__);
+  ::memcpy(&lat_, &from.lat_,
+    static_cast<size_t>(reinterpret_cast<char*>(&lon_) -
+    reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
+  // @@protoc_insertion_point(copy_constructor:PBStop)
+}
+
+void PBStop::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_PBStop_database_2eproto.base);
+  ::memset(&lat_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&lon_) -
+      reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
+}
+
+PBStop::~PBStop() {
+  // @@protoc_insertion_point(destructor:PBStop)
+  SharedDtor();
+}
+
+void PBStop::SharedDtor() {
+}
+
+void PBStop::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const PBStop& PBStop::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_PBStop_database_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void PBStop::Clear() {
+// @@protoc_insertion_point(message_clear_start:PBStop)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  buses_.Clear();
+  distance_to_stop__.Clear();
+  ::memset(&lat_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&lon_) -
+      reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* PBStop::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<PBStop*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // double lat = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 9) goto handle_unusual;
+        msg->set_lat(::google::protobuf::io::UnalignedLoad<double>(ptr));
+        ptr += sizeof(double);
+        break;
+      }
+      // double lon = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 17) goto handle_unusual;
+        msg->set_lon(::google::protobuf::io::UnalignedLoad<double>(ptr));
+        ptr += sizeof(double);
+        break;
+      }
+      // repeated string buses = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          ctx->extra_parse_data().SetFieldName("PBStop.buses");
+          object = msg->add_buses();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 26 && (ptr += 1));
+        break;
+      }
+      // map<string, int32> distance_to_stop_ = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
+          auto parse_map = ::PBStop_DistanceToStopEntry_DoNotUse::_ParseMap;
+          ctx->extra_parse_data().payload.clear();
+          ctx->extra_parse_data().parse_map = parse_map;
+          object = &msg->distance_to_stop__;
+          if (size > end - ptr) goto len_delim_till_end;
+          auto newend = ptr + size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
+          ptr = newend;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+string_till_end:
+  static_cast<::std::string*>(object)->clear();
+  static_cast<::std::string*>(object)->reserve(size);
+  goto len_delim_till_end;
+len_delim_till_end:
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                               {parser_till_end, object}, size);
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBStop::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:PBStop)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // double lat = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (9 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &lat_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // double lon = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (17 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &lon_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string buses = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_buses()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->buses(this->buses_size() - 1).data(),
+            static_cast<int>(this->buses(this->buses_size() - 1).length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "PBStop.buses"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // map<string, int32> distance_to_stop_ = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          PBStop_DistanceToStopEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
+              PBStop_DistanceToStopEntry_DoNotUse,
+              ::std::string, ::google::protobuf::int32,
+              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+              ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
+              0 >,
+            ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 > > parser(&distance_to_stop__);
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+              input, &parser));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            parser.key().data(), static_cast<int>(parser.key().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "PBStop.DistanceToStopEntry.key"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:PBStop)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:PBStop)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void PBStop::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:PBStop)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double lat = 1;
+  if (this->lat() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(1, this->lat(), output);
+  }
+
+  // double lon = 2;
+  if (this->lon() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(2, this->lon(), output);
+  }
+
+  // repeated string buses = 3;
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "PBStop.buses");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->buses(i), output);
+  }
+
+  // map<string, int32> distance_to_stop_ = 4;
+  if (!this->distance_to_stop_().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBStop.DistanceToStopEntry.key");
+      }
+    };
+
+    if (output->IsSerializationDeterministic() &&
+        this->distance_to_stop_().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->distance_to_stop_().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
+          it = this->distance_to_stop_().begin();
+          it != this->distance_to_stop_().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBStop_DistanceToStopEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(distance_to_stop__.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(4, *entry, output);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBStop_DistanceToStopEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
+          it = this->distance_to_stop_().begin();
+          it != this->distance_to_stop_().end(); ++it) {
+        entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(4, *entry, output);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:PBStop)
+}
+
+::google::protobuf::uint8* PBStop::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:PBStop)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double lat = 1;
+  if (this->lat() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(1, this->lat(), target);
+  }
+
+  // double lon = 2;
+  if (this->lon() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(2, this->lon(), target);
+  }
+
+  // repeated string buses = 3;
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "PBStop.buses");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(3, this->buses(i), target);
+  }
+
+  // map<string, int32> distance_to_stop_ = 4;
+  if (!this->distance_to_stop_().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBStop.DistanceToStopEntry.key");
+      }
+    };
+
+    if (false &&
+        this->distance_to_stop_().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->distance_to_stop_().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
+          it = this->distance_to_stop_().begin();
+          it != this->distance_to_stop_().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBStop_DistanceToStopEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(distance_to_stop__.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(4, *entry, target);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBStop_DistanceToStopEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
+          it = this->distance_to_stop_().begin();
+          it != this->distance_to_stop_().end(); ++it) {
+        entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(4, *entry, target);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:PBStop)
+  return target;
+}
+
+size_t PBStop::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:PBStop)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string buses = 3;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->buses_size());
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->buses(i));
+  }
+
+  // map<string, int32> distance_to_stop_ = 4;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->distance_to_stop__size());
+  {
+    ::std::unique_ptr<PBStop_DistanceToStopEntry_DoNotUse> entry;
+    for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
+        it = this->distance_to_stop_().begin();
+        it != this->distance_to_stop_().end(); ++it) {
+      entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
+      total_size += ::google::protobuf::internal::WireFormatLite::
+          MessageSizeNoVirtual(*entry);
+    }
+  }
+
+  // double lat = 1;
+  if (this->lat() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double lon = 2;
+  if (this->lon() != 0) {
+    total_size += 1 + 8;
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void PBStop::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:PBStop)
+  GOOGLE_DCHECK_NE(&from, this);
+  const PBStop* source =
+      ::google::protobuf::DynamicCastToGenerated<PBStop>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:PBStop)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:PBStop)
+    MergeFrom(*source);
+  }
+}
+
+void PBStop::MergeFrom(const PBStop& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:PBStop)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  buses_.MergeFrom(from.buses_);
+  distance_to_stop__.MergeFrom(from.distance_to_stop__);
+  if (from.lat() != 0) {
+    set_lat(from.lat());
+  }
+  if (from.lon() != 0) {
+    set_lon(from.lon());
+  }
+}
+
+void PBStop::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:PBStop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PBStop::CopyFrom(const PBStop& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:PBStop)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PBStop::IsInitialized() const {
+  return true;
+}
+
+void PBStop::Swap(PBStop* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void PBStop::InternalSwap(PBStop* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  buses_.InternalSwap(CastToBase(&other->buses_));
+  distance_to_stop__.Swap(&other->distance_to_stop__);
+  swap(lat_, other->lat_);
+  swap(lon_, other->lon_);
+}
+
+::google::protobuf::Metadata PBStop::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void PBBus::InitAsDefaultInstance() {
+}
+class PBBus::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int PBBus::kStopsFieldNumber;
+const int PBBus::kUniqueStopsFieldNumber;
+const int PBBus::kRouteTypeFieldNumber;
+const int PBBus::kRouteFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+PBBus::PBBus()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:PBBus)
+}
+PBBus::PBBus(const PBBus& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr),
+      route_(from.route_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&stops_, &from.stops_,
+    static_cast<size_t>(reinterpret_cast<char*>(&route_type_) -
+    reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
+  // @@protoc_insertion_point(copy_constructor:PBBus)
+}
+
+void PBBus::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_PBBus_database_2eproto.base);
+  ::memset(&stops_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&route_type_) -
+      reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
+}
+
+PBBus::~PBBus() {
+  // @@protoc_insertion_point(destructor:PBBus)
+  SharedDtor();
+}
+
+void PBBus::SharedDtor() {
+}
+
+void PBBus::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const PBBus& PBBus::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_PBBus_database_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void PBBus::Clear() {
+// @@protoc_insertion_point(message_clear_start:PBBus)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  route_.Clear();
+  ::memset(&stops_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&route_type_) -
+      reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* PBBus::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<PBBus*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // uint64 stops = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
+        msg->set_stops(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // uint64 unique_stops = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
+        msg->set_unique_stops(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // .PBBus.RouteType route_type = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
+        ::google::protobuf::uint64 val = ::google::protobuf::internal::ReadVarint(&ptr);
+        msg->set_route_type(static_cast<::PBBus_RouteType>(val));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // repeated string route = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          ctx->extra_parse_data().SetFieldName("PBBus.route");
+          object = msg->add_route();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+string_till_end:
+  static_cast<::std::string*>(object)->clear();
+  static_cast<::std::string*>(object)->reserve(size);
+  goto len_delim_till_end;
+len_delim_till_end:
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                               {parser_till_end, object}, size);
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBBus::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:PBBus)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint64 stops = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &stops_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint64 unique_stops = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &unique_stops_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .PBBus.RouteType route_type = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
+          int value = 0;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_route_type(static_cast< ::PBBus_RouteType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string route = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_route()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->route(this->route_size() - 1).data(),
+            static_cast<int>(this->route(this->route_size() - 1).length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "PBBus.route"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:PBBus)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:PBBus)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void PBBus::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:PBBus)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 stops = 1;
+  if (this->stops() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->stops(), output);
+  }
+
+  // uint64 unique_stops = 2;
+  if (this->unique_stops() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->unique_stops(), output);
+  }
+
+  // .PBBus.RouteType route_type = 3;
+  if (this->route_type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      3, this->route_type(), output);
+  }
+
+  // repeated string route = 4;
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->route(i).data(), static_cast<int>(this->route(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "PBBus.route");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->route(i), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:PBBus)
+}
+
+::google::protobuf::uint8* PBBus::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:PBBus)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 stops = 1;
+  if (this->stops() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->stops(), target);
+  }
+
+  // uint64 unique_stops = 2;
+  if (this->unique_stops() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->unique_stops(), target);
+  }
+
+  // .PBBus.RouteType route_type = 3;
+  if (this->route_type() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      3, this->route_type(), target);
+  }
+
+  // repeated string route = 4;
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->route(i).data(), static_cast<int>(this->route(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "PBBus.route");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(4, this->route(i), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:PBBus)
+  return target;
+}
+
+size_t PBBus::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:PBBus)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string route = 4;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->route_size());
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->route(i));
+  }
+
+  // uint64 stops = 1;
+  if (this->stops() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->stops());
+  }
+
+  // uint64 unique_stops = 2;
+  if (this->unique_stops() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->unique_stops());
+  }
+
+  // .PBBus.RouteType route_type = 3;
+  if (this->route_type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->route_type());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void PBBus::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:PBBus)
+  GOOGLE_DCHECK_NE(&from, this);
+  const PBBus* source =
+      ::google::protobuf::DynamicCastToGenerated<PBBus>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:PBBus)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:PBBus)
+    MergeFrom(*source);
+  }
+}
+
+void PBBus::MergeFrom(const PBBus& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:PBBus)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  route_.MergeFrom(from.route_);
+  if (from.stops() != 0) {
+    set_stops(from.stops());
+  }
+  if (from.unique_stops() != 0) {
+    set_unique_stops(from.unique_stops());
+  }
+  if (from.route_type() != 0) {
+    set_route_type(from.route_type());
+  }
+}
+
+void PBBus::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:PBBus)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PBBus::CopyFrom(const PBBus& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:PBBus)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PBBus::IsInitialized() const {
+  return true;
+}
+
+void PBBus::Swap(PBBus* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void PBBus::InternalSwap(PBBus* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  route_.InternalSwap(CastToBase(&other->route_));
+  swap(stops_, other->stops_);
+  swap(unique_stops_, other->unique_stops_);
+  swap(route_type_, other->route_type_);
+}
+
+::google::protobuf::Metadata PBBus::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+PBDatabase_StopsEntry_DoNotUse::PBDatabase_StopsEntry_DoNotUse() {}
+PBDatabase_StopsEntry_DoNotUse::PBDatabase_StopsEntry_DoNotUse(::google::protobuf::Arena* arena)
+    : SuperType(arena) {}
+void PBDatabase_StopsEntry_DoNotUse::MergeFrom(const PBDatabase_StopsEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::google::protobuf::Metadata PBDatabase_StopsEntry_DoNotUse::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[3];
+}
+void PBDatabase_StopsEntry_DoNotUse::MergeFrom(
+    const ::google::protobuf::Message& other) {
+  ::google::protobuf::Message::MergeFrom(other);
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBDatabase_StopsEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
+  using MF = ::google::protobuf::internal::MapField<
+      PBDatabase_StopsEntry_DoNotUse, EntryKeyType, EntryValueType,
+      kEntryKeyFieldType, kEntryValueFieldType,
+      kEntryDefaultEnumValue>;
+  auto mf = static_cast<MF*>(object);
+  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
+#define DO_(x) if (!(x)) return false
+  DO_(parser.ParseMap(begin, end));
+  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    parser.key().data(), static_cast<int>(parser.key().length()),
+    ::google::protobuf::internal::WireFormatLite::PARSE,
+    "PBDatabase.StopsEntry.key"));
+#undef DO_
+  return true;
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+
+// ===================================================================
+
+PBDatabase_BusesEntry_DoNotUse::PBDatabase_BusesEntry_DoNotUse() {}
+PBDatabase_BusesEntry_DoNotUse::PBDatabase_BusesEntry_DoNotUse(::google::protobuf::Arena* arena)
+    : SuperType(arena) {}
+void PBDatabase_BusesEntry_DoNotUse::MergeFrom(const PBDatabase_BusesEntry_DoNotUse& other) {
+  MergeFromInternal(other);
+}
+::google::protobuf::Metadata PBDatabase_BusesEntry_DoNotUse::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[4];
+}
+void PBDatabase_BusesEntry_DoNotUse::MergeFrom(
+    const ::google::protobuf::Message& other) {
+  ::google::protobuf::Message::MergeFrom(other);
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBDatabase_BusesEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
+  using MF = ::google::protobuf::internal::MapField<
+      PBDatabase_BusesEntry_DoNotUse, EntryKeyType, EntryValueType,
+      kEntryKeyFieldType, kEntryValueFieldType,
+      kEntryDefaultEnumValue>;
+  auto mf = static_cast<MF*>(object);
+  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
+#define DO_(x) if (!(x)) return false
+  DO_(parser.ParseMap(begin, end));
+  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+    parser.key().data(), static_cast<int>(parser.key().length()),
+    ::google::protobuf::internal::WireFormatLite::PARSE,
+    "PBDatabase.BusesEntry.key"));
+#undef DO_
+  return true;
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+
+// ===================================================================
+
+void PBDatabase::InitAsDefaultInstance() {
+}
+class PBDatabase::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int PBDatabase::kStopsFieldNumber;
+const int PBDatabase::kBusesFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+PBDatabase::PBDatabase()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:PBDatabase)
+}
+PBDatabase::PBDatabase(const PBDatabase& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  stops_.MergeFrom(from.stops_);
+  buses_.MergeFrom(from.buses_);
+  // @@protoc_insertion_point(copy_constructor:PBDatabase)
+}
+
+void PBDatabase::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_PBDatabase_database_2eproto.base);
+}
+
+PBDatabase::~PBDatabase() {
+  // @@protoc_insertion_point(destructor:PBDatabase)
+  SharedDtor();
+}
+
+void PBDatabase::SharedDtor() {
+}
+
+void PBDatabase::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const PBDatabase& PBDatabase::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_PBDatabase_database_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void PBDatabase::Clear() {
+// @@protoc_insertion_point(message_clear_start:PBDatabase)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  stops_.Clear();
+  buses_.Clear();
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* PBDatabase::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<PBDatabase*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // map<string, .PBStop> stops = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
+          auto parse_map = ::PBDatabase_StopsEntry_DoNotUse::_ParseMap;
+          ctx->extra_parse_data().payload.clear();
+          ctx->extra_parse_data().parse_map = parse_map;
+          object = &msg->stops_;
+          if (size > end - ptr) goto len_delim_till_end;
+          auto newend = ptr + size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
+          ptr = newend;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 10 && (ptr += 1));
+        break;
+      }
+      // map<string, .PBBus> buses = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
+          auto parse_map = ::PBDatabase_BusesEntry_DoNotUse::_ParseMap;
+          ctx->extra_parse_data().payload.clear();
+          ctx->extra_parse_data().parse_map = parse_map;
+          object = &msg->buses_;
+          if (size > end - ptr) goto len_delim_till_end;
+          auto newend = ptr + size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
+          ptr = newend;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+len_delim_till_end:
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                               {parser_till_end, object}, size);
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool PBDatabase::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:PBDatabase)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // map<string, .PBStop> stops = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
+          PBDatabase_StopsEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
+              PBDatabase_StopsEntry_DoNotUse,
+              ::std::string, ::PBStop,
+              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+              ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+              0 >,
+            ::google::protobuf::Map< ::std::string, ::PBStop > > parser(&stops_);
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+              input, &parser));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            parser.key().data(), static_cast<int>(parser.key().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "PBDatabase.StopsEntry.key"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // map<string, .PBBus> buses = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
+          PBDatabase_BusesEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
+              PBDatabase_BusesEntry_DoNotUse,
+              ::std::string, ::PBBus,
+              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+              ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+              0 >,
+            ::google::protobuf::Map< ::std::string, ::PBBus > > parser(&buses_);
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+              input, &parser));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            parser.key().data(), static_cast<int>(parser.key().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "PBDatabase.BusesEntry.key"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:PBDatabase)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:PBDatabase)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void PBDatabase::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:PBDatabase)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // map<string, .PBStop> stops = 1;
+  if (!this->stops().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::PBStop >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBDatabase.StopsEntry.key");
+      }
+    };
+
+    if (output->IsSerializationDeterministic() &&
+        this->stops().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->stops().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::PBStop >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::PBStop >::const_iterator
+          it = this->stops().begin();
+          it != this->stops().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBDatabase_StopsEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(stops_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(1, *entry, output);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBDatabase_StopsEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::PBStop >::const_iterator
+          it = this->stops().begin();
+          it != this->stops().end(); ++it) {
+        entry.reset(stops_.NewEntryWrapper(it->first, it->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(1, *entry, output);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  // map<string, .PBBus> buses = 2;
+  if (!this->buses().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::PBBus >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBDatabase.BusesEntry.key");
+      }
+    };
+
+    if (output->IsSerializationDeterministic() &&
+        this->buses().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->buses().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::PBBus >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::PBBus >::const_iterator
+          it = this->buses().begin();
+          it != this->buses().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBDatabase_BusesEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(buses_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBDatabase_BusesEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::PBBus >::const_iterator
+          it = this->buses().begin();
+          it != this->buses().end(); ++it) {
+        entry.reset(buses_.NewEntryWrapper(it->first, it->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:PBDatabase)
+}
+
+::google::protobuf::uint8* PBDatabase::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:PBDatabase)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // map<string, .PBStop> stops = 1;
+  if (!this->stops().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::PBStop >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBDatabase.StopsEntry.key");
+      }
+    };
+
+    if (false &&
+        this->stops().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->stops().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::PBStop >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::PBStop >::const_iterator
+          it = this->stops().begin();
+          it != this->stops().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBDatabase_StopsEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(stops_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(1, *entry, target);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBDatabase_StopsEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::PBStop >::const_iterator
+          it = this->stops().begin();
+          it != this->stops().end(); ++it) {
+        entry.reset(stops_.NewEntryWrapper(it->first, it->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(1, *entry, target);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  // map<string, .PBBus> buses = 2;
+  if (!this->buses().empty()) {
+    typedef ::google::protobuf::Map< ::std::string, ::PBBus >::const_pointer
+        ConstPtr;
+    typedef ConstPtr SortItem;
+    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
+    struct Utf8Check {
+      static void Check(ConstPtr p) {
+        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          p->first.data(), static_cast<int>(p->first.length()),
+          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+          "PBDatabase.BusesEntry.key");
+      }
+    };
+
+    if (false &&
+        this->buses().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->buses().size()]);
+      typedef ::google::protobuf::Map< ::std::string, ::PBBus >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::std::string, ::PBBus >::const_iterator
+          it = this->buses().begin();
+          it != this->buses().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<PBDatabase_BusesEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(buses_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
+        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
+      }
+    } else {
+      ::std::unique_ptr<PBDatabase_BusesEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::std::string, ::PBBus >::const_iterator
+          it = this->buses().begin();
+          it != this->buses().end(); ++it) {
+        entry.reset(buses_.NewEntryWrapper(it->first, it->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
+        Utf8Check::Check(&(*it));
+      }
+    }
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:PBDatabase)
+  return target;
+}
+
+size_t PBDatabase::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:PBDatabase)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // map<string, .PBStop> stops = 1;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->stops_size());
+  {
+    ::std::unique_ptr<PBDatabase_StopsEntry_DoNotUse> entry;
+    for (::google::protobuf::Map< ::std::string, ::PBStop >::const_iterator
+        it = this->stops().begin();
+        it != this->stops().end(); ++it) {
+      entry.reset(stops_.NewEntryWrapper(it->first, it->second));
+      total_size += ::google::protobuf::internal::WireFormatLite::
+          MessageSizeNoVirtual(*entry);
+    }
+  }
+
+  // map<string, .PBBus> buses = 2;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->buses_size());
+  {
+    ::std::unique_ptr<PBDatabase_BusesEntry_DoNotUse> entry;
+    for (::google::protobuf::Map< ::std::string, ::PBBus >::const_iterator
+        it = this->buses().begin();
+        it != this->buses().end(); ++it) {
+      entry.reset(buses_.NewEntryWrapper(it->first, it->second));
+      total_size += ::google::protobuf::internal::WireFormatLite::
+          MessageSizeNoVirtual(*entry);
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void PBDatabase::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:PBDatabase)
+  GOOGLE_DCHECK_NE(&from, this);
+  const PBDatabase* source =
+      ::google::protobuf::DynamicCastToGenerated<PBDatabase>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:PBDatabase)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:PBDatabase)
+    MergeFrom(*source);
+  }
+}
+
+void PBDatabase::MergeFrom(const PBDatabase& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:PBDatabase)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  stops_.MergeFrom(from.stops_);
+  buses_.MergeFrom(from.buses_);
+}
+
+void PBDatabase::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:PBDatabase)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PBDatabase::CopyFrom(const PBDatabase& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:PBDatabase)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PBDatabase::IsInitialized() const {
+  return true;
+}
+
+void PBDatabase::Swap(PBDatabase* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void PBDatabase::InternalSwap(PBDatabase* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  stops_.Swap(&other->stops_);
+  buses_.Swap(&other->buses_);
+}
+
+::google::protobuf::Metadata PBDatabase::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 namespace google {
 namespace protobuf {
+template<> PROTOBUF_NOINLINE ::PBStop_DistanceToStopEntry_DoNotUse* Arena::CreateMaybeMessage< ::PBStop_DistanceToStopEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::PBStop_DistanceToStopEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBStop* Arena::CreateMaybeMessage< ::PBStop >(Arena* arena) {
+  return Arena::CreateInternal< ::PBStop >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBBus* Arena::CreateMaybeMessage< ::PBBus >(Arena* arena) {
+  return Arena::CreateInternal< ::PBBus >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBDatabase_StopsEntry_DoNotUse* Arena::CreateMaybeMessage< ::PBDatabase_StopsEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::PBDatabase_StopsEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBDatabase_BusesEntry_DoNotUse* Arena::CreateMaybeMessage< ::PBDatabase_BusesEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::PBDatabase_BusesEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::PBDatabase* Arena::CreateMaybeMessage< ::PBDatabase >(Arena* arena) {
+  return Arena::CreateInternal< ::PBDatabase >(arena);
+}
 }  // namespace protobuf
 }  // namespace google
 

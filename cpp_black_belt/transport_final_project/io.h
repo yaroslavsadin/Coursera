@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
 #include "database.h"
 #include "transport_router.h"
 #include "misc.h"
@@ -109,12 +110,30 @@ public:
   using Requests = std::vector<std::unique_ptr<Request>>;
   using Respones = Json::Node;
 
-  TransportCatalog()
-  : db(), router(), renderer(db.GetBuses(),db.GetStops()) {}
-  TransportCatalog& ReadRequests(Json::Document doc);
+  TransportCatalog(Json::Document doc);
   TransportCatalog& ProcessRequests();
   Respones GetResponses() {
     return move(responses_);
+  }
+  TransportCatalog& Serialize() {
+    PBTransport t;
+    std::ofstream serial(
+        serial_file, std::ios::binary
+    );
+    *t.mutable_db() = db.Serialize();
+    t.SerializeToOstream(&serial);
+    assert(!serial.bad());
+    return *this;
+  }
+  TransportCatalog& Deserialize() {
+    std::ifstream serial(
+        serial_file, std::ios::binary
+    );
+    PBTransport t;
+    t.ParseFromIstream(&serial);
+    assert(!serial.bad());
+    db.Deserialize(t.db());
+    return *this;
   }
 private:
   Requests requests_;
@@ -123,6 +142,8 @@ private:
   BusDatabase db;
   TransportRouter router;
   SvgRender renderer;
+
+  std::string serial_file;
 };
 
 struct ColorVisitor {

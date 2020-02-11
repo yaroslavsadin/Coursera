@@ -27,8 +27,14 @@
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/inlined_string_field.h>
 #include <google/protobuf/metadata.h>
+#include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/map.h>  // IWYU pragma: export
+#include <google/protobuf/map_entry.h>
+#include <google/protobuf/map_field_inl.h>
+#include <google/protobuf/generated_enum_reflection.h>
+#include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_database_2eproto
@@ -39,21 +45,604 @@ struct TableStruct_database_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[1]
+  static const ::google::protobuf::internal::ParseTable schema[6]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
 };
 void AddDescriptors_database_2eproto();
+class PBBus;
+class PBBusDefaultTypeInternal;
+extern PBBusDefaultTypeInternal _PBBus_default_instance_;
+class PBDatabase;
+class PBDatabaseDefaultTypeInternal;
+extern PBDatabaseDefaultTypeInternal _PBDatabase_default_instance_;
+class PBDatabase_BusesEntry_DoNotUse;
+class PBDatabase_BusesEntry_DoNotUseDefaultTypeInternal;
+extern PBDatabase_BusesEntry_DoNotUseDefaultTypeInternal _PBDatabase_BusesEntry_DoNotUse_default_instance_;
+class PBDatabase_StopsEntry_DoNotUse;
+class PBDatabase_StopsEntry_DoNotUseDefaultTypeInternal;
+extern PBDatabase_StopsEntry_DoNotUseDefaultTypeInternal _PBDatabase_StopsEntry_DoNotUse_default_instance_;
+class PBStop;
+class PBStopDefaultTypeInternal;
+extern PBStopDefaultTypeInternal _PBStop_default_instance_;
+class PBStop_DistanceToStopEntry_DoNotUse;
+class PBStop_DistanceToStopEntry_DoNotUseDefaultTypeInternal;
+extern PBStop_DistanceToStopEntry_DoNotUseDefaultTypeInternal _PBStop_DistanceToStopEntry_DoNotUse_default_instance_;
 namespace google {
 namespace protobuf {
+template<> ::PBBus* Arena::CreateMaybeMessage<::PBBus>(Arena*);
+template<> ::PBDatabase* Arena::CreateMaybeMessage<::PBDatabase>(Arena*);
+template<> ::PBDatabase_BusesEntry_DoNotUse* Arena::CreateMaybeMessage<::PBDatabase_BusesEntry_DoNotUse>(Arena*);
+template<> ::PBDatabase_StopsEntry_DoNotUse* Arena::CreateMaybeMessage<::PBDatabase_StopsEntry_DoNotUse>(Arena*);
+template<> ::PBStop* Arena::CreateMaybeMessage<::PBStop>(Arena*);
+template<> ::PBStop_DistanceToStopEntry_DoNotUse* Arena::CreateMaybeMessage<::PBStop_DistanceToStopEntry_DoNotUse>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 
+enum PBBus_RouteType {
+  PBBus_RouteType_ONEWAY = 0,
+  PBBus_RouteType_ROUNDTRIP = 1,
+  PBBus_RouteType_PBBus_RouteType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::min(),
+  PBBus_RouteType_PBBus_RouteType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::google::protobuf::int32>::max()
+};
+bool PBBus_RouteType_IsValid(int value);
+const PBBus_RouteType PBBus_RouteType_RouteType_MIN = PBBus_RouteType_ONEWAY;
+const PBBus_RouteType PBBus_RouteType_RouteType_MAX = PBBus_RouteType_ROUNDTRIP;
+const int PBBus_RouteType_RouteType_ARRAYSIZE = PBBus_RouteType_RouteType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PBBus_RouteType_descriptor();
+inline const ::std::string& PBBus_RouteType_Name(PBBus_RouteType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PBBus_RouteType_descriptor(), value);
+}
+inline bool PBBus_RouteType_Parse(
+    const ::std::string& name, PBBus_RouteType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PBBus_RouteType>(
+    PBBus_RouteType_descriptor(), name, value);
+}
 // ===================================================================
 
+class PBStop_DistanceToStopEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<PBStop_DistanceToStopEntry_DoNotUse, 
+    ::std::string, ::google::protobuf::int32,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
+    0 > {
+public:
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  typedef ::google::protobuf::internal::MapEntry<PBStop_DistanceToStopEntry_DoNotUse, 
+    ::std::string, ::google::protobuf::int32,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
+    0 > SuperType;
+  PBStop_DistanceToStopEntry_DoNotUse();
+  PBStop_DistanceToStopEntry_DoNotUse(::google::protobuf::Arena* arena);
+  void MergeFrom(const PBStop_DistanceToStopEntry_DoNotUse& other);
+  static const PBStop_DistanceToStopEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const PBStop_DistanceToStopEntry_DoNotUse*>(&_PBStop_DistanceToStopEntry_DoNotUse_default_instance_); }
+  void MergeFrom(const ::google::protobuf::Message& other) final;
+  ::google::protobuf::Metadata GetMetadata() const;
+};
 
+// -------------------------------------------------------------------
+
+class PBStop :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:PBStop) */ {
+ public:
+  PBStop();
+  virtual ~PBStop();
+
+  PBStop(const PBStop& from);
+
+  inline PBStop& operator=(const PBStop& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PBStop(PBStop&& from) noexcept
+    : PBStop() {
+    *this = ::std::move(from);
+  }
+
+  inline PBStop& operator=(PBStop&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const PBStop& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PBStop* internal_default_instance() {
+    return reinterpret_cast<const PBStop*>(
+               &_PBStop_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  void Swap(PBStop* other);
+  friend void swap(PBStop& a, PBStop& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PBStop* New() const final {
+    return CreateMaybeMessage<PBStop>(nullptr);
+  }
+
+  PBStop* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<PBStop>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const PBStop& from);
+  void MergeFrom(const PBStop& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PBStop* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+
+  // accessors -------------------------------------------------------
+
+  // repeated string buses = 3;
+  int buses_size() const;
+  void clear_buses();
+  static const int kBusesFieldNumber = 3;
+  const ::std::string& buses(int index) const;
+  ::std::string* mutable_buses(int index);
+  void set_buses(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_buses(int index, ::std::string&& value);
+  #endif
+  void set_buses(int index, const char* value);
+  void set_buses(int index, const char* value, size_t size);
+  ::std::string* add_buses();
+  void add_buses(const ::std::string& value);
+  #if LANG_CXX11
+  void add_buses(::std::string&& value);
+  #endif
+  void add_buses(const char* value);
+  void add_buses(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& buses() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_buses();
+
+  // map<string, int32> distance_to_stop_ = 4;
+  int distance_to_stop__size() const;
+  void clear_distance_to_stop_();
+  static const int kDistanceToStopFieldNumber = 4;
+  const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
+      distance_to_stop_() const;
+  ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
+      mutable_distance_to_stop_();
+
+  // double lat = 1;
+  void clear_lat();
+  static const int kLatFieldNumber = 1;
+  double lat() const;
+  void set_lat(double value);
+
+  // double lon = 2;
+  void clear_lon();
+  static const int kLonFieldNumber = 2;
+  double lon() const;
+  void set_lon(double value);
+
+  // @@protoc_insertion_point(class_scope:PBStop)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField<::std::string> buses_;
+  ::google::protobuf::internal::MapField<
+      PBStop_DistanceToStopEntry_DoNotUse,
+      ::std::string, ::google::protobuf::int32,
+      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+      ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
+      0 > distance_to_stop__;
+  double lat_;
+  double lon_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_database_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PBBus :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:PBBus) */ {
+ public:
+  PBBus();
+  virtual ~PBBus();
+
+  PBBus(const PBBus& from);
+
+  inline PBBus& operator=(const PBBus& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PBBus(PBBus&& from) noexcept
+    : PBBus() {
+    *this = ::std::move(from);
+  }
+
+  inline PBBus& operator=(PBBus&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const PBBus& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PBBus* internal_default_instance() {
+    return reinterpret_cast<const PBBus*>(
+               &_PBBus_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(PBBus* other);
+  friend void swap(PBBus& a, PBBus& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PBBus* New() const final {
+    return CreateMaybeMessage<PBBus>(nullptr);
+  }
+
+  PBBus* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<PBBus>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const PBBus& from);
+  void MergeFrom(const PBBus& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PBBus* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  typedef PBBus_RouteType RouteType;
+  static const RouteType ONEWAY =
+    PBBus_RouteType_ONEWAY;
+  static const RouteType ROUNDTRIP =
+    PBBus_RouteType_ROUNDTRIP;
+  static inline bool RouteType_IsValid(int value) {
+    return PBBus_RouteType_IsValid(value);
+  }
+  static const RouteType RouteType_MIN =
+    PBBus_RouteType_RouteType_MIN;
+  static const RouteType RouteType_MAX =
+    PBBus_RouteType_RouteType_MAX;
+  static const int RouteType_ARRAYSIZE =
+    PBBus_RouteType_RouteType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  RouteType_descriptor() {
+    return PBBus_RouteType_descriptor();
+  }
+  static inline const ::std::string& RouteType_Name(RouteType value) {
+    return PBBus_RouteType_Name(value);
+  }
+  static inline bool RouteType_Parse(const ::std::string& name,
+      RouteType* value) {
+    return PBBus_RouteType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // repeated string route = 4;
+  int route_size() const;
+  void clear_route();
+  static const int kRouteFieldNumber = 4;
+  const ::std::string& route(int index) const;
+  ::std::string* mutable_route(int index);
+  void set_route(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_route(int index, ::std::string&& value);
+  #endif
+  void set_route(int index, const char* value);
+  void set_route(int index, const char* value, size_t size);
+  ::std::string* add_route();
+  void add_route(const ::std::string& value);
+  #if LANG_CXX11
+  void add_route(::std::string&& value);
+  #endif
+  void add_route(const char* value);
+  void add_route(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& route() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_route();
+
+  // uint64 stops = 1;
+  void clear_stops();
+  static const int kStopsFieldNumber = 1;
+  ::google::protobuf::uint64 stops() const;
+  void set_stops(::google::protobuf::uint64 value);
+
+  // uint64 unique_stops = 2;
+  void clear_unique_stops();
+  static const int kUniqueStopsFieldNumber = 2;
+  ::google::protobuf::uint64 unique_stops() const;
+  void set_unique_stops(::google::protobuf::uint64 value);
+
+  // .PBBus.RouteType route_type = 3;
+  void clear_route_type();
+  static const int kRouteTypeFieldNumber = 3;
+  ::PBBus_RouteType route_type() const;
+  void set_route_type(::PBBus_RouteType value);
+
+  // @@protoc_insertion_point(class_scope:PBBus)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField<::std::string> route_;
+  ::google::protobuf::uint64 stops_;
+  ::google::protobuf::uint64 unique_stops_;
+  int route_type_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_database_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PBDatabase_StopsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<PBDatabase_StopsEntry_DoNotUse, 
+    ::std::string, ::PBStop,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > {
+public:
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  typedef ::google::protobuf::internal::MapEntry<PBDatabase_StopsEntry_DoNotUse, 
+    ::std::string, ::PBStop,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > SuperType;
+  PBDatabase_StopsEntry_DoNotUse();
+  PBDatabase_StopsEntry_DoNotUse(::google::protobuf::Arena* arena);
+  void MergeFrom(const PBDatabase_StopsEntry_DoNotUse& other);
+  static const PBDatabase_StopsEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const PBDatabase_StopsEntry_DoNotUse*>(&_PBDatabase_StopsEntry_DoNotUse_default_instance_); }
+  void MergeFrom(const ::google::protobuf::Message& other) final;
+  ::google::protobuf::Metadata GetMetadata() const;
+};
+
+// -------------------------------------------------------------------
+
+class PBDatabase_BusesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<PBDatabase_BusesEntry_DoNotUse, 
+    ::std::string, ::PBBus,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > {
+public:
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  typedef ::google::protobuf::internal::MapEntry<PBDatabase_BusesEntry_DoNotUse, 
+    ::std::string, ::PBBus,
+    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+    0 > SuperType;
+  PBDatabase_BusesEntry_DoNotUse();
+  PBDatabase_BusesEntry_DoNotUse(::google::protobuf::Arena* arena);
+  void MergeFrom(const PBDatabase_BusesEntry_DoNotUse& other);
+  static const PBDatabase_BusesEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const PBDatabase_BusesEntry_DoNotUse*>(&_PBDatabase_BusesEntry_DoNotUse_default_instance_); }
+  void MergeFrom(const ::google::protobuf::Message& other) final;
+  ::google::protobuf::Metadata GetMetadata() const;
+};
+
+// -------------------------------------------------------------------
+
+class PBDatabase :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:PBDatabase) */ {
+ public:
+  PBDatabase();
+  virtual ~PBDatabase();
+
+  PBDatabase(const PBDatabase& from);
+
+  inline PBDatabase& operator=(const PBDatabase& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PBDatabase(PBDatabase&& from) noexcept
+    : PBDatabase() {
+    *this = ::std::move(from);
+  }
+
+  inline PBDatabase& operator=(PBDatabase&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const PBDatabase& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PBDatabase* internal_default_instance() {
+    return reinterpret_cast<const PBDatabase*>(
+               &_PBDatabase_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  void Swap(PBDatabase* other);
+  friend void swap(PBDatabase& a, PBDatabase& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PBDatabase* New() const final {
+    return CreateMaybeMessage<PBDatabase>(nullptr);
+  }
+
+  PBDatabase* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<PBDatabase>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const PBDatabase& from);
+  void MergeFrom(const PBDatabase& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PBDatabase* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+
+  // accessors -------------------------------------------------------
+
+  // map<string, .PBStop> stops = 1;
+  int stops_size() const;
+  void clear_stops();
+  static const int kStopsFieldNumber = 1;
+  const ::google::protobuf::Map< ::std::string, ::PBStop >&
+      stops() const;
+  ::google::protobuf::Map< ::std::string, ::PBStop >*
+      mutable_stops();
+
+  // map<string, .PBBus> buses = 2;
+  int buses_size() const;
+  void clear_buses();
+  static const int kBusesFieldNumber = 2;
+  const ::google::protobuf::Map< ::std::string, ::PBBus >&
+      buses() const;
+  ::google::protobuf::Map< ::std::string, ::PBBus >*
+      mutable_buses();
+
+  // @@protoc_insertion_point(class_scope:PBDatabase)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::MapField<
+      PBDatabase_StopsEntry_DoNotUse,
+      ::std::string, ::PBStop,
+      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+      ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+      0 > stops_;
+  ::google::protobuf::internal::MapField<
+      PBDatabase_BusesEntry_DoNotUse,
+      ::std::string, ::PBBus,
+      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
+      ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+      0 > buses_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_database_2eproto;
+};
 // ===================================================================
 
 
@@ -63,12 +652,312 @@ namespace protobuf {
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// PBStop
+
+// double lat = 1;
+inline void PBStop::clear_lat() {
+  lat_ = 0;
+}
+inline double PBStop::lat() const {
+  // @@protoc_insertion_point(field_get:PBStop.lat)
+  return lat_;
+}
+inline void PBStop::set_lat(double value) {
+  
+  lat_ = value;
+  // @@protoc_insertion_point(field_set:PBStop.lat)
+}
+
+// double lon = 2;
+inline void PBStop::clear_lon() {
+  lon_ = 0;
+}
+inline double PBStop::lon() const {
+  // @@protoc_insertion_point(field_get:PBStop.lon)
+  return lon_;
+}
+inline void PBStop::set_lon(double value) {
+  
+  lon_ = value;
+  // @@protoc_insertion_point(field_set:PBStop.lon)
+}
+
+// repeated string buses = 3;
+inline int PBStop::buses_size() const {
+  return buses_.size();
+}
+inline void PBStop::clear_buses() {
+  buses_.Clear();
+}
+inline const ::std::string& PBStop::buses(int index) const {
+  // @@protoc_insertion_point(field_get:PBStop.buses)
+  return buses_.Get(index);
+}
+inline ::std::string* PBStop::mutable_buses(int index) {
+  // @@protoc_insertion_point(field_mutable:PBStop.buses)
+  return buses_.Mutable(index);
+}
+inline void PBStop::set_buses(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:PBStop.buses)
+  buses_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void PBStop::set_buses(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:PBStop.buses)
+  buses_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void PBStop::set_buses(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  buses_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:PBStop.buses)
+}
+inline void PBStop::set_buses(int index, const char* value, size_t size) {
+  buses_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:PBStop.buses)
+}
+inline ::std::string* PBStop::add_buses() {
+  // @@protoc_insertion_point(field_add_mutable:PBStop.buses)
+  return buses_.Add();
+}
+inline void PBStop::add_buses(const ::std::string& value) {
+  buses_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:PBStop.buses)
+}
+#if LANG_CXX11
+inline void PBStop::add_buses(::std::string&& value) {
+  buses_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:PBStop.buses)
+}
+#endif
+inline void PBStop::add_buses(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  buses_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:PBStop.buses)
+}
+inline void PBStop::add_buses(const char* value, size_t size) {
+  buses_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:PBStop.buses)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+PBStop::buses() const {
+  // @@protoc_insertion_point(field_list:PBStop.buses)
+  return buses_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+PBStop::mutable_buses() {
+  // @@protoc_insertion_point(field_mutable_list:PBStop.buses)
+  return &buses_;
+}
+
+// map<string, int32> distance_to_stop_ = 4;
+inline int PBStop::distance_to_stop__size() const {
+  return distance_to_stop__.size();
+}
+inline void PBStop::clear_distance_to_stop_() {
+  distance_to_stop__.Clear();
+}
+inline const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
+PBStop::distance_to_stop_() const {
+  // @@protoc_insertion_point(field_map:PBStop.distance_to_stop_)
+  return distance_to_stop__.GetMap();
+}
+inline ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
+PBStop::mutable_distance_to_stop_() {
+  // @@protoc_insertion_point(field_mutable_map:PBStop.distance_to_stop_)
+  return distance_to_stop__.MutableMap();
+}
+
+// -------------------------------------------------------------------
+
+// PBBus
+
+// uint64 stops = 1;
+inline void PBBus::clear_stops() {
+  stops_ = PROTOBUF_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 PBBus::stops() const {
+  // @@protoc_insertion_point(field_get:PBBus.stops)
+  return stops_;
+}
+inline void PBBus::set_stops(::google::protobuf::uint64 value) {
+  
+  stops_ = value;
+  // @@protoc_insertion_point(field_set:PBBus.stops)
+}
+
+// uint64 unique_stops = 2;
+inline void PBBus::clear_unique_stops() {
+  unique_stops_ = PROTOBUF_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 PBBus::unique_stops() const {
+  // @@protoc_insertion_point(field_get:PBBus.unique_stops)
+  return unique_stops_;
+}
+inline void PBBus::set_unique_stops(::google::protobuf::uint64 value) {
+  
+  unique_stops_ = value;
+  // @@protoc_insertion_point(field_set:PBBus.unique_stops)
+}
+
+// .PBBus.RouteType route_type = 3;
+inline void PBBus::clear_route_type() {
+  route_type_ = 0;
+}
+inline ::PBBus_RouteType PBBus::route_type() const {
+  // @@protoc_insertion_point(field_get:PBBus.route_type)
+  return static_cast< ::PBBus_RouteType >(route_type_);
+}
+inline void PBBus::set_route_type(::PBBus_RouteType value) {
+  
+  route_type_ = value;
+  // @@protoc_insertion_point(field_set:PBBus.route_type)
+}
+
+// repeated string route = 4;
+inline int PBBus::route_size() const {
+  return route_.size();
+}
+inline void PBBus::clear_route() {
+  route_.Clear();
+}
+inline const ::std::string& PBBus::route(int index) const {
+  // @@protoc_insertion_point(field_get:PBBus.route)
+  return route_.Get(index);
+}
+inline ::std::string* PBBus::mutable_route(int index) {
+  // @@protoc_insertion_point(field_mutable:PBBus.route)
+  return route_.Mutable(index);
+}
+inline void PBBus::set_route(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:PBBus.route)
+  route_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void PBBus::set_route(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:PBBus.route)
+  route_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void PBBus::set_route(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  route_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:PBBus.route)
+}
+inline void PBBus::set_route(int index, const char* value, size_t size) {
+  route_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:PBBus.route)
+}
+inline ::std::string* PBBus::add_route() {
+  // @@protoc_insertion_point(field_add_mutable:PBBus.route)
+  return route_.Add();
+}
+inline void PBBus::add_route(const ::std::string& value) {
+  route_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:PBBus.route)
+}
+#if LANG_CXX11
+inline void PBBus::add_route(::std::string&& value) {
+  route_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:PBBus.route)
+}
+#endif
+inline void PBBus::add_route(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  route_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:PBBus.route)
+}
+inline void PBBus::add_route(const char* value, size_t size) {
+  route_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:PBBus.route)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+PBBus::route() const {
+  // @@protoc_insertion_point(field_list:PBBus.route)
+  return route_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+PBBus::mutable_route() {
+  // @@protoc_insertion_point(field_mutable_list:PBBus.route)
+  return &route_;
+}
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// PBDatabase
+
+// map<string, .PBStop> stops = 1;
+inline int PBDatabase::stops_size() const {
+  return stops_.size();
+}
+inline void PBDatabase::clear_stops() {
+  stops_.Clear();
+}
+inline const ::google::protobuf::Map< ::std::string, ::PBStop >&
+PBDatabase::stops() const {
+  // @@protoc_insertion_point(field_map:PBDatabase.stops)
+  return stops_.GetMap();
+}
+inline ::google::protobuf::Map< ::std::string, ::PBStop >*
+PBDatabase::mutable_stops() {
+  // @@protoc_insertion_point(field_mutable_map:PBDatabase.stops)
+  return stops_.MutableMap();
+}
+
+// map<string, .PBBus> buses = 2;
+inline int PBDatabase::buses_size() const {
+  return buses_.size();
+}
+inline void PBDatabase::clear_buses() {
+  buses_.Clear();
+}
+inline const ::google::protobuf::Map< ::std::string, ::PBBus >&
+PBDatabase::buses() const {
+  // @@protoc_insertion_point(field_map:PBDatabase.buses)
+  return buses_.GetMap();
+}
+inline ::google::protobuf::Map< ::std::string, ::PBBus >*
+PBDatabase::mutable_buses() {
+  // @@protoc_insertion_point(field_mutable_map:PBDatabase.buses)
+  return buses_.MutableMap();
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::PBBus_RouteType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::PBBus_RouteType>() {
+  return ::PBBus_RouteType_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

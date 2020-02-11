@@ -393,6 +393,33 @@ svg_render.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/svg_render.cpp.s
 .PHONY : svg_render.cpp.s
 
+transport_catalog.pb.o: transport_catalog.pb.cc.o
+
+.PHONY : transport_catalog.pb.o
+
+# target to build an object file
+transport_catalog.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.o
+.PHONY : transport_catalog.pb.cc.o
+
+transport_catalog.pb.i: transport_catalog.pb.cc.i
+
+.PHONY : transport_catalog.pb.i
+
+# target to preprocess a source file
+transport_catalog.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.i
+.PHONY : transport_catalog.pb.cc.i
+
+transport_catalog.pb.s: transport_catalog.pb.cc.s
+
+.PHONY : transport_catalog.pb.s
+
+# target to generate assembly for a file
+transport_catalog.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.s
+.PHONY : transport_catalog.pb.cc.s
+
 transport_router.o: transport_router.cpp.o
 
 .PHONY : transport_router.o
@@ -459,6 +486,9 @@ help:
 	@echo "... svg_render.o"
 	@echo "... svg_render.i"
 	@echo "... svg_render.s"
+	@echo "... transport_catalog.pb.o"
+	@echo "... transport_catalog.pb.i"
+	@echo "... transport_catalog.pb.s"
 	@echo "... transport_router.o"
 	@echo "... transport_router.i"
 	@echo "... transport_router.s"

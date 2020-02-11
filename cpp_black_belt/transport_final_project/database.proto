@@ -1,4 +1,24 @@
 syntax = "proto3";
 
+message PBStop {
+    double lat = 1;
+    double lon = 2;
+    repeated string buses = 3;
+    map<string, int32> distance_to_stop_ = 4;
+}
 
+message PBBus {
+    enum RouteType {
+        ONEWAY = 0;
+        ROUNDTRIP = 1;
+    }
+    uint64 stops = 1;
+    uint64 unique_stops = 2;
+    RouteType route_type = 3;
+    repeated string route = 4;
+}
 
+message PBDatabase {
+    map<string,PBStop> stops = 1;
+    map<string,PBBus> buses = 2;
+}

@@ -83,3 +83,76 @@ const Distances& BusDatabase::GetBusDistance(const std::string& name) const {
     }
     return bus_to_distance_cache.at(name);
 }
+
+#include <cassert>
+PBDatabase BusDatabase::Serialize() const {
+    PBDatabase db;
+
+    auto stops = db.mutable_stops();
+    for(auto [name,stop] : stops_) {
+        PBStop item;
+        item.set_lat(stop.latitude);
+        item.set_lon(stop.longtitude);
+        auto buses = item.mutable_buses();
+        for(const auto& bus : stop.buses) {
+            *buses->Add() = bus;
+        }
+        auto dist_to_stops = item.mutable_distance_to_stop_();
+        for(auto& [k,v] : stop.distance_to_stop_) {
+            (*dist_to_stops)[k] = v;
+        }
+        (*stops)[name] = move(item);
+    }
+    assert(db.stops_size() == stops_.size());
+
+    auto buses = db.mutable_buses();
+    for(auto [name,bus] : buses_) {
+        PBBus item;
+        item.set_stops(bus.stops);
+        item.set_unique_stops(bus.unique_stops);
+        item.set_route_type(
+            (bus.route_type == Bus::RouteType::CIRCULAR) ? 
+            PBBus_RouteType::PBBus_RouteType_ROUNDTRIP :
+            PBBus_RouteType::PBBus_RouteType_ONEWAY
+        );
+        auto route = item.mutable_route();
+        for(const auto& stop : bus.route) {
+            *route->Add() = stop;
+        }
+        (*buses)[name] = move(item);
+    }
+    assert(db.buses_size() == buses_.size());
+
+    return db;
+}
+
+void BusDatabase::Deserialize(const PBDatabase& db) {
+    const auto& stops = db.stops();
+    for(auto [name,stop] : stops) {
+        stops_[name].latitude = stop.lat();
+        stops_[name].longtitude = stop.lon();
+        for(auto [k,v]  : stop.distance_to_stop_()) {
+            stops_[name].distance_to_stop_[k] = v;
+        }
+        for(const auto& bus : stop.buses()) {
+            stops_[name].buses.insert(bus);
+        }
+    }
+    assert(db.stops_size() == stops_.size());
+
+    const auto& buses = db.buses();
+    for(auto [name,bus] : buses) {
+        buses_[name].stops = bus.stops();
+        buses_[name].unique_stops = bus.unique_stops();
+        buses_[name].route_type = 
+            (bus.route_type() == PBBus_RouteType::PBBus_RouteType_ROUNDTRIP) ?
+            Bus::RouteType::CIRCULAR :
+            Bus::RouteType::LINEAR;
+        
+        buses_[name].route.reserve(bus.route_size());
+        for(const auto& stop : bus.route()) {
+            buses_[name].route.push_back(stop);
+        }
+    }
+    assert(db.buses_size() == buses_.size());
+}

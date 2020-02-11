@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "database.proto";
+
+message PBTransport {
+    PBDatabase db = 1;
+    // Router router = 2;
+    // Renderer renderer = 3;
+}

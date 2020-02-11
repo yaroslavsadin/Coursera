@@ -23,10 +23,10 @@ namespace Json {
     Node(std::vector<Node> x) : variant(x) {}
     Node(std::map<std::string, Node> x) : variant(x) {}
 
-    const auto& AsArray() const {
+    decltype(auto) AsArray() const {
       return std::get<std::vector<Node>>(*this);
     }
-    const auto& AsMap() const {
+    decltype(auto) AsMap() const {
       return std::get<std::map<std::string, Node>>(*this);
     }
     int AsInt() const {
@@ -42,7 +42,7 @@ namespace Json {
     bool AsBool() const {
       return std::get<bool>(*this);
     }
-    const auto& AsString() const {
+    decltype(auto) AsString() const {
       return std::get<std::string>(*this);
     }
   };

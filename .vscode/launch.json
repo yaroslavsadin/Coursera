@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_black_belt/week_4/vector/vector.exe",
+            "program": "${workspaceFolder}/cpp_black_belt/transport_final_project/transport.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",

@@ -87,68 +87,81 @@ Svg::Color ColorFromJsonNode(const Json::Node& underlayer_color_) {
     }
 }
 
-TransportCatalog& TransportCatalog::ReadRequests(Json::Document doc) {                                   
+TransportCatalog::TransportCatalog(Json::Document doc)
+: db(), router(), renderer(db.GetBuses(),db.GetStops()) 
+{
     const auto& root_ = doc.GetRoot().AsMap();
 
+    /* Serializing settings */
+    if(root_.count("serialization_settings")) {
+        const auto& serialization_settings = root_.at("serialization_settings").AsMap();
+        serial_file = serialization_settings.at("file").AsString();
+    }
+
+
     /* Setting route settings */
-    const auto& route_settings = root_.at("routing_settings").AsMap();
-    router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
-    router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
+    if(root_.count("routing_settings")) {
+        const auto& route_settings = root_.at("routing_settings").AsMap();
+        router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
+        router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
 
-    /* Setting rendering settings */
-    const auto& render_settings = root_.at("render_settings").AsMap();
-    const auto& stop_label_offset_array = render_settings.at("stop_label_offset").AsArray();
-    const auto& bus_label_offset_array = render_settings.at("bus_label_offset").AsArray();
-    renderer.SetWidth(render_settings.at("width").AsDouble())
-            .SetHeight(render_settings.at("height").AsDouble())
-            .SetPadding(render_settings.at("padding").AsDouble())
-            .SetStopRadius(render_settings.at("stop_radius").AsDouble())
-            .SetLineWidth(render_settings.at("line_width").AsDouble())
-            .SetStopLabelFontSize(render_settings.at("stop_label_font_size").AsInt())
-            .SetStopLabelOffset({
-                                stop_label_offset_array[0].AsDouble(),
-                                stop_label_offset_array[1].AsDouble()
-                                })
-            .SetUnderlayerColor(ColorFromJsonNode(render_settings.at("underlayer_color")))
-            .SetUnderlayerWidth(render_settings.at("underlayer_width").AsDouble())
-            .SetBusLabelFontSize(render_settings.at("bus_label_font_size").AsInt())
-            .SetBusLabelOffset({
-                                bus_label_offset_array[0].AsDouble(),
-                                bus_label_offset_array[1].AsDouble()
-                                })
-            .SetOuterMargin(render_settings.at("outer_margin").AsDouble());
+        /* Setting rendering settings */
+        const auto& render_settings = root_.at("render_settings").AsMap();
+        const auto& stop_label_offset_array = render_settings.at("stop_label_offset").AsArray();
+        const auto& bus_label_offset_array = render_settings.at("bus_label_offset").AsArray();
+        renderer.SetWidth(render_settings.at("width").AsDouble())
+                .SetHeight(render_settings.at("height").AsDouble())
+                .SetPadding(render_settings.at("padding").AsDouble())
+                .SetStopRadius(render_settings.at("stop_radius").AsDouble())
+                .SetLineWidth(render_settings.at("line_width").AsDouble())
+                .SetStopLabelFontSize(render_settings.at("stop_label_font_size").AsInt())
+                .SetStopLabelOffset({
+                                    stop_label_offset_array[0].AsDouble(),
+                                    stop_label_offset_array[1].AsDouble()
+                                    })
+                .SetUnderlayerColor(ColorFromJsonNode(render_settings.at("underlayer_color")))
+                .SetUnderlayerWidth(render_settings.at("underlayer_width").AsDouble())
+                .SetBusLabelFontSize(render_settings.at("bus_label_font_size").AsInt())
+                .SetBusLabelOffset({
+                                    bus_label_offset_array[0].AsDouble(),
+                                    bus_label_offset_array[1].AsDouble()
+                                    })
+                .SetOuterMargin(render_settings.at("outer_margin").AsDouble());
 
-    vector<Svg::Color> colors;
-    colors.reserve(render_settings.at("color_palette").AsArray().size());
-    for(const auto& color_node : render_settings.at("color_palette").AsArray()) {
-        colors.push_back(ColorFromJsonNode(color_node));
+        vector<Svg::Color> colors;
+        colors.reserve(render_settings.at("color_palette").AsArray().size());
+        for(const auto& color_node : render_settings.at("color_palette").AsArray()) {
+            colors.push_back(ColorFromJsonNode(color_node));
+        }
+        renderer.SetColorPalette(move(colors));
+
+        vector<string> layers;
+        colors.reserve(render_settings.at("layers").AsArray().size());
+        for(const auto& layer_node : render_settings.at("layers").AsArray()) {
+            layers.push_back(layer_node.AsString());
+        }
+        renderer.SetLayers(move(layers));
     }
-    renderer.SetColorPalette(move(colors));
-
-    vector<string> layers;
-    colors.reserve(render_settings.at("layers").AsArray().size());
-    for(const auto& layer_node : render_settings.at("layers").AsArray()) {
-        layers.push_back(layer_node.AsString());
-    }
-    renderer.SetLayers(move(layers));
 
     /* Read Base Requests*/
-    const auto& base_requests = root_.at("base_requests").AsArray();
-    for(const auto& node : base_requests) {
-        const auto& request = node.AsMap();
-        Request::Type request_type = TypeFromString(request.at("type").AsString(),true);
-        requests_.push_back(MakeRequest(request_type,node));
+    if(root_.count("base_requests")) {
+        const auto& base_requests = root_.at("base_requests").AsArray();
+        for(const auto& node : base_requests) {
+            const auto& request = node.AsMap();
+            Request::Type request_type = TypeFromString(request.at("type").AsString(),true);
+            requests_.push_back(MakeRequest(request_type,node));
+        }
     }
 
-    /* Read Stats Requests*/
-    const auto& stats_requests = root_.at("stat_requests").AsArray();
-    for(const auto& node : stats_requests) {
-        const auto& request = node.AsMap();
-        Request::Type request_type = TypeFromString(request.at("type").AsString(),false);
-        requests_.push_back(MakeRequest(request_type,node));
+    /* Read Stats Requests */
+    if(root_.count("stat_requests")) {
+        const auto& stats_requests = root_.at("stat_requests").AsArray();
+        for(const auto& node : stats_requests) {
+            const auto& request = node.AsMap();
+            Request::Type request_type = TypeFromString(request.at("type").AsString(),false);
+            requests_.push_back(MakeRequest(request_type,node));
+        }
     }
-
-    return *this;
 }
 
 TransportCatalog& TransportCatalog::ProcessRequests() {

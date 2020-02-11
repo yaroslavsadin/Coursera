@@ -1,7 +1,10 @@
-#if 0
+#ifndef DEBUG
 #include <iostream>
 #include <fstream>
 #include <string_view>
+#include <iomanip>
+#include "io.h"
+#include "json.h"
 
 using namespace std;
 
@@ -25,11 +28,17 @@ int main(int argc, const char* argv[]) {
 
   if (mode == "make_base") {
 
-    // make base here
+    Json::Document doc = Json::Load(cin);
+    TransportCatalog handler(doc);
+    handler.ProcessRequests().Serialize();
 
   } else if (mode == "process_requests") {
 
-    // process requests here
+    Json::Document doc = Json::Load(cin);
+    TransportCatalog handler(doc);
+    auto responses = handler.Deserialize().ProcessRequests().GetResponses();
+    cout << setprecision(6);
+    Json::Print(responses, cout);
 
   }
 
