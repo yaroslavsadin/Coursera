@@ -137,7 +137,8 @@ void BusDatabase::Deserialize(const ProtoTransport::Database& db) {
         
         buses_[name].stops = bus.stops();
         buses_[name].unique_stops = bus.unique_stops();
-        bus_to_distance_cache[name] = {bus.road_route(),bus.linear_route()};
+        // -----------------------------\/\/\/ because uses string_view
+        bus_to_distance_cache[buses_.find(name)->first] = {bus.road_route(),bus.linear_route()};
     }
     for(size_t i = 0; i < stop_names.size(); i++) {
         const string& name = stop_names[i];
