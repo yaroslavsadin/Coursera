@@ -123,7 +123,7 @@ public:
     std::ofstream serial(
         serial_file, std::ios::binary
     );
-    *t.mutable_db() = db.Serialize();
+    db.Serialize(*t.mutable_db());
     t.SerializeToOstream(&serial);
     assert(!serial.bad());
     return *this;

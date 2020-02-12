@@ -29,7 +29,7 @@ public:
 
     const Distances& GetBusDistance(const std::string& name) const;
 
-    ProtoTransport::Database Serialize() const;
+    void Serialize(ProtoTransport::Database&) const;
     void Deserialize(const ProtoTransport::Database&);
 private:
     Stops stops_;

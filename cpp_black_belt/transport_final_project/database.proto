@@ -2,20 +2,20 @@ syntax = "proto3";
 
 package ProtoTransport;
 
-message Stop {
-    repeated string buses = 1;
+message Stops {
+    string name = 1;
+    repeated string buses = 2;
 }
 
-message Bus {
-    uint32 stops = 1;
-    uint32 unique_stops = 2;
-    uint32 road_route = 3;
-    double linear_route = 4;
+message Buses {
+    string name = 1;
+    uint32 stops = 2;
+    uint32 unique_stops = 3;
+    uint32 road_route = 4;
+    double linear_route = 5;
 }
 
 message Database {
-    repeated string stop_names = 1;
-    repeated Stop stops = 2;
-    repeated string bus_names = 3;
-    repeated Bus buses = 4;
+    repeated Stops stops = 1;
+    repeated Buses buses = 2;
 }

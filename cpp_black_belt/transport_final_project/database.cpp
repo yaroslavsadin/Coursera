@@ -85,67 +85,54 @@ const Distances& BusDatabase::GetBusDistance(const std::string& name) const {
 }
 
 #include <cassert>
-ProtoTransport::Database BusDatabase::Serialize() const {
-    ProtoTransport::Database db;
+void BusDatabase::Serialize(ProtoTransport::Database& t) const {
+    auto stops = t.mutable_stops();
+    auto buses = t.mutable_buses();
 
-    auto stop_names = db.mutable_stop_names();
-    auto stops = db.mutable_stops();
-    auto bus_names = db.mutable_bus_names();
-    auto buses = db.mutable_buses();
-
-    std::unordered_map<std::string,std::vector<std::string>> stops_map;
+    std::unordered_map<std::string,std::unordered_set<std::string>> stops_map;
 
     for(auto [name,bus] : buses_) {
-        ProtoTransport::Bus item;
+        ProtoTransport::Buses item;
+        item.set_name(name);
         item.set_stops(bus.stops);
         item.set_unique_stops(bus.unique_stops);
         item.set_linear_route(GetBusDistance(name).linear_distance);
         item.set_road_route(GetBusDistance(name).road_distance);
         for(const auto& stop : bus.route) {
-            stops_map[stop].push_back(name);
+            stops_map[stop].insert(name);
         }
-
-        *bus_names->Add() = name;
         *buses->Add() = move(item);
     }
 
     for(auto [name,_] : stops_) {
-        ProtoTransport::Stop item;
-        auto route = item.mutable_buses();
+        auto* item = stops->Add();
+        item->set_name(name);
         if(stops_map.count(name)) {
+            auto* route = item->mutable_buses();
             for(const string& bus : stops_map.at(name)) {
                 *route->Add() = bus;
             }
         }
-
-        *stop_names->Add() = name;
-        *stops->Add() = move(item);
     }
-
-    return db;
 }
 
-void BusDatabase::Deserialize(const ProtoTransport::Database& db) {
-    const auto& stop_names = db.stop_names();
-    const auto& stops = db.stops();
-    const auto& bus_names = db.bus_names();
-    const auto& buses = db.buses();
+void BusDatabase::Deserialize(const ProtoTransport::Database& t) {
+    const auto& stops = t.stops();
+    const auto& buses = t.buses();
 
-    for(size_t i = 0; i < bus_names.size(); i++) {
-        const string& name = bus_names[i];
-        const ProtoTransport::Bus& bus = buses[i];
+    for(size_t i = 0; i < buses.size(); i++) {
+        const ProtoTransport::Buses& bus = buses[i];
         
-        buses_[name].stops = bus.stops();
-        buses_[name].unique_stops = bus.unique_stops();
+        buses_[bus.name()].stops = bus.stops();
+        buses_[bus.name()].unique_stops = bus.unique_stops();
         // -----------------------------\/\/\/ because uses string_view
-        bus_to_distance_cache[buses_.find(name)->first] = {bus.road_route(),bus.linear_route()};
+        bus_to_distance_cache[buses_.find(bus.name())->first] = {bus.road_route(),bus.linear_route()};
     }
-    for(size_t i = 0; i < stop_names.size(); i++) {
-        const string& name = stop_names[i];
-        const ProtoTransport::Stop& stop = stops[i];
+    for(size_t i = 0; i < stops.size(); i++) {
+        const string& name = stops[i].name();
 
         stops_[name];
-        for(const string& bus : stop.buses()) {
+        for(const string& bus : stops[i].buses()) {
             stops_[name].buses.insert(bus);
         }
     }
