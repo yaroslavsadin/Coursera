@@ -30,9 +30,6 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include <google/protobuf/map.h>  // IWYU pragma: export
-#include <google/protobuf/map_entry.h>
-#include <google/protobuf/map_field_inl.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -44,7 +41,7 @@ struct TableStruct_database_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[6]
+  static const ::google::protobuf::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -58,56 +55,20 @@ extern BusDefaultTypeInternal _Bus_default_instance_;
 class Database;
 class DatabaseDefaultTypeInternal;
 extern DatabaseDefaultTypeInternal _Database_default_instance_;
-class Database_BusesEntry_DoNotUse;
-class Database_BusesEntry_DoNotUseDefaultTypeInternal;
-extern Database_BusesEntry_DoNotUseDefaultTypeInternal _Database_BusesEntry_DoNotUse_default_instance_;
-class Database_StopsEntry_DoNotUse;
-class Database_StopsEntry_DoNotUseDefaultTypeInternal;
-extern Database_StopsEntry_DoNotUseDefaultTypeInternal _Database_StopsEntry_DoNotUse_default_instance_;
 class Stop;
 class StopDefaultTypeInternal;
 extern StopDefaultTypeInternal _Stop_default_instance_;
-class Stop_DistanceToStopEntry_DoNotUse;
-class Stop_DistanceToStopEntry_DoNotUseDefaultTypeInternal;
-extern Stop_DistanceToStopEntry_DoNotUseDefaultTypeInternal _Stop_DistanceToStopEntry_DoNotUse_default_instance_;
 }  // namespace ProtoTransport
 namespace google {
 namespace protobuf {
 template<> ::ProtoTransport::Bus* Arena::CreateMaybeMessage<::ProtoTransport::Bus>(Arena*);
 template<> ::ProtoTransport::Database* Arena::CreateMaybeMessage<::ProtoTransport::Database>(Arena*);
-template<> ::ProtoTransport::Database_BusesEntry_DoNotUse* Arena::CreateMaybeMessage<::ProtoTransport::Database_BusesEntry_DoNotUse>(Arena*);
-template<> ::ProtoTransport::Database_StopsEntry_DoNotUse* Arena::CreateMaybeMessage<::ProtoTransport::Database_StopsEntry_DoNotUse>(Arena*);
 template<> ::ProtoTransport::Stop* Arena::CreateMaybeMessage<::ProtoTransport::Stop>(Arena*);
-template<> ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse* Arena::CreateMaybeMessage<::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 namespace ProtoTransport {
 
 // ===================================================================
-
-class Stop_DistanceToStopEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<Stop_DistanceToStopEntry_DoNotUse, 
-    ::std::string, ::google::protobuf::int32,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-    0 > {
-public:
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  typedef ::google::protobuf::internal::MapEntry<Stop_DistanceToStopEntry_DoNotUse, 
-    ::std::string, ::google::protobuf::int32,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-    0 > SuperType;
-  Stop_DistanceToStopEntry_DoNotUse();
-  Stop_DistanceToStopEntry_DoNotUse(::google::protobuf::Arena* arena);
-  void MergeFrom(const Stop_DistanceToStopEntry_DoNotUse& other);
-  static const Stop_DistanceToStopEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const Stop_DistanceToStopEntry_DoNotUse*>(&_Stop_DistanceToStopEntry_DoNotUse_default_instance_); }
-  void MergeFrom(const ::google::protobuf::Message& other) final;
-  ::google::protobuf::Metadata GetMetadata() const;
-};
-
-// -------------------------------------------------------------------
 
 class Stop :
     public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.Stop) */ {
@@ -147,7 +108,7 @@ class Stop :
                &_Stop_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    0;
 
   void Swap(Stop* other);
   friend void swap(Stop& a, Stop& b) {
@@ -202,43 +163,36 @@ class Stop :
 
   // nested types ----------------------------------------------------
 
-
   // accessors -------------------------------------------------------
 
-  // map<string, int32> distance_to_stop_ = 3;
-  int distance_to_stop__size() const;
-  void clear_distance_to_stop_();
-  static const int kDistanceToStopFieldNumber = 3;
-  const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
-      distance_to_stop_() const;
-  ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
-      mutable_distance_to_stop_();
-
-  // double lat = 1;
-  void clear_lat();
-  static const int kLatFieldNumber = 1;
-  double lat() const;
-  void set_lat(double value);
-
-  // double lon = 2;
-  void clear_lon();
-  static const int kLonFieldNumber = 2;
-  double lon() const;
-  void set_lon(double value);
+  // repeated string buses = 1;
+  int buses_size() const;
+  void clear_buses();
+  static const int kBusesFieldNumber = 1;
+  const ::std::string& buses(int index) const;
+  ::std::string* mutable_buses(int index);
+  void set_buses(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_buses(int index, ::std::string&& value);
+  #endif
+  void set_buses(int index, const char* value);
+  void set_buses(int index, const char* value, size_t size);
+  ::std::string* add_buses();
+  void add_buses(const ::std::string& value);
+  #if LANG_CXX11
+  void add_buses(::std::string&& value);
+  #endif
+  void add_buses(const char* value);
+  void add_buses(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& buses() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_buses();
 
   // @@protoc_insertion_point(class_scope:ProtoTransport.Stop)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::MapField<
-      Stop_DistanceToStopEntry_DoNotUse,
-      ::std::string, ::google::protobuf::int32,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-      0 > distance_to_stop__;
-  double lat_;
-  double lon_;
+  ::google::protobuf::RepeatedPtrField<::std::string> buses_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_database_2eproto;
 };
@@ -282,7 +236,7 @@ class Bus :
                &_Bus_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    1;
 
   void Swap(Bus* other);
   friend void swap(Bus& a, Bus& b) {
@@ -339,97 +293,42 @@ class Bus :
 
   // accessors -------------------------------------------------------
 
-  // repeated uint32 route = 4;
-  int route_size() const;
-  void clear_route();
-  static const int kRouteFieldNumber = 4;
-  ::google::protobuf::uint32 route(int index) const;
-  void set_route(int index, ::google::protobuf::uint32 value);
-  void add_route(::google::protobuf::uint32 value);
-  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      route() const;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_route();
-
-  // uint64 stops = 1;
+  // uint32 stops = 1;
   void clear_stops();
   static const int kStopsFieldNumber = 1;
-  ::google::protobuf::uint64 stops() const;
-  void set_stops(::google::protobuf::uint64 value);
+  ::google::protobuf::uint32 stops() const;
+  void set_stops(::google::protobuf::uint32 value);
 
-  // uint64 unique_stops = 2;
+  // uint32 unique_stops = 2;
   void clear_unique_stops();
   static const int kUniqueStopsFieldNumber = 2;
-  ::google::protobuf::uint64 unique_stops() const;
-  void set_unique_stops(::google::protobuf::uint64 value);
+  ::google::protobuf::uint32 unique_stops() const;
+  void set_unique_stops(::google::protobuf::uint32 value);
 
-  // bool is_round_trip = 3;
-  void clear_is_round_trip();
-  static const int kIsRoundTripFieldNumber = 3;
-  bool is_round_trip() const;
-  void set_is_round_trip(bool value);
+  // double linear_route = 4;
+  void clear_linear_route();
+  static const int kLinearRouteFieldNumber = 4;
+  double linear_route() const;
+  void set_linear_route(double value);
+
+  // uint32 road_route = 3;
+  void clear_road_route();
+  static const int kRoadRouteFieldNumber = 3;
+  ::google::protobuf::uint32 road_route() const;
+  void set_road_route(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:ProtoTransport.Bus)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > route_;
-  mutable std::atomic<int> _route_cached_byte_size_;
-  ::google::protobuf::uint64 stops_;
-  ::google::protobuf::uint64 unique_stops_;
-  bool is_round_trip_;
+  ::google::protobuf::uint32 stops_;
+  ::google::protobuf::uint32 unique_stops_;
+  double linear_route_;
+  ::google::protobuf::uint32 road_route_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_database_2eproto;
 };
-// -------------------------------------------------------------------
-
-class Database_StopsEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<Database_StopsEntry_DoNotUse, 
-    ::std::string, ::ProtoTransport::Stop,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-    0 > {
-public:
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  typedef ::google::protobuf::internal::MapEntry<Database_StopsEntry_DoNotUse, 
-    ::std::string, ::ProtoTransport::Stop,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-    0 > SuperType;
-  Database_StopsEntry_DoNotUse();
-  Database_StopsEntry_DoNotUse(::google::protobuf::Arena* arena);
-  void MergeFrom(const Database_StopsEntry_DoNotUse& other);
-  static const Database_StopsEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const Database_StopsEntry_DoNotUse*>(&_Database_StopsEntry_DoNotUse_default_instance_); }
-  void MergeFrom(const ::google::protobuf::Message& other) final;
-  ::google::protobuf::Metadata GetMetadata() const;
-};
-
-// -------------------------------------------------------------------
-
-class Database_BusesEntry_DoNotUse : public ::google::protobuf::internal::MapEntry<Database_BusesEntry_DoNotUse, 
-    ::std::string, ::ProtoTransport::Bus,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-    0 > {
-public:
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-static bool _ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-  typedef ::google::protobuf::internal::MapEntry<Database_BusesEntry_DoNotUse, 
-    ::std::string, ::ProtoTransport::Bus,
-    ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-    ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-    0 > SuperType;
-  Database_BusesEntry_DoNotUse();
-  Database_BusesEntry_DoNotUse(::google::protobuf::Arena* arena);
-  void MergeFrom(const Database_BusesEntry_DoNotUse& other);
-  static const Database_BusesEntry_DoNotUse* internal_default_instance() { return reinterpret_cast<const Database_BusesEntry_DoNotUse*>(&_Database_BusesEntry_DoNotUse_default_instance_); }
-  void MergeFrom(const ::google::protobuf::Message& other) final;
-  ::google::protobuf::Metadata GetMetadata() const;
-};
-
 // -------------------------------------------------------------------
 
 class Database :
@@ -470,7 +369,7 @@ class Database :
                &_Database_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    2;
 
   void Swap(Database* other);
   friend void swap(Database& a, Database& b) {
@@ -525,44 +424,85 @@ class Database :
 
   // nested types ----------------------------------------------------
 
-
   // accessors -------------------------------------------------------
 
-  // map<string, .ProtoTransport.Stop> stops = 1;
+  // repeated string stop_names = 1;
+  int stop_names_size() const;
+  void clear_stop_names();
+  static const int kStopNamesFieldNumber = 1;
+  const ::std::string& stop_names(int index) const;
+  ::std::string* mutable_stop_names(int index);
+  void set_stop_names(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_stop_names(int index, ::std::string&& value);
+  #endif
+  void set_stop_names(int index, const char* value);
+  void set_stop_names(int index, const char* value, size_t size);
+  ::std::string* add_stop_names();
+  void add_stop_names(const ::std::string& value);
+  #if LANG_CXX11
+  void add_stop_names(::std::string&& value);
+  #endif
+  void add_stop_names(const char* value);
+  void add_stop_names(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& stop_names() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_stop_names();
+
+  // repeated .ProtoTransport.Stop stops = 2;
   int stops_size() const;
   void clear_stops();
-  static const int kStopsFieldNumber = 1;
-  const ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >&
-      stops() const;
-  ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >*
+  static const int kStopsFieldNumber = 2;
+  ::ProtoTransport::Stop* mutable_stops(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Stop >*
       mutable_stops();
+  const ::ProtoTransport::Stop& stops(int index) const;
+  ::ProtoTransport::Stop* add_stops();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Stop >&
+      stops() const;
 
-  // map<string, .ProtoTransport.Bus> buses = 2;
+  // repeated string bus_names = 3;
+  int bus_names_size() const;
+  void clear_bus_names();
+  static const int kBusNamesFieldNumber = 3;
+  const ::std::string& bus_names(int index) const;
+  ::std::string* mutable_bus_names(int index);
+  void set_bus_names(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_bus_names(int index, ::std::string&& value);
+  #endif
+  void set_bus_names(int index, const char* value);
+  void set_bus_names(int index, const char* value, size_t size);
+  ::std::string* add_bus_names();
+  void add_bus_names(const ::std::string& value);
+  #if LANG_CXX11
+  void add_bus_names(::std::string&& value);
+  #endif
+  void add_bus_names(const char* value);
+  void add_bus_names(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& bus_names() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_bus_names();
+
+  // repeated .ProtoTransport.Bus buses = 4;
   int buses_size() const;
   void clear_buses();
-  static const int kBusesFieldNumber = 2;
-  const ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >&
-      buses() const;
-  ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >*
+  static const int kBusesFieldNumber = 4;
+  ::ProtoTransport::Bus* mutable_buses(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Bus >*
       mutable_buses();
+  const ::ProtoTransport::Bus& buses(int index) const;
+  ::ProtoTransport::Bus* add_buses();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Bus >&
+      buses() const;
 
   // @@protoc_insertion_point(class_scope:ProtoTransport.Database)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::MapField<
-      Database_StopsEntry_DoNotUse,
-      ::std::string, ::ProtoTransport::Stop,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-      0 > stops_;
-  ::google::protobuf::internal::MapField<
-      Database_BusesEntry_DoNotUse,
-      ::std::string, ::ProtoTransport::Bus,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-      0 > buses_;
+  ::google::protobuf::RepeatedPtrField<::std::string> stop_names_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Stop > stops_;
+  ::google::protobuf::RepeatedPtrField<::std::string> bus_names_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Bus > buses_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_database_2eproto;
 };
@@ -575,185 +515,342 @@ class Database :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // Stop
 
-// double lat = 1;
-inline void Stop::clear_lat() {
-  lat_ = 0;
+// repeated string buses = 1;
+inline int Stop::buses_size() const {
+  return buses_.size();
 }
-inline double Stop::lat() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Stop.lat)
-  return lat_;
+inline void Stop::clear_buses() {
+  buses_.Clear();
 }
-inline void Stop::set_lat(double value) {
-  
-  lat_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.lat)
+inline const ::std::string& Stop::buses(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Stop.buses)
+  return buses_.Get(index);
 }
-
-// double lon = 2;
-inline void Stop::clear_lon() {
-  lon_ = 0;
+inline ::std::string* Stop::mutable_buses(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Stop.buses)
+  return buses_.Mutable(index);
 }
-inline double Stop::lon() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Stop.lon)
-  return lon_;
+inline void Stop::set_buses(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.buses)
+  buses_.Mutable(index)->assign(value);
 }
-inline void Stop::set_lon(double value) {
-  
-  lon_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.lon)
+#if LANG_CXX11
+inline void Stop::set_buses(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Stop.buses)
+  buses_.Mutable(index)->assign(std::move(value));
 }
-
-// map<string, int32> distance_to_stop_ = 3;
-inline int Stop::distance_to_stop__size() const {
-  return distance_to_stop__.size();
+#endif
+inline void Stop::set_buses(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  buses_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ProtoTransport.Stop.buses)
 }
-inline void Stop::clear_distance_to_stop_() {
-  distance_to_stop__.Clear();
+inline void Stop::set_buses(int index, const char* value, size_t size) {
+  buses_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Stop.buses)
 }
-inline const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
-Stop::distance_to_stop_() const {
-  // @@protoc_insertion_point(field_map:ProtoTransport.Stop.distance_to_stop_)
-  return distance_to_stop__.GetMap();
+inline ::std::string* Stop::add_buses() {
+  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Stop.buses)
+  return buses_.Add();
 }
-inline ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
-Stop::mutable_distance_to_stop_() {
-  // @@protoc_insertion_point(field_mutable_map:ProtoTransport.Stop.distance_to_stop_)
-  return distance_to_stop__.MutableMap();
+inline void Stop::add_buses(const ::std::string& value) {
+  buses_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ProtoTransport.Stop.buses)
+}
+#if LANG_CXX11
+inline void Stop::add_buses(::std::string&& value) {
+  buses_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ProtoTransport.Stop.buses)
+}
+#endif
+inline void Stop::add_buses(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  buses_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ProtoTransport.Stop.buses)
+}
+inline void Stop::add_buses(const char* value, size_t size) {
+  buses_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Stop.buses)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+Stop::buses() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Stop.buses)
+  return buses_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+Stop::mutable_buses() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Stop.buses)
+  return &buses_;
 }
 
 // -------------------------------------------------------------------
 
 // Bus
 
-// uint64 stops = 1;
+// uint32 stops = 1;
 inline void Bus::clear_stops() {
-  stops_ = PROTOBUF_ULONGLONG(0);
+  stops_ = 0u;
 }
-inline ::google::protobuf::uint64 Bus::stops() const {
+inline ::google::protobuf::uint32 Bus::stops() const {
   // @@protoc_insertion_point(field_get:ProtoTransport.Bus.stops)
   return stops_;
 }
-inline void Bus::set_stops(::google::protobuf::uint64 value) {
+inline void Bus::set_stops(::google::protobuf::uint32 value) {
   
   stops_ = value;
   // @@protoc_insertion_point(field_set:ProtoTransport.Bus.stops)
 }
 
-// uint64 unique_stops = 2;
+// uint32 unique_stops = 2;
 inline void Bus::clear_unique_stops() {
-  unique_stops_ = PROTOBUF_ULONGLONG(0);
+  unique_stops_ = 0u;
 }
-inline ::google::protobuf::uint64 Bus::unique_stops() const {
+inline ::google::protobuf::uint32 Bus::unique_stops() const {
   // @@protoc_insertion_point(field_get:ProtoTransport.Bus.unique_stops)
   return unique_stops_;
 }
-inline void Bus::set_unique_stops(::google::protobuf::uint64 value) {
+inline void Bus::set_unique_stops(::google::protobuf::uint32 value) {
   
   unique_stops_ = value;
   // @@protoc_insertion_point(field_set:ProtoTransport.Bus.unique_stops)
 }
 
-// bool is_round_trip = 3;
-inline void Bus::clear_is_round_trip() {
-  is_round_trip_ = false;
+// uint32 road_route = 3;
+inline void Bus::clear_road_route() {
+  road_route_ = 0u;
 }
-inline bool Bus::is_round_trip() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.is_round_trip)
-  return is_round_trip_;
+inline ::google::protobuf::uint32 Bus::road_route() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.road_route)
+  return road_route_;
 }
-inline void Bus::set_is_round_trip(bool value) {
+inline void Bus::set_road_route(::google::protobuf::uint32 value) {
   
-  is_round_trip_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.is_round_trip)
+  road_route_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.road_route)
 }
 
-// repeated uint32 route = 4;
-inline int Bus::route_size() const {
-  return route_.size();
+// double linear_route = 4;
+inline void Bus::clear_linear_route() {
+  linear_route_ = 0;
 }
-inline void Bus::clear_route() {
-  route_.Clear();
+inline double Bus::linear_route() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.linear_route)
+  return linear_route_;
 }
-inline ::google::protobuf::uint32 Bus::route(int index) const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Bus.route)
-  return route_.Get(index);
+inline void Bus::set_linear_route(double value) {
+  
+  linear_route_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.linear_route)
 }
-inline void Bus::set_route(int index, ::google::protobuf::uint32 value) {
-  route_.Set(index, value);
-  // @@protoc_insertion_point(field_set:ProtoTransport.Bus.route)
-}
-inline void Bus::add_route(::google::protobuf::uint32 value) {
-  route_.Add(value);
-  // @@protoc_insertion_point(field_add:ProtoTransport.Bus.route)
-}
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-Bus::route() const {
-  // @@protoc_insertion_point(field_list:ProtoTransport.Bus.route)
-  return route_;
-}
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-Bus::mutable_route() {
-  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Bus.route)
-  return &route_;
-}
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
 
 // Database
 
-// map<string, .ProtoTransport.Stop> stops = 1;
+// repeated string stop_names = 1;
+inline int Database::stop_names_size() const {
+  return stop_names_.size();
+}
+inline void Database::clear_stop_names() {
+  stop_names_.Clear();
+}
+inline const ::std::string& Database::stop_names(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Database.stop_names)
+  return stop_names_.Get(index);
+}
+inline ::std::string* Database::mutable_stop_names(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Database.stop_names)
+  return stop_names_.Mutable(index);
+}
+inline void Database::set_stop_names(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Database.stop_names)
+  stop_names_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void Database::set_stop_names(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Database.stop_names)
+  stop_names_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void Database::set_stop_names(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  stop_names_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ProtoTransport.Database.stop_names)
+}
+inline void Database::set_stop_names(int index, const char* value, size_t size) {
+  stop_names_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Database.stop_names)
+}
+inline ::std::string* Database::add_stop_names() {
+  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Database.stop_names)
+  return stop_names_.Add();
+}
+inline void Database::add_stop_names(const ::std::string& value) {
+  stop_names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.stop_names)
+}
+#if LANG_CXX11
+inline void Database::add_stop_names(::std::string&& value) {
+  stop_names_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.stop_names)
+}
+#endif
+inline void Database::add_stop_names(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  stop_names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ProtoTransport.Database.stop_names)
+}
+inline void Database::add_stop_names(const char* value, size_t size) {
+  stop_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Database.stop_names)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+Database::stop_names() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Database.stop_names)
+  return stop_names_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+Database::mutable_stop_names() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Database.stop_names)
+  return &stop_names_;
+}
+
+// repeated .ProtoTransport.Stop stops = 2;
 inline int Database::stops_size() const {
   return stops_.size();
 }
 inline void Database::clear_stops() {
   stops_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >&
-Database::stops() const {
-  // @@protoc_insertion_point(field_map:ProtoTransport.Database.stops)
-  return stops_.GetMap();
+inline ::ProtoTransport::Stop* Database::mutable_stops(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Database.stops)
+  return stops_.Mutable(index);
 }
-inline ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >*
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Stop >*
 Database::mutable_stops() {
-  // @@protoc_insertion_point(field_mutable_map:ProtoTransport.Database.stops)
-  return stops_.MutableMap();
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Database.stops)
+  return &stops_;
+}
+inline const ::ProtoTransport::Stop& Database::stops(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Database.stops)
+  return stops_.Get(index);
+}
+inline ::ProtoTransport::Stop* Database::add_stops() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.stops)
+  return stops_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Stop >&
+Database::stops() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Database.stops)
+  return stops_;
 }
 
-// map<string, .ProtoTransport.Bus> buses = 2;
+// repeated string bus_names = 3;
+inline int Database::bus_names_size() const {
+  return bus_names_.size();
+}
+inline void Database::clear_bus_names() {
+  bus_names_.Clear();
+}
+inline const ::std::string& Database::bus_names(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Database.bus_names)
+  return bus_names_.Get(index);
+}
+inline ::std::string* Database::mutable_bus_names(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Database.bus_names)
+  return bus_names_.Mutable(index);
+}
+inline void Database::set_bus_names(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Database.bus_names)
+  bus_names_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void Database::set_bus_names(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Database.bus_names)
+  bus_names_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void Database::set_bus_names(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  bus_names_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ProtoTransport.Database.bus_names)
+}
+inline void Database::set_bus_names(int index, const char* value, size_t size) {
+  bus_names_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Database.bus_names)
+}
+inline ::std::string* Database::add_bus_names() {
+  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Database.bus_names)
+  return bus_names_.Add();
+}
+inline void Database::add_bus_names(const ::std::string& value) {
+  bus_names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.bus_names)
+}
+#if LANG_CXX11
+inline void Database::add_bus_names(::std::string&& value) {
+  bus_names_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.bus_names)
+}
+#endif
+inline void Database::add_bus_names(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  bus_names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ProtoTransport.Database.bus_names)
+}
+inline void Database::add_bus_names(const char* value, size_t size) {
+  bus_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Database.bus_names)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+Database::bus_names() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Database.bus_names)
+  return bus_names_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+Database::mutable_bus_names() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Database.bus_names)
+  return &bus_names_;
+}
+
+// repeated .ProtoTransport.Bus buses = 4;
 inline int Database::buses_size() const {
   return buses_.size();
 }
 inline void Database::clear_buses() {
   buses_.Clear();
 }
-inline const ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >&
-Database::buses() const {
-  // @@protoc_insertion_point(field_map:ProtoTransport.Database.buses)
-  return buses_.GetMap();
+inline ::ProtoTransport::Bus* Database::mutable_buses(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Database.buses)
+  return buses_.Mutable(index);
 }
-inline ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >*
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Bus >*
 Database::mutable_buses() {
-  // @@protoc_insertion_point(field_mutable_map:ProtoTransport.Database.buses)
-  return buses_.MutableMap();
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Database.buses)
+  return &buses_;
+}
+inline const ::ProtoTransport::Bus& Database::buses(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Database.buses)
+  return buses_.Get(index);
+}
+inline ::ProtoTransport::Bus* Database::add_buses() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.Database.buses)
+  return buses_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Bus >&
+Database::buses() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Database.buses)
+  return buses_;
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

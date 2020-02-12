@@ -88,60 +88,61 @@ const Distances& BusDatabase::GetBusDistance(const std::string& name) const {
 ProtoTransport::Database BusDatabase::Serialize() const {
     ProtoTransport::Database db;
 
+    auto stop_names = db.mutable_stop_names();
     auto stops = db.mutable_stops();
-    for(auto [name,stop] : stops_) {
-        ProtoTransport::Stop item;
-        item.set_lat(stop.latitude);
-        item.set_lon(stop.longtitude);
-        auto dist_to_stops = item.mutable_distance_to_stop_();
-        for(auto& [k,v] : stop.distance_to_stop_) {
-            (*dist_to_stops)[k] = v;
-        }
-        (*stops)[name] = move(item);
-    }
-    assert(db.stops_size() == stops_.size());
-
+    auto bus_names = db.mutable_bus_names();
     auto buses = db.mutable_buses();
+
+    std::unordered_map<std::string,std::vector<std::string>> stops_map;
+
     for(auto [name,bus] : buses_) {
         ProtoTransport::Bus item;
         item.set_stops(bus.stops);
         item.set_unique_stops(bus.unique_stops);
-        item.set_is_round_trip(bus.route_type == Bus::RouteType::ROUNDTRIP);
-        auto route = item.mutable_route();
+        item.set_linear_route(GetBusDistance(name).linear_distance);
+        item.set_road_route(GetBusDistance(name).road_distance);
         for(const auto& stop : bus.route) {
-            *route->Add() = std::distance(stops_.begin(),stops_.find(stop));
+            stops_map[stop].push_back(name);
         }
-        (*buses)[name] = move(item);
+
+        *bus_names->Add() = name;
+        *buses->Add() = move(item);
     }
-    assert(db.buses_size() == buses_.size());
+
+    for(auto [k,v] : stops_map) {
+        ProtoTransport::Stop item;
+        auto route = item.mutable_buses();
+        for(const string& bus : v) {
+            *route->Add() = bus;
+        }
+
+        *stop_names->Add() = k;
+        *stops->Add() = move(item);
+    }
 
     return db;
 }
 
 void BusDatabase::Deserialize(const ProtoTransport::Database& db) {
+    const auto& stop_names = db.stop_names();
     const auto& stops = db.stops();
-    for(auto [name,stop] : stops) {
-        stops_[name].latitude = stop.lat();
-        stops_[name].longtitude = stop.lon();
-        for(auto [k,v]  : stop.distance_to_stop_()) {
-            stops_[name].distance_to_stop_[k] = v;
-        }
-    }
-    assert(db.stops_size() == stops_.size());
-
+    const auto& bus_names = db.bus_names();
     const auto& buses = db.buses();
-    for(auto [name,bus] : buses) {
+
+    for(size_t i = 0; i < bus_names.size(); i++) {
+        const string& name = bus_names[i];
+        const ProtoTransport::Bus& bus = buses[i];
+        
         buses_[name].stops = bus.stops();
         buses_[name].unique_stops = bus.unique_stops();
-        buses_[name].route_type = (bus.is_round_trip()) ?
-                                    Bus::RouteType::ROUNDTRIP :
-                                    Bus::RouteType::ONEWAY;
-        
-        buses_[name].route.reserve(bus.route_size());
-        for(uint32_t stop_idx : bus.route()) {
-            buses_[name].route.push_back((next(stops_.begin(), stop_idx))->first);
-            stops_[(next(stops_.begin(), stop_idx))->first].buses.insert(name);
+        bus_to_distance_cache[name] = {bus.road_route(),bus.linear_route()};
+    }
+    for(size_t i = 0; i < stop_names.size(); i++) {
+        const string& name = stop_names[i];
+        const ProtoTransport::Stop& stop = stops[i];
+
+        for(const string& bus : stop.buses()) {
+            stops_[name].buses.insert(bus);
         }
     }
-    assert(db.buses_size() == buses_.size());
 }

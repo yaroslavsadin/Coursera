@@ -3,19 +3,19 @@ syntax = "proto3";
 package ProtoTransport;
 
 message Stop {
-    double lat = 1;
-    double lon = 2;
-    map<string, int32> distance_to_stop_ = 3;
+    repeated string buses = 1;
 }
 
 message Bus {
-    uint64 stops = 1;
-    uint64 unique_stops = 2;
-    bool is_round_trip = 3;
-    repeated uint32 route = 4;
+    uint32 stops = 1;
+    uint32 unique_stops = 2;
+    uint32 road_route = 3;
+    double linear_route = 4;
 }
 
 message Database {
-    map<string,Stop> stops = 1;
-    map<string,Bus> buses = 2;
+    repeated string stop_names = 1;
+    repeated Stop stops = 2;
+    repeated string bus_names = 3;
+    repeated Bus buses = 4;
 }

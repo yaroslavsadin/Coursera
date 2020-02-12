@@ -17,15 +17,8 @@
 #include <google/protobuf/port_def.inc>
 
 extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Bus_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Stop_DistanceToStopEntry_DoNotUse_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Database_BusesEntry_DoNotUse_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Database_StopsEntry_DoNotUse_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Stop_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Stop_database_2eproto;
 namespace ProtoTransport {
-class Stop_DistanceToStopEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Stop_DistanceToStopEntry_DoNotUse> _instance;
-} _Stop_DistanceToStopEntry_DoNotUse_default_instance_;
 class StopDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Stop> _instance;
@@ -34,32 +27,11 @@ class BusDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Bus> _instance;
 } _Bus_default_instance_;
-class Database_StopsEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Database_StopsEntry_DoNotUse> _instance;
-} _Database_StopsEntry_DoNotUse_default_instance_;
-class Database_BusesEntry_DoNotUseDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Database_BusesEntry_DoNotUse> _instance;
-} _Database_BusesEntry_DoNotUse_default_instance_;
 class DatabaseDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Database> _instance;
 } _Database_default_instance_;
 }  // namespace ProtoTransport
-static void InitDefaultsStop_DistanceToStopEntry_DoNotUse_database_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::ProtoTransport::_Stop_DistanceToStopEntry_DoNotUse_default_instance_;
-    new (ptr) ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse();
-  }
-  ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<0> scc_info_Stop_DistanceToStopEntry_DoNotUse_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsStop_DistanceToStopEntry_DoNotUse_database_2eproto}, {}};
-
 static void InitDefaultsStop_database_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -71,9 +43,8 @@ static void InitDefaultsStop_database_2eproto() {
   ::ProtoTransport::Stop::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_Stop_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsStop_database_2eproto}, {
-      &scc_info_Stop_DistanceToStopEntry_DoNotUse_database_2eproto.base,}};
+::google::protobuf::internal::SCCInfo<0> scc_info_Stop_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsStop_database_2eproto}, {}};
 
 static void InitDefaultsBus_database_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -89,34 +60,6 @@ static void InitDefaultsBus_database_2eproto() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_Bus_database_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsBus_database_2eproto}, {}};
 
-static void InitDefaultsDatabase_StopsEntry_DoNotUse_database_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::ProtoTransport::_Database_StopsEntry_DoNotUse_default_instance_;
-    new (ptr) ::ProtoTransport::Database_StopsEntry_DoNotUse();
-  }
-  ::ProtoTransport::Database_StopsEntry_DoNotUse::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<1> scc_info_Database_StopsEntry_DoNotUse_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsDatabase_StopsEntry_DoNotUse_database_2eproto}, {
-      &scc_info_Stop_database_2eproto.base,}};
-
-static void InitDefaultsDatabase_BusesEntry_DoNotUse_database_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::ProtoTransport::_Database_BusesEntry_DoNotUse_default_instance_;
-    new (ptr) ::ProtoTransport::Database_BusesEntry_DoNotUse();
-  }
-  ::ProtoTransport::Database_BusesEntry_DoNotUse::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<1> scc_info_Database_BusesEntry_DoNotUse_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsDatabase_BusesEntry_DoNotUse_database_2eproto}, {
-      &scc_info_Bus_database_2eproto.base,}};
-
 static void InitDefaultsDatabase_database_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -130,40 +73,26 @@ static void InitDefaultsDatabase_database_2eproto() {
 
 ::google::protobuf::internal::SCCInfo<2> scc_info_Database_database_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsDatabase_database_2eproto}, {
-      &scc_info_Database_StopsEntry_DoNotUse_database_2eproto.base,
-      &scc_info_Database_BusesEntry_DoNotUse_database_2eproto.base,}};
+      &scc_info_Stop_database_2eproto.base,
+      &scc_info_Bus_database_2eproto.base,}};
 
 void InitDefaults_database_2eproto() {
-  ::google::protobuf::internal::InitSCC(&scc_info_Stop_DistanceToStopEntry_DoNotUse_database_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Stop_database_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Bus_database_2eproto.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_Database_StopsEntry_DoNotUse_database_2eproto.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_Database_BusesEntry_DoNotUse_database_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Database_database_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_database_2eproto[6];
+::google::protobuf::Metadata file_level_metadata_database_2eproto[3];
 constexpr ::google::protobuf::EnumDescriptor const** file_level_enum_descriptors_database_2eproto = nullptr;
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_database_2eproto = nullptr;
 
 const ::google::protobuf::uint32 TableStruct_database_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse, value_),
-  0,
-  1,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop, lat_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop, lon_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop, distance_to_stop__),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stop, buses_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -171,78 +100,49 @@ const ::google::protobuf::uint32 TableStruct_database_2eproto::offsets[] PROTOBU
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, stops_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, unique_stops_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, is_round_trip_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, route_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_StopsEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_StopsEntry_DoNotUse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_StopsEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_StopsEntry_DoNotUse, value_),
-  0,
-  1,
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_BusesEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_BusesEntry_DoNotUse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_BusesEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database_BusesEntry_DoNotUse, value_),
-  0,
-  1,
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, road_route_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Bus, linear_route_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, stop_names_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, stops_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, bus_names_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, buses_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, 7, sizeof(::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse)},
-  { 9, -1, sizeof(::ProtoTransport::Stop)},
-  { 17, -1, sizeof(::ProtoTransport::Bus)},
-  { 26, 33, sizeof(::ProtoTransport::Database_StopsEntry_DoNotUse)},
-  { 35, 42, sizeof(::ProtoTransport::Database_BusesEntry_DoNotUse)},
-  { 44, -1, sizeof(::ProtoTransport::Database)},
+  { 0, -1, sizeof(::ProtoTransport::Stop)},
+  { 6, -1, sizeof(::ProtoTransport::Bus)},
+  { 15, -1, sizeof(::ProtoTransport::Database)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Stop_DistanceToStopEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Stop_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Bus_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Database_StopsEntry_DoNotUse_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Database_BusesEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Database_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_database_2eproto = {
   {}, AddDescriptors_database_2eproto, "database.proto", schemas,
   file_default_instances, TableStruct_database_2eproto::offsets,
-  file_level_metadata_database_2eproto, 6, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
+  file_level_metadata_database_2eproto, 3, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
 };
 
 const char descriptor_table_protodef_database_2eproto[] =
-  "\n\016database.proto\022\016ProtoTransport\"\234\001\n\004Sto"
-  "p\022\013\n\003lat\030\001 \001(\001\022\013\n\003lon\030\002 \001(\001\022C\n\021distance_"
-  "to_stop_\030\003 \003(\0132(.ProtoTransport.Stop.Dis"
-  "tanceToStopEntry\0325\n\023DistanceToStopEntry\022"
-  "\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\005:\0028\001\"P\n\003Bus\022\r"
-  "\n\005stops\030\001 \001(\004\022\024\n\014unique_stops\030\002 \001(\004\022\025\n\ri"
-  "s_round_trip\030\003 \001(\010\022\r\n\005route\030\004 \003(\r\"\371\001\n\010Da"
-  "tabase\0222\n\005stops\030\001 \003(\0132#.ProtoTransport.D"
-  "atabase.StopsEntry\0222\n\005buses\030\002 \003(\0132#.Prot"
-  "oTransport.Database.BusesEntry\032B\n\nStopsE"
-  "ntry\022\013\n\003key\030\001 \001(\t\022#\n\005value\030\002 \001(\0132\024.Proto"
-  "Transport.Stop:\0028\001\032A\n\nBusesEntry\022\013\n\003key\030"
-  "\001 \001(\t\022\"\n\005value\030\002 \001(\0132\023.ProtoTransport.Bu"
-  "s:\0028\001b\006proto3"
+  "\n\016database.proto\022\016ProtoTransport\"\025\n\004Stop"
+  "\022\r\n\005buses\030\001 \003(\t\"T\n\003Bus\022\r\n\005stops\030\001 \001(\r\022\024\n"
+  "\014unique_stops\030\002 \001(\r\022\022\n\nroad_route\030\003 \001(\r\022"
+  "\024\n\014linear_route\030\004 \001(\001\"z\n\010Database\022\022\n\nsto"
+  "p_names\030\001 \003(\t\022#\n\005stops\030\002 \003(\0132\024.ProtoTran"
+  "sport.Stop\022\021\n\tbus_names\030\003 \003(\t\022\"\n\005buses\030\004"
+  " \003(\0132\023.ProtoTransport.Busb\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_database_2eproto = {
   false, InitDefaults_database_2eproto, 
   descriptor_table_protodef_database_2eproto,
-  "database.proto", &assign_descriptors_table_database_2eproto, 533,
+  "database.proto", &assign_descriptors_table_database_2eproto, 273,
 };
 
 void AddDescriptors_database_2eproto() {
@@ -258,43 +158,6 @@ namespace ProtoTransport {
 
 // ===================================================================
 
-Stop_DistanceToStopEntry_DoNotUse::Stop_DistanceToStopEntry_DoNotUse() {}
-Stop_DistanceToStopEntry_DoNotUse::Stop_DistanceToStopEntry_DoNotUse(::google::protobuf::Arena* arena)
-    : SuperType(arena) {}
-void Stop_DistanceToStopEntry_DoNotUse::MergeFrom(const Stop_DistanceToStopEntry_DoNotUse& other) {
-  MergeFromInternal(other);
-}
-::google::protobuf::Metadata Stop_DistanceToStopEntry_DoNotUse::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
-  return ::file_level_metadata_database_2eproto[0];
-}
-void Stop_DistanceToStopEntry_DoNotUse::MergeFrom(
-    const ::google::protobuf::Message& other) {
-  ::google::protobuf::Message::MergeFrom(other);
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Stop_DistanceToStopEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
-  using MF = ::google::protobuf::internal::MapField<
-      Stop_DistanceToStopEntry_DoNotUse, EntryKeyType, EntryValueType,
-      kEntryKeyFieldType, kEntryValueFieldType,
-      kEntryDefaultEnumValue>;
-  auto mf = static_cast<MF*>(object);
-  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
-#define DO_(x) if (!(x)) return false
-  DO_(parser.ParseMap(begin, end));
-  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-    parser.key().data(), static_cast<int>(parser.key().length()),
-    ::google::protobuf::internal::WireFormatLite::PARSE,
-    "ProtoTransport.Stop.DistanceToStopEntry.key"));
-#undef DO_
-  return true;
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-
-// ===================================================================
-
 void Stop::InitAsDefaultInstance() {
 }
 class Stop::HasBitSetters {
@@ -302,9 +165,7 @@ class Stop::HasBitSetters {
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Stop::kLatFieldNumber;
-const int Stop::kLonFieldNumber;
-const int Stop::kDistanceToStopFieldNumber;
+const int Stop::kBusesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Stop::Stop()
@@ -314,21 +175,15 @@ Stop::Stop()
 }
 Stop::Stop(const Stop& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr) {
+      _internal_metadata_(nullptr),
+      buses_(from.buses_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  distance_to_stop__.MergeFrom(from.distance_to_stop__);
-  ::memcpy(&lat_, &from.lat_,
-    static_cast<size_t>(reinterpret_cast<char*>(&lon_) -
-    reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.Stop)
 }
 
 void Stop::SharedCtor() {
   ::google::protobuf::internal::InitSCC(
       &scc_info_Stop_database_2eproto.base);
-  ::memset(&lat_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&lon_) -
-      reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
 }
 
 Stop::~Stop() {
@@ -354,10 +209,7 @@ void Stop::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  distance_to_stop__.Clear();
-  ::memset(&lat_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&lon_) -
-      reinterpret_cast<char*>(&lat_)) + sizeof(lon_));
+  buses_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -374,37 +226,23 @@ const char* Stop::_InternalParse(const char* begin, const char* end, void* objec
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // double lat = 1;
+      // repeated string buses = 1;
       case 1: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 9) goto handle_unusual;
-        msg->set_lat(::google::protobuf::io::UnalignedLoad<double>(ptr));
-        ptr += sizeof(double);
-        break;
-      }
-      // double lon = 2;
-      case 2: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 17) goto handle_unusual;
-        msg->set_lon(::google::protobuf::io::UnalignedLoad<double>(ptr));
-        ptr += sizeof(double);
-        break;
-      }
-      // map<string, int32> distance_to_stop_ = 3;
-      case 3: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
+        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
-          auto parse_map = ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse::_ParseMap;
-          ctx->extra_parse_data().payload.clear();
-          ctx->extra_parse_data().parse_map = parse_map;
-          object = &msg->distance_to_stop__;
-          if (size > end - ptr) goto len_delim_till_end;
-          auto newend = ptr + size;
-          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
-          ptr = newend;
+          ctx->extra_parse_data().SetFieldName("ProtoTransport.Stop.buses");
+          object = msg->add_buses();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
           if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 26 && (ptr += 1));
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 10 && (ptr += 1));
         break;
       }
       default: {
@@ -422,6 +260,10 @@ const char* Stop::_InternalParse(const char* begin, const char* end, void* objec
     }  // switch
   }  // while
   return ptr;
+string_till_end:
+  static_cast<::std::string*>(object)->clear();
+  static_cast<::std::string*>(object)->reserve(size);
+  goto len_delim_till_end;
 len_delim_till_end:
   return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
                                {parser_till_end, object}, size);
@@ -437,48 +279,16 @@ bool Stop::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // double lat = 1;
+      // repeated string buses = 1;
       case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (9 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &lat_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // double lon = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (17 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &lon_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // map<string, int32> distance_to_stop_ = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
-          Stop_DistanceToStopEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
-              Stop_DistanceToStopEntry_DoNotUse,
-              ::std::string, ::google::protobuf::int32,
-              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-              ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-              0 >,
-            ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 > > parser(&distance_to_stop__);
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-              input, &parser));
+        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_buses()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            parser.key().data(), static_cast<int>(parser.key().length()),
+            this->buses(this->buses_size() - 1).data(),
+            static_cast<int>(this->buses(this->buses_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Stop.DistanceToStopEntry.key"));
+            "ProtoTransport.Stop.buses"));
         } else {
           goto handle_unusual;
         }
@@ -512,59 +322,14 @@ void Stop::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // double lat = 1;
-  if (this->lat() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(1, this->lat(), output);
-  }
-
-  // double lon = 2;
-  if (this->lon() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(2, this->lon(), output);
-  }
-
-  // map<string, int32> distance_to_stop_ = 3;
-  if (!this->distance_to_stop_().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Stop.DistanceToStopEntry.key");
-      }
-    };
-
-    if (output->IsSerializationDeterministic() &&
-        this->distance_to_stop_().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->distance_to_stop_().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-          it = this->distance_to_stop_().begin();
-          it != this->distance_to_stop_().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Stop_DistanceToStopEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(distance_to_stop__.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(3, *entry, output);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Stop_DistanceToStopEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-          it = this->distance_to_stop_().begin();
-          it != this->distance_to_stop_().end(); ++it) {
-        entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(3, *entry, output);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string buses = 1;
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Stop.buses");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->buses(i), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -580,59 +345,14 @@ void Stop::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // double lat = 1;
-  if (this->lat() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(1, this->lat(), target);
-  }
-
-  // double lon = 2;
-  if (this->lon() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(2, this->lon(), target);
-  }
-
-  // map<string, int32> distance_to_stop_ = 3;
-  if (!this->distance_to_stop_().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Stop.DistanceToStopEntry.key");
-      }
-    };
-
-    if (false &&
-        this->distance_to_stop_().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->distance_to_stop_().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-          it = this->distance_to_stop_().begin();
-          it != this->distance_to_stop_().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Stop_DistanceToStopEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(distance_to_stop__.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(3, *entry, target);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Stop_DistanceToStopEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-          it = this->distance_to_stop_().begin();
-          it != this->distance_to_stop_().end(); ++it) {
-        entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(3, *entry, target);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string buses = 1;
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Stop.buses");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(1, this->buses(i), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -656,28 +376,12 @@ size_t Stop::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, int32> distance_to_stop_ = 3;
+  // repeated string buses = 1;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->distance_to_stop__size());
-  {
-    ::std::unique_ptr<Stop_DistanceToStopEntry_DoNotUse> entry;
-    for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-        it = this->distance_to_stop_().begin();
-        it != this->distance_to_stop_().end(); ++it) {
-      entry.reset(distance_to_stop__.NewEntryWrapper(it->first, it->second));
-      total_size += ::google::protobuf::internal::WireFormatLite::
-          MessageSizeNoVirtual(*entry);
-    }
-  }
-
-  // double lat = 1;
-  if (this->lat() != 0) {
-    total_size += 1 + 8;
-  }
-
-  // double lon = 2;
-  if (this->lon() != 0) {
-    total_size += 1 + 8;
+      ::google::protobuf::internal::FromIntSize(this->buses_size());
+  for (int i = 0, n = this->buses_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->buses(i));
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -707,13 +411,7 @@ void Stop::MergeFrom(const Stop& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  distance_to_stop__.MergeFrom(from.distance_to_stop__);
-  if (from.lat() != 0) {
-    set_lat(from.lat());
-  }
-  if (from.lon() != 0) {
-    set_lon(from.lon());
-  }
+  buses_.MergeFrom(from.buses_);
 }
 
 void Stop::CopyFrom(const ::google::protobuf::Message& from) {
@@ -741,9 +439,7 @@ void Stop::Swap(Stop* other) {
 void Stop::InternalSwap(Stop* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  distance_to_stop__.Swap(&other->distance_to_stop__);
-  swap(lat_, other->lat_);
-  swap(lon_, other->lon_);
+  buses_.InternalSwap(CastToBase(&other->buses_));
 }
 
 ::google::protobuf::Metadata Stop::GetMetadata() const {
@@ -763,8 +459,8 @@ class Bus::HasBitSetters {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Bus::kStopsFieldNumber;
 const int Bus::kUniqueStopsFieldNumber;
-const int Bus::kIsRoundTripFieldNumber;
-const int Bus::kRouteFieldNumber;
+const int Bus::kRoadRouteFieldNumber;
+const int Bus::kLinearRouteFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Bus::Bus()
@@ -774,19 +470,18 @@ Bus::Bus()
 }
 Bus::Bus(const Bus& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr),
-      route_(from.route_) {
+      _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&stops_, &from.stops_,
-    static_cast<size_t>(reinterpret_cast<char*>(&is_round_trip_) -
-    reinterpret_cast<char*>(&stops_)) + sizeof(is_round_trip_));
+    static_cast<size_t>(reinterpret_cast<char*>(&road_route_) -
+    reinterpret_cast<char*>(&stops_)) + sizeof(road_route_));
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.Bus)
 }
 
 void Bus::SharedCtor() {
   ::memset(&stops_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&is_round_trip_) -
-      reinterpret_cast<char*>(&stops_)) + sizeof(is_round_trip_));
+      reinterpret_cast<char*>(&road_route_) -
+      reinterpret_cast<char*>(&stops_)) + sizeof(road_route_));
 }
 
 Bus::~Bus() {
@@ -812,10 +507,9 @@ void Bus::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  route_.Clear();
   ::memset(&stops_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&is_round_trip_) -
-      reinterpret_cast<char*>(&stops_)) + sizeof(is_round_trip_));
+      reinterpret_cast<char*>(&road_route_) -
+      reinterpret_cast<char*>(&stops_)) + sizeof(road_route_));
   _internal_metadata_.Clear();
 }
 
@@ -832,45 +526,32 @@ const char* Bus::_InternalParse(const char* begin, const char* end, void* object
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // uint64 stops = 1;
+      // uint32 stops = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
         msg->set_stops(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // uint64 unique_stops = 2;
+      // uint32 unique_stops = 2;
       case 2: {
         if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
         msg->set_unique_stops(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // bool is_round_trip = 3;
+      // uint32 road_route = 3;
       case 3: {
         if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
-        msg->set_is_round_trip(::google::protobuf::internal::ReadVarint(&ptr));
+        msg->set_road_route(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // repeated uint32 route = 4;
+      // double linear_route = 4;
       case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) == 34) {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::google::protobuf::internal::PackedUInt32Parser;
-          object = msg->mutable_route();
-          if (size > end - ptr) goto len_delim_till_end;
-          auto newend = ptr + size;
-          if (size) ptr = parser_till_end(ptr, newend, object, ctx);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr == newend);
-          break;
-        } else if (static_cast<::google::protobuf::uint8>(tag) != 32) goto handle_unusual;
-        do {
-          msg->add_route(::google::protobuf::internal::ReadVarint(&ptr));
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 32 && (ptr += 1));
+        if (static_cast<::google::protobuf::uint8>(tag) != 33) goto handle_unusual;
+        msg->set_linear_route(::google::protobuf::io::UnalignedLoad<double>(ptr));
+        ptr += sizeof(double);
         break;
       }
       default: {
@@ -888,9 +569,6 @@ const char* Bus::_InternalParse(const char* begin, const char* end, void* object
     }  // switch
   }  // while
   return ptr;
-len_delim_till_end:
-  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
-                               {parser_till_end, object}, size);
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 bool Bus::MergePartialFromCodedStream(
@@ -903,12 +581,12 @@ bool Bus::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // uint64 stops = 1;
+      // uint32 stops = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &stops_)));
         } else {
           goto handle_unusual;
@@ -916,12 +594,12 @@ bool Bus::MergePartialFromCodedStream(
         break;
       }
 
-      // uint64 unique_stops = 2;
+      // uint32 unique_stops = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &unique_stops_)));
         } else {
           goto handle_unusual;
@@ -929,29 +607,26 @@ bool Bus::MergePartialFromCodedStream(
         break;
       }
 
-      // bool is_round_trip = 3;
+      // uint32 road_route = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &is_round_trip_)));
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &road_route_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // repeated uint32 route = 4;
+      // double linear_route = 4;
       case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, this->mutable_route())));
-        } else if (static_cast< ::google::protobuf::uint8>(tag) == (32 & 0xFF)) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitiveNoInline<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 34u, input, this->mutable_route())));
+        if (static_cast< ::google::protobuf::uint8>(tag) == (33 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &linear_route_)));
         } else {
           goto handle_unusual;
         }
@@ -985,30 +660,24 @@ void Bus::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 stops = 1;
+  // uint32 stops = 1;
   if (this->stops() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->stops(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->stops(), output);
   }
 
-  // uint64 unique_stops = 2;
+  // uint32 unique_stops = 2;
   if (this->unique_stops() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->unique_stops(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->unique_stops(), output);
   }
 
-  // bool is_round_trip = 3;
-  if (this->is_round_trip() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->is_round_trip(), output);
+  // uint32 road_route = 3;
+  if (this->road_route() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->road_route(), output);
   }
 
-  // repeated uint32 route = 4;
-  if (this->route_size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteTag(4, ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED, output);
-    output->WriteVarint32(_route_cached_byte_size_.load(
-        std::memory_order_relaxed));
-  }
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32NoTag(
-      this->route(i), output);
+  // double linear_route = 4;
+  if (this->linear_route() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->linear_route(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1024,32 +693,24 @@ void Bus::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // uint64 stops = 1;
+  // uint32 stops = 1;
   if (this->stops() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->stops(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->stops(), target);
   }
 
-  // uint64 unique_stops = 2;
+  // uint32 unique_stops = 2;
   if (this->unique_stops() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->unique_stops(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->unique_stops(), target);
   }
 
-  // bool is_round_trip = 3;
-  if (this->is_round_trip() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->is_round_trip(), target);
+  // uint32 road_route = 3;
+  if (this->road_route() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->road_route(), target);
   }
 
-  // repeated uint32 route = 4;
-  if (this->route_size() > 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
-      4,
-      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
-      target);
-    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(
-        _route_cached_byte_size_.load(std::memory_order_relaxed),
-         target);
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteUInt32NoTagToArray(this->route_, target);
+  // double linear_route = 4;
+  if (this->linear_route() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->linear_route(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1073,38 +734,30 @@ size_t Bus::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated uint32 route = 4;
-  {
-    size_t data_size = ::google::protobuf::internal::WireFormatLite::
-      UInt32Size(this->route_);
-    if (data_size > 0) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-            static_cast<::google::protobuf::int32>(data_size));
-    }
-    int cached_size = ::google::protobuf::internal::ToCachedSize(data_size);
-    _route_cached_byte_size_.store(cached_size,
-                                    std::memory_order_relaxed);
-    total_size += data_size;
-  }
-
-  // uint64 stops = 1;
+  // uint32 stops = 1;
   if (this->stops() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->stops());
   }
 
-  // uint64 unique_stops = 2;
+  // uint32 unique_stops = 2;
   if (this->unique_stops() != 0) {
     total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->unique_stops());
   }
 
-  // bool is_round_trip = 3;
-  if (this->is_round_trip() != 0) {
-    total_size += 1 + 1;
+  // double linear_route = 4;
+  if (this->linear_route() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // uint32 road_route = 3;
+  if (this->road_route() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->road_route());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -1134,15 +787,17 @@ void Bus::MergeFrom(const Bus& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  route_.MergeFrom(from.route_);
   if (from.stops() != 0) {
     set_stops(from.stops());
   }
   if (from.unique_stops() != 0) {
     set_unique_stops(from.unique_stops());
   }
-  if (from.is_round_trip() != 0) {
-    set_is_round_trip(from.is_round_trip());
+  if (from.linear_route() != 0) {
+    set_linear_route(from.linear_route());
+  }
+  if (from.road_route() != 0) {
+    set_road_route(from.road_route());
   }
 }
 
@@ -1171,90 +826,16 @@ void Bus::Swap(Bus* other) {
 void Bus::InternalSwap(Bus* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  route_.InternalSwap(&other->route_);
   swap(stops_, other->stops_);
   swap(unique_stops_, other->unique_stops_);
-  swap(is_round_trip_, other->is_round_trip_);
+  swap(linear_route_, other->linear_route_);
+  swap(road_route_, other->road_route_);
 }
 
 ::google::protobuf::Metadata Bus::GetMetadata() const {
   ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
   return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
 }
-
-
-// ===================================================================
-
-Database_StopsEntry_DoNotUse::Database_StopsEntry_DoNotUse() {}
-Database_StopsEntry_DoNotUse::Database_StopsEntry_DoNotUse(::google::protobuf::Arena* arena)
-    : SuperType(arena) {}
-void Database_StopsEntry_DoNotUse::MergeFrom(const Database_StopsEntry_DoNotUse& other) {
-  MergeFromInternal(other);
-}
-::google::protobuf::Metadata Database_StopsEntry_DoNotUse::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
-  return ::file_level_metadata_database_2eproto[3];
-}
-void Database_StopsEntry_DoNotUse::MergeFrom(
-    const ::google::protobuf::Message& other) {
-  ::google::protobuf::Message::MergeFrom(other);
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Database_StopsEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
-  using MF = ::google::protobuf::internal::MapField<
-      Database_StopsEntry_DoNotUse, EntryKeyType, EntryValueType,
-      kEntryKeyFieldType, kEntryValueFieldType,
-      kEntryDefaultEnumValue>;
-  auto mf = static_cast<MF*>(object);
-  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
-#define DO_(x) if (!(x)) return false
-  DO_(parser.ParseMap(begin, end));
-  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-    parser.key().data(), static_cast<int>(parser.key().length()),
-    ::google::protobuf::internal::WireFormatLite::PARSE,
-    "ProtoTransport.Database.StopsEntry.key"));
-#undef DO_
-  return true;
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-
-// ===================================================================
-
-Database_BusesEntry_DoNotUse::Database_BusesEntry_DoNotUse() {}
-Database_BusesEntry_DoNotUse::Database_BusesEntry_DoNotUse(::google::protobuf::Arena* arena)
-    : SuperType(arena) {}
-void Database_BusesEntry_DoNotUse::MergeFrom(const Database_BusesEntry_DoNotUse& other) {
-  MergeFromInternal(other);
-}
-::google::protobuf::Metadata Database_BusesEntry_DoNotUse::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
-  return ::file_level_metadata_database_2eproto[4];
-}
-void Database_BusesEntry_DoNotUse::MergeFrom(
-    const ::google::protobuf::Message& other) {
-  ::google::protobuf::Message::MergeFrom(other);
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Database_BusesEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
-  using MF = ::google::protobuf::internal::MapField<
-      Database_BusesEntry_DoNotUse, EntryKeyType, EntryValueType,
-      kEntryKeyFieldType, kEntryValueFieldType,
-      kEntryDefaultEnumValue>;
-  auto mf = static_cast<MF*>(object);
-  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
-#define DO_(x) if (!(x)) return false
-  DO_(parser.ParseMap(begin, end));
-  DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-    parser.key().data(), static_cast<int>(parser.key().length()),
-    ::google::protobuf::internal::WireFormatLite::PARSE,
-    "ProtoTransport.Database.BusesEntry.key"));
-#undef DO_
-  return true;
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 
 
 // ===================================================================
@@ -1266,7 +847,9 @@ class Database::HasBitSetters {
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Database::kStopNamesFieldNumber;
 const int Database::kStopsFieldNumber;
+const int Database::kBusNamesFieldNumber;
 const int Database::kBusesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -1277,10 +860,12 @@ Database::Database()
 }
 Database::Database(const Database& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr) {
+      _internal_metadata_(nullptr),
+      stop_names_(from.stop_names_),
+      stops_(from.stops_),
+      bus_names_(from.bus_names_),
+      buses_(from.buses_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  stops_.MergeFrom(from.stops_);
-  buses_.MergeFrom(from.buses_);
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.Database)
 }
 
@@ -1312,7 +897,9 @@ void Database::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  stop_names_.Clear();
   stops_.Clear();
+  bus_names_.Clear();
   buses_.Clear();
   _internal_metadata_.Clear();
 }
@@ -1330,42 +917,74 @@ const char* Database::_InternalParse(const char* begin, const char* end, void* o
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // map<string, .ProtoTransport.Stop> stops = 1;
+      // repeated string stop_names = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
-          auto parse_map = ::ProtoTransport::Database_StopsEntry_DoNotUse::_ParseMap;
-          ctx->extra_parse_data().payload.clear();
-          ctx->extra_parse_data().parse_map = parse_map;
-          object = &msg->stops_;
-          if (size > end - ptr) goto len_delim_till_end;
-          auto newend = ptr + size;
-          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
-          ptr = newend;
+          ctx->extra_parse_data().SetFieldName("ProtoTransport.Database.stop_names");
+          object = msg->add_stop_names();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
           if (ptr >= end) break;
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 10 && (ptr += 1));
         break;
       }
-      // map<string, .ProtoTransport.Bus> buses = 2;
+      // repeated .ProtoTransport.Stop stops = 2;
       case 2: {
         if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
-          auto parse_map = ::ProtoTransport::Database_BusesEntry_DoNotUse::_ParseMap;
-          ctx->extra_parse_data().payload.clear();
-          ctx->extra_parse_data().parse_map = parse_map;
-          object = &msg->buses_;
+          parser_till_end = ::ProtoTransport::Stop::_InternalParse;
+          object = msg->add_stops();
           if (size > end - ptr) goto len_delim_till_end;
-          auto newend = ptr + size;
-          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
-          ptr = newend;
+          ptr += size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+              {parser_till_end, object}, ptr - size, ptr));
           if (ptr >= end) break;
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
+        break;
+      }
+      // repeated string bus_names = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          ctx->extra_parse_data().SetFieldName("ProtoTransport.Database.bus_names");
+          object = msg->add_bus_names();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 26 && (ptr += 1));
+        break;
+      }
+      // repeated .ProtoTransport.Bus buses = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::ProtoTransport::Bus::_InternalParse;
+          object = msg->add_buses();
+          if (size > end - ptr) goto len_delim_till_end;
+          ptr += size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+              {parser_till_end, object}, ptr - size, ptr));
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
         break;
       }
       default: {
@@ -1383,6 +1002,10 @@ const char* Database::_InternalParse(const char* begin, const char* end, void* o
     }  // switch
   }  // while
   return ptr;
+string_till_end:
+  static_cast<::std::string*>(object)->clear();
+  static_cast<::std::string*>(object)->reserve(size);
+  goto len_delim_till_end;
 len_delim_till_end:
   return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
                                {parser_till_end, object}, size);
@@ -1398,44 +1021,54 @@ bool Database::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // map<string, .ProtoTransport.Stop> stops = 1;
+      // repeated string stop_names = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
-          Database_StopsEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
-              Database_StopsEntry_DoNotUse,
-              ::std::string, ::ProtoTransport::Stop,
-              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-              ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-              0 >,
-            ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop > > parser(&stops_);
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-              input, &parser));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_stop_names()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            parser.key().data(), static_cast<int>(parser.key().length()),
+            this->stop_names(this->stop_names_size() - 1).data(),
+            static_cast<int>(this->stop_names(this->stop_names_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Database.StopsEntry.key"));
+            "ProtoTransport.Database.stop_names"));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // map<string, .ProtoTransport.Bus> buses = 2;
+      // repeated .ProtoTransport.Stop stops = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
-          Database_BusesEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
-              Database_BusesEntry_DoNotUse,
-              ::std::string, ::ProtoTransport::Bus,
-              ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-              ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
-              0 >,
-            ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus > > parser(&buses_);
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-              input, &parser));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_stops()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated string bus_names = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_bus_names()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            parser.key().data(), static_cast<int>(parser.key().length()),
+            this->bus_names(this->bus_names_size() - 1).data(),
+            static_cast<int>(this->bus_names(this->bus_names_size() - 1).length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Database.BusesEntry.key"));
+            "ProtoTransport.Database.bus_names"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // repeated .ProtoTransport.Bus buses = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_buses()));
         } else {
           goto handle_unusual;
         }
@@ -1469,94 +1102,42 @@ void Database::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // map<string, .ProtoTransport.Stop> stops = 1;
-  if (!this->stops().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Database.StopsEntry.key");
-      }
-    };
-
-    if (output->IsSerializationDeterministic() &&
-        this->stops().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->stops().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_iterator
-          it = this->stops().begin();
-          it != this->stops().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Database_StopsEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(stops_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(1, *entry, output);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Database_StopsEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_iterator
-          it = this->stops().begin();
-          it != this->stops().end(); ++it) {
-        entry.reset(stops_.NewEntryWrapper(it->first, it->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(1, *entry, output);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string stop_names = 1;
+  for (int i = 0, n = this->stop_names_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->stop_names(i).data(), static_cast<int>(this->stop_names(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Database.stop_names");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      1, this->stop_names(i), output);
   }
 
-  // map<string, .ProtoTransport.Bus> buses = 2;
-  if (!this->buses().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Database.BusesEntry.key");
-      }
-    };
+  // repeated .ProtoTransport.Stop stops = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->stops_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2,
+      this->stops(static_cast<int>(i)),
+      output);
+  }
 
-    if (output->IsSerializationDeterministic() &&
-        this->buses().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->buses().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_iterator
-          it = this->buses().begin();
-          it != this->buses().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Database_BusesEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(buses_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Database_BusesEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_iterator
-          it = this->buses().begin();
-          it != this->buses().end(); ++it) {
-        entry.reset(buses_.NewEntryWrapper(it->first, it->second));
-        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string bus_names = 3;
+  for (int i = 0, n = this->bus_names_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->bus_names(i).data(), static_cast<int>(this->bus_names(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Database.bus_names");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->bus_names(i), output);
+  }
+
+  // repeated .ProtoTransport.Bus buses = 4;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->buses_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4,
+      this->buses(static_cast<int>(i)),
+      output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1572,94 +1153,40 @@ void Database::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // map<string, .ProtoTransport.Stop> stops = 1;
-  if (!this->stops().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Database.StopsEntry.key");
-      }
-    };
-
-    if (false &&
-        this->stops().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->stops().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_iterator
-          it = this->stops().begin();
-          it != this->stops().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Database_StopsEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(stops_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(1, *entry, target);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Database_StopsEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_iterator
-          it = this->stops().begin();
-          it != this->stops().end(); ++it) {
-        entry.reset(stops_.NewEntryWrapper(it->first, it->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(1, *entry, target);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string stop_names = 1;
+  for (int i = 0, n = this->stop_names_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->stop_names(i).data(), static_cast<int>(this->stop_names(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Database.stop_names");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(1, this->stop_names(i), target);
   }
 
-  // map<string, .ProtoTransport.Bus> buses = 2;
-  if (!this->buses().empty()) {
-    typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_pointer
-        ConstPtr;
-    typedef ConstPtr SortItem;
-    typedef ::google::protobuf::internal::CompareByDerefFirst<SortItem> Less;
-    struct Utf8Check {
-      static void Check(ConstPtr p) {
-        ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          p->first.data(), static_cast<int>(p->first.length()),
-          ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-          "ProtoTransport.Database.BusesEntry.key");
-      }
-    };
+  // repeated .ProtoTransport.Stop stops = 2;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->stops_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        2, this->stops(static_cast<int>(i)), target);
+  }
 
-    if (false &&
-        this->buses().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->buses().size()]);
-      typedef ::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::size_type size_type;
-      size_type n = 0;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_iterator
-          it = this->buses().begin();
-          it != this->buses().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      ::std::unique_ptr<Database_BusesEntry_DoNotUse> entry;
-      for (size_type i = 0; i < n; i++) {
-        entry.reset(buses_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
-        Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
-      }
-    } else {
-      ::std::unique_ptr<Database_BusesEntry_DoNotUse> entry;
-      for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_iterator
-          it = this->buses().begin();
-          it != this->buses().end(); ++it) {
-        entry.reset(buses_.NewEntryWrapper(it->first, it->second));
-        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
-        Utf8Check::Check(&(*it));
-      }
-    }
+  // repeated string bus_names = 3;
+  for (int i = 0, n = this->bus_names_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->bus_names(i).data(), static_cast<int>(this->bus_names(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.Database.bus_names");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(3, this->bus_names(i), target);
+  }
+
+  // repeated .ProtoTransport.Bus buses = 4;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->buses_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        4, this->buses(static_cast<int>(i)), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1683,31 +1210,41 @@ size_t Database::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, .ProtoTransport.Stop> stops = 1;
+  // repeated string stop_names = 1;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->stops_size());
+      ::google::protobuf::internal::FromIntSize(this->stop_names_size());
+  for (int i = 0, n = this->stop_names_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->stop_names(i));
+  }
+
+  // repeated .ProtoTransport.Stop stops = 2;
   {
-    ::std::unique_ptr<Database_StopsEntry_DoNotUse> entry;
-    for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Stop >::const_iterator
-        it = this->stops().begin();
-        it != this->stops().end(); ++it) {
-      entry.reset(stops_.NewEntryWrapper(it->first, it->second));
-      total_size += ::google::protobuf::internal::WireFormatLite::
-          MessageSizeNoVirtual(*entry);
+    unsigned int count = static_cast<unsigned int>(this->stops_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->stops(static_cast<int>(i)));
     }
   }
 
-  // map<string, .ProtoTransport.Bus> buses = 2;
+  // repeated string bus_names = 3;
   total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->buses_size());
+      ::google::protobuf::internal::FromIntSize(this->bus_names_size());
+  for (int i = 0, n = this->bus_names_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->bus_names(i));
+  }
+
+  // repeated .ProtoTransport.Bus buses = 4;
   {
-    ::std::unique_ptr<Database_BusesEntry_DoNotUse> entry;
-    for (::google::protobuf::Map< ::std::string, ::ProtoTransport::Bus >::const_iterator
-        it = this->buses().begin();
-        it != this->buses().end(); ++it) {
-      entry.reset(buses_.NewEntryWrapper(it->first, it->second));
-      total_size += ::google::protobuf::internal::WireFormatLite::
-          MessageSizeNoVirtual(*entry);
+    unsigned int count = static_cast<unsigned int>(this->buses_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->buses(static_cast<int>(i)));
     }
   }
 
@@ -1738,7 +1275,9 @@ void Database::MergeFrom(const Database& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  stop_names_.MergeFrom(from.stop_names_);
   stops_.MergeFrom(from.stops_);
+  bus_names_.MergeFrom(from.bus_names_);
   buses_.MergeFrom(from.buses_);
 }
 
@@ -1767,8 +1306,10 @@ void Database::Swap(Database* other) {
 void Database::InternalSwap(Database* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  stops_.Swap(&other->stops_);
-  buses_.Swap(&other->buses_);
+  stop_names_.InternalSwap(CastToBase(&other->stop_names_));
+  CastToBase(&stops_)->InternalSwap(CastToBase(&other->stops_));
+  bus_names_.InternalSwap(CastToBase(&other->bus_names_));
+  CastToBase(&buses_)->InternalSwap(CastToBase(&other->buses_));
 }
 
 ::google::protobuf::Metadata Database::GetMetadata() const {
@@ -1781,20 +1322,11 @@ void Database::InternalSwap(Database* other) {
 }  // namespace ProtoTransport
 namespace google {
 namespace protobuf {
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse* Arena::CreateMaybeMessage< ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Stop_DistanceToStopEntry_DoNotUse >(arena);
-}
 template<> PROTOBUF_NOINLINE ::ProtoTransport::Stop* Arena::CreateMaybeMessage< ::ProtoTransport::Stop >(Arena* arena) {
   return Arena::CreateInternal< ::ProtoTransport::Stop >(arena);
 }
 template<> PROTOBUF_NOINLINE ::ProtoTransport::Bus* Arena::CreateMaybeMessage< ::ProtoTransport::Bus >(Arena* arena) {
   return Arena::CreateInternal< ::ProtoTransport::Bus >(arena);
-}
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Database_StopsEntry_DoNotUse* Arena::CreateMaybeMessage< ::ProtoTransport::Database_StopsEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Database_StopsEntry_DoNotUse >(arena);
-}
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Database_BusesEntry_DoNotUse* Arena::CreateMaybeMessage< ::ProtoTransport::Database_BusesEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Database_BusesEntry_DoNotUse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::ProtoTransport::Database* Arena::CreateMaybeMessage< ::ProtoTransport::Database >(Arena* arena) {
   return Arena::CreateInternal< ::ProtoTransport::Database >(arena);
