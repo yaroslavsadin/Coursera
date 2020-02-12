@@ -109,14 +109,16 @@ ProtoTransport::Database BusDatabase::Serialize() const {
         *buses->Add() = move(item);
     }
 
-    for(auto [k,v] : stops_map) {
+    for(auto [name,_] : stops_) {
         ProtoTransport::Stop item;
         auto route = item.mutable_buses();
-        for(const string& bus : v) {
-            *route->Add() = bus;
+        if(stops_map.count(name)) {
+            for(const string& bus : stops_map.at(name)) {
+                *route->Add() = bus;
+            }
         }
 
-        *stop_names->Add() = k;
+        *stop_names->Add() = name;
         *stops->Add() = move(item);
     }
 
@@ -141,6 +143,7 @@ void BusDatabase::Deserialize(const ProtoTransport::Database& db) {
         const string& name = stop_names[i];
         const ProtoTransport::Stop& stop = stops[i];
 
+        stops_[name];
         for(const string& bus : stop.buses()) {
             stops_[name].buses.insert(bus);
         }
