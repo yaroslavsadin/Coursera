@@ -124,6 +124,8 @@ public:
         serial_file, std::ios::binary
     );
     db.Serialize(*t.mutable_db());
+    router.InitRouter(db.GetBuses(),db.GetStops());
+    router.Serialize(*t.mutable_router());
     t.SerializeToOstream(&serial);
     assert(!serial.bad());
     return *this;
@@ -136,6 +138,7 @@ public:
     t.ParseFromIstream(&serial);
     assert(!serial.bad());
     db.Deserialize(t.db());
+    router.Deserialize(t.router());
     return *this;
   }
 private:

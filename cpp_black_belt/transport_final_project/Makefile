@@ -366,6 +366,33 @@ misc.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.s
 .PHONY : misc.cpp.s
 
+router.pb.o: router.pb.cc.o
+
+.PHONY : router.pb.o
+
+# target to build an object file
+router.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.o
+.PHONY : router.pb.cc.o
+
+router.pb.i: router.pb.cc.i
+
+.PHONY : router.pb.i
+
+# target to preprocess a source file
+router.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.i
+.PHONY : router.pb.cc.i
+
+router.pb.s: router.pb.cc.s
+
+.PHONY : router.pb.s
+
+# target to generate assembly for a file
+router.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.s
+.PHONY : router.pb.cc.s
+
 svg_render.o: svg_render.cpp.o
 
 .PHONY : svg_render.o
@@ -483,6 +510,9 @@ help:
 	@echo "... misc.o"
 	@echo "... misc.i"
 	@echo "... misc.s"
+	@echo "... router.pb.o"
+	@echo "... router.pb.i"
+	@echo "... router.pb.s"
 	@echo "... svg_render.o"
 	@echo "... svg_render.i"
 	@echo "... svg_render.s"

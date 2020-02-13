@@ -372,9 +372,9 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
             }
             res["items"] = move(items);
         }
-        stringstream ss;
-        renderer.RenderRoute(std::move(route_map)).Render(ss);
-        res["map"] = Json::Node(ss.str());
+        // stringstream ss;
+        // renderer.RenderRoute(std::move(route_map)).Render(ss);
+        // res["map"] = Json::Node(ss.str());
     } else {
         res["error_message"] = Json::Node(string("not found"));
     }

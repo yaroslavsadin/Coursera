@@ -32,6 +32,7 @@
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
 #include "database.pb.h"
+#include "router.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_transport_5fcatalog_2eproto
@@ -167,12 +168,22 @@ class TransportCatalog :
   ::ProtoTransport::Database* mutable_db();
   void set_allocated_db(::ProtoTransport::Database* db);
 
+  // .ProtoTransport.Router router = 2;
+  bool has_router() const;
+  void clear_router();
+  static const int kRouterFieldNumber = 2;
+  const ::ProtoTransport::Router& router() const;
+  ::ProtoTransport::Router* release_router();
+  ::ProtoTransport::Router* mutable_router();
+  void set_allocated_router(::ProtoTransport::Router* router);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.TransportCatalog)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::ProtoTransport::Database* db_;
+  ::ProtoTransport::Router* router_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_transport_5fcatalog_2eproto;
 };
@@ -230,6 +241,51 @@ inline void TransportCatalog::set_allocated_db(::ProtoTransport::Database* db) {
   }
   db_ = db;
   // @@protoc_insertion_point(field_set_allocated:ProtoTransport.TransportCatalog.db)
+}
+
+// .ProtoTransport.Router router = 2;
+inline bool TransportCatalog::has_router() const {
+  return this != internal_default_instance() && router_ != nullptr;
+}
+inline const ::ProtoTransport::Router& TransportCatalog::router() const {
+  const ::ProtoTransport::Router* p = router_;
+  // @@protoc_insertion_point(field_get:ProtoTransport.TransportCatalog.router)
+  return p != nullptr ? *p : *reinterpret_cast<const ::ProtoTransport::Router*>(
+      &::ProtoTransport::_Router_default_instance_);
+}
+inline ::ProtoTransport::Router* TransportCatalog::release_router() {
+  // @@protoc_insertion_point(field_release:ProtoTransport.TransportCatalog.router)
+  
+  ::ProtoTransport::Router* temp = router_;
+  router_ = nullptr;
+  return temp;
+}
+inline ::ProtoTransport::Router* TransportCatalog::mutable_router() {
+  
+  if (router_ == nullptr) {
+    auto* p = CreateMaybeMessage<::ProtoTransport::Router>(GetArenaNoVirtual());
+    router_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.TransportCatalog.router)
+  return router_;
+}
+inline void TransportCatalog::set_allocated_router(::ProtoTransport::Router* router) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(router_);
+  }
+  if (router) {
+    ::google::protobuf::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      router = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, router, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  router_ = router;
+  // @@protoc_insertion_point(field_set_allocated:ProtoTransport.TransportCatalog.router)
 }
 
 #ifdef __GNUC__
