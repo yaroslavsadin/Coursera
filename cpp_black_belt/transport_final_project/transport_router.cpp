@@ -73,13 +73,6 @@ std::optional<RouterT::RouteInfo>
 TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const string& from, const string& to) const {
     InitRouter(buses_,stops_);
 
-    try {
-        stop_to_vertices_.at(from);
-        stop_to_vertices_.at(to);
-    } catch(...) {
-        cerr << "Here" << endl;
-    }
-
     std::optional<RouterT::RouteInfo> route_info = 
     router_->BuildRoute(stop_to_vertices_.at(from).change, stop_to_vertices_.at(to).change);
     if(route_info) {

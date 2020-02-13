@@ -26,10 +26,6 @@ public:
 
     void InitRouter(const Buses& buses_, const Stops& stops_) const;
 
-    void AddVerticesForStop(const std::string& stop_name) {
-        
-    }
-
     void SetBusWaitTime(int x) {
         route_settings_.bus_wait_time_ = x;
     }
@@ -45,45 +41,12 @@ public:
                                                     const std::string& from, const std::string& to) const;
     
     void Serialize(ProtoTransport::Router& r) {
-        r.set_vertex_count(graph_.GetVertexCount());
-        for(size_t i = 0; i < graph_.GetEdgeCount(); i++) {
-            ProtoTransport::Edge proto_edge;
-            const Graph::Edge<EdgeWeight>& edge = graph_.GetEdge(i);
-            proto_edge.set_from(edge.from);
-            proto_edge.set_to(edge.to);
-            proto_edge.set_item_name(edge.weight.item_name_);
-            proto_edge.set_type(edge.weight.type_ == EdgeType::CHANGE);
-            proto_edge.set_time(edge.weight.time_);
-            proto_edge.set_span_count(edge.weight.span_count_);
-
-            *r.mutable_edges()->Add() = std::move(proto_edge);
-        }
+        r.set_bus_velocity(route_settings_.bus_velocity_);
+        r.set_bus_wait_time(route_settings_.bus_wait_time_);
     }
-    void Deserialize(const ProtoTransport::Router& r, const Stops& s) {
-        Graph::VertexId current_vertex_id {0};
-        for(const auto& [stop_name,_] : s) {
-            stop_to_vertices_[stop_name].board = current_vertex_id++;
-            stop_to_vertices_[stop_name].change = current_vertex_id++;
-        }
-
-        const auto& edges = r.edges();
-        graph_ = GraphT(r.vertex_count());
-        for(size_t i = 0; i < edges.size(); i++) {
-            Graph::Edge<EdgeWeight> edge {
-                edges[i].from(),
-                edges[i].to(),
-                EdgeWeight (
-                    (edges[i].type()) ?EdgeType::CHANGE : EdgeType::RIDE,
-                    edges[i].time(),
-                    edges[i].item_name(),
-                    edges[i].span_count(),
-                    {} // placeholder for deque
-                )
-            };
-
-            graph_.AddEdge(std::move(edge));
-        }
-        router_.emplace(Graph::Router(graph_));
+    void Deserialize(const ProtoTransport::Router& r) {
+        route_settings_.bus_velocity_ = r.bus_velocity();
+        route_settings_.bus_wait_time_ = r.bus_wait_time();
     }
 private:
     double GetRideTime(const Stops& stops_, const std::string& stop_from, const std::string& stop_to) const { 

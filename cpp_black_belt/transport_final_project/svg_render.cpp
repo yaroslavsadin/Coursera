@@ -428,7 +428,7 @@ Svg::Document SvgRender::Render() const {
                 if(it == base_it_next) {
                     if(!lat.count(stop_name)) {
                         lat[stop_name] = stops.at(stop_name).latitude;
-                        lon[stop_name] = stops.at(stop_name).longtitude;
+                        lon[stop_name] = stops.at(stop_name).longitude;
                     }
                     base_it = base_it_next;
                     base_it_next = std::find_if(next(it),bus.route.end(),
@@ -437,7 +437,7 @@ Svg::Document SvgRender::Render() const {
                                         });
                     if(base_it_next != bus.route.end()) {
                         lon_step = (
-                            stops.at(*base_it_next).longtitude - stops.at(*base_it).longtitude
+                            stops.at(*base_it_next).longitude - stops.at(*base_it).longitude
                         ) / (base_it_next - base_it);
                         lat_step = (
                             stops.at(*base_it_next).latitude - stops.at(*base_it).latitude
@@ -446,7 +446,7 @@ Svg::Document SvgRender::Render() const {
                     continue;
                 }
                 lat[stop_name] = stops.at(*base_it).latitude + lat_step * (it - base_it);
-                lon[stop_name] = stops.at(*base_it).longtitude + lon_step * (it - base_it);
+                lon[stop_name] = stops.at(*base_it).longitude + lon_step * (it - base_it);
             }
         }
 
@@ -456,7 +456,7 @@ Svg::Document SvgRender::Render() const {
                 lon_sorted[lon.at(name)] = name;
             } else {
                 lat_sorted[stop.latitude] = name;
-                lon_sorted[stop.longtitude] = name;
+                lon_sorted[stop.longitude] = name;
             }
         }
         

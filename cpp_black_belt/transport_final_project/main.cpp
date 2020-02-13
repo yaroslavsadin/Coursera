@@ -218,7 +218,8 @@ int main(void) {
     {
         Json::Document doc = Json::Load(input_base);
         TransportCatalog handler(doc);
-        handler.ProcessRequests().Serialize();
+        handler.ProcessRequests();
+        handler.Serialize();
     }
     {
         Json::Document doc = Json::Load(input_stats);

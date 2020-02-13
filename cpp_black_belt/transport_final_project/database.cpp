@@ -10,7 +10,7 @@ using namespace std;
 void BusDatabase::AddStop(std::string name, double latitude, double longtitude,
                                 std::vector< std::pair< std::string, unsigned int > > stop_distances) {
     stops_[name].latitude = latitude;
-    stops_[name].longtitude = longtitude;
+    stops_[name].longitude = longtitude;
 
     for(const auto& stop : stop_distances) {
         stops_[name].distance_to_stop_[stop.first] = stop.second;
@@ -31,8 +31,8 @@ Distances BusDatabase::ComputeDistance(const Bus& bus) const {
     for(auto it = bus.route.begin() + 1; it < bus.route.end(); it++) {
         const auto& prev_stop = stops_.at(*(it-1));
         const auto& cur_stop = stops_.at(*it);
-        distance_linear += CalcDistance(prev_stop.latitude, prev_stop.longtitude, 
-                                        cur_stop.latitude, cur_stop.longtitude);
+        distance_linear += CalcDistance(prev_stop.latitude, prev_stop.longitude, 
+                                        cur_stop.latitude, cur_stop.longitude);
         distance_road += prev_stop.distance_to_stop_.at(*it);
         if (bus.route_type == Bus::RouteType::ONEWAY) {
             distance_road += cur_stop.distance_to_stop_.at(*(it-1));
@@ -98,15 +98,25 @@ void BusDatabase::Serialize(ProtoTransport::Database& t) const {
         item.set_unique_stops(bus.unique_stops);
         item.set_linear_route(GetBusDistance(name).linear_distance);
         item.set_road_route(GetBusDistance(name).road_distance);
+        item.set_is_roundtrip(bus.route_type == Bus::RouteType::ROUNDTRIP);
         for(const auto& stop : bus.route) {
+            *item.mutable_route()->Add() = stop;
             stops_map[stop].insert(name);
         }
         *buses->Add() = move(item);
     }
 
-    for(auto [name,_] : stops_) {
+    for(const auto& [name,stop] : stops_) {
         auto* item = stops->Add();
+        item->set_lat(stop.latitude);
+        item->set_lon(stop.longitude);
         item->set_name(name);
+        auto* distances = item->mutable_ds_to_stops();
+        for(const auto& [to,dist] : stop.distance_to_stop_) {
+            auto* d_to_stop = distances->Add();
+            d_to_stop->set_to(to);
+            d_to_stop->set_distance(dist);
+        }
         if(stops_map.count(name)) {
             auto* route = item->mutable_buses();
             for(const string& bus : stops_map.at(name)) {
@@ -120,18 +130,26 @@ void BusDatabase::Deserialize(const ProtoTransport::Database& t) {
     const auto& stops = t.stops();
     const auto& buses = t.buses();
 
-    for(size_t i = 0; i < buses.size(); i++) {
+    for(int i = 0; i < buses.size(); i++) {
         const ProtoTransport::Buses& bus = buses[i];
         
         buses_[bus.name()].stops = bus.stops();
         buses_[bus.name()].unique_stops = bus.unique_stops();
-        // -----------------------------\/\/\/ because uses string_view
-        bus_to_distance_cache[buses_.find(bus.name())->first] = {bus.road_route(),bus.linear_route()};
-    }
-    for(size_t i = 0; i < stops.size(); i++) {
-        const string& name = stops[i].name();
+        buses_[bus.name()].route_type = (bus.is_roundtrip() ? Bus::RouteType::ROUNDTRIP : Bus::RouteType::ONEWAY);
 
-        stops_[name];
+        buses_[bus.name()].route.reserve(bus.route_size());
+        for(const string& stop : bus.route()) {
+            buses_[bus.name()].route.push_back(stop);
+        }
+    }
+    for(int i = 0; i < stops.size(); i++) {
+        const string& name = stops[i].name();
+        stops_[name].latitude = stops[i].lat();
+        stops_[name].longitude = stops[i].lon();
+
+        for(const auto& d_to_stop : stops[i].ds_to_stops()) {
+            stops_[name].distance_to_stop_[d_to_stop.to()] = d_to_stop.distance();
+        }
         for(const string& bus : stops[i].buses()) {
             stops_[name].buses.insert(bus);
         }

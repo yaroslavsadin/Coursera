@@ -14,7 +14,7 @@ using Buses = std::map< std::string , Bus >;
 
 struct Stop {
     double latitude;
-    double longtitude;
+    double longitude;
     std::set<std::string> buses;
     std::unordered_map<std::string,int> distance_to_stop_;
 };

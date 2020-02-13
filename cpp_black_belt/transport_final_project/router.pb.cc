@@ -16,7 +16,6 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 
-extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Edge_router_2eproto;
 namespace ProtoTransport {
 class EdgeDefaultTypeInternal {
  public:
@@ -52,9 +51,8 @@ static void InitDefaultsRouter_router_2eproto() {
   ::ProtoTransport::Router::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<1> scc_info_Router_router_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsRouter_router_2eproto}, {
-      &scc_info_Edge_router_2eproto.base,}};
+::google::protobuf::internal::SCCInfo<0> scc_info_Router_router_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRouter_router_2eproto}, {}};
 
 void InitDefaults_router_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_Edge_router_2eproto.base);
@@ -82,8 +80,8 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, vertex_count_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, edges_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, bus_wait_time_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, bus_velocity_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::Edge)},
@@ -105,14 +103,13 @@ const char descriptor_table_protodef_router_2eproto[] =
   "\n\014router.proto\022\016ProtoTransport\"c\n\004Edge\022\014"
   "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004type\030\003 \001(\010\022\014"
   "\n\004time\030\004 \001(\001\022\021\n\titem_name\030\005 \001(\t\022\022\n\nspan_"
-  "count\030\006 \001(\005\"C\n\006Router\022\024\n\014vertex_count\030\001 "
-  "\001(\005\022#\n\005edges\030\002 \003(\0132\024.ProtoTransport.Edge"
-  "b\006proto3"
+  "count\030\006 \001(\005\"5\n\006Router\022\025\n\rbus_wait_time\030\001"
+  " \001(\005\022\024\n\014bus_velocity\030\002 \001(\005b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_router_2eproto = {
   false, InitDefaults_router_2eproto, 
   descriptor_table_protodef_router_2eproto,
-  "router.proto", &assign_descriptors_table_router_2eproto, 208,
+  "router.proto", &assign_descriptors_table_router_2eproto, 194,
 };
 
 void AddDescriptors_router_2eproto() {
@@ -647,8 +644,8 @@ class Router::HasBitSetters {
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Router::kVertexCountFieldNumber;
-const int Router::kEdgesFieldNumber;
+const int Router::kBusWaitTimeFieldNumber;
+const int Router::kBusVelocityFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Router::Router()
@@ -658,17 +655,18 @@ Router::Router()
 }
 Router::Router(const Router& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr),
-      edges_(from.edges_) {
+      _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  vertex_count_ = from.vertex_count_;
+  ::memcpy(&bus_wait_time_, &from.bus_wait_time_,
+    static_cast<size_t>(reinterpret_cast<char*>(&bus_velocity_) -
+    reinterpret_cast<char*>(&bus_wait_time_)) + sizeof(bus_velocity_));
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.Router)
 }
 
 void Router::SharedCtor() {
-  ::google::protobuf::internal::InitSCC(
-      &scc_info_Router_router_2eproto.base);
-  vertex_count_ = 0;
+  ::memset(&bus_wait_time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&bus_velocity_) -
+      reinterpret_cast<char*>(&bus_wait_time_)) + sizeof(bus_velocity_));
 }
 
 Router::~Router() {
@@ -694,8 +692,9 @@ void Router::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  edges_.Clear();
-  vertex_count_ = 0;
+  ::memset(&bus_wait_time_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&bus_velocity_) -
+      reinterpret_cast<char*>(&bus_wait_time_)) + sizeof(bus_velocity_));
   _internal_metadata_.Clear();
 }
 
@@ -712,27 +711,18 @@ const char* Router::_InternalParse(const char* begin, const char* end, void* obj
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // int32 vertex_count = 1;
+      // int32 bus_wait_time = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
-        msg->set_vertex_count(::google::protobuf::internal::ReadVarint(&ptr));
+        msg->set_bus_wait_time(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // repeated .ProtoTransport.Edge edges = 2;
+      // int32 bus_velocity = 2;
       case 2: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::ProtoTransport::Edge::_InternalParse;
-          object = msg->add_edges();
-          if (size > end - ptr) goto len_delim_till_end;
-          ptr += size;
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
-              {parser_till_end, object}, ptr - size, ptr));
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
+        if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
+        msg->set_bus_velocity(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
       default: {
@@ -750,9 +740,6 @@ const char* Router::_InternalParse(const char* begin, const char* end, void* obj
     }  // switch
   }  // while
   return ptr;
-len_delim_till_end:
-  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
-                               {parser_till_end, object}, size);
 }
 #else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
 bool Router::MergePartialFromCodedStream(
@@ -765,24 +752,26 @@ bool Router::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // int32 vertex_count = 1;
+      // int32 bus_wait_time = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &vertex_count_)));
+                 input, &bus_wait_time_)));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // repeated .ProtoTransport.Edge edges = 2;
+      // int32 bus_velocity = 2;
       case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_edges()));
+        if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &bus_velocity_)));
         } else {
           goto handle_unusual;
         }
@@ -816,18 +805,14 @@ void Router::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 vertex_count = 1;
-  if (this->vertex_count() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->vertex_count(), output);
+  // int32 bus_wait_time = 1;
+  if (this->bus_wait_time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->bus_wait_time(), output);
   }
 
-  // repeated .ProtoTransport.Edge edges = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->edges_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2,
-      this->edges(static_cast<int>(i)),
-      output);
+  // int32 bus_velocity = 2;
+  if (this->bus_velocity() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->bus_velocity(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -843,17 +828,14 @@ void Router::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 vertex_count = 1;
-  if (this->vertex_count() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->vertex_count(), target);
+  // int32 bus_wait_time = 1;
+  if (this->bus_wait_time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->bus_wait_time(), target);
   }
 
-  // repeated .ProtoTransport.Edge edges = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->edges_size()); i < n; i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageToArray(
-        2, this->edges(static_cast<int>(i)), target);
+  // int32 bus_velocity = 2;
+  if (this->bus_velocity() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->bus_velocity(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -877,22 +859,18 @@ size_t Router::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .ProtoTransport.Edge edges = 2;
-  {
-    unsigned int count = static_cast<unsigned int>(this->edges_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->edges(static_cast<int>(i)));
-    }
-  }
-
-  // int32 vertex_count = 1;
-  if (this->vertex_count() != 0) {
+  // int32 bus_wait_time = 1;
+  if (this->bus_wait_time() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
-        this->vertex_count());
+        this->bus_wait_time());
+  }
+
+  // int32 bus_velocity = 2;
+  if (this->bus_velocity() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->bus_velocity());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -922,9 +900,11 @@ void Router::MergeFrom(const Router& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  edges_.MergeFrom(from.edges_);
-  if (from.vertex_count() != 0) {
-    set_vertex_count(from.vertex_count());
+  if (from.bus_wait_time() != 0) {
+    set_bus_wait_time(from.bus_wait_time());
+  }
+  if (from.bus_velocity() != 0) {
+    set_bus_velocity(from.bus_velocity());
   }
 }
 
@@ -953,8 +933,8 @@ void Router::Swap(Router* other) {
 void Router::InternalSwap(Router* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  CastToBase(&edges_)->InternalSwap(CastToBase(&other->edges_));
-  swap(vertex_count_, other->vertex_count_);
+  swap(bus_wait_time_, other->bus_wait_time_);
+  swap(bus_velocity_, other->bus_velocity_);
 }
 
 ::google::protobuf::Metadata Router::GetMetadata() const {

@@ -12,6 +12,6 @@ message Edge {
 }
 
 message Router {
-    int32 vertex_count = 1;
-    repeated Edge edges = 2;
+    int32 bus_wait_time = 1;
+    int32 bus_velocity = 2;
 }
