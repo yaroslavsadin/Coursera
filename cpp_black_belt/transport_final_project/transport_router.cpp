@@ -3,6 +3,12 @@ using namespace std;
 
 void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const {
     if(!router_) {    
+        Graph::VertexId current_vertex_id {0};
+        for(const auto& [stop_name,_] : stops_) {
+            stop_to_vertices_[stop_name].board = current_vertex_id++;
+            stop_to_vertices_[stop_name].change = current_vertex_id++;
+        }
+
         graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(current_vertex_id * 2);
         
         for(const auto& [bus_name,bus_data] : buses_) {
@@ -66,6 +72,14 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
 std::optional<RouterT::RouteInfo> 
 TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const string& from, const string& to) const {
     InitRouter(buses_,stops_);
+
+    try {
+        stop_to_vertices_.at(from);
+        stop_to_vertices_.at(to);
+    } catch(...) {
+        cerr << "Here" << endl;
+    }
+
     std::optional<RouterT::RouteInfo> route_info = 
     router_->BuildRoute(stop_to_vertices_.at(from).change, stop_to_vertices_.at(to).change);
     if(route_info) {

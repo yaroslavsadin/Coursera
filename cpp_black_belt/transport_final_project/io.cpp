@@ -397,6 +397,5 @@ void AddBusRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender&
     );
 }
 void AddStopRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
-    router.AddVerticesForStop(name_);
     db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }

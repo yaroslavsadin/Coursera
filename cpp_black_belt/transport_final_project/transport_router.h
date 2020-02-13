@@ -27,8 +27,7 @@ public:
     void InitRouter(const Buses& buses_, const Stops& stops_) const;
 
     void AddVerticesForStop(const std::string& stop_name) {
-        stop_to_vertices_[stop_name].board = current_vertex_id++;
-        stop_to_vertices_[stop_name].change = current_vertex_id++;
+        
     }
 
     void SetBusWaitTime(int x) {
@@ -60,7 +59,13 @@ public:
             *r.mutable_edges()->Add() = std::move(proto_edge);
         }
     }
-    void Deserialize(const ProtoTransport::Router& r) {
+    void Deserialize(const ProtoTransport::Router& r, const Stops& s) {
+        Graph::VertexId current_vertex_id {0};
+        for(const auto& [stop_name,_] : s) {
+            stop_to_vertices_[stop_name].board = current_vertex_id++;
+            stop_to_vertices_[stop_name].change = current_vertex_id++;
+        }
+
         const auto& edges = r.edges();
         graph_ = GraphT(r.vertex_count());
         for(size_t i = 0; i < edges.size(); i++) {
@@ -76,11 +81,6 @@ public:
                 )
             };
 
-            if(edge.weight.type_ == EdgeType::CHANGE) {
-                stop_to_vertices_[edge.weight.item_name_].board = edge.to;
-                stop_to_vertices_[edge.weight.item_name_].change = edge.from;
-            }
-
             graph_.AddEdge(std::move(edge));
         }
         router_.emplace(Graph::Router(graph_));
@@ -93,9 +93,7 @@ private:
     // Bad but as router was designed...
     mutable GraphT graph_ = GraphT(0);
     mutable std::optional<RouterT> router_;
-
-    Graph::VertexId current_vertex_id {0};
-    std::unordered_map<std::string,StopVertices> stop_to_vertices_;
+    mutable std::unordered_map<std::string,StopVertices> stop_to_vertices_;
     
     mutable std::vector<int> routes;
 };

@@ -138,7 +138,7 @@ public:
     t.ParseFromIstream(&serial);
     assert(!serial.bad());
     db.Deserialize(t.db());
-    router.Deserialize(t.router());
+    router.Deserialize(t.router(),db.GetStops());
     return *this;
   }
 private:
