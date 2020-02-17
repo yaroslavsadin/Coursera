@@ -42,6 +42,7 @@ namespace Graph {
     size_t GetVertexCount() const;
     size_t GetEdgeCount() const;
     const Edge<Weight>& GetEdge(EdgeId edge_id) const;
+    Edge<Weight>& GetEdge(EdgeId edge_id);
     IncidentEdgesRange_ GetIncidentEdges(VertexId vertex) const;
 
   private:
@@ -73,6 +74,11 @@ namespace Graph {
 
   template <typename Weight>
   const Edge<Weight>& DirectedWeightedGraph<Weight>::GetEdge(EdgeId edge_id) const {
+    return edges_[edge_id];
+  }
+
+  template <typename Weight>
+  Edge<Weight>& DirectedWeightedGraph<Weight>::GetEdge(EdgeId edge_id) {
     return edges_[edge_id];
   }
 

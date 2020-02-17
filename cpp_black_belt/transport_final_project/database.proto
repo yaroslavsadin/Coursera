@@ -2,18 +2,9 @@ syntax = "proto3";
 
 package ProtoTransport;
 
-message d_to_stop {
-    string to = 1;
-    int32 distance = 2;
-}
-
 message Stops {
     string name = 1;
     repeated string buses = 2;
-    repeated d_to_stop ds_to_stops = 3;
-    double lat = 4;
-    double lon = 5;
-
 }
 
 message Buses {
@@ -22,8 +13,6 @@ message Buses {
     uint32 unique_stops = 3;
     uint32 road_route = 4;
     double linear_route = 5;
-    repeated string route = 6;
-    bool is_roundtrip = 7;
 }
 
 message Database {

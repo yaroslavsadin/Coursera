@@ -1,8 +1,16 @@
 #include "transport_router.h"
 using namespace std;
 
+#ifdef DEBUG
+#include "profile_advanced.h"
+#endif
+
 void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const {
-    if(!router_) {    
+    if(1) {
+#ifdef DEBUG
+        TotalDuration init_router("TransportRouter::InitRouter()");
+        ADD_DURATION(init_router);
+#endif
         Graph::VertexId current_vertex_id {0};
         for(const auto& [stop_name,_] : stops_) {
             stop_to_vertices_[stop_name].board = current_vertex_id++;
@@ -23,8 +31,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                 );
                 double cumulative_distance_straight = 0.;
                 double cumulative_distance_reverse = 0.;
-                deque<string_view> stops_along_straight;
-                deque<string_view> stops_along_reverse;
+                // deque<string_view> stops_along_straight;
+                // deque<string_view> stops_along_reverse;
                 for(auto it_to = it_from; it_to < bus_data.route.end(); it_to++) {
                     const auto& stop_to = *it_to;
                     if(stop_from != stop_to) {
@@ -32,8 +40,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                         cumulative_distance_straight += GetRideTime(stops_, prev_stop, stop_to);
                         cumulative_distance_reverse += GetRideTime(stops_, stop_to, prev_stop);
                     }
-                    stops_along_straight.push_back(stop_to);
-                    stops_along_reverse.push_front(stop_to);
+                    // stops_along_straight.push_back(stop_to);
+                    // stops_along_reverse.push_front(stop_to);
                     graph_.AddEdge(
                         Graph::Edge<EdgeWeight> {
                             stop_to_vertices_.at(stop_from).board,
@@ -42,8 +50,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                                 EdgeType::RIDE, 
                                 cumulative_distance_straight, 
                                 bus_name,
-                                it_to - it_from,
-                                (stop_from != stop_to) ? stops_along_straight : deque<string_view>{}
+                                it_to - it_from
+                                // (stop_from != stop_to) ? stops_along_straight : deque<string_view>{}
                             )
                         }
                     );
@@ -56,8 +64,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                                 EdgeType::RIDE, 
                                 cumulative_distance_reverse, 
                                 bus_name,
-                                it_to - it_from,
-                                (stop_from != stop_to) ? stops_along_reverse : deque<string_view>{}
+                                it_to - it_from
+                                // (stop_from != stop_to) ? stops_along_reverse : deque<string_view>{}
                             )
                         }
                     );
@@ -71,8 +79,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
 
 std::optional<RouterT::RouteInfo> 
 TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const string& from, const string& to) const {
-    InitRouter(buses_,stops_);
-
+    // InitRouter(buses_,stops_);
     std::optional<RouterT::RouteInfo> route_info = 
     router_->BuildRoute(stop_to_vertices_.at(from).change, stop_to_vertices_.at(to).change);
     if(route_info) {

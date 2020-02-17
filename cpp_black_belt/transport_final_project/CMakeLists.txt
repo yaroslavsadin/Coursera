@@ -18,7 +18,7 @@ include_directories(${UTILSDIR} ${SVGLIBDIR})
 add_compile_definitions(DEBUG)
 
 #Set compile and link flags
-set(COMMON_FLAGS -g -O0 -Wall)
+set(COMMON_FLAGS -g -O3 -Wall)
 
 if(SANITIZE)
 set(COMMON_FLAGS ${COMMON_FLAGS} -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls)
@@ -38,7 +38,7 @@ protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS transport_catalog.proto database.pro
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
  
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES *.cpp ${SVGLIBDIR}/svg.cpp)
+file(GLOB SOURCES *.cpp ${SVGLIBDIR}/svg.cpp ../profile_advanced.cpp)
 set(SOURCES ${PROTO_SRCS} ${PROTO_HDRS} ${SOURCES})
 
 add_executable(transport ${SOURCES})

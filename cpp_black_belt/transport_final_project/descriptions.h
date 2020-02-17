@@ -14,7 +14,7 @@ using Buses = std::map< std::string , Bus >;
 
 struct Stop {
     double latitude;
-    double longitude;
+    double longtitude;
     std::set<std::string> buses;
     std::unordered_map<std::string,int> distance_to_stop_;
 };
@@ -41,7 +41,7 @@ struct EdgeWeight {
     double time_;
     std::string item_name_;
     int span_count_;
-    std::deque<std::string_view> stops_;
+    // std::deque<std::string_view> stops_;
 
     bool operator>(const EdgeWeight& other) const {
         return this->time_ > other.time_;
@@ -63,8 +63,8 @@ struct EdgeWeight {
     : type_(type), time_(time), item_name_(bus_name) 
     {}
     EdgeWeight(EdgeType type, double time, std::string bus_name, 
-    int span_count, const std::deque<std::string_view>& stops ) 
+    int span_count/*, const std::deque<std::string_view>& stops*/ ) 
     : type_(type), time_(time), item_name_(bus_name), 
-        span_count_(span_count) , stops_(stops)
+        span_count_(span_count)// , stops_(stops)
     {}
 };

@@ -392,8 +392,7 @@ Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& rou
 
 void AddBusRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
     db.AddBus(
-        bus_name_,move(stops_), 
-        (route_type_ == Bus::RouteType::ROUNDTRIP)
+        move(bus_name_),move(stops_), (route_type_ == Bus::RouteType::ROUNDTRIP)
     );
 }
 void AddStopRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {

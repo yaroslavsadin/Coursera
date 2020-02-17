@@ -316,25 +316,31 @@ class Router :
 
   // accessors -------------------------------------------------------
 
-  // int32 bus_wait_time = 1;
-  void clear_bus_wait_time();
-  static const int kBusWaitTimeFieldNumber = 1;
-  ::google::protobuf::int32 bus_wait_time() const;
-  void set_bus_wait_time(::google::protobuf::int32 value);
+  // repeated .ProtoTransport.Edge edges = 2;
+  int edges_size() const;
+  void clear_edges();
+  static const int kEdgesFieldNumber = 2;
+  ::ProtoTransport::Edge* mutable_edges(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge >*
+      mutable_edges();
+  const ::ProtoTransport::Edge& edges(int index) const;
+  ::ProtoTransport::Edge* add_edges();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge >&
+      edges() const;
 
-  // int32 bus_velocity = 2;
-  void clear_bus_velocity();
-  static const int kBusVelocityFieldNumber = 2;
-  ::google::protobuf::int32 bus_velocity() const;
-  void set_bus_velocity(::google::protobuf::int32 value);
+  // int32 vertex_count = 1;
+  void clear_vertex_count();
+  static const int kVertexCountFieldNumber = 1;
+  ::google::protobuf::int32 vertex_count() const;
+  void set_vertex_count(::google::protobuf::int32 value);
 
   // @@protoc_insertion_point(class_scope:ProtoTransport.Router)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::int32 bus_wait_time_;
-  ::google::protobuf::int32 bus_velocity_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge > edges_;
+  ::google::protobuf::int32 vertex_count_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
 };
@@ -476,32 +482,48 @@ inline void Edge::set_span_count(::google::protobuf::int32 value) {
 
 // Router
 
-// int32 bus_wait_time = 1;
-inline void Router::clear_bus_wait_time() {
-  bus_wait_time_ = 0;
+// int32 vertex_count = 1;
+inline void Router::clear_vertex_count() {
+  vertex_count_ = 0;
 }
-inline ::google::protobuf::int32 Router::bus_wait_time() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Router.bus_wait_time)
-  return bus_wait_time_;
+inline ::google::protobuf::int32 Router::vertex_count() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Router.vertex_count)
+  return vertex_count_;
 }
-inline void Router::set_bus_wait_time(::google::protobuf::int32 value) {
+inline void Router::set_vertex_count(::google::protobuf::int32 value) {
   
-  bus_wait_time_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Router.bus_wait_time)
+  vertex_count_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Router.vertex_count)
 }
 
-// int32 bus_velocity = 2;
-inline void Router::clear_bus_velocity() {
-  bus_velocity_ = 0;
+// repeated .ProtoTransport.Edge edges = 2;
+inline int Router::edges_size() const {
+  return edges_.size();
 }
-inline ::google::protobuf::int32 Router::bus_velocity() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Router.bus_velocity)
-  return bus_velocity_;
+inline void Router::clear_edges() {
+  edges_.Clear();
 }
-inline void Router::set_bus_velocity(::google::protobuf::int32 value) {
-  
-  bus_velocity_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Router.bus_velocity)
+inline ::ProtoTransport::Edge* Router::mutable_edges(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Router.edges)
+  return edges_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge >*
+Router::mutable_edges() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Router.edges)
+  return &edges_;
+}
+inline const ::ProtoTransport::Edge& Router::edges(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Router.edges)
+  return edges_.Get(index);
+}
+inline ::ProtoTransport::Edge* Router::add_edges() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.Router.edges)
+  return edges_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge >&
+Router::edges() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Router.edges)
+  return edges_;
 }
 
 #ifdef __GNUC__

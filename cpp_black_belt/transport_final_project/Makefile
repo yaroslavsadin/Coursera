@@ -123,6 +123,33 @@ transport/fast:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/build
 .PHONY : transport/fast
 
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o
+
+# target to build an object file
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
+
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i
+
+# target to preprocess a source file
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
+
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
+
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s
+
+# target to generate assembly for a file
+cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
+.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
+
 cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o: cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.o
 
 .PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o
@@ -483,6 +510,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... transport"
 	@echo "... edit_cache"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i"
+	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.i"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.s"

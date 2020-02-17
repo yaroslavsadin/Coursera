@@ -8,6 +8,9 @@
 #include "json.h"
 #include "svg_render.h"
 #include <stdexcept>
+#ifdef DEBUG
+#include "profile_advanced.h"
+#endif
 
 #include "database.pb.h"
 #include "transport_catalog.pb.h"
@@ -119,26 +122,42 @@ public:
     return move(responses_);
   }
   TransportCatalog& Serialize() {
+#ifdef DEBUG
+    std::cerr << "--------------- SERIALIZATION ---------------" << std::endl;
+#endif
     ProtoTransport::TransportCatalog t;
     std::ofstream serial(
         serial_file, std::ios::binary
     );
-    db.Serialize(*t.mutable_db());
-    router.Serialize(*t.mutable_router());
+    {
+#ifdef DEBUG
+      TotalDuration serialize("TransportCatalog& Serialize()");
+      ADD_DURATION(serialize);
+#endif
+      db.Serialize(*t.mutable_db());
+      router.InitRouter(db.GetBuses(),db.GetStops());
+      router.Serialize(*t.mutable_router());
+    }
     t.SerializeToOstream(&serial);
-    assert(!serial.bad());
+    // assert(!serial.bad());
     return *this;
   }
   TransportCatalog& Deserialize() {
+#ifdef DEBUG
+    std::cerr << "-------------- DESERIALIZATION --------------" << std::endl;
+#endif
     std::ifstream serial(
         serial_file, std::ios::binary
     );
     ProtoTransport::TransportCatalog t;
     t.ParseFromIstream(&serial);
-    assert(!serial.bad());
+    // assert(!serial.bad());
+#ifdef DEBUG
+    TotalDuration deserialize("TransportCatalog& Deserialize()");
+    ADD_DURATION(deserialize);
+#endif
     db.Deserialize(t.db());
-    router.Deserialize(t.router());
-    // router.InitRouter(db.GetBuses(),db.GetStops());
+    router.Deserialize(t.router(),db.GetStops());
     return *this;
   }
 private:

@@ -200,104 +200,104 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
 }
 
 void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const {
-    for(auto edge: route_map) {
-        std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
-        Svg::Polyline bus_line;
-        bus_line.SetStrokeColor(bus_to_color.at(bus_name))
-                .SetStrokeWidth(settings.line_width)
-                .SetStrokeLineCap("round")
-                .SetStrokeLineJoin("round");
-        for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
-            bus_line.AddPoint(
-                PointFromLocation(
-                    stops_compressed.at(*it).latitude, 
-                    stops_compressed.at(*it).longtitude)
-                );
-        }
-        doc.Add(std::move(bus_line));
-    }
+    // for(auto edge: route_map) {
+    //     std::string_view bus_name = edge->item_name_;
+    //     const auto& stop_names = edge->stops_;
+    //     Svg::Polyline bus_line;
+    //     bus_line.SetStrokeColor(bus_to_color.at(bus_name))
+    //             .SetStrokeWidth(settings.line_width)
+    //             .SetStrokeLineCap("round")
+    //             .SetStrokeLineJoin("round");
+    //     for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
+    //         bus_line.AddPoint(
+    //             PointFromLocation(
+    //                 stops_compressed.at(*it).latitude, 
+    //                 stops_compressed.at(*it).longtitude)
+    //             );
+    //     }
+    //     doc.Add(std::move(bus_line));
+    // }
 }
 void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const {
-    std::unordered_set<std::string_view> drawn;
-    for(auto edge : route_map) {
-        std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
-        std::string_view stop_begin = *stop_names.begin();
-        std::string_view stop_end = *prev(stop_names.end());
-        /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
-        auto f_add_label = [this,&doc](std::string_view stop_name){
-             const auto& stop = stops_compressed.at(stop_name);
-             Svg::Text common = Svg::Text{}
-                .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
-                .SetOffset(settings.stop_label_offset)
-                .SetFontSize(settings.stop_label_font_size)
-                .SetFontFamily("Verdana")
-                .SetData(std::string(stop_name));
-            Svg::Text underlayer = common;
-            doc.Add(
-                underlayer
-                .SetFillColor(settings.underlayer_color)
-                .SetStrokeColor(settings.underlayer_color)
-                .SetStrokeWidth(settings.underlayer_width)
-                .SetStrokeLineCap("round")
-                .SetStrokeLineJoin("round")
-            );
-            doc.Add(
-                common.SetFillColor("black")
-            );
-        };
-        if(!drawn.count(stop_begin)) {
-            f_add_label(stop_begin);
-            drawn.insert(stop_begin);
-        }
-        if(!drawn.count(stop_end)) {
-            f_add_label(stop_end);
-            drawn.insert(stop_end);
-        }
-    }
+    // std::unordered_set<std::string_view> drawn;
+    // for(auto edge : route_map) {
+    //     std::string_view bus_name = edge->item_name_;
+    //     const auto& stop_names = edge->stops_;
+    //     std::string_view stop_begin = *stop_names.begin();
+    //     std::string_view stop_end = *prev(stop_names.end());
+    //     /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
+    //     auto f_add_label = [this,&doc](std::string_view stop_name){
+    //          const auto& stop = stops_compressed.at(stop_name);
+    //          Svg::Text common = Svg::Text{}
+    //             .SetPoint(PointFromLocation(stop.latitude, stop.longtitude))
+    //             .SetOffset(settings.stop_label_offset)
+    //             .SetFontSize(settings.stop_label_font_size)
+    //             .SetFontFamily("Verdana")
+    //             .SetData(std::string(stop_name));
+    //         Svg::Text underlayer = common;
+    //         doc.Add(
+    //             underlayer
+    //             .SetFillColor(settings.underlayer_color)
+    //             .SetStrokeColor(settings.underlayer_color)
+    //             .SetStrokeWidth(settings.underlayer_width)
+    //             .SetStrokeLineCap("round")
+    //             .SetStrokeLineJoin("round")
+    //         );
+    //         doc.Add(
+    //             common.SetFillColor("black")
+    //         );
+    //     };
+    //     if(!drawn.count(stop_begin)) {
+    //         f_add_label(stop_begin);
+    //         drawn.insert(stop_begin);
+    //     }
+    //     if(!drawn.count(stop_end)) {
+    //         f_add_label(stop_end);
+    //         drawn.insert(stop_end);
+    //     }
+    // }
 }
 void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const{
-    for(auto edge : route_map) {
-        std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
-        std::string_view stop_begin = *stop_names.begin();
-        std::string_view stop_end = *prev(stop_names.end());
-        auto f_is_terminal = 
-        [this] (std::string_view bus_name, std::string_view stop_name) -> bool {
-            const auto& bus = buses.at(std::string(bus_name));
-            if(*bus.route.begin() == stop_name || *prev(bus.route.end()) == stop_name) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        if(f_is_terminal(bus_name,stop_begin)) {
-            AddBusLabel(doc,std::string(bus_name),std::string(stop_begin),bus_to_color.at(bus_name));
-        }
-        if(f_is_terminal(bus_name,stop_end)) {
-            AddBusLabel(doc,std::string(bus_name),std::string(stop_end),bus_to_color.at(bus_name));
-        }
-    }
+    // for(auto edge : route_map) {
+    //     std::string_view bus_name = edge->item_name_;
+    //     const auto& stop_names = edge->stops_;
+    //     std::string_view stop_begin = *stop_names.begin();
+    //     std::string_view stop_end = *prev(stop_names.end());
+    //     auto f_is_terminal = 
+    //     [this] (std::string_view bus_name, std::string_view stop_name) -> bool {
+    //         const auto& bus = buses.at(std::string(bus_name));
+    //         if(*bus.route.begin() == stop_name || *prev(bus.route.end()) == stop_name) {
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     };
+    //     if(f_is_terminal(bus_name,stop_begin)) {
+    //         AddBusLabel(doc,std::string(bus_name),std::string(stop_begin),bus_to_color.at(bus_name));
+    //     }
+    //     if(f_is_terminal(bus_name,stop_end)) {
+    //         AddBusLabel(doc,std::string(bus_name),std::string(stop_end),bus_to_color.at(bus_name));
+    //     }
+    // }
 }
 void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const{
-        // std::unordered_set<std::string_view> drawn;
-    for(auto edge : route_map) {
-        std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
-        /// TODO: Take care of empty stop_names?
-        for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
-                doc.Add(
-                    Svg::Circle{}
-                    .SetFillColor("white")
-                    .SetRadius(settings.stop_radius)
-                    .SetCenter(PointFromLocation(
-                        stops_compressed.at(*it).latitude, 
-                        stops_compressed.at(*it).longtitude
-                    ))
-                );
-        }
-    }
+    //     // std::unordered_set<std::string_view> drawn;
+    // for(auto edge : route_map) {
+    //     std::string_view bus_name = edge->item_name_;
+    //     const auto& stop_names = edge->stops_;
+    //     /// TODO: Take care of empty stop_names?
+    //     for(auto it = stop_names.begin(); it != stop_names.end(); it++) {
+    //             doc.Add(
+    //                 Svg::Circle{}
+    //                 .SetFillColor("white")
+    //                 .SetRadius(settings.stop_radius)
+    //                 .SetCenter(PointFromLocation(
+    //                     stops_compressed.at(*it).latitude, 
+    //                     stops_compressed.at(*it).longtitude
+    //                 ))
+    //             );
+    //     }
+    // }
 }
 
 bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
@@ -428,7 +428,7 @@ Svg::Document SvgRender::Render() const {
                 if(it == base_it_next) {
                     if(!lat.count(stop_name)) {
                         lat[stop_name] = stops.at(stop_name).latitude;
-                        lon[stop_name] = stops.at(stop_name).longitude;
+                        lon[stop_name] = stops.at(stop_name).longtitude;
                     }
                     base_it = base_it_next;
                     base_it_next = std::find_if(next(it),bus.route.end(),
@@ -437,7 +437,7 @@ Svg::Document SvgRender::Render() const {
                                         });
                     if(base_it_next != bus.route.end()) {
                         lon_step = (
-                            stops.at(*base_it_next).longitude - stops.at(*base_it).longitude
+                            stops.at(*base_it_next).longtitude - stops.at(*base_it).longtitude
                         ) / (base_it_next - base_it);
                         lat_step = (
                             stops.at(*base_it_next).latitude - stops.at(*base_it).latitude
@@ -446,7 +446,7 @@ Svg::Document SvgRender::Render() const {
                     continue;
                 }
                 lat[stop_name] = stops.at(*base_it).latitude + lat_step * (it - base_it);
-                lon[stop_name] = stops.at(*base_it).longitude + lon_step * (it - base_it);
+                lon[stop_name] = stops.at(*base_it).longtitude + lon_step * (it - base_it);
             }
         }
 
@@ -456,7 +456,7 @@ Svg::Document SvgRender::Render() const {
                 lon_sorted[lon.at(name)] = name;
             } else {
                 lat_sorted[stop.latitude] = name;
-                lon_sorted[stop.longitude] = name;
+                lon_sorted[stop.longtitude] = name;
             }
         }
         
