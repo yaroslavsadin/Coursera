@@ -9,10 +9,37 @@
 #include <unordered_map>
 #include <vector>
 
+struct EdgeWeight {
+    double time_;
+    std::vector<double> lol;
+
+    inline bool operator>(const EdgeWeight& other) const {
+        return this->time_ > other.time_;
+    }
+
+    inline bool operator<(const EdgeWeight& other) const {
+        return this->time_ < other.time_;
+    }
+
+    inline EdgeWeight operator+(const EdgeWeight& other) const {
+        EdgeWeight tmp(*this);
+        tmp.time_ += other.time_;
+        return tmp;
+    }
+
+    operator double() const {
+      return time_;
+    }
+
+    operator double() {
+      return time_;
+    }
+};
+
 class TransportRouter {
 private:
-  using BusGraph = Graph::DirectedWeightedGraph<double>;
-  using Router = Graph::Router<double>;
+  using BusGraph = Graph::DirectedWeightedGraph<EdgeWeight>;
+  using Router = Graph::Router<EdgeWeight>;
 
 public:
   TransportRouter(const Descriptions::StopsDict& stops_dict,

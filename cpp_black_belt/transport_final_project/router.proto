@@ -5,6 +5,10 @@ package ProtoTransport;
 message Edge {
     uint32 from = 1;
     uint32 to = 2;
+    double time = 3;
+}
+
+message EdgeInfo {
     bool type = 3;
     double time = 4;
     string item_name = 5;
@@ -14,4 +18,5 @@ message Edge {
 message Router {
     int32 vertex_count = 1;
     repeated Edge edges = 2;
+    repeated EdgeInfo edges_info = 3;
 }

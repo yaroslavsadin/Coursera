@@ -25,7 +25,7 @@ struct RenderSettings {
 
 class SvgRender {
 public:
-    using RouteMap = std::vector<const EdgeWeight*>;
+    using RouteMap = std::vector<const EdgeInfo*>;
     using BaseRenderFP = void(SvgRender::*)(Svg::Document&) const;
     using RouteRenderFP = void(SvgRender::*)(Svg::Document&,const RouteMap&) const;
     struct StopsPos {

@@ -41,7 +41,7 @@ struct TableStruct_router_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[2]
+  static const ::google::protobuf::internal::ParseTable schema[3]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -52,6 +52,9 @@ namespace ProtoTransport {
 class Edge;
 class EdgeDefaultTypeInternal;
 extern EdgeDefaultTypeInternal _Edge_default_instance_;
+class EdgeInfo;
+class EdgeInfoDefaultTypeInternal;
+extern EdgeInfoDefaultTypeInternal _EdgeInfo_default_instance_;
 class Router;
 class RouterDefaultTypeInternal;
 extern RouterDefaultTypeInternal _Router_default_instance_;
@@ -59,6 +62,7 @@ extern RouterDefaultTypeInternal _Router_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::ProtoTransport::Edge* Arena::CreateMaybeMessage<::ProtoTransport::Edge>(Arena*);
+template<> ::ProtoTransport::EdgeInfo* Arena::CreateMaybeMessage<::ProtoTransport::EdgeInfo>(Arena*);
 template<> ::ProtoTransport::Router* Arena::CreateMaybeMessage<::ProtoTransport::Router>(Arena*);
 }  // namespace protobuf
 }  // namespace google
@@ -161,6 +165,132 @@ class Edge :
 
   // accessors -------------------------------------------------------
 
+  // uint32 from = 1;
+  void clear_from();
+  static const int kFromFieldNumber = 1;
+  ::google::protobuf::uint32 from() const;
+  void set_from(::google::protobuf::uint32 value);
+
+  // uint32 to = 2;
+  void clear_to();
+  static const int kToFieldNumber = 2;
+  ::google::protobuf::uint32 to() const;
+  void set_to(::google::protobuf::uint32 value);
+
+  // double time = 3;
+  void clear_time();
+  static const int kTimeFieldNumber = 3;
+  double time() const;
+  void set_time(double value);
+
+  // @@protoc_insertion_point(class_scope:ProtoTransport.Edge)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 from_;
+  ::google::protobuf::uint32 to_;
+  double time_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_router_2eproto;
+};
+// -------------------------------------------------------------------
+
+class EdgeInfo :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.EdgeInfo) */ {
+ public:
+  EdgeInfo();
+  virtual ~EdgeInfo();
+
+  EdgeInfo(const EdgeInfo& from);
+
+  inline EdgeInfo& operator=(const EdgeInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  EdgeInfo(EdgeInfo&& from) noexcept
+    : EdgeInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline EdgeInfo& operator=(EdgeInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const EdgeInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const EdgeInfo* internal_default_instance() {
+    return reinterpret_cast<const EdgeInfo*>(
+               &_EdgeInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  void Swap(EdgeInfo* other);
+  friend void swap(EdgeInfo& a, EdgeInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline EdgeInfo* New() const final {
+    return CreateMaybeMessage<EdgeInfo>(nullptr);
+  }
+
+  EdgeInfo* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<EdgeInfo>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const EdgeInfo& from);
+  void MergeFrom(const EdgeInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EdgeInfo* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
   // string item_name = 5;
   void clear_item_name();
   static const int kItemNameFieldNumber = 5;
@@ -174,18 +304,6 @@ class Edge :
   ::std::string* mutable_item_name();
   ::std::string* release_item_name();
   void set_allocated_item_name(::std::string* item_name);
-
-  // uint32 from = 1;
-  void clear_from();
-  static const int kFromFieldNumber = 1;
-  ::google::protobuf::uint32 from() const;
-  void set_from(::google::protobuf::uint32 value);
-
-  // uint32 to = 2;
-  void clear_to();
-  static const int kToFieldNumber = 2;
-  ::google::protobuf::uint32 to() const;
-  void set_to(::google::protobuf::uint32 value);
 
   // double time = 4;
   void clear_time();
@@ -205,14 +323,12 @@ class Edge :
   ::google::protobuf::int32 span_count() const;
   void set_span_count(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:ProtoTransport.Edge)
+  // @@protoc_insertion_point(class_scope:ProtoTransport.EdgeInfo)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr item_name_;
-  ::google::protobuf::uint32 from_;
-  ::google::protobuf::uint32 to_;
   double time_;
   bool type_;
   ::google::protobuf::int32 span_count_;
@@ -259,7 +375,7 @@ class Router :
                &_Router_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   void Swap(Router* other);
   friend void swap(Router& a, Router& b) {
@@ -328,6 +444,18 @@ class Router :
   const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge >&
       edges() const;
 
+  // repeated .ProtoTransport.EdgeInfo edges_info = 3;
+  int edges_info_size() const;
+  void clear_edges_info();
+  static const int kEdgesInfoFieldNumber = 3;
+  ::ProtoTransport::EdgeInfo* mutable_edges_info(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo >*
+      mutable_edges_info();
+  const ::ProtoTransport::EdgeInfo& edges_info(int index) const;
+  ::ProtoTransport::EdgeInfo* add_edges_info();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo >&
+      edges_info() const;
+
   // int32 vertex_count = 1;
   void clear_vertex_count();
   static const int kVertexCountFieldNumber = 1;
@@ -340,6 +468,7 @@ class Router :
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge > edges_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo > edges_info_;
   ::google::protobuf::int32 vertex_count_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
@@ -383,21 +512,7 @@ inline void Edge::set_to(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.Edge.to)
 }
 
-// bool type = 3;
-inline void Edge::clear_type() {
-  type_ = false;
-}
-inline bool Edge::type() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Edge.type)
-  return type_;
-}
-inline void Edge::set_type(bool value) {
-  
-  type_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Edge.type)
-}
-
-// double time = 4;
+// double time = 3;
 inline void Edge::clear_time() {
   time_ = 0;
 }
@@ -411,71 +526,103 @@ inline void Edge::set_time(double value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.Edge.time)
 }
 
+// -------------------------------------------------------------------
+
+// EdgeInfo
+
+// bool type = 3;
+inline void EdgeInfo::clear_type() {
+  type_ = false;
+}
+inline bool EdgeInfo::type() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.type)
+  return type_;
+}
+inline void EdgeInfo::set_type(bool value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.type)
+}
+
+// double time = 4;
+inline void EdgeInfo::clear_time() {
+  time_ = 0;
+}
+inline double EdgeInfo::time() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.time)
+  return time_;
+}
+inline void EdgeInfo::set_time(double value) {
+  
+  time_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.time)
+}
+
 // string item_name = 5;
-inline void Edge::clear_item_name() {
+inline void EdgeInfo::clear_item_name() {
   item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Edge::item_name() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Edge.item_name)
+inline const ::std::string& EdgeInfo::item_name() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.item_name)
   return item_name_.GetNoArena();
 }
-inline void Edge::set_item_name(const ::std::string& value) {
+inline void EdgeInfo::set_item_name(const ::std::string& value) {
   
   item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.item_name)
 }
 #if LANG_CXX11
-inline void Edge::set_item_name(::std::string&& value) {
+inline void EdgeInfo::set_item_name(::std::string&& value) {
   
   item_name_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_set_rvalue:ProtoTransport.EdgeInfo.item_name)
 }
 #endif
-inline void Edge::set_item_name(const char* value) {
+inline void EdgeInfo::set_item_name(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
   
   item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_set_char:ProtoTransport.EdgeInfo.item_name)
 }
-inline void Edge::set_item_name(const char* value, size_t size) {
+inline void EdgeInfo::set_item_name(const char* value, size_t size) {
   
   item_name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.EdgeInfo.item_name)
 }
-inline ::std::string* Edge::mutable_item_name() {
+inline ::std::string* EdgeInfo::mutable_item_name() {
   
-  // @@protoc_insertion_point(field_mutable:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.EdgeInfo.item_name)
   return item_name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Edge::release_item_name() {
-  // @@protoc_insertion_point(field_release:ProtoTransport.Edge.item_name)
+inline ::std::string* EdgeInfo::release_item_name() {
+  // @@protoc_insertion_point(field_release:ProtoTransport.EdgeInfo.item_name)
   
   return item_name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Edge::set_allocated_item_name(::std::string* item_name) {
+inline void EdgeInfo::set_allocated_item_name(::std::string* item_name) {
   if (item_name != nullptr) {
     
   } else {
     
   }
   item_name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), item_name);
-  // @@protoc_insertion_point(field_set_allocated:ProtoTransport.Edge.item_name)
+  // @@protoc_insertion_point(field_set_allocated:ProtoTransport.EdgeInfo.item_name)
 }
 
 // int32 span_count = 6;
-inline void Edge::clear_span_count() {
+inline void EdgeInfo::clear_span_count() {
   span_count_ = 0;
 }
-inline ::google::protobuf::int32 Edge::span_count() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.Edge.span_count)
+inline ::google::protobuf::int32 EdgeInfo::span_count() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.span_count)
   return span_count_;
 }
-inline void Edge::set_span_count(::google::protobuf::int32 value) {
+inline void EdgeInfo::set_span_count(::google::protobuf::int32 value) {
   
   span_count_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.Edge.span_count)
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.span_count)
 }
 
 // -------------------------------------------------------------------
@@ -526,9 +673,41 @@ Router::edges() const {
   return edges_;
 }
 
+// repeated .ProtoTransport.EdgeInfo edges_info = 3;
+inline int Router::edges_info_size() const {
+  return edges_info_.size();
+}
+inline void Router::clear_edges_info() {
+  edges_info_.Clear();
+}
+inline ::ProtoTransport::EdgeInfo* Router::mutable_edges_info(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Router.edges_info)
+  return edges_info_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo >*
+Router::mutable_edges_info() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Router.edges_info)
+  return &edges_info_;
+}
+inline const ::ProtoTransport::EdgeInfo& Router::edges_info(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Router.edges_info)
+  return edges_info_.Get(index);
+}
+inline ::ProtoTransport::EdgeInfo* Router::add_edges_info() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.Router.edges_info)
+  return edges_info_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo >&
+Router::edges_info() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Router.edges_info)
+  return edges_info_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

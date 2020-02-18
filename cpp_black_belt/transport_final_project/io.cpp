@@ -343,11 +343,12 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
             res["total_time"] = 0;
             res["items"] = vector<Json::Node>();
         } else {
-            res["total_time"] = Json::Node(route->weight.time_ );
+            res["total_time"] = Json::Node(route->weight);
 
             vector<Json::Node> items;
             for(size_t i = 0; i < num_edges;i++) {
-                const EdgeWeight& edge_info = router.GetRouteEdge(route_id,i).weight;
+                const size_t edge_info_idx = router.GetRouteEdgeId(route_id,i);
+                const EdgeInfo& edge_info = router.GetEdgeInfo(edge_info_idx);
                 switch(edge_info.type_) {
                 case EdgeType::CHANGE:
                     items.push_back(map<string,Json::Node> {

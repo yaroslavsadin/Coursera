@@ -1,4 +1,5 @@
 #include "transport_router.h"
+#include "profile_advanced.h"
 
 using namespace std;
 
@@ -8,6 +9,8 @@ TransportRouter::TransportRouter(const Descriptions::StopsDict& stops_dict,
                                  const Json::Dict& routing_settings_json)
     : routing_settings_(MakeRoutingSettings(routing_settings_json))
 {
+  TotalDuration init_router("TransportRouter::InitRouter()");
+  ADD_DURATION(init_router);
   const size_t vertex_count = stops_dict.size() * 2;
   vertices_info_.resize(vertex_count);
   graph_ = BusGraph(vertex_count);
@@ -15,7 +18,12 @@ TransportRouter::TransportRouter(const Descriptions::StopsDict& stops_dict,
   FillGraphWithStops(stops_dict);
   FillGraphWithBuses(stops_dict, buses_dict);
 
-  router_ = std::make_unique<Router>(graph_);
+  cerr << graph_.GetEdgeCount() << ' ' << graph_.GetVertexCount() << endl;
+  {
+    TotalDuration router("Router");
+    ADD_DURATION(router);
+    router_ = std::make_unique<Router>(graph_);
+  }
 }
 
 TransportRouter::RoutingSettings TransportRouter::MakeRoutingSettings(const Json::Dict& json) {

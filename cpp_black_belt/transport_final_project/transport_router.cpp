@@ -6,7 +6,7 @@ using namespace std;
 #endif
 
 void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const {
-    if(1) {
+    if(!router_) {
 #ifdef DEBUG
         TotalDuration init_router("TransportRouter::InitRouter()");
         ADD_DURATION(init_router);
@@ -17,18 +17,19 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
             stop_to_vertices_[stop_name].change = current_vertex_id++;
         }
 
-        graph_ = Graph::DirectedWeightedGraph<EdgeWeight>(current_vertex_id * 2);
+        graph_ = Graph::DirectedWeightedGraph<double>(current_vertex_id);
         
         for(const auto& [bus_name,bus_data] : buses_) {
             for(auto it_from = bus_data.route.begin(); it_from < bus_data.route.end(); it_from++) {
                 const auto& stop_from = *it_from;
                 graph_.AddEdge(
-                    Graph::Edge<EdgeWeight> {
+                    Graph::Edge<double> {
                         stop_to_vertices_.at(stop_from).change,
                         stop_to_vertices_.at(stop_from).board,
-                        EdgeWeight(EdgeType::CHANGE, route_settings_.bus_wait_time_, stop_from)
+                        static_cast<double>(route_settings_.bus_wait_time_)
                     }
                 );
+                edges_info.push_back(EdgeInfo(EdgeType::CHANGE, route_settings_.bus_wait_time_, stop_from));
                 double cumulative_distance_straight = 0.;
                 double cumulative_distance_reverse = 0.;
                 // deque<string_view> stops_along_straight;
@@ -43,37 +44,46 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                     // stops_along_straight.push_back(stop_to);
                     // stops_along_reverse.push_front(stop_to);
                     graph_.AddEdge(
-                        Graph::Edge<EdgeWeight> {
+                        Graph::Edge<double> {
                             stop_to_vertices_.at(stop_from).board,
                             stop_to_vertices_.at(stop_to).change,
-                            EdgeWeight(
+                            cumulative_distance_straight
+                        }
+                    );
+                    edges_info.push_back(EdgeInfo(
                                 EdgeType::RIDE, 
                                 cumulative_distance_straight, 
                                 bus_name,
                                 it_to - it_from
                                 // (stop_from != stop_to) ? stops_along_straight : deque<string_view>{}
-                            )
-                        }
-                    );
+                            ));
                     if(bus_data.route_type == Bus::RouteType::ONEWAY) {
                         graph_.AddEdge(
-                        Graph::Edge<EdgeWeight> {
+                        Graph::Edge<double> {
                             stop_to_vertices_.at(stop_to).board,
                             stop_to_vertices_.at(stop_from).change,
-                            EdgeWeight(
+                            cumulative_distance_reverse
+                        }
+                    );
+                    edges_info.push_back(EdgeInfo(
                                 EdgeType::RIDE, 
                                 cumulative_distance_reverse, 
                                 bus_name,
                                 it_to - it_from
                                 // (stop_from != stop_to) ? stops_along_reverse : deque<string_view>{}
-                            )
-                        }
-                    );
+                            ));
                     }
                 }
             }
         }
-        router_.emplace(Graph::Router(graph_));
+        {
+            #ifdef DEBUG
+                TotalDuration router("router_.emplace(graph_)");
+                cerr << graph_.GetEdgeCount() << ' ' << graph_.GetVertexCount() << endl;
+                ADD_DURATION(router);
+            #endif
+            // router_.emplace(graph_);
+        }
     }
 }
 
