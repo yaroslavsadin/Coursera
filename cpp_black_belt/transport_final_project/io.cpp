@@ -353,14 +353,14 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
                 case EdgeType::CHANGE:
                     items.push_back(map<string,Json::Node> {
                         {"stop_name", edge_info.item_name_},
-                        {"time", edge_info.time_},
+                        {"time", router.GetEdgeWeight(edge_info_idx)},
                         {"type", string("Wait")}
                     });
                     break;
                 case EdgeType::RIDE:
                     items.push_back(map<string,Json::Node> {
                         {"bus", edge_info.item_name_},
-                        {"time", edge_info.time_},
+                        {"time", router.GetEdgeWeight(edge_info_idx)},
                         {"span_count", edge_info.span_count_},
                         {"type", string("Bus")}
                     });

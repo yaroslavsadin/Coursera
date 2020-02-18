@@ -143,7 +143,6 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, type_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, time_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, item_name_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, span_count_),
   ~0u,  // no _has_bits_
@@ -172,9 +171,9 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::Edge)},
   { 8, -1, sizeof(::ProtoTransport::EdgeInfo)},
-  { 17, -1, sizeof(::ProtoTransport::RouteData)},
-  { 24, -1, sizeof(::ProtoTransport::RoutesData)},
-  { 30, -1, sizeof(::ProtoTransport::Router)},
+  { 16, -1, sizeof(::ProtoTransport::RouteData)},
+  { 23, -1, sizeof(::ProtoTransport::RoutesData)},
+  { 29, -1, sizeof(::ProtoTransport::Router)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -193,21 +192,21 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 const char descriptor_table_protodef_router_2eproto[] =
   "\n\014router.proto\022\016ProtoTransport\".\n\004Edge\022\014"
-  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"M"
-  "\n\010EdgeInfo\022\014\n\004type\030\003 \001(\010\022\014\n\004time\030\004 \001(\001\022\021"
-  "\n\titem_name\030\005 \001(\t\022\022\n\nspan_count\030\006 \001(\005\".\n"
-  "\tRouteData\022\016\n\006weight\030\001 \001(\001\022\021\n\tprev_edge\030"
-  "\002 \001(\005\"5\n\nRoutesData\022\'\n\004data\030\001 \003(\0132\031.Prot"
-  "oTransport.RouteData\"\242\001\n\006Router\022\024\n\014verte"
-  "x_count\030\001 \001(\005\022#\n\005edges\030\002 \003(\0132\024.ProtoTran"
-  "sport.Edge\022,\n\nedges_info\030\003 \003(\0132\030.ProtoTr"
-  "ansport.EdgeInfo\022/\n\013routes_data\030\004 \003(\0132\032."
-  "ProtoTransport.RoutesDatab\006proto3"
+  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"\?"
+  "\n\010EdgeInfo\022\014\n\004type\030\001 \001(\010\022\021\n\titem_name\030\002 "
+  "\001(\t\022\022\n\nspan_count\030\003 \001(\005\".\n\tRouteData\022\016\n\006"
+  "weight\030\001 \001(\001\022\021\n\tprev_edge\030\002 \001(\005\"5\n\nRoute"
+  "sData\022\'\n\004data\030\001 \003(\0132\031.ProtoTransport.Rou"
+  "teData\"\242\001\n\006Router\022\024\n\014vertex_count\030\001 \001(\005\022"
+  "#\n\005edges\030\002 \003(\0132\024.ProtoTransport.Edge\022,\n\n"
+  "edges_info\030\003 \003(\0132\030.ProtoTransport.EdgeIn"
+  "fo\022/\n\013routes_data\030\004 \003(\0132\032.ProtoTransport"
+  ".RoutesDatab\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_router_2eproto = {
   false, InitDefaults_router_2eproto, 
   descriptor_table_protodef_router_2eproto,
-  "router.proto", &assign_descriptors_table_router_2eproto, 433,
+  "router.proto", &assign_descriptors_table_router_2eproto, 419,
 };
 
 void AddDescriptors_router_2eproto() {
@@ -579,7 +578,6 @@ class EdgeInfo::HasBitSetters {
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int EdgeInfo::kTypeFieldNumber;
-const int EdgeInfo::kTimeFieldNumber;
 const int EdgeInfo::kItemNameFieldNumber;
 const int EdgeInfo::kSpanCountFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -597,9 +595,9 @@ EdgeInfo::EdgeInfo(const EdgeInfo& from)
   if (from.item_name().size() > 0) {
     item_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_name_);
   }
-  ::memcpy(&time_, &from.time_,
+  ::memcpy(&type_, &from.type_,
     static_cast<size_t>(reinterpret_cast<char*>(&span_count_) -
-    reinterpret_cast<char*>(&time_)) + sizeof(span_count_));
+    reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.EdgeInfo)
 }
 
@@ -607,9 +605,9 @@ void EdgeInfo::SharedCtor() {
   ::google::protobuf::internal::InitSCC(
       &scc_info_EdgeInfo_router_2eproto.base);
   item_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&time_, 0, static_cast<size_t>(
+  ::memset(&type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&span_count_) -
-      reinterpret_cast<char*>(&time_)) + sizeof(span_count_));
+      reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
 }
 
 EdgeInfo::~EdgeInfo() {
@@ -637,9 +635,9 @@ void EdgeInfo::Clear() {
   (void) cached_has_bits;
 
   item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&time_, 0, static_cast<size_t>(
+  ::memset(&type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&span_count_) -
-      reinterpret_cast<char*>(&time_)) + sizeof(span_count_));
+      reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
   _internal_metadata_.Clear();
 }
 
@@ -656,23 +654,16 @@ const char* EdgeInfo::_InternalParse(const char* begin, const char* end, void* o
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // bool type = 3;
-      case 3: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
+      // bool type = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 8) goto handle_unusual;
         msg->set_type(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // double time = 4;
-      case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 33) goto handle_unusual;
-        msg->set_time(::google::protobuf::io::UnalignedLoad<double>(ptr));
-        ptr += sizeof(double);
-        break;
-      }
-      // string item_name = 5;
-      case 5: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 42) goto handle_unusual;
+      // string item_name = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         ctx->extra_parse_data().SetFieldName("ProtoTransport.EdgeInfo.item_name");
@@ -686,9 +677,9 @@ const char* EdgeInfo::_InternalParse(const char* begin, const char* end, void* o
         ptr += size;
         break;
       }
-      // int32 span_count = 6;
-      case 6: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 48) goto handle_unusual;
+      // int32 span_count = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
         msg->set_span_count(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
@@ -727,9 +718,9 @@ bool EdgeInfo::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bool type = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
+      // bool type = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (8 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -740,22 +731,9 @@ bool EdgeInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // double time = 4;
-      case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (33 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &time_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // string item_name = 5;
-      case 5: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (42 & 0xFF)) {
+      // string item_name = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_item_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -768,9 +746,9 @@ bool EdgeInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // int32 span_count = 6;
-      case 6: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (48 & 0xFF)) {
+      // int32 span_count = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -808,29 +786,24 @@ void EdgeInfo::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool type = 3;
+  // bool type = 1;
   if (this->type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->type(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->type(), output);
   }
 
-  // double time = 4;
-  if (this->time() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->time(), output);
-  }
-
-  // string item_name = 5;
+  // string item_name = 2;
   if (this->item_name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->item_name().data(), static_cast<int>(this->item_name().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "ProtoTransport.EdgeInfo.item_name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      5, this->item_name(), output);
+      2, this->item_name(), output);
   }
 
-  // int32 span_count = 6;
+  // int32 span_count = 3;
   if (this->span_count() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->span_count(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->span_count(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -846,17 +819,12 @@ void EdgeInfo::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool type = 3;
+  // bool type = 1;
   if (this->type() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->type(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->type(), target);
   }
 
-  // double time = 4;
-  if (this->time() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->time(), target);
-  }
-
-  // string item_name = 5;
+  // string item_name = 2;
   if (this->item_name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->item_name().data(), static_cast<int>(this->item_name().length()),
@@ -864,12 +832,12 @@ void EdgeInfo::SerializeWithCachedSizes(
       "ProtoTransport.EdgeInfo.item_name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->item_name(), target);
+        2, this->item_name(), target);
   }
 
-  // int32 span_count = 6;
+  // int32 span_count = 3;
   if (this->span_count() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->span_count(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->span_count(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -893,24 +861,19 @@ size_t EdgeInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string item_name = 5;
+  // string item_name = 2;
   if (this->item_name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->item_name());
   }
 
-  // double time = 4;
-  if (this->time() != 0) {
-    total_size += 1 + 8;
-  }
-
-  // bool type = 3;
+  // bool type = 1;
   if (this->type() != 0) {
     total_size += 1 + 1;
   }
 
-  // int32 span_count = 6;
+  // int32 span_count = 3;
   if (this->span_count() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
@@ -948,9 +911,6 @@ void EdgeInfo::MergeFrom(const EdgeInfo& from) {
 
     item_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_name_);
   }
-  if (from.time() != 0) {
-    set_time(from.time());
-  }
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -986,7 +946,6 @@ void EdgeInfo::InternalSwap(EdgeInfo* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   item_name_.Swap(&other->item_name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
-  swap(time_, other->time_);
   swap(type_, other->type_);
   swap(span_count_, other->span_count_);
 }

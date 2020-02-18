@@ -28,9 +28,13 @@ public:
     };
 
     void InitRouter(const Buses& buses_, const Stops& stops_) const;
-    
+
     const EdgeInfo& GetEdgeInfo(size_t idx) const {
         return edges_info[idx];
+    }
+
+    double GetEdgeWeight(size_t idx) const {
+        return graph_.GetEdge(idx).weight;
     }
 
     void SetBusWaitTime(int x) {

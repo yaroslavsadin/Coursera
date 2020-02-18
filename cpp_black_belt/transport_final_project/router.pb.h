@@ -299,9 +299,9 @@ class EdgeInfo :
 
   // accessors -------------------------------------------------------
 
-  // string item_name = 5;
+  // string item_name = 2;
   void clear_item_name();
-  static const int kItemNameFieldNumber = 5;
+  static const int kItemNameFieldNumber = 2;
   const ::std::string& item_name() const;
   void set_item_name(const ::std::string& value);
   #if LANG_CXX11
@@ -313,21 +313,15 @@ class EdgeInfo :
   ::std::string* release_item_name();
   void set_allocated_item_name(::std::string* item_name);
 
-  // double time = 4;
-  void clear_time();
-  static const int kTimeFieldNumber = 4;
-  double time() const;
-  void set_time(double value);
-
-  // bool type = 3;
+  // bool type = 1;
   void clear_type();
-  static const int kTypeFieldNumber = 3;
+  static const int kTypeFieldNumber = 1;
   bool type() const;
   void set_type(bool value);
 
-  // int32 span_count = 6;
+  // int32 span_count = 3;
   void clear_span_count();
-  static const int kSpanCountFieldNumber = 6;
+  static const int kSpanCountFieldNumber = 3;
   ::google::protobuf::int32 span_count() const;
   void set_span_count(::google::protobuf::int32 value);
 
@@ -337,7 +331,6 @@ class EdgeInfo :
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr item_name_;
-  double time_;
   bool type_;
   ::google::protobuf::int32 span_count_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -788,7 +781,7 @@ inline void Edge::set_time(double value) {
 
 // EdgeInfo
 
-// bool type = 3;
+// bool type = 1;
 inline void EdgeInfo::clear_type() {
   type_ = false;
 }
@@ -802,21 +795,7 @@ inline void EdgeInfo::set_type(bool value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.type)
 }
 
-// double time = 4;
-inline void EdgeInfo::clear_time() {
-  time_ = 0;
-}
-inline double EdgeInfo::time() const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.time)
-  return time_;
-}
-inline void EdgeInfo::set_time(double value) {
-  
-  time_ = value;
-  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.time)
-}
-
-// string item_name = 5;
+// string item_name = 2;
 inline void EdgeInfo::clear_item_name() {
   item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -869,7 +848,7 @@ inline void EdgeInfo::set_allocated_item_name(::std::string* item_name) {
   // @@protoc_insertion_point(field_set_allocated:ProtoTransport.EdgeInfo.item_name)
 }
 
-// int32 span_count = 6;
+// int32 span_count = 3;
 inline void EdgeInfo::clear_span_count() {
   span_count_ = 0;
 }

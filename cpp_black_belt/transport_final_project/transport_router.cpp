@@ -29,7 +29,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                         static_cast<double>(route_settings_.bus_wait_time_)
                     }
                 );
-                edges_info.push_back(EdgeInfo(EdgeType::CHANGE, route_settings_.bus_wait_time_, stop_from));
+                edges_info.push_back(EdgeInfo(EdgeType::CHANGE, stop_from));
                 double cumulative_distance_straight = 0.;
                 double cumulative_distance_reverse = 0.;
                 // deque<string_view> stops_along_straight;
@@ -52,7 +52,6 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                     );
                     edges_info.push_back(EdgeInfo(
                                 EdgeType::RIDE, 
-                                cumulative_distance_straight, 
                                 bus_name,
                                 it_to - it_from
                                 // (stop_from != stop_to) ? stops_along_straight : deque<string_view>{}
@@ -66,8 +65,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                         }
                     );
                     edges_info.push_back(EdgeInfo(
-                                EdgeType::RIDE, 
-                                cumulative_distance_reverse, 
+                                EdgeType::RIDE,
                                 bus_name,
                                 it_to - it_from
                                 // (stop_from != stop_to) ? stops_along_reverse : deque<string_view>{}
@@ -100,12 +98,14 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
             proto_edge->set_to(edge.to);
             proto_edge->set_time(edge.weight);
         }
-        for(const auto& edge_info : edges_info) {
+        for(size_t i = 0; i < graph_.GetEdgeCount(); i++) {
             ProtoTransport::EdgeInfo* proto_edge_info = r.mutable_edges_info()->Add();
+            const auto& edge_info = edges_info[i];
             proto_edge_info->set_item_name(edge_info.item_name_);
-            proto_edge_info->set_span_count(edge_info.span_count_);
+            if(edge_info.type_ == EdgeType::RIDE) {
+                proto_edge_info->set_span_count(edge_info.span_count_);
+            }
             proto_edge_info->set_type((edge_info.type_ == EdgeType::CHANGE) ? true : false);
-            proto_edge_info->set_time(edge_info.time_);
         }
         const RouterT::RoutesInternalData& router_internal_data = router_->GetRouteInternalData();
         for(size_t i = 0; i < router_internal_data.size(); i++) {
@@ -151,9 +151,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
                 edges_info.push_back(
                     EdgeInfo(
                         (proto_edge_info.type()) ?EdgeType::CHANGE : EdgeType::RIDE,
-                        proto_edge_info.time(),
                         proto_edge_info.item_name(),
-                        proto_edge_info.span_count()
+                        (proto_edge_info.type()) ? 0 :  proto_edge_info.span_count()
                     )
                 );
             }

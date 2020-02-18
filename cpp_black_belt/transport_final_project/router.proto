@@ -9,10 +9,9 @@ message Edge {
 }
 
 message EdgeInfo {
-    bool type = 3;
-    double time = 4;
-    string item_name = 5;
-    int32 span_count = 6;
+    bool type = 1;
+    string item_name = 2;
+    int32 span_count = 3;
 }
 
 message RouteData {
