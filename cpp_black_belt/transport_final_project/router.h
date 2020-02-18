@@ -19,7 +19,13 @@ namespace Graph {
     using Graph = DirectedWeightedGraph<Weight>;
 
   public:
+    struct RouteInternalData {
+      Weight weight;
+      std::optional<EdgeId> prev_edge;
+    };
+    using RoutesInternalData = std::vector<std::vector<std::optional<RouteInternalData>>>;
     Router(const Graph& graph);
+    Router(const Graph& graph, RoutesInternalData d);
 
     using RouteId = uint64_t;
 
@@ -32,15 +38,12 @@ namespace Graph {
     std::optional<RouteInfo> BuildRoute(VertexId from, VertexId to) const;
     EdgeId GetRouteEdge(RouteId route_id, size_t edge_idx) const;
     void ReleaseRoute(RouteId route_id);
+    const RoutesInternalData& GetRouteInternalData() const {
+      return routes_internal_data_;
+    }
 
   private:
     const Graph& graph_;
-
-    struct RouteInternalData {
-      Weight weight;
-      std::optional<EdgeId> prev_edge;
-    };
-    using RoutesInternalData = std::vector<std::vector<std::optional<RouteInternalData>>>;
 
     using ExpandedRoute = std::vector<EdgeId>;
     mutable RouteId next_route_id_ = 0;
@@ -134,5 +137,8 @@ namespace Graph {
   void Router<Weight>::ReleaseRoute(RouteId route_id) {
     expanded_routes_cache_.erase(route_id);
   }
-
+  
+  template <typename Weight>
+  Router<Weight>::Router(const Graph& graph, RoutesInternalData d) 
+  : graph_(graph), routes_internal_data_(std::move(d)){}
 }

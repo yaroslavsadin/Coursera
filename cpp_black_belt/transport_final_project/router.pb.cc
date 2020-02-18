@@ -18,6 +18,8 @@
 
 extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_EdgeInfo_router_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Edge_router_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_RouteData_router_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_RoutesData_router_2eproto;
 namespace ProtoTransport {
 class EdgeDefaultTypeInternal {
  public:
@@ -27,6 +29,14 @@ class EdgeInfoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<EdgeInfo> _instance;
 } _EdgeInfo_default_instance_;
+class RouteDataDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<RouteData> _instance;
+} _RouteData_default_instance_;
+class RoutesDataDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<RoutesData> _instance;
+} _RoutesData_default_instance_;
 class RouterDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Router> _instance;
@@ -60,6 +70,35 @@ static void InitDefaultsEdgeInfo_router_2eproto() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_EdgeInfo_router_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsEdgeInfo_router_2eproto}, {}};
 
+static void InitDefaultsRouteData_router_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::ProtoTransport::_RouteData_default_instance_;
+    new (ptr) ::ProtoTransport::RouteData();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ProtoTransport::RouteData::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_RouteData_router_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRouteData_router_2eproto}, {}};
+
+static void InitDefaultsRoutesData_router_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::ProtoTransport::_RoutesData_default_instance_;
+    new (ptr) ::ProtoTransport::RoutesData();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::ProtoTransport::RoutesData::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<1> scc_info_RoutesData_router_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsRoutesData_router_2eproto}, {
+      &scc_info_RouteData_router_2eproto.base,}};
+
 static void InitDefaultsRouter_router_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -71,18 +110,21 @@ static void InitDefaultsRouter_router_2eproto() {
   ::ProtoTransport::Router::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<2> scc_info_Router_router_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsRouter_router_2eproto}, {
+::google::protobuf::internal::SCCInfo<3> scc_info_Router_router_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsRouter_router_2eproto}, {
       &scc_info_Edge_router_2eproto.base,
-      &scc_info_EdgeInfo_router_2eproto.base,}};
+      &scc_info_EdgeInfo_router_2eproto.base,
+      &scc_info_RoutesData_router_2eproto.base,}};
 
 void InitDefaults_router_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_Edge_router_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_EdgeInfo_router_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_RouteData_router_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_RoutesData_router_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Router_router_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_router_2eproto[3];
+::google::protobuf::Metadata file_level_metadata_router_2eproto[5];
 constexpr ::google::protobuf::EnumDescriptor const** file_level_enum_descriptors_router_2eproto = nullptr;
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_router_2eproto = nullptr;
 
@@ -105,6 +147,19 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, item_name_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, span_count_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::RouteData, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::RouteData, weight_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::RouteData, prev_edge_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::RoutesData, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::RoutesData, data_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -112,38 +167,47 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, vertex_count_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, edges_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, edges_info_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Router, routes_data_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::Edge)},
   { 8, -1, sizeof(::ProtoTransport::EdgeInfo)},
-  { 17, -1, sizeof(::ProtoTransport::Router)},
+  { 17, -1, sizeof(::ProtoTransport::RouteData)},
+  { 24, -1, sizeof(::ProtoTransport::RoutesData)},
+  { 30, -1, sizeof(::ProtoTransport::Router)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Edge_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_EdgeInfo_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_RouteData_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_RoutesData_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Router_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_router_2eproto = {
   {}, AddDescriptors_router_2eproto, "router.proto", schemas,
   file_default_instances, TableStruct_router_2eproto::offsets,
-  file_level_metadata_router_2eproto, 3, file_level_enum_descriptors_router_2eproto, file_level_service_descriptors_router_2eproto,
+  file_level_metadata_router_2eproto, 5, file_level_enum_descriptors_router_2eproto, file_level_service_descriptors_router_2eproto,
 };
 
 const char descriptor_table_protodef_router_2eproto[] =
   "\n\014router.proto\022\016ProtoTransport\".\n\004Edge\022\014"
   "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"M"
   "\n\010EdgeInfo\022\014\n\004type\030\003 \001(\010\022\014\n\004time\030\004 \001(\001\022\021"
-  "\n\titem_name\030\005 \001(\t\022\022\n\nspan_count\030\006 \001(\005\"q\n"
-  "\006Router\022\024\n\014vertex_count\030\001 \001(\005\022#\n\005edges\030\002"
-  " \003(\0132\024.ProtoTransport.Edge\022,\n\nedges_info"
-  "\030\003 \003(\0132\030.ProtoTransport.EdgeInfob\006proto3"
+  "\n\titem_name\030\005 \001(\t\022\022\n\nspan_count\030\006 \001(\005\".\n"
+  "\tRouteData\022\016\n\006weight\030\001 \001(\001\022\021\n\tprev_edge\030"
+  "\002 \001(\005\"5\n\nRoutesData\022\'\n\004data\030\001 \003(\0132\031.Prot"
+  "oTransport.RouteData\"\242\001\n\006Router\022\024\n\014verte"
+  "x_count\030\001 \001(\005\022#\n\005edges\030\002 \003(\0132\024.ProtoTran"
+  "sport.Edge\022,\n\nedges_info\030\003 \003(\0132\030.ProtoTr"
+  "ansport.EdgeInfo\022/\n\013routes_data\030\004 \003(\0132\032."
+  "ProtoTransport.RoutesDatab\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_router_2eproto = {
   false, InitDefaults_router_2eproto, 
   descriptor_table_protodef_router_2eproto,
-  "router.proto", &assign_descriptors_table_router_2eproto, 280,
+  "router.proto", &assign_descriptors_table_router_2eproto, 433,
 };
 
 void AddDescriptors_router_2eproto() {
@@ -935,6 +999,592 @@ void EdgeInfo::InternalSwap(EdgeInfo* other) {
 
 // ===================================================================
 
+void RouteData::InitAsDefaultInstance() {
+}
+class RouteData::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RouteData::kWeightFieldNumber;
+const int RouteData::kPrevEdgeFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RouteData::RouteData()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ProtoTransport.RouteData)
+}
+RouteData::RouteData(const RouteData& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&weight_, &from.weight_,
+    static_cast<size_t>(reinterpret_cast<char*>(&prev_edge_) -
+    reinterpret_cast<char*>(&weight_)) + sizeof(prev_edge_));
+  // @@protoc_insertion_point(copy_constructor:ProtoTransport.RouteData)
+}
+
+void RouteData::SharedCtor() {
+  ::memset(&weight_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&prev_edge_) -
+      reinterpret_cast<char*>(&weight_)) + sizeof(prev_edge_));
+}
+
+RouteData::~RouteData() {
+  // @@protoc_insertion_point(destructor:ProtoTransport.RouteData)
+  SharedDtor();
+}
+
+void RouteData::SharedDtor() {
+}
+
+void RouteData::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const RouteData& RouteData::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_RouteData_router_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void RouteData::Clear() {
+// @@protoc_insertion_point(message_clear_start:ProtoTransport.RouteData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&weight_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&prev_edge_) -
+      reinterpret_cast<char*>(&weight_)) + sizeof(prev_edge_));
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* RouteData::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<RouteData*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // double weight = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 9) goto handle_unusual;
+        msg->set_weight(::google::protobuf::io::UnalignedLoad<double>(ptr));
+        ptr += sizeof(double);
+        break;
+      }
+      // int32 prev_edge = 2;
+      case 2: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
+        msg->set_prev_edge(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool RouteData::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ProtoTransport.RouteData)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // double weight = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (9 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &weight_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 prev_edge = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &prev_edge_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ProtoTransport.RouteData)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ProtoTransport.RouteData)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void RouteData::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ProtoTransport.RouteData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double weight = 1;
+  if (this->weight() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(1, this->weight(), output);
+  }
+
+  // int32 prev_edge = 2;
+  if (this->prev_edge() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->prev_edge(), output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ProtoTransport.RouteData)
+}
+
+::google::protobuf::uint8* RouteData::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.RouteData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // double weight = 1;
+  if (this->weight() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(1, this->weight(), target);
+  }
+
+  // int32 prev_edge = 2;
+  if (this->prev_edge() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->prev_edge(), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.RouteData)
+  return target;
+}
+
+size_t RouteData::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.RouteData)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // double weight = 1;
+  if (this->weight() != 0) {
+    total_size += 1 + 8;
+  }
+
+  // int32 prev_edge = 2;
+  if (this->prev_edge() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->prev_edge());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RouteData::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.RouteData)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RouteData* source =
+      ::google::protobuf::DynamicCastToGenerated<RouteData>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.RouteData)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.RouteData)
+    MergeFrom(*source);
+  }
+}
+
+void RouteData::MergeFrom(const RouteData& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.RouteData)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.weight() != 0) {
+    set_weight(from.weight());
+  }
+  if (from.prev_edge() != 0) {
+    set_prev_edge(from.prev_edge());
+  }
+}
+
+void RouteData::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.RouteData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RouteData::CopyFrom(const RouteData& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.RouteData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RouteData::IsInitialized() const {
+  return true;
+}
+
+void RouteData::Swap(RouteData* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RouteData::InternalSwap(RouteData* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(weight_, other->weight_);
+  swap(prev_edge_, other->prev_edge_);
+}
+
+::google::protobuf::Metadata RouteData::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_router_2eproto);
+  return ::file_level_metadata_router_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void RoutesData::InitAsDefaultInstance() {
+}
+class RoutesData::HasBitSetters {
+ public:
+};
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RoutesData::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+RoutesData::RoutesData()
+  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ProtoTransport.RoutesData)
+}
+RoutesData::RoutesData(const RoutesData& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(nullptr),
+      data_(from.data_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ProtoTransport.RoutesData)
+}
+
+void RoutesData::SharedCtor() {
+  ::google::protobuf::internal::InitSCC(
+      &scc_info_RoutesData_router_2eproto.base);
+}
+
+RoutesData::~RoutesData() {
+  // @@protoc_insertion_point(destructor:ProtoTransport.RoutesData)
+  SharedDtor();
+}
+
+void RoutesData::SharedDtor() {
+}
+
+void RoutesData::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const RoutesData& RoutesData::default_instance() {
+  ::google::protobuf::internal::InitSCC(&::scc_info_RoutesData_router_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void RoutesData::Clear() {
+// @@protoc_insertion_point(message_clear_start:ProtoTransport.RoutesData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  data_.Clear();
+  _internal_metadata_.Clear();
+}
+
+#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+const char* RoutesData::_InternalParse(const char* begin, const char* end, void* object,
+                  ::google::protobuf::internal::ParseContext* ctx) {
+  auto msg = static_cast<RoutesData*>(object);
+  ::google::protobuf::int32 size; (void)size;
+  int depth; (void)depth;
+  ::google::protobuf::uint32 tag;
+  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
+  auto ptr = begin;
+  while (ptr < end) {
+    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
+    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+    switch (tag >> 3) {
+      // repeated .ProtoTransport.RouteData data = 1;
+      case 1: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::ProtoTransport::RouteData::_InternalParse;
+          object = msg->add_data();
+          if (size > end - ptr) goto len_delim_till_end;
+          ptr += size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+              {parser_till_end, object}, ptr - size, ptr));
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 10 && (ptr += 1));
+        break;
+      }
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->EndGroup(tag);
+          return ptr;
+        }
+        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
+          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
+        ptr = res.first;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
+        if (res.second) return ptr;
+      }
+    }  // switch
+  }  // while
+  return ptr;
+len_delim_till_end:
+  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
+                               {parser_till_end, object}, size);
+}
+#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+bool RoutesData::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ProtoTransport.RoutesData)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .ProtoTransport.RouteData data = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_data()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ProtoTransport.RoutesData)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ProtoTransport.RoutesData)
+  return false;
+#undef DO_
+}
+#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+void RoutesData::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ProtoTransport.RoutesData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .ProtoTransport.RouteData data = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->data_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1,
+      this->data(static_cast<int>(i)),
+      output);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        _internal_metadata_.unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ProtoTransport.RoutesData)
+}
+
+::google::protobuf::uint8* RoutesData::InternalSerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.RoutesData)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .ProtoTransport.RouteData data = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->data_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        1, this->data(static_cast<int>(i)), target);
+  }
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.RoutesData)
+  return target;
+}
+
+size_t RoutesData::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.RoutesData)
+  size_t total_size = 0;
+
+  if (_internal_metadata_.have_unknown_fields()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        _internal_metadata_.unknown_fields());
+  }
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .ProtoTransport.RouteData data = 1;
+  {
+    unsigned int count = static_cast<unsigned int>(this->data_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->data(static_cast<int>(i)));
+    }
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RoutesData::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.RoutesData)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RoutesData* source =
+      ::google::protobuf::DynamicCastToGenerated<RoutesData>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.RoutesData)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.RoutesData)
+    MergeFrom(*source);
+  }
+}
+
+void RoutesData::MergeFrom(const RoutesData& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.RoutesData)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  data_.MergeFrom(from.data_);
+}
+
+void RoutesData::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.RoutesData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RoutesData::CopyFrom(const RoutesData& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.RoutesData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RoutesData::IsInitialized() const {
+  return true;
+}
+
+void RoutesData::Swap(RoutesData* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void RoutesData::InternalSwap(RoutesData* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  CastToBase(&data_)->InternalSwap(CastToBase(&other->data_));
+}
+
+::google::protobuf::Metadata RoutesData::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_router_2eproto);
+  return ::file_level_metadata_router_2eproto[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void Router::InitAsDefaultInstance() {
 }
 class Router::HasBitSetters {
@@ -945,6 +1595,7 @@ class Router::HasBitSetters {
 const int Router::kVertexCountFieldNumber;
 const int Router::kEdgesFieldNumber;
 const int Router::kEdgesInfoFieldNumber;
+const int Router::kRoutesDataFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Router::Router()
@@ -956,7 +1607,8 @@ Router::Router(const Router& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(nullptr),
       edges_(from.edges_),
-      edges_info_(from.edges_info_) {
+      edges_info_(from.edges_info_),
+      routes_data_(from.routes_data_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   vertex_count_ = from.vertex_count_;
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.Router)
@@ -993,6 +1645,7 @@ void Router::Clear() {
 
   edges_.Clear();
   edges_info_.Clear();
+  routes_data_.Clear();
   vertex_count_ = 0;
   _internal_metadata_.Clear();
 }
@@ -1047,6 +1700,22 @@ const char* Router::_InternalParse(const char* begin, const char* end, void* obj
               {parser_till_end, object}, ptr - size, ptr));
           if (ptr >= end) break;
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 26 && (ptr += 1));
+        break;
+      }
+      // repeated .ProtoTransport.RoutesData routes_data = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          parser_till_end = ::ProtoTransport::RoutesData::_InternalParse;
+          object = msg->add_routes_data();
+          if (size > end - ptr) goto len_delim_till_end;
+          ptr += size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+              {parser_till_end, object}, ptr - size, ptr));
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
         break;
       }
       default: {
@@ -1114,6 +1783,17 @@ bool Router::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated .ProtoTransport.RoutesData routes_data = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+                input, add_routes_data()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1164,6 +1844,15 @@ void Router::SerializeWithCachedSizes(
       output);
   }
 
+  // repeated .ProtoTransport.RoutesData routes_data = 4;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->routes_data_size()); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4,
+      this->routes_data(static_cast<int>(i)),
+      output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -1196,6 +1885,14 @@ void Router::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
         3, this->edges_info(static_cast<int>(i)), target);
+  }
+
+  // repeated .ProtoTransport.RoutesData routes_data = 4;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->routes_data_size()); i < n; i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        4, this->routes_data(static_cast<int>(i)), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1241,6 +1938,17 @@ size_t Router::ByteSizeLong() const {
     }
   }
 
+  // repeated .ProtoTransport.RoutesData routes_data = 4;
+  {
+    unsigned int count = static_cast<unsigned int>(this->routes_data_size());
+    total_size += 1UL * count;
+    for (unsigned int i = 0; i < count; i++) {
+      total_size +=
+        ::google::protobuf::internal::WireFormatLite::MessageSize(
+          this->routes_data(static_cast<int>(i)));
+    }
+  }
+
   // int32 vertex_count = 1;
   if (this->vertex_count() != 0) {
     total_size += 1 +
@@ -1277,6 +1985,7 @@ void Router::MergeFrom(const Router& from) {
 
   edges_.MergeFrom(from.edges_);
   edges_info_.MergeFrom(from.edges_info_);
+  routes_data_.MergeFrom(from.routes_data_);
   if (from.vertex_count() != 0) {
     set_vertex_count(from.vertex_count());
   }
@@ -1309,6 +2018,7 @@ void Router::InternalSwap(Router* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   CastToBase(&edges_)->InternalSwap(CastToBase(&other->edges_));
   CastToBase(&edges_info_)->InternalSwap(CastToBase(&other->edges_info_));
+  CastToBase(&routes_data_)->InternalSwap(CastToBase(&other->routes_data_));
   swap(vertex_count_, other->vertex_count_);
 }
 
@@ -1327,6 +2037,12 @@ template<> PROTOBUF_NOINLINE ::ProtoTransport::Edge* Arena::CreateMaybeMessage< 
 }
 template<> PROTOBUF_NOINLINE ::ProtoTransport::EdgeInfo* Arena::CreateMaybeMessage< ::ProtoTransport::EdgeInfo >(Arena* arena) {
   return Arena::CreateInternal< ::ProtoTransport::EdgeInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ProtoTransport::RouteData* Arena::CreateMaybeMessage< ::ProtoTransport::RouteData >(Arena* arena) {
+  return Arena::CreateInternal< ::ProtoTransport::RouteData >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ProtoTransport::RoutesData* Arena::CreateMaybeMessage< ::ProtoTransport::RoutesData >(Arena* arena) {
+  return Arena::CreateInternal< ::ProtoTransport::RoutesData >(arena);
 }
 template<> PROTOBUF_NOINLINE ::ProtoTransport::Router* Arena::CreateMaybeMessage< ::ProtoTransport::Router >(Arena* arena) {
   return Arena::CreateInternal< ::ProtoTransport::Router >(arena);

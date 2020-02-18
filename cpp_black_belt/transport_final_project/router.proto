@@ -15,8 +15,18 @@ message EdgeInfo {
     int32 span_count = 6;
 }
 
+message RouteData {
+    double weight = 1;
+    int32 prev_edge = 2;
+}
+
+message RoutesData {
+    repeated RouteData data = 1;
+}
+
 message Router {
     int32 vertex_count = 1;
     repeated Edge edges = 2;
     repeated EdgeInfo edges_info = 3;
+    repeated RoutesData routes_data = 4;
 }

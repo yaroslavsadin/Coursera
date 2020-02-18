@@ -18,7 +18,7 @@ include_directories(${UTILSDIR} ${SVGLIBDIR})
 add_compile_definitions(DEBUG)
 
 #Set compile and link flags
-set(COMMON_FLAGS -g -O3 -Wall)
+set(COMMON_FLAGS -g -O0 -Wall)
 
 if(SANITIZE)
 set(COMMON_FLAGS ${COMMON_FLAGS} -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls)

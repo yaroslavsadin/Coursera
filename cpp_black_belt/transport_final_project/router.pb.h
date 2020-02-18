@@ -41,7 +41,7 @@ struct TableStruct_router_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::google::protobuf::internal::ParseTable schema[3]
+  static const ::google::protobuf::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
@@ -55,15 +55,23 @@ extern EdgeDefaultTypeInternal _Edge_default_instance_;
 class EdgeInfo;
 class EdgeInfoDefaultTypeInternal;
 extern EdgeInfoDefaultTypeInternal _EdgeInfo_default_instance_;
+class RouteData;
+class RouteDataDefaultTypeInternal;
+extern RouteDataDefaultTypeInternal _RouteData_default_instance_;
 class Router;
 class RouterDefaultTypeInternal;
 extern RouterDefaultTypeInternal _Router_default_instance_;
+class RoutesData;
+class RoutesDataDefaultTypeInternal;
+extern RoutesDataDefaultTypeInternal _RoutesData_default_instance_;
 }  // namespace ProtoTransport
 namespace google {
 namespace protobuf {
 template<> ::ProtoTransport::Edge* Arena::CreateMaybeMessage<::ProtoTransport::Edge>(Arena*);
 template<> ::ProtoTransport::EdgeInfo* Arena::CreateMaybeMessage<::ProtoTransport::EdgeInfo>(Arena*);
+template<> ::ProtoTransport::RouteData* Arena::CreateMaybeMessage<::ProtoTransport::RouteData>(Arena*);
 template<> ::ProtoTransport::Router* Arena::CreateMaybeMessage<::ProtoTransport::Router>(Arena*);
+template<> ::ProtoTransport::RoutesData* Arena::CreateMaybeMessage<::ProtoTransport::RoutesData>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 namespace ProtoTransport {
@@ -337,6 +345,243 @@ class EdgeInfo :
 };
 // -------------------------------------------------------------------
 
+class RouteData :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.RouteData) */ {
+ public:
+  RouteData();
+  virtual ~RouteData();
+
+  RouteData(const RouteData& from);
+
+  inline RouteData& operator=(const RouteData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RouteData(RouteData&& from) noexcept
+    : RouteData() {
+    *this = ::std::move(from);
+  }
+
+  inline RouteData& operator=(RouteData&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const RouteData& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RouteData* internal_default_instance() {
+    return reinterpret_cast<const RouteData*>(
+               &_RouteData_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  void Swap(RouteData* other);
+  friend void swap(RouteData& a, RouteData& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RouteData* New() const final {
+    return CreateMaybeMessage<RouteData>(nullptr);
+  }
+
+  RouteData* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<RouteData>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const RouteData& from);
+  void MergeFrom(const RouteData& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RouteData* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // double weight = 1;
+  void clear_weight();
+  static const int kWeightFieldNumber = 1;
+  double weight() const;
+  void set_weight(double value);
+
+  // int32 prev_edge = 2;
+  void clear_prev_edge();
+  static const int kPrevEdgeFieldNumber = 2;
+  ::google::protobuf::int32 prev_edge() const;
+  void set_prev_edge(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:ProtoTransport.RouteData)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  double weight_;
+  ::google::protobuf::int32 prev_edge_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_router_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RoutesData :
+    public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.RoutesData) */ {
+ public:
+  RoutesData();
+  virtual ~RoutesData();
+
+  RoutesData(const RoutesData& from);
+
+  inline RoutesData& operator=(const RoutesData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RoutesData(RoutesData&& from) noexcept
+    : RoutesData() {
+    *this = ::std::move(from);
+  }
+
+  inline RoutesData& operator=(RoutesData&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor() {
+    return default_instance().GetDescriptor();
+  }
+  static const RoutesData& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RoutesData* internal_default_instance() {
+    return reinterpret_cast<const RoutesData*>(
+               &_RoutesData_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  void Swap(RoutesData* other);
+  friend void swap(RoutesData& a, RoutesData& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RoutesData* New() const final {
+    return CreateMaybeMessage<RoutesData>(nullptr);
+  }
+
+  RoutesData* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<RoutesData>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const RoutesData& from);
+  void MergeFrom(const RoutesData& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  static const char* _InternalParse(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx);
+  ::google::protobuf::internal::ParseFunc _ParseFunc() const final { return _InternalParse; }
+  #else
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RoutesData* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .ProtoTransport.RouteData data = 1;
+  int data_size() const;
+  void clear_data();
+  static const int kDataFieldNumber = 1;
+  ::ProtoTransport::RouteData* mutable_data(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RouteData >*
+      mutable_data();
+  const ::ProtoTransport::RouteData& data(int index) const;
+  ::ProtoTransport::RouteData* add_data();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RouteData >&
+      data() const;
+
+  // @@protoc_insertion_point(class_scope:ProtoTransport.RoutesData)
+ private:
+  class HasBitSetters;
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RouteData > data_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_router_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Router :
     public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:ProtoTransport.Router) */ {
  public:
@@ -375,7 +620,7 @@ class Router :
                &_Router_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   void Swap(Router* other);
   friend void swap(Router& a, Router& b) {
@@ -456,6 +701,18 @@ class Router :
   const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo >&
       edges_info() const;
 
+  // repeated .ProtoTransport.RoutesData routes_data = 4;
+  int routes_data_size() const;
+  void clear_routes_data();
+  static const int kRoutesDataFieldNumber = 4;
+  ::ProtoTransport::RoutesData* mutable_routes_data(int index);
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData >*
+      mutable_routes_data();
+  const ::ProtoTransport::RoutesData& routes_data(int index) const;
+  ::ProtoTransport::RoutesData* add_routes_data();
+  const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData >&
+      routes_data() const;
+
   // int32 vertex_count = 1;
   void clear_vertex_count();
   static const int kVertexCountFieldNumber = 1;
@@ -469,6 +726,7 @@ class Router :
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::ProtoTransport::Edge > edges_;
   ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo > edges_info_;
+  ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData > routes_data_;
   ::google::protobuf::int32 vertex_count_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
@@ -627,6 +885,72 @@ inline void EdgeInfo::set_span_count(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
+// RouteData
+
+// double weight = 1;
+inline void RouteData::clear_weight() {
+  weight_ = 0;
+}
+inline double RouteData::weight() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.RouteData.weight)
+  return weight_;
+}
+inline void RouteData::set_weight(double value) {
+  
+  weight_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.RouteData.weight)
+}
+
+// int32 prev_edge = 2;
+inline void RouteData::clear_prev_edge() {
+  prev_edge_ = 0;
+}
+inline ::google::protobuf::int32 RouteData::prev_edge() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.RouteData.prev_edge)
+  return prev_edge_;
+}
+inline void RouteData::set_prev_edge(::google::protobuf::int32 value) {
+  
+  prev_edge_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.RouteData.prev_edge)
+}
+
+// -------------------------------------------------------------------
+
+// RoutesData
+
+// repeated .ProtoTransport.RouteData data = 1;
+inline int RoutesData::data_size() const {
+  return data_.size();
+}
+inline void RoutesData::clear_data() {
+  data_.Clear();
+}
+inline ::ProtoTransport::RouteData* RoutesData::mutable_data(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.RoutesData.data)
+  return data_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RouteData >*
+RoutesData::mutable_data() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.RoutesData.data)
+  return &data_;
+}
+inline const ::ProtoTransport::RouteData& RoutesData::data(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.RoutesData.data)
+  return data_.Get(index);
+}
+inline ::ProtoTransport::RouteData* RoutesData::add_data() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.RoutesData.data)
+  return data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RouteData >&
+RoutesData::data() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.RoutesData.data)
+  return data_;
+}
+
+// -------------------------------------------------------------------
+
 // Router
 
 // int32 vertex_count = 1;
@@ -703,9 +1027,43 @@ Router::edges_info() const {
   return edges_info_;
 }
 
+// repeated .ProtoTransport.RoutesData routes_data = 4;
+inline int Router::routes_data_size() const {
+  return routes_data_.size();
+}
+inline void Router::clear_routes_data() {
+  routes_data_.Clear();
+}
+inline ::ProtoTransport::RoutesData* Router::mutable_routes_data(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Router.routes_data)
+  return routes_data_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData >*
+Router::mutable_routes_data() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Router.routes_data)
+  return &routes_data_;
+}
+inline const ::ProtoTransport::RoutesData& Router::routes_data(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Router.routes_data)
+  return routes_data_.Get(index);
+}
+inline ::ProtoTransport::RoutesData* Router::add_routes_data() {
+  // @@protoc_insertion_point(field_add:ProtoTransport.Router.routes_data)
+  return routes_data_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData >&
+Router::routes_data() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Router.routes_data)
+  return routes_data_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
