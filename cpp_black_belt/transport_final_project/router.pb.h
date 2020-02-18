@@ -445,6 +445,12 @@ class RouteData :
   ::google::protobuf::int32 prev_edge() const;
   void set_prev_edge(::google::protobuf::int32 value);
 
+  // int32 idx = 3;
+  void clear_idx();
+  static const int kIdxFieldNumber = 3;
+  ::google::protobuf::int32 idx() const;
+  void set_idx(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.RouteData)
  private:
   class HasBitSetters;
@@ -452,6 +458,7 @@ class RouteData :
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   double weight_;
   ::google::protobuf::int32 prev_edge_;
+  ::google::protobuf::int32 idx_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
 };
@@ -712,6 +719,12 @@ class Router :
   ::google::protobuf::int32 vertex_count() const;
   void set_vertex_count(::google::protobuf::int32 value);
 
+  // int32 routes_col_size = 5;
+  void clear_routes_col_size();
+  static const int kRoutesColSizeFieldNumber = 5;
+  ::google::protobuf::int32 routes_col_size() const;
+  void set_routes_col_size(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.Router)
  private:
   class HasBitSetters;
@@ -721,6 +734,7 @@ class Router :
   ::google::protobuf::RepeatedPtrField< ::ProtoTransport::EdgeInfo > edges_info_;
   ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData > routes_data_;
   ::google::protobuf::int32 vertex_count_;
+  ::google::protobuf::int32 routes_col_size_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
 };
@@ -865,6 +879,20 @@ inline void EdgeInfo::set_span_count(::google::protobuf::int32 value) {
 // -------------------------------------------------------------------
 
 // RouteData
+
+// int32 idx = 3;
+inline void RouteData::clear_idx() {
+  idx_ = 0;
+}
+inline ::google::protobuf::int32 RouteData::idx() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.RouteData.idx)
+  return idx_;
+}
+inline void RouteData::set_idx(::google::protobuf::int32 value) {
+  
+  idx_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.RouteData.idx)
+}
 
 // double weight = 1;
 inline void RouteData::clear_weight() {
@@ -1034,6 +1062,20 @@ inline const ::google::protobuf::RepeatedPtrField< ::ProtoTransport::RoutesData 
 Router::routes_data() const {
   // @@protoc_insertion_point(field_list:ProtoTransport.Router.routes_data)
   return routes_data_;
+}
+
+// int32 routes_col_size = 5;
+inline void Router::clear_routes_col_size() {
+  routes_col_size_ = 0;
+}
+inline ::google::protobuf::int32 Router::routes_col_size() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Router.routes_col_size)
+  return routes_col_size_;
+}
+inline void Router::set_routes_col_size(::google::protobuf::int32 value) {
+  
+  routes_col_size_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Router.routes_col_size)
 }
 
 #ifdef __GNUC__

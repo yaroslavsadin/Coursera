@@ -15,6 +15,7 @@ message EdgeInfo {
 }
 
 message RouteData {
+    int32 idx = 3;
     double weight = 1;
     int32 prev_edge = 2;
 }
@@ -28,4 +29,5 @@ message Router {
     repeated Edge edges = 2;
     repeated EdgeInfo edges_info = 3;
     repeated RoutesData routes_data = 4;
+    int32 routes_col_size = 5;
 }

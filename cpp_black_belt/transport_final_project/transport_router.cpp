@@ -108,19 +108,22 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
             proto_edge_info->set_type((edge_info.type_ == EdgeType::CHANGE) ? true : false);
         }
         const RouterT::RoutesInternalData& router_internal_data = router_->GetRouteInternalData();
+        if(!router_internal_data.empty()) {
+            r.set_routes_col_size(router_internal_data[0].size());
+        }
         for(size_t i = 0; i < router_internal_data.size(); i++) {
             auto* col = r.mutable_routes_data()->Add();
             for(size_t j = 0; j < router_internal_data[i].size(); j++) {
                 const optional<RouterT::RouteInternalData>& data = router_internal_data[i][j];
-                auto* proto_route_internal_data = col->mutable_data()->Add();
-                proto_route_internal_data->set_weight(-1);
                 if(data.has_value()) {
+                    auto* proto_route_internal_data = col->mutable_data()->Add();
                     if(data->prev_edge.has_value()) {
                         proto_route_internal_data->set_prev_edge(*data->prev_edge);
                     } else {
                         proto_route_internal_data->set_prev_edge(-1);
                     }
                     proto_route_internal_data->set_weight(data->weight);
+                    proto_route_internal_data->set_idx(j);
                 }
             }
         }
@@ -166,17 +169,15 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_) const
         router_internal_data.resize(r.routes_data_size());
         for(int i = 0; i < r.routes_data_size(); i++) {
             std::vector<std::optional<RouterT::RouteInternalData>> col;
-            col.resize(r.routes_data(i).data_size());
+            col.resize(r.routes_col_size());
             for(int j = 0; j < r.routes_data(i).data_size(); j++) {
                 const ProtoTransport::RouteData& data = r.routes_data(i).data(j);
-                if(data.weight() != -1) {
                     RouterT::RouteInternalData temp;
                     temp.weight = data.weight();
                     if(data.prev_edge() != -1) {
                         temp.prev_edge = data.prev_edge();
                     }
-                    col[j] = std::move(temp);
-                }
+                    col[data.idx()] = std::move(temp);
             }
             router_internal_data[i] = std::move(col);
         }
