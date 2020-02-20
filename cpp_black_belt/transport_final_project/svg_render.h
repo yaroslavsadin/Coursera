@@ -5,6 +5,7 @@
 #include <deque>
 #include <functional>
 #include <unordered_set>
+#include "renderer.pb.h"
 
 struct RenderSettings {
     double width;
@@ -30,12 +31,15 @@ public:
     using RouteRenderFP = void(SvgRender::*)(Svg::Document&,const RouteMap&) const;
     struct StopsPos {
         double latitude;
-        double longtitude;
+        double longitude;
     };
 
     SvgRender(const Buses& buses, const Stops& stops)
     : buses(buses), stops(stops) {
     }
+
+    void Serialize(ProtoTransport::Renderer& r) const;
+    void Deserialize(const ProtoTransport::Renderer& r, const Stops& s, const Buses& b);
 
     SvgRender& SetWidth(double);
     SvgRender& SetHeight(double);
@@ -58,6 +62,7 @@ private:
     RenderSettings settings;
     const Buses& buses;
     const Stops& stops;
+    /// TODO: why not unordered_map???
     mutable std::map<std::string_view,StopsPos> stops_compressed;
     mutable std::unordered_map<std::string_view,Svg::Color> bus_to_color;
 
@@ -66,6 +71,7 @@ private:
     Svg::Point PointFromLocation(double lat, double lon) const;
 
     void FillBusColors() const;
+    void CompressStopsCoordinates() const;
 
     void RenderBuses(Svg::Document& doc) const;
     void RenderStops(Svg::Document& doc) const;

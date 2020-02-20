@@ -12,6 +12,7 @@ message EdgeInfo {
     bool type = 1;
     string item_name = 2;
     int32 span_count = 3;
+    repeated string route = 4;
 }
 
 message RouteData {

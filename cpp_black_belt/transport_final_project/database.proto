@@ -13,6 +13,8 @@ message Buses {
     uint32 unique_stops = 3;
     uint32 road_route = 4;
     double linear_route = 5;
+    repeated string route = 6;
+    bool route_type = 7;
 }
 
 message Database {

@@ -145,6 +145,7 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, type_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, item_name_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, span_count_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, route_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::RouteData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -173,9 +174,9 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::Edge)},
   { 8, -1, sizeof(::ProtoTransport::EdgeInfo)},
-  { 16, -1, sizeof(::ProtoTransport::RouteData)},
-  { 24, -1, sizeof(::ProtoTransport::RoutesData)},
-  { 30, -1, sizeof(::ProtoTransport::Router)},
+  { 17, -1, sizeof(::ProtoTransport::RouteData)},
+  { 25, -1, sizeof(::ProtoTransport::RoutesData)},
+  { 31, -1, sizeof(::ProtoTransport::Router)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -194,22 +195,22 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 const char descriptor_table_protodef_router_2eproto[] =
   "\n\014router.proto\022\016ProtoTransport\".\n\004Edge\022\014"
-  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"\?"
+  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"N"
   "\n\010EdgeInfo\022\014\n\004type\030\001 \001(\010\022\021\n\titem_name\030\002 "
-  "\001(\t\022\022\n\nspan_count\030\003 \001(\005\";\n\tRouteData\022\013\n\003"
-  "idx\030\003 \001(\005\022\016\n\006weight\030\001 \001(\001\022\021\n\tprev_edge\030\002"
-  " \001(\005\"5\n\nRoutesData\022\'\n\004data\030\001 \003(\0132\031.Proto"
-  "Transport.RouteData\"\273\001\n\006Router\022\024\n\014vertex"
-  "_count\030\001 \001(\005\022#\n\005edges\030\002 \003(\0132\024.ProtoTrans"
-  "port.Edge\022,\n\nedges_info\030\003 \003(\0132\030.ProtoTra"
-  "nsport.EdgeInfo\022/\n\013routes_data\030\004 \003(\0132\032.P"
-  "rotoTransport.RoutesData\022\027\n\017routes_col_s"
-  "ize\030\005 \001(\005b\006proto3"
+  "\001(\t\022\022\n\nspan_count\030\003 \001(\005\022\r\n\005route\030\004 \003(\t\";"
+  "\n\tRouteData\022\013\n\003idx\030\003 \001(\005\022\016\n\006weight\030\001 \001(\001"
+  "\022\021\n\tprev_edge\030\002 \001(\005\"5\n\nRoutesData\022\'\n\004dat"
+  "a\030\001 \003(\0132\031.ProtoTransport.RouteData\"\273\001\n\006R"
+  "outer\022\024\n\014vertex_count\030\001 \001(\005\022#\n\005edges\030\002 \003"
+  "(\0132\024.ProtoTransport.Edge\022,\n\nedges_info\030\003"
+  " \003(\0132\030.ProtoTransport.EdgeInfo\022/\n\013routes"
+  "_data\030\004 \003(\0132\032.ProtoTransport.RoutesData\022"
+  "\027\n\017routes_col_size\030\005 \001(\005b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_router_2eproto = {
   false, InitDefaults_router_2eproto, 
   descriptor_table_protodef_router_2eproto,
-  "router.proto", &assign_descriptors_table_router_2eproto, 457,
+  "router.proto", &assign_descriptors_table_router_2eproto, 472,
 };
 
 void AddDescriptors_router_2eproto() {
@@ -583,6 +584,7 @@ class EdgeInfo::HasBitSetters {
 const int EdgeInfo::kTypeFieldNumber;
 const int EdgeInfo::kItemNameFieldNumber;
 const int EdgeInfo::kSpanCountFieldNumber;
+const int EdgeInfo::kRouteFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 EdgeInfo::EdgeInfo()
@@ -592,7 +594,8 @@ EdgeInfo::EdgeInfo()
 }
 EdgeInfo::EdgeInfo(const EdgeInfo& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr) {
+      _internal_metadata_(nullptr),
+      route_(from.route_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   item_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.item_name().size() > 0) {
@@ -637,6 +640,7 @@ void EdgeInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  route_.Clear();
   item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&type_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&span_count_) -
@@ -685,6 +689,25 @@ const char* EdgeInfo::_InternalParse(const char* begin, const char* end, void* o
         if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
         msg->set_span_count(::google::protobuf::internal::ReadVarint(&ptr));
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // repeated string route = 4;
+      case 4: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
+        do {
+          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+          ctx->extra_parse_data().SetFieldName("ProtoTransport.EdgeInfo.route");
+          object = msg->add_route();
+          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
+            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
+            goto string_till_end;
+          }
+          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
+          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
+          ptr += size;
+          if (ptr >= end) break;
+        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
         break;
       }
       default: {
@@ -762,6 +785,22 @@ bool EdgeInfo::MergePartialFromCodedStream(
         break;
       }
 
+      // repeated string route = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->add_route()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->route(this->route_size() - 1).data(),
+            static_cast<int>(this->route(this->route_size() - 1).length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "ProtoTransport.EdgeInfo.route"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -809,6 +848,16 @@ void EdgeInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->span_count(), output);
   }
 
+  // repeated string route = 4;
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->route(i).data(), static_cast<int>(this->route(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.EdgeInfo.route");
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      4, this->route(i), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -843,6 +892,16 @@ void EdgeInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->span_count(), target);
   }
 
+  // repeated string route = 4;
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->route(i).data(), static_cast<int>(this->route(i).length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "ProtoTransport.EdgeInfo.route");
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteStringToArray(4, this->route(i), target);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
@@ -863,6 +922,14 @@ size_t EdgeInfo::ByteSizeLong() const {
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated string route = 4;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->route_size());
+  for (int i = 0, n = this->route_size(); i < n; i++) {
+    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
+      this->route(i));
+  }
 
   // string item_name = 2;
   if (this->item_name().size() > 0) {
@@ -910,6 +977,7 @@ void EdgeInfo::MergeFrom(const EdgeInfo& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  route_.MergeFrom(from.route_);
   if (from.item_name().size() > 0) {
 
     item_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_name_);
@@ -947,6 +1015,7 @@ void EdgeInfo::Swap(EdgeInfo* other) {
 void EdgeInfo::InternalSwap(EdgeInfo* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
+  route_.InternalSwap(CastToBase(&other->route_));
   item_name_.Swap(&other->item_name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(type_, other->type_);

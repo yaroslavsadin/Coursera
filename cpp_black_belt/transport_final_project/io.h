@@ -13,6 +13,8 @@
 #endif
 
 #include "database.pb.h"
+#include "router.pb.h"
+#include "renderer.pb.h"
 #include "transport_catalog.pb.h"
 
 /******************************* 
@@ -137,6 +139,7 @@ public:
       db.Serialize(*t.mutable_db());
       router.InitRouter(db.GetBuses(),db.GetStops());
       router.Serialize(*t.mutable_router());
+      renderer.Serialize(*t.mutable_renderer());
     }
     t.SerializeToOstream(&serial);
     // assert(!serial.bad());
@@ -157,7 +160,8 @@ public:
     ADD_DURATION(deserialize);
 #endif
     db.Deserialize(t.db());
-    router.Deserialize(t.router(),db.GetStops());
+    router.Deserialize(t.router(),db.GetStops(),db.GetBuses());
+    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
     return *this;
   }
 private:

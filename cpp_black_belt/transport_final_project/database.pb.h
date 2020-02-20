@@ -308,6 +308,28 @@ class Buses :
 
   // accessors -------------------------------------------------------
 
+  // repeated string route = 6;
+  int route_size() const;
+  void clear_route();
+  static const int kRouteFieldNumber = 6;
+  const ::std::string& route(int index) const;
+  ::std::string* mutable_route(int index);
+  void set_route(int index, const ::std::string& value);
+  #if LANG_CXX11
+  void set_route(int index, ::std::string&& value);
+  #endif
+  void set_route(int index, const char* value);
+  void set_route(int index, const char* value, size_t size);
+  ::std::string* add_route();
+  void add_route(const ::std::string& value);
+  #if LANG_CXX11
+  void add_route(::std::string&& value);
+  #endif
+  void add_route(const char* value);
+  void add_route(const char* value, size_t size);
+  const ::google::protobuf::RepeatedPtrField<::std::string>& route() const;
+  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_route();
+
   // string name = 1;
   void clear_name();
   static const int kNameFieldNumber = 1;
@@ -346,16 +368,24 @@ class Buses :
   ::google::protobuf::uint32 road_route() const;
   void set_road_route(::google::protobuf::uint32 value);
 
+  // bool route_type = 7;
+  void clear_route_type();
+  static const int kRouteTypeFieldNumber = 7;
+  bool route_type() const;
+  void set_route_type(bool value);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.Buses)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedPtrField<::std::string> route_;
   ::google::protobuf::internal::ArenaStringPtr name_;
   ::google::protobuf::uint32 stops_;
   ::google::protobuf::uint32 unique_stops_;
   double linear_route_;
   ::google::protobuf::uint32 road_route_;
+  bool route_type_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_database_2eproto;
 };
@@ -734,6 +764,89 @@ inline void Buses::set_linear_route(double value) {
   
   linear_route_ = value;
   // @@protoc_insertion_point(field_set:ProtoTransport.Buses.linear_route)
+}
+
+// repeated string route = 6;
+inline int Buses::route_size() const {
+  return route_.size();
+}
+inline void Buses::clear_route() {
+  route_.Clear();
+}
+inline const ::std::string& Buses::route(int index) const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Buses.route)
+  return route_.Get(index);
+}
+inline ::std::string* Buses::mutable_route(int index) {
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.Buses.route)
+  return route_.Mutable(index);
+}
+inline void Buses::set_route(int index, const ::std::string& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Buses.route)
+  route_.Mutable(index)->assign(value);
+}
+#if LANG_CXX11
+inline void Buses::set_route(int index, ::std::string&& value) {
+  // @@protoc_insertion_point(field_set:ProtoTransport.Buses.route)
+  route_.Mutable(index)->assign(std::move(value));
+}
+#endif
+inline void Buses::set_route(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  route_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:ProtoTransport.Buses.route)
+}
+inline void Buses::set_route(int index, const char* value, size_t size) {
+  route_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.Buses.route)
+}
+inline ::std::string* Buses::add_route() {
+  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.Buses.route)
+  return route_.Add();
+}
+inline void Buses::add_route(const ::std::string& value) {
+  route_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:ProtoTransport.Buses.route)
+}
+#if LANG_CXX11
+inline void Buses::add_route(::std::string&& value) {
+  route_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:ProtoTransport.Buses.route)
+}
+#endif
+inline void Buses::add_route(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  route_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:ProtoTransport.Buses.route)
+}
+inline void Buses::add_route(const char* value, size_t size) {
+  route_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.Buses.route)
+}
+inline const ::google::protobuf::RepeatedPtrField<::std::string>&
+Buses::route() const {
+  // @@protoc_insertion_point(field_list:ProtoTransport.Buses.route)
+  return route_;
+}
+inline ::google::protobuf::RepeatedPtrField<::std::string>*
+Buses::mutable_route() {
+  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.Buses.route)
+  return &route_;
+}
+
+// bool route_type = 7;
+inline void Buses::clear_route_type() {
+  route_type_ = false;
+}
+inline bool Buses::route_type() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.Buses.route_type)
+  return route_type_;
+}
+inline void Buses::set_route_type(bool value) {
+  
+  route_type_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.Buses.route_type)
 }
 
 // -------------------------------------------------------------------

@@ -393,6 +393,33 @@ misc.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.s
 .PHONY : misc.cpp.s
 
+renderer.pb.o: renderer.pb.cc.o
+
+.PHONY : renderer.pb.o
+
+# target to build an object file
+renderer.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.o
+.PHONY : renderer.pb.cc.o
+
+renderer.pb.i: renderer.pb.cc.i
+
+.PHONY : renderer.pb.i
+
+# target to preprocess a source file
+renderer.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.i
+.PHONY : renderer.pb.cc.i
+
+renderer.pb.s: renderer.pb.cc.s
+
+.PHONY : renderer.pb.s
+
+# target to generate assembly for a file
+renderer.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.s
+.PHONY : renderer.pb.cc.s
+
 router.pb.o: router.pb.cc.o
 
 .PHONY : router.pb.o
@@ -540,6 +567,9 @@ help:
 	@echo "... misc.o"
 	@echo "... misc.i"
 	@echo "... misc.s"
+	@echo "... renderer.pb.o"
+	@echo "... renderer.pb.i"
+	@echo "... renderer.pb.s"
 	@echo "... router.pb.o"
 	@echo "... router.pb.i"
 	@echo "... router.pb.s"

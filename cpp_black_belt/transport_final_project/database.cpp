@@ -107,7 +107,9 @@ void BusDatabase::Serialize(ProtoTransport::Database& t) const {
         item->set_road_route(GetBusDistance(name).road_distance);
         for(const auto& stop : bus.route) {
             stops_map[stop].insert(name);
+            *item->mutable_route()->Add() = stop;
         }
+        item->set_route_type(bus.route_type == Bus::RouteType::ROUNDTRIP);
     }
 
     for(auto [name,_] : stops_) {
@@ -136,6 +138,10 @@ void BusDatabase::Deserialize(const ProtoTransport::Database& t) {
         auto it = buses_.insert({bus.name(),{}}).first;
         it->second.stops = bus.stops();
         it->second.unique_stops = bus.unique_stops();
+        for(const auto& stop_name : bus.route()) {
+            it->second.route.push_back(stop_name);
+        }
+        it->second.route_type = (bus.route_type()) ? Bus::RouteType::ROUNDTRIP : Bus::RouteType::ONEWAY;
         // -----------------------------\/\/\/ because uses string_view
         bus_to_distance_cache[it->first] = {bus.road_route(),bus.linear_route()};
     }

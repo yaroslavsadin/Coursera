@@ -52,7 +52,7 @@ public:
                                                     const std::string& from, const std::string& to) const;
     
     void Serialize(ProtoTransport::Router& r) const;
-    void Deserialize(const ProtoTransport::Router& r, const Stops& s);
+    void Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b);
 private:
     double GetRideTime(const Stops& stops_, const std::string& stop_from, const std::string& stop_to) const { 
         return stops_.at(stop_from).distance_to_stop_.at(stop_to) / 1000. / route_settings_.bus_velocity_ * 60;

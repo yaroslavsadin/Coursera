@@ -45,6 +45,9 @@ namespace Svg {
             std::visit( [&os](const auto& color){ os << color; },  color.data );
             return os;
         }
+        bool IsRgb() const { return std::holds_alternative<Rgb>(data); }
+        template<typename T>
+        const auto& Get() const { return std::get<T>(data); }
     private:
         std::variant<std::string,Rgb> data;
     };

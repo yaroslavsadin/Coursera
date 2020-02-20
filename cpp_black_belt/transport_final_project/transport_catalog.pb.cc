@@ -17,7 +17,8 @@
 #include <google/protobuf/port_def.inc>
 
 extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Database_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Router_router_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_renderer_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Renderer_renderer_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<3> scc_info_Router_router_2eproto;
 namespace ProtoTransport {
 class TransportCatalogDefaultTypeInternal {
  public:
@@ -35,10 +36,11 @@ static void InitDefaultsTransportCatalog_transport_5fcatalog_2eproto() {
   ::ProtoTransport::TransportCatalog::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<2> scc_info_TransportCatalog_transport_5fcatalog_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsTransportCatalog_transport_5fcatalog_2eproto}, {
+::google::protobuf::internal::SCCInfo<3> scc_info_TransportCatalog_transport_5fcatalog_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsTransportCatalog_transport_5fcatalog_2eproto}, {
       &scc_info_Database_database_2eproto.base,
-      &scc_info_Router_router_2eproto.base,}};
+      &scc_info_Router_router_2eproto.base,
+      &scc_info_Renderer_renderer_2eproto.base,}};
 
 void InitDefaults_transport_5fcatalog_2eproto() {
   ::google::protobuf::internal::InitSCC(&scc_info_TransportCatalog_transport_5fcatalog_2eproto.base);
@@ -56,6 +58,7 @@ const ::google::protobuf::uint32 TableStruct_transport_5fcatalog_2eproto::offset
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::TransportCatalog, db_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::TransportCatalog, router_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::TransportCatalog, renderer_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::TransportCatalog)},
@@ -73,24 +76,26 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 const char descriptor_table_protodef_transport_5fcatalog_2eproto[] =
   "\n\027transport_catalog.proto\022\016ProtoTranspor"
-  "t\032\016database.proto\032\014router.proto\"`\n\020Trans"
-  "portCatalog\022$\n\002db\030\001 \001(\0132\030.ProtoTransport"
-  ".Database\022&\n\006router\030\002 \001(\0132\026.ProtoTranspo"
-  "rt.Routerb\006proto3"
+  "t\032\016database.proto\032\014router.proto\032\016rendere"
+  "r.proto\"\214\001\n\020TransportCatalog\022$\n\002db\030\001 \001(\013"
+  "2\030.ProtoTransport.Database\022&\n\006router\030\002 \001"
+  "(\0132\026.ProtoTransport.Router\022*\n\010renderer\030\003"
+  " \001(\0132\030.ProtoTransport.Rendererb\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_transport_5fcatalog_2eproto = {
   false, InitDefaults_transport_5fcatalog_2eproto, 
   descriptor_table_protodef_transport_5fcatalog_2eproto,
-  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 177,
+  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 238,
 };
 
 void AddDescriptors_transport_5fcatalog_2eproto() {
-  static constexpr ::google::protobuf::internal::InitFunc deps[2] =
+  static constexpr ::google::protobuf::internal::InitFunc deps[3] =
   {
     ::AddDescriptors_database_2eproto,
     ::AddDescriptors_router_2eproto,
+    ::AddDescriptors_renderer_2eproto,
   };
- ::google::protobuf::internal::AddDescriptors(&descriptor_table_transport_5fcatalog_2eproto, deps, 2);
+ ::google::protobuf::internal::AddDescriptors(&descriptor_table_transport_5fcatalog_2eproto, deps, 3);
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -104,11 +109,14 @@ void TransportCatalog::InitAsDefaultInstance() {
       ::ProtoTransport::Database::internal_default_instance());
   ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->router_ = const_cast< ::ProtoTransport::Router*>(
       ::ProtoTransport::Router::internal_default_instance());
+  ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->renderer_ = const_cast< ::ProtoTransport::Renderer*>(
+      ::ProtoTransport::Renderer::internal_default_instance());
 }
 class TransportCatalog::HasBitSetters {
  public:
   static const ::ProtoTransport::Database& db(const TransportCatalog* msg);
   static const ::ProtoTransport::Router& router(const TransportCatalog* msg);
+  static const ::ProtoTransport::Renderer& renderer(const TransportCatalog* msg);
 };
 
 const ::ProtoTransport::Database&
@@ -118,6 +126,10 @@ TransportCatalog::HasBitSetters::db(const TransportCatalog* msg) {
 const ::ProtoTransport::Router&
 TransportCatalog::HasBitSetters::router(const TransportCatalog* msg) {
   return *msg->router_;
+}
+const ::ProtoTransport::Renderer&
+TransportCatalog::HasBitSetters::renderer(const TransportCatalog* msg) {
+  return *msg->renderer_;
 }
 void TransportCatalog::clear_db() {
   if (GetArenaNoVirtual() == nullptr && db_ != nullptr) {
@@ -131,9 +143,16 @@ void TransportCatalog::clear_router() {
   }
   router_ = nullptr;
 }
+void TransportCatalog::clear_renderer() {
+  if (GetArenaNoVirtual() == nullptr && renderer_ != nullptr) {
+    delete renderer_;
+  }
+  renderer_ = nullptr;
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int TransportCatalog::kDbFieldNumber;
 const int TransportCatalog::kRouterFieldNumber;
+const int TransportCatalog::kRendererFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 TransportCatalog::TransportCatalog()
@@ -155,6 +174,11 @@ TransportCatalog::TransportCatalog(const TransportCatalog& from)
   } else {
     router_ = nullptr;
   }
+  if (from.has_renderer()) {
+    renderer_ = new ::ProtoTransport::Renderer(*from.renderer_);
+  } else {
+    renderer_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.TransportCatalog)
 }
 
@@ -162,8 +186,8 @@ void TransportCatalog::SharedCtor() {
   ::google::protobuf::internal::InitSCC(
       &scc_info_TransportCatalog_transport_5fcatalog_2eproto.base);
   ::memset(&db_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&router_) -
-      reinterpret_cast<char*>(&db_)) + sizeof(router_));
+      reinterpret_cast<char*>(&renderer_) -
+      reinterpret_cast<char*>(&db_)) + sizeof(renderer_));
 }
 
 TransportCatalog::~TransportCatalog() {
@@ -174,6 +198,7 @@ TransportCatalog::~TransportCatalog() {
 void TransportCatalog::SharedDtor() {
   if (this != internal_default_instance()) delete db_;
   if (this != internal_default_instance()) delete router_;
+  if (this != internal_default_instance()) delete renderer_;
 }
 
 void TransportCatalog::SetCachedSize(int size) const {
@@ -199,6 +224,10 @@ void TransportCatalog::Clear() {
     delete router_;
   }
   router_ = nullptr;
+  if (GetArenaNoVirtual() == nullptr && renderer_ != nullptr) {
+    delete renderer_;
+  }
+  renderer_ = nullptr;
   _internal_metadata_.Clear();
 }
 
@@ -235,6 +264,19 @@ const char* TransportCatalog::_InternalParse(const char* begin, const char* end,
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         parser_till_end = ::ProtoTransport::Router::_InternalParse;
         object = msg->mutable_router();
+        if (size > end - ptr) goto len_delim_till_end;
+        ptr += size;
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
+            {parser_till_end, object}, ptr - size, ptr));
+        break;
+      }
+      // .ProtoTransport.Renderer renderer = 3;
+      case 3: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 26) goto handle_unusual;
+        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        parser_till_end = ::ProtoTransport::Renderer::_InternalParse;
+        object = msg->mutable_renderer();
         if (size > end - ptr) goto len_delim_till_end;
         ptr += size;
         GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
@@ -293,6 +335,17 @@ bool TransportCatalog::MergePartialFromCodedStream(
         break;
       }
 
+      // .ProtoTransport.Renderer renderer = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (26 & 0xFF)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_renderer()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -332,6 +385,12 @@ void TransportCatalog::SerializeWithCachedSizes(
       2, HasBitSetters::router(this), output);
   }
 
+  // .ProtoTransport.Renderer renderer = 3;
+  if (this->has_renderer()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, HasBitSetters::renderer(this), output);
+  }
+
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
@@ -357,6 +416,13 @@ void TransportCatalog::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
         2, HasBitSetters::router(this), target);
+  }
+
+  // .ProtoTransport.Renderer renderer = 3;
+  if (this->has_renderer()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, HasBitSetters::renderer(this), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -394,6 +460,13 @@ size_t TransportCatalog::ByteSizeLong() const {
         *router_);
   }
 
+  // .ProtoTransport.Renderer renderer = 3;
+  if (this->has_renderer()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *renderer_);
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
   return total_size;
@@ -427,6 +500,9 @@ void TransportCatalog::MergeFrom(const TransportCatalog& from) {
   if (from.has_router()) {
     mutable_router()->::ProtoTransport::Router::MergeFrom(from.router());
   }
+  if (from.has_renderer()) {
+    mutable_renderer()->::ProtoTransport::Renderer::MergeFrom(from.renderer());
+  }
 }
 
 void TransportCatalog::CopyFrom(const ::google::protobuf::Message& from) {
@@ -456,6 +532,7 @@ void TransportCatalog::InternalSwap(TransportCatalog* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(db_, other->db_);
   swap(router_, other->router_);
+  swap(renderer_, other->renderer_);
 }
 
 ::google::protobuf::Metadata TransportCatalog::GetMetadata() const {

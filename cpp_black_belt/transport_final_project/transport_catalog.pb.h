@@ -33,6 +33,7 @@
 #include <google/protobuf/unknown_field_set.h>
 #include "database.pb.h"
 #include "router.pb.h"
+#include "renderer.pb.h"
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 #define PROTOBUF_INTERNAL_EXPORT_transport_5fcatalog_2eproto
@@ -177,6 +178,15 @@ class TransportCatalog :
   ::ProtoTransport::Router* mutable_router();
   void set_allocated_router(::ProtoTransport::Router* router);
 
+  // .ProtoTransport.Renderer renderer = 3;
+  bool has_renderer() const;
+  void clear_renderer();
+  static const int kRendererFieldNumber = 3;
+  const ::ProtoTransport::Renderer& renderer() const;
+  ::ProtoTransport::Renderer* release_renderer();
+  ::ProtoTransport::Renderer* mutable_renderer();
+  void set_allocated_renderer(::ProtoTransport::Renderer* renderer);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.TransportCatalog)
  private:
   class HasBitSetters;
@@ -184,6 +194,7 @@ class TransportCatalog :
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::ProtoTransport::Database* db_;
   ::ProtoTransport::Router* router_;
+  ::ProtoTransport::Renderer* renderer_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_transport_5fcatalog_2eproto;
 };
@@ -286,6 +297,51 @@ inline void TransportCatalog::set_allocated_router(::ProtoTransport::Router* rou
   }
   router_ = router;
   // @@protoc_insertion_point(field_set_allocated:ProtoTransport.TransportCatalog.router)
+}
+
+// .ProtoTransport.Renderer renderer = 3;
+inline bool TransportCatalog::has_renderer() const {
+  return this != internal_default_instance() && renderer_ != nullptr;
+}
+inline const ::ProtoTransport::Renderer& TransportCatalog::renderer() const {
+  const ::ProtoTransport::Renderer* p = renderer_;
+  // @@protoc_insertion_point(field_get:ProtoTransport.TransportCatalog.renderer)
+  return p != nullptr ? *p : *reinterpret_cast<const ::ProtoTransport::Renderer*>(
+      &::ProtoTransport::_Renderer_default_instance_);
+}
+inline ::ProtoTransport::Renderer* TransportCatalog::release_renderer() {
+  // @@protoc_insertion_point(field_release:ProtoTransport.TransportCatalog.renderer)
+  
+  ::ProtoTransport::Renderer* temp = renderer_;
+  renderer_ = nullptr;
+  return temp;
+}
+inline ::ProtoTransport::Renderer* TransportCatalog::mutable_renderer() {
+  
+  if (renderer_ == nullptr) {
+    auto* p = CreateMaybeMessage<::ProtoTransport::Renderer>(GetArenaNoVirtual());
+    renderer_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:ProtoTransport.TransportCatalog.renderer)
+  return renderer_;
+}
+inline void TransportCatalog::set_allocated_renderer(::ProtoTransport::Renderer* renderer) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(renderer_);
+  }
+  if (renderer) {
+    ::google::protobuf::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      renderer = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, renderer, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  renderer_ = renderer;
+  // @@protoc_insertion_point(field_set_allocated:ProtoTransport.TransportCatalog.renderer)
 }
 
 #ifdef __GNUC__
