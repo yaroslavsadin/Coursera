@@ -213,8 +213,9 @@ void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const
             bus_line.AddPoint(
                 PointFromLocation(
                     stops_compressed.at(buses.at(edge->item_name_).route[it]).latitude, 
-                    stops_compressed.at(buses.at(edge->item_name_).route[it]).longitude)
-                );
+                    stops_compressed.at(buses.at(edge->item_name_).route[it]).longitude
+                )
+            );
         }
         doc.Add(std::move(bus_line));
     }
@@ -279,7 +280,7 @@ void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) c
     }
 }
 void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const{
-        // std::unordered_set<std::string_view> drawn;
+    // std::unordered_set<std::string_view> drawn;
     for(auto edge : route_map) {
         /// TODO: Take care of empty stop_names?
         for(auto it = edge->route->start; 

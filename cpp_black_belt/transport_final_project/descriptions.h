@@ -41,8 +41,8 @@ struct EdgeInfo {
     int span_count_;
     
     struct RouteRange {
-        size_t start;
-        size_t end;
+        int start;
+        int end;
     };
     std::optional<RouteRange> route;
 
@@ -50,7 +50,7 @@ struct EdgeInfo {
     : type_(type), item_name_(bus_name) 
     {}
     EdgeInfo(EdgeType type, std::string bus_name, 
-    int span_count, size_t start_, size_t end_ ) 
+    int span_count, int start_, int end_ ) 
     : type_(type), item_name_(bus_name), 
         span_count_(span_count) , route(RouteRange{start_,end_})
     {}
