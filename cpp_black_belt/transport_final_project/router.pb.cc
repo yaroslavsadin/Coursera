@@ -145,7 +145,8 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, type_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, item_name_),
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, span_count_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, route_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, stop_from_),
+  PROTOBUF_FIELD_OFFSET(::ProtoTransport::EdgeInfo, stop_to_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ProtoTransport::RouteData, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -174,9 +175,9 @@ const ::google::protobuf::uint32 TableStruct_router_2eproto::offsets[] PROTOBUF_
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::ProtoTransport::Edge)},
   { 8, -1, sizeof(::ProtoTransport::EdgeInfo)},
-  { 17, -1, sizeof(::ProtoTransport::RouteData)},
-  { 25, -1, sizeof(::ProtoTransport::RoutesData)},
-  { 31, -1, sizeof(::ProtoTransport::Router)},
+  { 18, -1, sizeof(::ProtoTransport::RouteData)},
+  { 26, -1, sizeof(::ProtoTransport::RoutesData)},
+  { 32, -1, sizeof(::ProtoTransport::Router)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -195,22 +196,23 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 const char descriptor_table_protodef_router_2eproto[] =
   "\n\014router.proto\022\016ProtoTransport\".\n\004Edge\022\014"
-  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"N"
+  "\n\004from\030\001 \001(\r\022\n\n\002to\030\002 \001(\r\022\014\n\004time\030\003 \001(\001\"c"
   "\n\010EdgeInfo\022\014\n\004type\030\001 \001(\010\022\021\n\titem_name\030\002 "
-  "\001(\t\022\022\n\nspan_count\030\003 \001(\005\022\r\n\005route\030\004 \003(\t\";"
-  "\n\tRouteData\022\013\n\003idx\030\003 \001(\005\022\016\n\006weight\030\001 \001(\001"
-  "\022\021\n\tprev_edge\030\002 \001(\005\"5\n\nRoutesData\022\'\n\004dat"
-  "a\030\001 \003(\0132\031.ProtoTransport.RouteData\"\273\001\n\006R"
-  "outer\022\024\n\014vertex_count\030\001 \001(\005\022#\n\005edges\030\002 \003"
-  "(\0132\024.ProtoTransport.Edge\022,\n\nedges_info\030\003"
-  " \003(\0132\030.ProtoTransport.EdgeInfo\022/\n\013routes"
-  "_data\030\004 \003(\0132\032.ProtoTransport.RoutesData\022"
-  "\027\n\017routes_col_size\030\005 \001(\005b\006proto3"
+  "\001(\t\022\022\n\nspan_count\030\003 \001(\005\022\021\n\tstop_from\030\004 \001"
+  "(\r\022\017\n\007stop_to\030\005 \001(\r\";\n\tRouteData\022\013\n\003idx\030"
+  "\003 \001(\005\022\016\n\006weight\030\001 \001(\001\022\021\n\tprev_edge\030\002 \001(\005"
+  "\"5\n\nRoutesData\022\'\n\004data\030\001 \003(\0132\031.ProtoTran"
+  "sport.RouteData\"\273\001\n\006Router\022\024\n\014vertex_cou"
+  "nt\030\001 \001(\005\022#\n\005edges\030\002 \003(\0132\024.ProtoTransport"
+  ".Edge\022,\n\nedges_info\030\003 \003(\0132\030.ProtoTranspo"
+  "rt.EdgeInfo\022/\n\013routes_data\030\004 \003(\0132\032.Proto"
+  "Transport.RoutesData\022\027\n\017routes_col_size\030"
+  "\005 \001(\005b\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_router_2eproto = {
   false, InitDefaults_router_2eproto, 
   descriptor_table_protodef_router_2eproto,
-  "router.proto", &assign_descriptors_table_router_2eproto, 472,
+  "router.proto", &assign_descriptors_table_router_2eproto, 493,
 };
 
 void AddDescriptors_router_2eproto() {
@@ -584,7 +586,8 @@ class EdgeInfo::HasBitSetters {
 const int EdgeInfo::kTypeFieldNumber;
 const int EdgeInfo::kItemNameFieldNumber;
 const int EdgeInfo::kSpanCountFieldNumber;
-const int EdgeInfo::kRouteFieldNumber;
+const int EdgeInfo::kStopFromFieldNumber;
+const int EdgeInfo::kStopToFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 EdgeInfo::EdgeInfo()
@@ -594,16 +597,15 @@ EdgeInfo::EdgeInfo()
 }
 EdgeInfo::EdgeInfo(const EdgeInfo& from)
   : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr),
-      route_(from.route_) {
+      _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   item_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (from.item_name().size() > 0) {
     item_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_name_);
   }
   ::memcpy(&type_, &from.type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&span_count_) -
-    reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
+    static_cast<size_t>(reinterpret_cast<char*>(&stop_to_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(stop_to_));
   // @@protoc_insertion_point(copy_constructor:ProtoTransport.EdgeInfo)
 }
 
@@ -612,8 +614,8 @@ void EdgeInfo::SharedCtor() {
       &scc_info_EdgeInfo_router_2eproto.base);
   item_name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&span_count_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
+      reinterpret_cast<char*>(&stop_to_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(stop_to_));
 }
 
 EdgeInfo::~EdgeInfo() {
@@ -640,11 +642,10 @@ void EdgeInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  route_.Clear();
   item_name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&span_count_) -
-      reinterpret_cast<char*>(&type_)) + sizeof(span_count_));
+      reinterpret_cast<char*>(&stop_to_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(stop_to_));
   _internal_metadata_.Clear();
 }
 
@@ -691,23 +692,18 @@ const char* EdgeInfo::_InternalParse(const char* begin, const char* end, void* o
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
-      // repeated string route = 4;
+      // uint32 stop_from = 4;
       case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 34) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("ProtoTransport.EdgeInfo.route");
-          object = msg->add_route();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 34 && (ptr += 1));
+        if (static_cast<::google::protobuf::uint8>(tag) != 32) goto handle_unusual;
+        msg->set_stop_from(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
+        break;
+      }
+      // uint32 stop_to = 5;
+      case 5: {
+        if (static_cast<::google::protobuf::uint8>(tag) != 40) goto handle_unusual;
+        msg->set_stop_to(::google::protobuf::internal::ReadVarint(&ptr));
+        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
         break;
       }
       default: {
@@ -785,16 +781,26 @@ bool EdgeInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated string route = 4;
+      // uint32 stop_from = 4;
       case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (34 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->add_route()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->route(this->route_size() - 1).data(),
-            static_cast<int>(this->route(this->route_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.EdgeInfo.route"));
+        if (static_cast< ::google::protobuf::uint8>(tag) == (32 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &stop_from_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 stop_to = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) == (40 & 0xFF)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &stop_to_)));
         } else {
           goto handle_unusual;
         }
@@ -848,14 +854,14 @@ void EdgeInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->span_count(), output);
   }
 
-  // repeated string route = 4;
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->route(i).data(), static_cast<int>(this->route(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.EdgeInfo.route");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      4, this->route(i), output);
+  // uint32 stop_from = 4;
+  if (this->stop_from() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->stop_from(), output);
+  }
+
+  // uint32 stop_to = 5;
+  if (this->stop_to() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->stop_to(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -892,14 +898,14 @@ void EdgeInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->span_count(), target);
   }
 
-  // repeated string route = 4;
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->route(i).data(), static_cast<int>(this->route(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.EdgeInfo.route");
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(4, this->route(i), target);
+  // uint32 stop_from = 4;
+  if (this->stop_from() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->stop_from(), target);
+  }
+
+  // uint32 stop_to = 5;
+  if (this->stop_to() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->stop_to(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -923,14 +929,6 @@ size_t EdgeInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string route = 4;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->route_size());
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
-      this->route(i));
-  }
-
   // string item_name = 2;
   if (this->item_name().size() > 0) {
     total_size += 1 +
@@ -948,6 +946,20 @@ size_t EdgeInfo::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->span_count());
+  }
+
+  // uint32 stop_from = 4;
+  if (this->stop_from() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->stop_from());
+  }
+
+  // uint32 stop_to = 5;
+  if (this->stop_to() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->stop_to());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -977,7 +989,6 @@ void EdgeInfo::MergeFrom(const EdgeInfo& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  route_.MergeFrom(from.route_);
   if (from.item_name().size() > 0) {
 
     item_name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.item_name_);
@@ -987,6 +998,12 @@ void EdgeInfo::MergeFrom(const EdgeInfo& from) {
   }
   if (from.span_count() != 0) {
     set_span_count(from.span_count());
+  }
+  if (from.stop_from() != 0) {
+    set_stop_from(from.stop_from());
+  }
+  if (from.stop_to() != 0) {
+    set_stop_to(from.stop_to());
   }
 }
 
@@ -1015,11 +1032,12 @@ void EdgeInfo::Swap(EdgeInfo* other) {
 void EdgeInfo::InternalSwap(EdgeInfo* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  route_.InternalSwap(CastToBase(&other->route_));
   item_name_.Swap(&other->item_name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(type_, other->type_);
   swap(span_count_, other->span_count_);
+  swap(stop_from_, other->stop_from_);
+  swap(stop_to_, other->stop_to_);
 }
 
 ::google::protobuf::Metadata EdgeInfo::GetMetadata() const {

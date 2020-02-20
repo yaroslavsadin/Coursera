@@ -299,28 +299,6 @@ class EdgeInfo :
 
   // accessors -------------------------------------------------------
 
-  // repeated string route = 4;
-  int route_size() const;
-  void clear_route();
-  static const int kRouteFieldNumber = 4;
-  const ::std::string& route(int index) const;
-  ::std::string* mutable_route(int index);
-  void set_route(int index, const ::std::string& value);
-  #if LANG_CXX11
-  void set_route(int index, ::std::string&& value);
-  #endif
-  void set_route(int index, const char* value);
-  void set_route(int index, const char* value, size_t size);
-  ::std::string* add_route();
-  void add_route(const ::std::string& value);
-  #if LANG_CXX11
-  void add_route(::std::string&& value);
-  #endif
-  void add_route(const char* value);
-  void add_route(const char* value, size_t size);
-  const ::google::protobuf::RepeatedPtrField<::std::string>& route() const;
-  ::google::protobuf::RepeatedPtrField<::std::string>* mutable_route();
-
   // string item_name = 2;
   void clear_item_name();
   static const int kItemNameFieldNumber = 2;
@@ -347,15 +325,28 @@ class EdgeInfo :
   ::google::protobuf::int32 span_count() const;
   void set_span_count(::google::protobuf::int32 value);
 
+  // uint32 stop_from = 4;
+  void clear_stop_from();
+  static const int kStopFromFieldNumber = 4;
+  ::google::protobuf::uint32 stop_from() const;
+  void set_stop_from(::google::protobuf::uint32 value);
+
+  // uint32 stop_to = 5;
+  void clear_stop_to();
+  static const int kStopToFieldNumber = 5;
+  ::google::protobuf::uint32 stop_to() const;
+  void set_stop_to(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:ProtoTransport.EdgeInfo)
  private:
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedPtrField<::std::string> route_;
   ::google::protobuf::internal::ArenaStringPtr item_name_;
   bool type_;
   ::google::protobuf::int32 span_count_;
+  ::google::protobuf::uint32 stop_from_;
+  ::google::protobuf::uint32 stop_to_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_router_2eproto;
 };
@@ -899,73 +890,32 @@ inline void EdgeInfo::set_span_count(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.span_count)
 }
 
-// repeated string route = 4;
-inline int EdgeInfo::route_size() const {
-  return route_.size();
+// uint32 stop_from = 4;
+inline void EdgeInfo::clear_stop_from() {
+  stop_from_ = 0u;
 }
-inline void EdgeInfo::clear_route() {
-  route_.Clear();
+inline ::google::protobuf::uint32 EdgeInfo::stop_from() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.stop_from)
+  return stop_from_;
 }
-inline const ::std::string& EdgeInfo::route(int index) const {
-  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.route)
-  return route_.Get(index);
+inline void EdgeInfo::set_stop_from(::google::protobuf::uint32 value) {
+  
+  stop_from_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.stop_from)
 }
-inline ::std::string* EdgeInfo::mutable_route(int index) {
-  // @@protoc_insertion_point(field_mutable:ProtoTransport.EdgeInfo.route)
-  return route_.Mutable(index);
+
+// uint32 stop_to = 5;
+inline void EdgeInfo::clear_stop_to() {
+  stop_to_ = 0u;
 }
-inline void EdgeInfo::set_route(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.route)
-  route_.Mutable(index)->assign(value);
+inline ::google::protobuf::uint32 EdgeInfo::stop_to() const {
+  // @@protoc_insertion_point(field_get:ProtoTransport.EdgeInfo.stop_to)
+  return stop_to_;
 }
-#if LANG_CXX11
-inline void EdgeInfo::set_route(int index, ::std::string&& value) {
-  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.route)
-  route_.Mutable(index)->assign(std::move(value));
-}
-#endif
-inline void EdgeInfo::set_route(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  route_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:ProtoTransport.EdgeInfo.route)
-}
-inline void EdgeInfo::set_route(int index, const char* value, size_t size) {
-  route_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:ProtoTransport.EdgeInfo.route)
-}
-inline ::std::string* EdgeInfo::add_route() {
-  // @@protoc_insertion_point(field_add_mutable:ProtoTransport.EdgeInfo.route)
-  return route_.Add();
-}
-inline void EdgeInfo::add_route(const ::std::string& value) {
-  route_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:ProtoTransport.EdgeInfo.route)
-}
-#if LANG_CXX11
-inline void EdgeInfo::add_route(::std::string&& value) {
-  route_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:ProtoTransport.EdgeInfo.route)
-}
-#endif
-inline void EdgeInfo::add_route(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  route_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:ProtoTransport.EdgeInfo.route)
-}
-inline void EdgeInfo::add_route(const char* value, size_t size) {
-  route_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:ProtoTransport.EdgeInfo.route)
-}
-inline const ::google::protobuf::RepeatedPtrField<::std::string>&
-EdgeInfo::route() const {
-  // @@protoc_insertion_point(field_list:ProtoTransport.EdgeInfo.route)
-  return route_;
-}
-inline ::google::protobuf::RepeatedPtrField<::std::string>*
-EdgeInfo::mutable_route() {
-  // @@protoc_insertion_point(field_mutable_list:ProtoTransport.EdgeInfo.route)
-  return &route_;
+inline void EdgeInfo::set_stop_to(::google::protobuf::uint32 value) {
+  
+  stop_to_ = value;
+  // @@protoc_insertion_point(field_set:ProtoTransport.EdgeInfo.stop_to)
 }
 
 // -------------------------------------------------------------------

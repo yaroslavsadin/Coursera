@@ -39,14 +39,19 @@ struct EdgeInfo {
     EdgeType type_;
     std::string item_name_;
     int span_count_;
-    std::optional<std::deque<std::string_view>> stops_;
+    
+    struct RouteRange {
+        size_t start;
+        size_t end;
+    };
+    std::optional<RouteRange> route;
 
     EdgeInfo(EdgeType type, std::string bus_name) 
     : type_(type), item_name_(bus_name) 
     {}
     EdgeInfo(EdgeType type, std::string bus_name, 
-    int span_count, const std::deque<std::string_view>& stops ) 
+    int span_count, size_t start_, size_t end_ ) 
     : type_(type), item_name_(bus_name), 
-        span_count_(span_count) , stops_(stops)
+        span_count_(span_count) , route(RouteRange{start_,end_})
     {}
 };

@@ -202,17 +202,18 @@ void SvgRender::RenderStopLabels(Svg::Document& doc) const {
 void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const {
     for(auto edge: route_map) {
         std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
         Svg::Polyline bus_line;
         bus_line.SetStrokeColor(bus_to_color.at(bus_name))
                 .SetStrokeWidth(settings.line_width)
                 .SetStrokeLineCap("round")
                 .SetStrokeLineJoin("round");
-        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
+        for(auto it = edge->route->start; 
+        (edge->route->start <= edge->route->end) ? it <= edge->route->end : it >= edge->route->end; 
+        (edge->route->start <= edge->route->end) ? it++ : it--) {
             bus_line.AddPoint(
                 PointFromLocation(
-                    stops_compressed.at(*it).latitude, 
-                    stops_compressed.at(*it).longitude)
+                    stops_compressed.at(buses.at(edge->item_name_).route[it]).latitude, 
+                    stops_compressed.at(buses.at(edge->item_name_).route[it]).longitude)
                 );
         }
         doc.Add(std::move(bus_line));
@@ -221,9 +222,8 @@ void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const
 void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const {
     std::unordered_set<std::string_view> drawn;
     for(auto edge : route_map) {
-        const auto& stop_names = edge->stops_;
-        std::string_view stop_begin = *stop_names->begin();
-        std::string_view stop_end = *prev(stop_names->end());
+        std::string_view stop_begin = buses.at(edge->item_name_).route[edge->route->start];
+        std::string_view stop_end = buses.at(edge->item_name_).route[edge->route->end];
         /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
         auto f_add_label = [this,&doc](std::string_view stop_name){
              const auto& stop = stops_compressed.at(stop_name);
@@ -259,9 +259,8 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) 
 void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const{
     for(auto edge : route_map) {
         std::string_view bus_name = edge->item_name_;
-        const auto& stop_names = edge->stops_;
-        std::string_view stop_begin = *stop_names->begin();
-        std::string_view stop_end = *prev(stop_names->end());
+        std::string_view stop_begin = buses.at(edge->item_name_).route[edge->route->start];
+        std::string_view stop_end = buses.at(edge->item_name_).route[edge->route->end];
         auto f_is_terminal = 
         [this] (std::string_view bus_name, std::string_view stop_name) -> bool {
             const auto& bus = buses.at(std::string(bus_name));
@@ -282,18 +281,19 @@ void SvgRender::RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) c
 void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const{
         // std::unordered_set<std::string_view> drawn;
     for(auto edge : route_map) {
-        const auto& stop_names = edge->stops_;
         /// TODO: Take care of empty stop_names?
-        for(auto it = stop_names->begin(); it != stop_names->end(); it++) {
-                doc.Add(
-                    Svg::Circle{}
-                    .SetFillColor("white")
-                    .SetRadius(settings.stop_radius)
-                    .SetCenter(PointFromLocation(
-                        stops_compressed.at(*it).latitude, 
-                        stops_compressed.at(*it).longitude
-                    ))
-                );
+        for(auto it = edge->route->start; 
+        (edge->route->start <= edge->route->end) ? it <= edge->route->end : it >= edge->route->end; 
+        (edge->route->start <= edge->route->end) ? it++ : it--) {
+            doc.Add(
+                Svg::Circle{}
+                .SetFillColor("white")
+                .SetRadius(settings.stop_radius)
+                .SetCenter(PointFromLocation(
+                    stops_compressed.at(buses.at(edge->item_name_).route[it]).latitude, 
+                    stops_compressed.at(buses.at(edge->item_name_).route[it]).longitude
+                ))
+            );
         }
     }
 }

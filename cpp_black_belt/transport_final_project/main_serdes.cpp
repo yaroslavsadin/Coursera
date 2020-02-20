@@ -30,15 +30,25 @@ int main(int argc, const char* argv[]) {
 
     Json::Document doc = Json::Load(cin);
     TransportCatalog handler(doc);
-    handler.ProcessRequests().Serialize();
+    try {  
+      handler.ProcessRequests().Serialize();
+    } catch(exception& e) {
+      cerr << "make_base" << e.what() << endl;
+      throw;
+    }
 
   } else if (mode == "process_requests") {
 
     Json::Document doc = Json::Load(cin);
     TransportCatalog handler(doc);
-    auto responses = handler.Deserialize().ProcessRequests().GetResponses();
-    cout << setprecision(6);
-    Json::Print(responses, cout);
+    try {
+      auto responses = handler.Deserialize().ProcessRequests().GetResponses();
+      cout << setprecision(6);
+      Json::Print(responses, cout);
+    } catch(exception& e) {
+      cerr << "process_requests" << e.what() << endl;
+      throw;
+    }
 
   }
 
