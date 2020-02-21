@@ -16,7 +16,7 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Database_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_db_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Db_db_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_renderer_2eproto ::google::protobuf::internal::SCCInfo<2> scc_info_Renderer_renderer_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_router_2eproto ::google::protobuf::internal::SCCInfo<3> scc_info_Router_router_2eproto;
 namespace ProtoTransport {
@@ -38,7 +38,7 @@ static void InitDefaultsTransportCatalog_transport_5fcatalog_2eproto() {
 
 ::google::protobuf::internal::SCCInfo<3> scc_info_TransportCatalog_transport_5fcatalog_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 3, InitDefaultsTransportCatalog_transport_5fcatalog_2eproto}, {
-      &scc_info_Database_database_2eproto.base,
+      &scc_info_Db_db_2eproto.base,
       &scc_info_Router_router_2eproto.base,
       &scc_info_Renderer_renderer_2eproto.base,}};
 
@@ -76,22 +76,22 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 const char descriptor_table_protodef_transport_5fcatalog_2eproto[] =
   "\n\027transport_catalog.proto\022\016ProtoTranspor"
-  "t\032\016database.proto\032\014router.proto\032\016rendere"
-  "r.proto\"\214\001\n\020TransportCatalog\022$\n\002db\030\001 \001(\013"
-  "2\030.ProtoTransport.Database\022&\n\006router\030\002 \001"
-  "(\0132\026.ProtoTransport.Router\022*\n\010renderer\030\003"
-  " \001(\0132\030.ProtoTransport.Rendererb\006proto3"
+  "t\032\010db.proto\032\014router.proto\032\016renderer.prot"
+  "o\"\206\001\n\020TransportCatalog\022\036\n\002db\030\001 \001(\0132\022.Pro"
+  "toTransport.Db\022&\n\006router\030\002 \001(\0132\026.ProtoTr"
+  "ansport.Router\022*\n\010renderer\030\003 \001(\0132\030.Proto"
+  "Transport.Rendererb\006proto3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_transport_5fcatalog_2eproto = {
   false, InitDefaults_transport_5fcatalog_2eproto, 
   descriptor_table_protodef_transport_5fcatalog_2eproto,
-  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 238,
+  "transport_catalog.proto", &assign_descriptors_table_transport_5fcatalog_2eproto, 226,
 };
 
 void AddDescriptors_transport_5fcatalog_2eproto() {
   static constexpr ::google::protobuf::internal::InitFunc deps[3] =
   {
-    ::AddDescriptors_database_2eproto,
+    ::AddDescriptors_db_2eproto,
     ::AddDescriptors_router_2eproto,
     ::AddDescriptors_renderer_2eproto,
   };
@@ -105,8 +105,8 @@ namespace ProtoTransport {
 // ===================================================================
 
 void TransportCatalog::InitAsDefaultInstance() {
-  ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->db_ = const_cast< ::ProtoTransport::Database*>(
-      ::ProtoTransport::Database::internal_default_instance());
+  ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->db_ = const_cast< ::ProtoTransport::Db*>(
+      ::ProtoTransport::Db::internal_default_instance());
   ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->router_ = const_cast< ::ProtoTransport::Router*>(
       ::ProtoTransport::Router::internal_default_instance());
   ::ProtoTransport::_TransportCatalog_default_instance_._instance.get_mutable()->renderer_ = const_cast< ::ProtoTransport::Renderer*>(
@@ -114,12 +114,12 @@ void TransportCatalog::InitAsDefaultInstance() {
 }
 class TransportCatalog::HasBitSetters {
  public:
-  static const ::ProtoTransport::Database& db(const TransportCatalog* msg);
+  static const ::ProtoTransport::Db& db(const TransportCatalog* msg);
   static const ::ProtoTransport::Router& router(const TransportCatalog* msg);
   static const ::ProtoTransport::Renderer& renderer(const TransportCatalog* msg);
 };
 
-const ::ProtoTransport::Database&
+const ::ProtoTransport::Db&
 TransportCatalog::HasBitSetters::db(const TransportCatalog* msg) {
   return *msg->db_;
 }
@@ -165,7 +165,7 @@ TransportCatalog::TransportCatalog(const TransportCatalog& from)
       _internal_metadata_(nullptr) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.has_db()) {
-    db_ = new ::ProtoTransport::Database(*from.db_);
+    db_ = new ::ProtoTransport::Db(*from.db_);
   } else {
     db_ = nullptr;
   }
@@ -244,12 +244,12 @@ const char* TransportCatalog::_InternalParse(const char* begin, const char* end,
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // .ProtoTransport.Database db = 1;
+      // .ProtoTransport.Db db = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
         ptr = ::google::protobuf::io::ReadSize(ptr, &size);
         GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        parser_till_end = ::ProtoTransport::Database::_InternalParse;
+        parser_till_end = ::ProtoTransport::Db::_InternalParse;
         object = msg->mutable_db();
         if (size > end - ptr) goto len_delim_till_end;
         ptr += size;
@@ -313,7 +313,7 @@ bool TransportCatalog::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // .ProtoTransport.Database db = 1;
+      // .ProtoTransport.Db db = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
@@ -373,7 +373,7 @@ void TransportCatalog::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .ProtoTransport.Database db = 1;
+  // .ProtoTransport.Db db = 1;
   if (this->has_db()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, HasBitSetters::db(this), output);
@@ -404,7 +404,7 @@ void TransportCatalog::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .ProtoTransport.Database db = 1;
+  // .ProtoTransport.Db db = 1;
   if (this->has_db()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
@@ -446,7 +446,7 @@ size_t TransportCatalog::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .ProtoTransport.Database db = 1;
+  // .ProtoTransport.Db db = 1;
   if (this->has_db()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -495,7 +495,7 @@ void TransportCatalog::MergeFrom(const TransportCatalog& from) {
   (void) cached_has_bits;
 
   if (from.has_db()) {
-    mutable_db()->::ProtoTransport::Database::MergeFrom(from.db());
+    mutable_db()->::ProtoTransport::Db::MergeFrom(from.db());
   }
   if (from.has_router()) {
     mutable_router()->::ProtoTransport::Router::MergeFrom(from.router());

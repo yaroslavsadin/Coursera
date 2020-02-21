@@ -31,7 +31,7 @@
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/unknown_field_set.h>
-#include "database.pb.h"
+#include "db.pb.h"
 #include "router.pb.h"
 #include "renderer.pb.h"
 // @@protoc_insertion_point(includes)
@@ -160,14 +160,14 @@ class TransportCatalog :
 
   // accessors -------------------------------------------------------
 
-  // .ProtoTransport.Database db = 1;
+  // .ProtoTransport.Db db = 1;
   bool has_db() const;
   void clear_db();
   static const int kDbFieldNumber = 1;
-  const ::ProtoTransport::Database& db() const;
-  ::ProtoTransport::Database* release_db();
-  ::ProtoTransport::Database* mutable_db();
-  void set_allocated_db(::ProtoTransport::Database* db);
+  const ::ProtoTransport::Db& db() const;
+  ::ProtoTransport::Db* release_db();
+  ::ProtoTransport::Db* mutable_db();
+  void set_allocated_db(::ProtoTransport::Db* db);
 
   // .ProtoTransport.Router router = 2;
   bool has_router() const;
@@ -192,7 +192,7 @@ class TransportCatalog :
   class HasBitSetters;
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::ProtoTransport::Database* db_;
+  ::ProtoTransport::Db* db_;
   ::ProtoTransport::Router* router_;
   ::ProtoTransport::Renderer* renderer_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -209,33 +209,33 @@ class TransportCatalog :
 #endif  // __GNUC__
 // TransportCatalog
 
-// .ProtoTransport.Database db = 1;
+// .ProtoTransport.Db db = 1;
 inline bool TransportCatalog::has_db() const {
   return this != internal_default_instance() && db_ != nullptr;
 }
-inline const ::ProtoTransport::Database& TransportCatalog::db() const {
-  const ::ProtoTransport::Database* p = db_;
+inline const ::ProtoTransport::Db& TransportCatalog::db() const {
+  const ::ProtoTransport::Db* p = db_;
   // @@protoc_insertion_point(field_get:ProtoTransport.TransportCatalog.db)
-  return p != nullptr ? *p : *reinterpret_cast<const ::ProtoTransport::Database*>(
-      &::ProtoTransport::_Database_default_instance_);
+  return p != nullptr ? *p : *reinterpret_cast<const ::ProtoTransport::Db*>(
+      &::ProtoTransport::_Db_default_instance_);
 }
-inline ::ProtoTransport::Database* TransportCatalog::release_db() {
+inline ::ProtoTransport::Db* TransportCatalog::release_db() {
   // @@protoc_insertion_point(field_release:ProtoTransport.TransportCatalog.db)
   
-  ::ProtoTransport::Database* temp = db_;
+  ::ProtoTransport::Db* temp = db_;
   db_ = nullptr;
   return temp;
 }
-inline ::ProtoTransport::Database* TransportCatalog::mutable_db() {
+inline ::ProtoTransport::Db* TransportCatalog::mutable_db() {
   
   if (db_ == nullptr) {
-    auto* p = CreateMaybeMessage<::ProtoTransport::Database>(GetArenaNoVirtual());
+    auto* p = CreateMaybeMessage<::ProtoTransport::Db>(GetArenaNoVirtual());
     db_ = p;
   }
   // @@protoc_insertion_point(field_mutable:ProtoTransport.TransportCatalog.db)
   return db_;
 }
-inline void TransportCatalog::set_allocated_db(::ProtoTransport::Database* db) {
+inline void TransportCatalog::set_allocated_db(::ProtoTransport::Db* db) {
   ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
     delete reinterpret_cast< ::google::protobuf::MessageLite*>(db_);

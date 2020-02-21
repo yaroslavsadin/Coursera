@@ -16,1092 +16,151 @@
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
 
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Buses_database_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Stops_database_2eproto;
-namespace ProtoTransport {
-class StopsDefaultTypeInternal {
+extern PROTOBUF_INTERNAL_EXPORT_company_2eproto ::google::protobuf::internal::SCCInfo<6> scc_info_Company_company_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_database_2eproto ::google::protobuf::internal::SCCInfo<1> scc_info_Database_RubricsEntry_DoNotUse_database_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_rubric_2eproto ::google::protobuf::internal::SCCInfo<0> scc_info_Rubric_rubric_2eproto;
+namespace YellowPages {
+class Database_RubricsEntry_DoNotUseDefaultTypeInternal {
  public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Stops> _instance;
-} _Stops_default_instance_;
-class BusesDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Buses> _instance;
-} _Buses_default_instance_;
+  ::google::protobuf::internal::ExplicitlyConstructed<Database_RubricsEntry_DoNotUse> _instance;
+} _Database_RubricsEntry_DoNotUse_default_instance_;
 class DatabaseDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<Database> _instance;
 } _Database_default_instance_;
-}  // namespace ProtoTransport
-static void InitDefaultsStops_database_2eproto() {
+}  // namespace YellowPages
+static void InitDefaultsDatabase_RubricsEntry_DoNotUse_database_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::ProtoTransport::_Stops_default_instance_;
-    new (ptr) ::ProtoTransport::Stops();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+    void* ptr = &::YellowPages::_Database_RubricsEntry_DoNotUse_default_instance_;
+    new (ptr) ::YellowPages::Database_RubricsEntry_DoNotUse();
   }
-  ::ProtoTransport::Stops::InitAsDefaultInstance();
+  ::YellowPages::Database_RubricsEntry_DoNotUse::InitAsDefaultInstance();
 }
 
-::google::protobuf::internal::SCCInfo<0> scc_info_Stops_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsStops_database_2eproto}, {}};
-
-static void InitDefaultsBuses_database_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::ProtoTransport::_Buses_default_instance_;
-    new (ptr) ::ProtoTransport::Buses();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::ProtoTransport::Buses::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<0> scc_info_Buses_database_2eproto =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsBuses_database_2eproto}, {}};
+::google::protobuf::internal::SCCInfo<1> scc_info_Database_RubricsEntry_DoNotUse_database_2eproto =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 1, InitDefaultsDatabase_RubricsEntry_DoNotUse_database_2eproto}, {
+      &scc_info_Rubric_rubric_2eproto.base,}};
 
 static void InitDefaultsDatabase_database_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   {
-    void* ptr = &::ProtoTransport::_Database_default_instance_;
-    new (ptr) ::ProtoTransport::Database();
+    void* ptr = &::YellowPages::_Database_default_instance_;
+    new (ptr) ::YellowPages::Database();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::ProtoTransport::Database::InitAsDefaultInstance();
+  ::YellowPages::Database::InitAsDefaultInstance();
 }
 
 ::google::protobuf::internal::SCCInfo<2> scc_info_Database_database_2eproto =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 2, InitDefaultsDatabase_database_2eproto}, {
-      &scc_info_Stops_database_2eproto.base,
-      &scc_info_Buses_database_2eproto.base,}};
+      &scc_info_Company_company_2eproto.base,
+      &scc_info_Database_RubricsEntry_DoNotUse_database_2eproto.base,}};
 
 void InitDefaults_database_2eproto() {
-  ::google::protobuf::internal::InitSCC(&scc_info_Stops_database_2eproto.base);
-  ::google::protobuf::internal::InitSCC(&scc_info_Buses_database_2eproto.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_Database_RubricsEntry_DoNotUse_database_2eproto.base);
   ::google::protobuf::internal::InitSCC(&scc_info_Database_database_2eproto.base);
 }
 
-::google::protobuf::Metadata file_level_metadata_database_2eproto[3];
+::google::protobuf::Metadata file_level_metadata_database_2eproto[2];
 constexpr ::google::protobuf::EnumDescriptor const** file_level_enum_descriptors_database_2eproto = nullptr;
 constexpr ::google::protobuf::ServiceDescriptor const** file_level_service_descriptors_database_2eproto = nullptr;
 
 const ::google::protobuf::uint32 TableStruct_database_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stops, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database_RubricsEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database_RubricsEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stops, name_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Stops, buses_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database_RubricsEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database_RubricsEntry_DoNotUse, value_),
+  0,
+  1,
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, name_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, stops_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, unique_stops_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, road_route_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, linear_route_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, route_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Buses, route_type_),
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, stops_),
-  PROTOBUF_FIELD_OFFSET(::ProtoTransport::Database, buses_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database, companies_),
+  PROTOBUF_FIELD_OFFSET(::YellowPages::Database, rubrics_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::ProtoTransport::Stops)},
-  { 7, -1, sizeof(::ProtoTransport::Buses)},
-  { 19, -1, sizeof(::ProtoTransport::Database)},
+  { 0, 7, sizeof(::YellowPages::Database_RubricsEntry_DoNotUse)},
+  { 9, -1, sizeof(::YellowPages::Database)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Stops_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Buses_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::ProtoTransport::_Database_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::YellowPages::_Database_RubricsEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::YellowPages::_Database_default_instance_),
 };
 
 ::google::protobuf::internal::AssignDescriptorsTable assign_descriptors_table_database_2eproto = {
   {}, AddDescriptors_database_2eproto, "database.proto", schemas,
   file_default_instances, TableStruct_database_2eproto::offsets,
-  file_level_metadata_database_2eproto, 3, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
+  file_level_metadata_database_2eproto, 2, file_level_enum_descriptors_database_2eproto, file_level_service_descriptors_database_2eproto,
 };
 
 const char descriptor_table_protodef_database_2eproto[] =
-  "\n\016database.proto\022\016ProtoTransport\"$\n\005Stop"
-  "s\022\014\n\004name\030\001 \001(\t\022\r\n\005buses\030\002 \003(\t\"\207\001\n\005Buses"
-  "\022\014\n\004name\030\001 \001(\t\022\r\n\005stops\030\002 \001(\r\022\024\n\014unique_"
-  "stops\030\003 \001(\r\022\022\n\nroad_route\030\004 \001(\r\022\024\n\014linea"
-  "r_route\030\005 \001(\001\022\r\n\005route\030\006 \003(\t\022\022\n\nroute_ty"
-  "pe\030\007 \001(\010\"V\n\010Database\022$\n\005stops\030\001 \003(\0132\025.Pr"
-  "otoTransport.Stops\022$\n\005buses\030\002 \003(\0132\025.Prot"
-  "oTransport.Busesb\006proto3"
+  "\n\016database.proto\022\013YellowPages\032\rcompany.p"
+  "roto\032\014rubric.proto\"\255\001\n\010Database\022\'\n\tcompa"
+  "nies\030\001 \003(\0132\024.YellowPages.Company\0223\n\007rubr"
+  "ics\030\002 \003(\0132\".YellowPages.Database.Rubrics"
+  "Entry\032C\n\014RubricsEntry\022\013\n\003key\030\001 \001(\004\022\"\n\005va"
+  "lue\030\002 \001(\0132\023.YellowPages.Rubric:\0028\001b\006prot"
+  "o3"
   ;
 ::google::protobuf::internal::DescriptorTable descriptor_table_database_2eproto = {
   false, InitDefaults_database_2eproto, 
   descriptor_table_protodef_database_2eproto,
-  "database.proto", &assign_descriptors_table_database_2eproto, 304,
+  "database.proto", &assign_descriptors_table_database_2eproto, 242,
 };
 
 void AddDescriptors_database_2eproto() {
-  static constexpr ::google::protobuf::internal::InitFunc deps[1] =
+  static constexpr ::google::protobuf::internal::InitFunc deps[2] =
   {
+    ::AddDescriptors_company_2eproto,
+    ::AddDescriptors_rubric_2eproto,
   };
- ::google::protobuf::internal::AddDescriptors(&descriptor_table_database_2eproto, deps, 0);
+ ::google::protobuf::internal::AddDescriptors(&descriptor_table_database_2eproto, deps, 2);
 }
 
 // Force running AddDescriptors() at dynamic initialization time.
 static bool dynamic_init_dummy_database_2eproto = []() { AddDescriptors_database_2eproto(); return true; }();
-namespace ProtoTransport {
+namespace YellowPages {
 
 // ===================================================================
 
-void Stops::InitAsDefaultInstance() {
+Database_RubricsEntry_DoNotUse::Database_RubricsEntry_DoNotUse() {}
+Database_RubricsEntry_DoNotUse::Database_RubricsEntry_DoNotUse(::google::protobuf::Arena* arena)
+    : SuperType(arena) {}
+void Database_RubricsEntry_DoNotUse::MergeFrom(const Database_RubricsEntry_DoNotUse& other) {
+  MergeFromInternal(other);
 }
-class Stops::HasBitSetters {
- public:
-};
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Stops::kNameFieldNumber;
-const int Stops::kBusesFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Stops::Stops()
-  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:ProtoTransport.Stops)
+::google::protobuf::Metadata Database_RubricsEntry_DoNotUse::GetMetadata() const {
+  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
+  return ::file_level_metadata_database_2eproto[0];
 }
-Stops::Stops(const Stops& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr),
-      buses_(from.buses_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  // @@protoc_insertion_point(copy_constructor:ProtoTransport.Stops)
-}
-
-void Stops::SharedCtor() {
-  ::google::protobuf::internal::InitSCC(
-      &scc_info_Stops_database_2eproto.base);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-Stops::~Stops() {
-  // @@protoc_insertion_point(destructor:ProtoTransport.Stops)
-  SharedDtor();
-}
-
-void Stops::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void Stops::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const Stops& Stops::default_instance() {
-  ::google::protobuf::internal::InitSCC(&::scc_info_Stops_database_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void Stops::Clear() {
-// @@protoc_insertion_point(message_clear_start:ProtoTransport.Stops)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  buses_.Clear();
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  _internal_metadata_.Clear();
+void Database_RubricsEntry_DoNotUse::MergeFrom(
+    const ::google::protobuf::Message& other) {
+  ::google::protobuf::Message::MergeFrom(other);
 }
 
 #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* Stops::_InternalParse(const char* begin, const char* end, void* object,
-                  ::google::protobuf::internal::ParseContext* ctx) {
-  auto msg = static_cast<Stops*>(object);
-  ::google::protobuf::int32 size; (void)size;
-  int depth; (void)depth;
-  ::google::protobuf::uint32 tag;
-  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
-  auto ptr = begin;
-  while (ptr < end) {
-    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
-    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-    switch (tag >> 3) {
-      // string name = 1;
-      case 1: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
-        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        ctx->extra_parse_data().SetFieldName("ProtoTransport.Stops.name");
-        object = msg->mutable_name();
-        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-          goto string_till_end;
-        }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-        ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-        ptr += size;
-        break;
-      }
-      // repeated string buses = 2;
-      case 2: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("ProtoTransport.Stops.buses");
-          object = msg->add_buses();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
-        break;
-      }
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->EndGroup(tag);
-          return ptr;
-        }
-        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
-          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
-        ptr = res.first;
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
-        if (res.second) return ptr;
-      }
-    }  // switch
-  }  // while
-  return ptr;
-string_till_end:
-  static_cast<::std::string*>(object)->clear();
-  static_cast<::std::string*>(object)->reserve(size);
-  goto len_delim_till_end;
-len_delim_till_end:
-  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
-                               {parser_till_end, object}, size);
-}
-#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Stops::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ProtoTransport.Stops)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Stops.name"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated string buses = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->add_buses()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->buses(this->buses_size() - 1).data(),
-            static_cast<int>(this->buses(this->buses_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Stops.buses"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:ProtoTransport.Stops)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:ProtoTransport.Stops)
-  return false;
+bool Database_RubricsEntry_DoNotUse::_ParseMap(const char* begin, const char* end, void* object, ::google::protobuf::internal::ParseContext* ctx) {
+  using MF = ::google::protobuf::internal::MapField<
+      Database_RubricsEntry_DoNotUse, EntryKeyType, EntryValueType,
+      kEntryKeyFieldType, kEntryValueFieldType,
+      kEntryDefaultEnumValue>;
+  auto mf = static_cast<MF*>(object);
+  Parser<MF, ::google::protobuf::Map<EntryKeyType, EntryValueType>> parser(mf);
+#define DO_(x) if (!(x)) return false
+  DO_(parser.ParseMap(begin, end));
 #undef DO_
+  return true;
 }
 #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-void Stops::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ProtoTransport.Stops)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Stops.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
-  }
-
-  // repeated string buses = 2;
-  for (int i = 0, n = this->buses_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Stops.buses");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->buses(i), output);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        _internal_metadata_.unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:ProtoTransport.Stops)
-}
-
-::google::protobuf::uint8* Stops::InternalSerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.Stops)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Stops.name");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->name(), target);
-  }
-
-  // repeated string buses = 2;
-  for (int i = 0, n = this->buses_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->buses(i).data(), static_cast<int>(this->buses(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Stops.buses");
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(2, this->buses(i), target);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.Stops)
-  return target;
-}
-
-size_t Stops::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.Stops)
-  size_t total_size = 0;
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        _internal_metadata_.unknown_fields());
-  }
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // repeated string buses = 2;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->buses_size());
-  for (int i = 0, n = this->buses_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
-      this->buses(i));
-  }
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void Stops::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.Stops)
-  GOOGLE_DCHECK_NE(&from, this);
-  const Stops* source =
-      ::google::protobuf::DynamicCastToGenerated<Stops>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.Stops)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.Stops)
-    MergeFrom(*source);
-  }
-}
-
-void Stops::MergeFrom(const Stops& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.Stops)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  buses_.MergeFrom(from.buses_);
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-}
-
-void Stops::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.Stops)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Stops::CopyFrom(const Stops& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.Stops)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Stops::IsInitialized() const {
-  return true;
-}
-
-void Stops::Swap(Stops* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Stops::InternalSwap(Stops* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  buses_.InternalSwap(CastToBase(&other->buses_));
-  name_.Swap(&other->name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-}
-
-::google::protobuf::Metadata Stops::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
-  return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
-}
-
-
-// ===================================================================
-
-void Buses::InitAsDefaultInstance() {
-}
-class Buses::HasBitSetters {
- public:
-};
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Buses::kNameFieldNumber;
-const int Buses::kStopsFieldNumber;
-const int Buses::kUniqueStopsFieldNumber;
-const int Buses::kRoadRouteFieldNumber;
-const int Buses::kLinearRouteFieldNumber;
-const int Buses::kRouteFieldNumber;
-const int Buses::kRouteTypeFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Buses::Buses()
-  : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:ProtoTransport.Buses)
-}
-Buses::Buses(const Buses& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(nullptr),
-      route_(from.route_) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.name().size() > 0) {
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  ::memcpy(&stops_, &from.stops_,
-    static_cast<size_t>(reinterpret_cast<char*>(&route_type_) -
-    reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
-  // @@protoc_insertion_point(copy_constructor:ProtoTransport.Buses)
-}
-
-void Buses::SharedCtor() {
-  ::google::protobuf::internal::InitSCC(
-      &scc_info_Buses_database_2eproto.base);
-  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&stops_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&route_type_) -
-      reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
-}
-
-Buses::~Buses() {
-  // @@protoc_insertion_point(destructor:ProtoTransport.Buses)
-  SharedDtor();
-}
-
-void Buses::SharedDtor() {
-  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-
-void Buses::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const Buses& Buses::default_instance() {
-  ::google::protobuf::internal::InitSCC(&::scc_info_Buses_database_2eproto.base);
-  return *internal_default_instance();
-}
-
-
-void Buses::Clear() {
-// @@protoc_insertion_point(message_clear_start:ProtoTransport.Buses)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  route_.Clear();
-  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&stops_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&route_type_) -
-      reinterpret_cast<char*>(&stops_)) + sizeof(route_type_));
-  _internal_metadata_.Clear();
-}
-
-#if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-const char* Buses::_InternalParse(const char* begin, const char* end, void* object,
-                  ::google::protobuf::internal::ParseContext* ctx) {
-  auto msg = static_cast<Buses*>(object);
-  ::google::protobuf::int32 size; (void)size;
-  int depth; (void)depth;
-  ::google::protobuf::uint32 tag;
-  ::google::protobuf::internal::ParseFunc parser_till_end; (void)parser_till_end;
-  auto ptr = begin;
-  while (ptr < end) {
-    ptr = ::google::protobuf::io::Parse32(ptr, &tag);
-    GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-    switch (tag >> 3) {
-      // string name = 1;
-      case 1: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
-        ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        ctx->extra_parse_data().SetFieldName("ProtoTransport.Buses.name");
-        object = msg->mutable_name();
-        if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-          parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-          goto string_till_end;
-        }
-        GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-        ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-        ptr += size;
-        break;
-      }
-      // uint32 stops = 2;
-      case 2: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 16) goto handle_unusual;
-        msg->set_stops(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      // uint32 unique_stops = 3;
-      case 3: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 24) goto handle_unusual;
-        msg->set_unique_stops(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      // uint32 road_route = 4;
-      case 4: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 32) goto handle_unusual;
-        msg->set_road_route(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      // double linear_route = 5;
-      case 5: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 41) goto handle_unusual;
-        msg->set_linear_route(::google::protobuf::io::UnalignedLoad<double>(ptr));
-        ptr += sizeof(double);
-        break;
-      }
-      // repeated string route = 6;
-      case 6: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 50) goto handle_unusual;
-        do {
-          ptr = ::google::protobuf::io::ReadSize(ptr, &size);
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          ctx->extra_parse_data().SetFieldName("ProtoTransport.Buses.route");
-          object = msg->add_route();
-          if (size > end - ptr + ::google::protobuf::internal::ParseContext::kSlopBytes) {
-            parser_till_end = ::google::protobuf::internal::GreedyStringParserUTF8;
-            goto string_till_end;
-          }
-          GOOGLE_PROTOBUF_PARSER_ASSERT(::google::protobuf::internal::StringCheckUTF8(ptr, size, ctx));
-          ::google::protobuf::internal::InlineGreedyStringParser(object, ptr, size, ctx);
-          ptr += size;
-          if (ptr >= end) break;
-        } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 50 && (ptr += 1));
-        break;
-      }
-      // bool route_type = 7;
-      case 7: {
-        if (static_cast<::google::protobuf::uint8>(tag) != 56) goto handle_unusual;
-        msg->set_route_type(::google::protobuf::internal::ReadVarint(&ptr));
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-        break;
-      }
-      default: {
-      handle_unusual:
-        if ((tag & 7) == 4 || tag == 0) {
-          ctx->EndGroup(tag);
-          return ptr;
-        }
-        auto res = UnknownFieldParse(tag, {_InternalParse, msg},
-          ptr, end, msg->_internal_metadata_.mutable_unknown_fields(), ctx);
-        ptr = res.first;
-        GOOGLE_PROTOBUF_PARSER_ASSERT(ptr != nullptr);
-        if (res.second) return ptr;
-      }
-    }  // switch
-  }  // while
-  return ptr;
-string_till_end:
-  static_cast<::std::string*>(object)->clear();
-  static_cast<::std::string*>(object)->reserve(size);
-  goto len_delim_till_end;
-len_delim_till_end:
-  return ctx->StoreAndTailCall(ptr, end, {_InternalParse, msg},
-                               {parser_till_end, object}, size);
-}
-#else  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-bool Buses::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ProtoTransport.Buses)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // string name = 1;
-      case 1: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_name()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->name().data(), static_cast<int>(this->name().length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Buses.name"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // uint32 stops = 2;
-      case 2: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (16 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &stops_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // uint32 unique_stops = 3;
-      case 3: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (24 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &unique_stops_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // uint32 road_route = 4;
-      case 4: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (32 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &road_route_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // double linear_route = 5;
-      case 5: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (41 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &linear_route_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // repeated string route = 6;
-      case 6: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (50 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->add_route()));
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            this->route(this->route_size() - 1).data(),
-            static_cast<int>(this->route(this->route_size() - 1).length()),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "ProtoTransport.Buses.route"));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      // bool route_type = 7;
-      case 7: {
-        if (static_cast< ::google::protobuf::uint8>(tag) == (56 & 0xFF)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &route_type_)));
-        } else {
-          goto handle_unusual;
-        }
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormat::SkipField(
-              input, tag, _internal_metadata_.mutable_unknown_fields()));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:ProtoTransport.Buses)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:ProtoTransport.Buses)
-  return false;
-#undef DO_
-}
-#endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
-
-void Buses::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ProtoTransport.Buses)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Buses.name");
-    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
-  }
-
-  // uint32 stops = 2;
-  if (this->stops() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->stops(), output);
-  }
-
-  // uint32 unique_stops = 3;
-  if (this->unique_stops() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->unique_stops(), output);
-  }
-
-  // uint32 road_route = 4;
-  if (this->road_route() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->road_route(), output);
-  }
-
-  // double linear_route = 5;
-  if (this->linear_route() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(5, this->linear_route(), output);
-  }
-
-  // repeated string route = 6;
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->route(i).data(), static_cast<int>(this->route(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Buses.route");
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      6, this->route(i), output);
-  }
-
-  // bool route_type = 7;
-  if (this->route_type() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->route_type(), output);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        _internal_metadata_.unknown_fields(), output);
-  }
-  // @@protoc_insertion_point(serialize_end:ProtoTransport.Buses)
-}
-
-::google::protobuf::uint8* Buses::InternalSerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.Buses)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->name().data(), static_cast<int>(this->name().length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Buses.name");
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->name(), target);
-  }
-
-  // uint32 stops = 2;
-  if (this->stops() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->stops(), target);
-  }
-
-  // uint32 unique_stops = 3;
-  if (this->unique_stops() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->unique_stops(), target);
-  }
-
-  // uint32 road_route = 4;
-  if (this->road_route() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->road_route(), target);
-  }
-
-  // double linear_route = 5;
-  if (this->linear_route() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(5, this->linear_route(), target);
-  }
-
-  // repeated string route = 6;
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-      this->route(i).data(), static_cast<int>(this->route(i).length()),
-      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "ProtoTransport.Buses.route");
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteStringToArray(6, this->route(i), target);
-  }
-
-  // bool route_type = 7;
-  if (this->route_type() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->route_type(), target);
-  }
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields(), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.Buses)
-  return target;
-}
-
-size_t Buses::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.Buses)
-  size_t total_size = 0;
-
-  if (_internal_metadata_.have_unknown_fields()) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        _internal_metadata_.unknown_fields());
-  }
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // repeated string route = 6;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->route_size());
-  for (int i = 0, n = this->route_size(); i < n; i++) {
-    total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
-      this->route(i));
-  }
-
-  // string name = 1;
-  if (this->name().size() > 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::StringSize(
-        this->name());
-  }
-
-  // uint32 stops = 2;
-  if (this->stops() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->stops());
-  }
-
-  // uint32 unique_stops = 3;
-  if (this->unique_stops() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->unique_stops());
-  }
-
-  // double linear_route = 5;
-  if (this->linear_route() != 0) {
-    total_size += 1 + 8;
-  }
-
-  // uint32 road_route = 4;
-  if (this->road_route() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->road_route());
-  }
-
-  // bool route_type = 7;
-  if (this->route_type() != 0) {
-    total_size += 1 + 1;
-  }
-
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void Buses::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.Buses)
-  GOOGLE_DCHECK_NE(&from, this);
-  const Buses* source =
-      ::google::protobuf::DynamicCastToGenerated<Buses>(
-          &from);
-  if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.Buses)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.Buses)
-    MergeFrom(*source);
-  }
-}
-
-void Buses::MergeFrom(const Buses& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.Buses)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  route_.MergeFrom(from.route_);
-  if (from.name().size() > 0) {
-
-    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
-  }
-  if (from.stops() != 0) {
-    set_stops(from.stops());
-  }
-  if (from.unique_stops() != 0) {
-    set_unique_stops(from.unique_stops());
-  }
-  if (from.linear_route() != 0) {
-    set_linear_route(from.linear_route());
-  }
-  if (from.road_route() != 0) {
-    set_road_route(from.road_route());
-  }
-  if (from.route_type() != 0) {
-    set_route_type(from.route_type());
-  }
-}
-
-void Buses::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.Buses)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Buses::CopyFrom(const Buses& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.Buses)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Buses::IsInitialized() const {
-  return true;
-}
-
-void Buses::Swap(Buses* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Buses::InternalSwap(Buses* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  route_.InternalSwap(CastToBase(&other->route_));
-  name_.Swap(&other->name_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
-  swap(stops_, other->stops_);
-  swap(unique_stops_, other->unique_stops_);
-  swap(linear_route_, other->linear_route_);
-  swap(road_route_, other->road_route_);
-  swap(route_type_, other->route_type_);
-}
-
-::google::protobuf::Metadata Buses::GetMetadata() const {
-  ::google::protobuf::internal::AssignDescriptors(&::assign_descriptors_table_database_2eproto);
-  return ::file_level_metadata_database_2eproto[kIndexInFileMessages];
-}
 
 
 // ===================================================================
@@ -1112,23 +171,29 @@ class Database::HasBitSetters {
  public:
 };
 
+void Database::clear_companies() {
+  companies_.Clear();
+}
+void Database::clear_rubrics() {
+  rubrics_.Clear();
+}
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Database::kStopsFieldNumber;
-const int Database::kBusesFieldNumber;
+const int Database::kCompaniesFieldNumber;
+const int Database::kRubricsFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Database::Database()
   : ::google::protobuf::Message(), _internal_metadata_(nullptr) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:ProtoTransport.Database)
+  // @@protoc_insertion_point(constructor:YellowPages.Database)
 }
 Database::Database(const Database& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(nullptr),
-      stops_(from.stops_),
-      buses_(from.buses_) {
+      companies_(from.companies_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:ProtoTransport.Database)
+  rubrics_.MergeFrom(from.rubrics_);
+  // @@protoc_insertion_point(copy_constructor:YellowPages.Database)
 }
 
 void Database::SharedCtor() {
@@ -1137,7 +202,7 @@ void Database::SharedCtor() {
 }
 
 Database::~Database() {
-  // @@protoc_insertion_point(destructor:ProtoTransport.Database)
+  // @@protoc_insertion_point(destructor:YellowPages.Database)
   SharedDtor();
 }
 
@@ -1154,13 +219,13 @@ const Database& Database::default_instance() {
 
 
 void Database::Clear() {
-// @@protoc_insertion_point(message_clear_start:ProtoTransport.Database)
+// @@protoc_insertion_point(message_clear_start:YellowPages.Database)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  stops_.Clear();
-  buses_.Clear();
+  companies_.Clear();
+  rubrics_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -1177,14 +242,14 @@ const char* Database::_InternalParse(const char* begin, const char* end, void* o
     ptr = ::google::protobuf::io::Parse32(ptr, &tag);
     GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
     switch (tag >> 3) {
-      // repeated .ProtoTransport.Stops stops = 1;
+      // repeated .YellowPages.Company companies = 1;
       case 1: {
         if (static_cast<::google::protobuf::uint8>(tag) != 10) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::ProtoTransport::Stops::_InternalParse;
-          object = msg->add_stops();
+          parser_till_end = ::YellowPages::Company::_InternalParse;
+          object = msg->add_companies();
           if (size > end - ptr) goto len_delim_till_end;
           ptr += size;
           GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
@@ -1193,18 +258,21 @@ const char* Database::_InternalParse(const char* begin, const char* end, void* o
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 10 && (ptr += 1));
         break;
       }
-      // repeated .ProtoTransport.Buses buses = 2;
+      // map<uint64, .YellowPages.Rubric> rubrics = 2;
       case 2: {
         if (static_cast<::google::protobuf::uint8>(tag) != 18) goto handle_unusual;
         do {
           ptr = ::google::protobuf::io::ReadSize(ptr, &size);
           GOOGLE_PROTOBUF_PARSER_ASSERT(ptr);
-          parser_till_end = ::ProtoTransport::Buses::_InternalParse;
-          object = msg->add_buses();
+          parser_till_end = ::google::protobuf::internal::SlowMapEntryParser;
+          auto parse_map = ::YellowPages::Database_RubricsEntry_DoNotUse::_ParseMap;
+          ctx->extra_parse_data().payload.clear();
+          ctx->extra_parse_data().parse_map = parse_map;
+          object = &msg->rubrics_;
           if (size > end - ptr) goto len_delim_till_end;
-          ptr += size;
-          GOOGLE_PROTOBUF_PARSER_ASSERT(ctx->ParseExactRange(
-              {parser_till_end, object}, ptr - size, ptr));
+          auto newend = ptr + size;
+          GOOGLE_PROTOBUF_PARSER_ASSERT(parse_map(ptr, newend, object, ctx));
+          ptr = newend;
           if (ptr >= end) break;
         } while ((::google::protobuf::io::UnalignedLoad<::google::protobuf::uint64>(ptr) & 255) == 18 && (ptr += 1));
         break;
@@ -1233,28 +301,35 @@ bool Database::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!PROTOBUF_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:ProtoTransport.Database)
+  // @@protoc_insertion_point(parse_start:YellowPages.Database)
   for (;;) {
     ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .ProtoTransport.Stops stops = 1;
+      // repeated .YellowPages.Company companies = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (10 & 0xFF)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_stops()));
+                input, add_companies()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // repeated .ProtoTransport.Buses buses = 2;
+      // map<uint64, .YellowPages.Rubric> rubrics = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) == (18 & 0xFF)) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
-                input, add_buses()));
+          Database_RubricsEntry_DoNotUse::Parser< ::google::protobuf::internal::MapField<
+              Database_RubricsEntry_DoNotUse,
+              ::google::protobuf::uint64, ::YellowPages::Rubric,
+              ::google::protobuf::internal::WireFormatLite::TYPE_UINT64,
+              ::google::protobuf::internal::WireFormatLite::TYPE_MESSAGE,
+              0 >,
+            ::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric > > parser(&rubrics_);
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+              input, &parser));
         } else {
           goto handle_unusual;
         }
@@ -1273,10 +348,10 @@ bool Database::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:ProtoTransport.Database)
+  // @@protoc_insertion_point(parse_success:YellowPages.Database)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:ProtoTransport.Database)
+  // @@protoc_insertion_point(parse_failure:YellowPages.Database)
   return false;
 #undef DO_
 }
@@ -1284,67 +359,120 @@ failure:
 
 void Database::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:ProtoTransport.Database)
+  // @@protoc_insertion_point(serialize_start:YellowPages.Database)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .ProtoTransport.Stops stops = 1;
+  // repeated .YellowPages.Company companies = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->stops_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->companies_size()); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1,
-      this->stops(static_cast<int>(i)),
+      this->companies(static_cast<int>(i)),
       output);
   }
 
-  // repeated .ProtoTransport.Buses buses = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->buses_size()); i < n; i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2,
-      this->buses(static_cast<int>(i)),
-      output);
+  // map<uint64, .YellowPages.Rubric> rubrics = 2;
+  if (!this->rubrics().empty()) {
+    typedef ::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_pointer
+        ConstPtr;
+    typedef ::google::protobuf::internal::SortItem< ::google::protobuf::uint64, ConstPtr > SortItem;
+    typedef ::google::protobuf::internal::CompareByFirstField<SortItem> Less;
+
+    if (output->IsSerializationDeterministic() &&
+        this->rubrics().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->rubrics().size()]);
+      typedef ::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_iterator
+          it = this->rubrics().begin();
+          it != this->rubrics().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<Database_RubricsEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(rubrics_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
+      }
+    } else {
+      ::std::unique_ptr<Database_RubricsEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_iterator
+          it = this->rubrics().begin();
+          it != this->rubrics().end(); ++it) {
+        entry.reset(rubrics_.NewEntryWrapper(it->first, it->second));
+        ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(2, *entry, output);
+      }
+    }
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         _internal_metadata_.unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:ProtoTransport.Database)
+  // @@protoc_insertion_point(serialize_end:YellowPages.Database)
 }
 
 ::google::protobuf::uint8* Database::InternalSerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:ProtoTransport.Database)
+  // @@protoc_insertion_point(serialize_to_array_start:YellowPages.Database)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .ProtoTransport.Stops stops = 1;
+  // repeated .YellowPages.Company companies = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->stops_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->companies_size()); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        1, this->stops(static_cast<int>(i)), target);
+        1, this->companies(static_cast<int>(i)), target);
   }
 
-  // repeated .ProtoTransport.Buses buses = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->buses_size()); i < n; i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageToArray(
-        2, this->buses(static_cast<int>(i)), target);
+  // map<uint64, .YellowPages.Rubric> rubrics = 2;
+  if (!this->rubrics().empty()) {
+    typedef ::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_pointer
+        ConstPtr;
+    typedef ::google::protobuf::internal::SortItem< ::google::protobuf::uint64, ConstPtr > SortItem;
+    typedef ::google::protobuf::internal::CompareByFirstField<SortItem> Less;
+
+    if (false &&
+        this->rubrics().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->rubrics().size()]);
+      typedef ::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::size_type size_type;
+      size_type n = 0;
+      for (::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_iterator
+          it = this->rubrics().begin();
+          it != this->rubrics().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      ::std::unique_ptr<Database_RubricsEntry_DoNotUse> entry;
+      for (size_type i = 0; i < n; i++) {
+        entry.reset(rubrics_.NewEntryWrapper(items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
+      }
+    } else {
+      ::std::unique_ptr<Database_RubricsEntry_DoNotUse> entry;
+      for (::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_iterator
+          it = this->rubrics().begin();
+          it != this->rubrics().end(); ++it) {
+        entry.reset(rubrics_.NewEntryWrapper(it->first, it->second));
+        target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessageNoVirtualToArray(2, *entry, target);
+      }
+    }
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:ProtoTransport.Database)
+  // @@protoc_insertion_point(serialize_to_array_end:YellowPages.Database)
   return target;
 }
 
 size_t Database::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:ProtoTransport.Database)
+// @@protoc_insertion_point(message_byte_size_start:YellowPages.Database)
   size_t total_size = 0;
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -1356,25 +484,28 @@ size_t Database::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .ProtoTransport.Stops stops = 1;
+  // repeated .YellowPages.Company companies = 1;
   {
-    unsigned int count = static_cast<unsigned int>(this->stops_size());
+    unsigned int count = static_cast<unsigned int>(this->companies_size());
     total_size += 1UL * count;
     for (unsigned int i = 0; i < count; i++) {
       total_size +=
         ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->stops(static_cast<int>(i)));
+          this->companies(static_cast<int>(i)));
     }
   }
 
-  // repeated .ProtoTransport.Buses buses = 2;
+  // map<uint64, .YellowPages.Rubric> rubrics = 2;
+  total_size += 1 *
+      ::google::protobuf::internal::FromIntSize(this->rubrics_size());
   {
-    unsigned int count = static_cast<unsigned int>(this->buses_size());
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSize(
-          this->buses(static_cast<int>(i)));
+    ::std::unique_ptr<Database_RubricsEntry_DoNotUse> entry;
+    for (::google::protobuf::Map< ::google::protobuf::uint64, ::YellowPages::Rubric >::const_iterator
+        it = this->rubrics().begin();
+        it != this->rubrics().end(); ++it) {
+      entry.reset(rubrics_.NewEntryWrapper(it->first, it->second));
+      total_size += ::google::protobuf::internal::WireFormatLite::
+          MessageSizeNoVirtual(*entry);
     }
   }
 
@@ -1384,40 +515,40 @@ size_t Database::ByteSizeLong() const {
 }
 
 void Database::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:ProtoTransport.Database)
+// @@protoc_insertion_point(generalized_merge_from_start:YellowPages.Database)
   GOOGLE_DCHECK_NE(&from, this);
   const Database* source =
       ::google::protobuf::DynamicCastToGenerated<Database>(
           &from);
   if (source == nullptr) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:ProtoTransport.Database)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:YellowPages.Database)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:ProtoTransport.Database)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:YellowPages.Database)
     MergeFrom(*source);
   }
 }
 
 void Database::MergeFrom(const Database& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:ProtoTransport.Database)
+// @@protoc_insertion_point(class_specific_merge_from_start:YellowPages.Database)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  stops_.MergeFrom(from.stops_);
-  buses_.MergeFrom(from.buses_);
+  companies_.MergeFrom(from.companies_);
+  rubrics_.MergeFrom(from.rubrics_);
 }
 
 void Database::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:ProtoTransport.Database)
+// @@protoc_insertion_point(generalized_copy_from_start:YellowPages.Database)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void Database::CopyFrom(const Database& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:ProtoTransport.Database)
+// @@protoc_insertion_point(class_specific_copy_from_start:YellowPages.Database)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1434,8 +565,8 @@ void Database::Swap(Database* other) {
 void Database::InternalSwap(Database* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  CastToBase(&stops_)->InternalSwap(CastToBase(&other->stops_));
-  CastToBase(&buses_)->InternalSwap(CastToBase(&other->buses_));
+  CastToBase(&companies_)->InternalSwap(CastToBase(&other->companies_));
+  rubrics_.Swap(&other->rubrics_);
 }
 
 ::google::protobuf::Metadata Database::GetMetadata() const {
@@ -1445,17 +576,14 @@ void Database::InternalSwap(Database* other) {
 
 
 // @@protoc_insertion_point(namespace_scope)
-}  // namespace ProtoTransport
+}  // namespace YellowPages
 namespace google {
 namespace protobuf {
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Stops* Arena::CreateMaybeMessage< ::ProtoTransport::Stops >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Stops >(arena);
+template<> PROTOBUF_NOINLINE ::YellowPages::Database_RubricsEntry_DoNotUse* Arena::CreateMaybeMessage< ::YellowPages::Database_RubricsEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateInternal< ::YellowPages::Database_RubricsEntry_DoNotUse >(arena);
 }
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Buses* Arena::CreateMaybeMessage< ::ProtoTransport::Buses >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Buses >(arena);
-}
-template<> PROTOBUF_NOINLINE ::ProtoTransport::Database* Arena::CreateMaybeMessage< ::ProtoTransport::Database >(Arena* arena) {
-  return Arena::CreateInternal< ::ProtoTransport::Database >(arena);
+template<> PROTOBUF_NOINLINE ::YellowPages::Database* Arena::CreateMaybeMessage< ::YellowPages::Database >(Arena* arena) {
+  return Arena::CreateInternal< ::YellowPages::Database >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

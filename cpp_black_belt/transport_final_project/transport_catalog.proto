@@ -1,12 +1,12 @@
 syntax = "proto3";
 
 package ProtoTransport;
-import "database.proto";
+import "db.proto";
 import "router.proto";
 import "renderer.proto";
 
 message TransportCatalog {
-    Database db = 1;
+    Db db = 1;
     Router router = 2;
     Renderer renderer = 3;
 }

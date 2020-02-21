@@ -12,7 +12,7 @@
 #include "profile_advanced.h"
 #endif
 
-#include "database.pb.h"
+#include "db.pb.h"
 #include "router.pb.h"
 #include "renderer.pb.h"
 #include "transport_catalog.pb.h"

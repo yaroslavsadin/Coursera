@@ -32,7 +32,8 @@ add_compile_options(${COMMON_FLAGS})
 add_link_options(${COMMON_FLAGS})
 
 # Generate CXX from Proto
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS transport_catalog.proto database.proto router.proto renderer.proto)
+file(GLOB PROTO_FILES *.proto ./yp_proto/*.proto)
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
 
 #Can manually add the sources using the set command as follows:
 #set(SOURCES src/mainapp.cpp src/Student.cpp)

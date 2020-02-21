@@ -17,7 +17,7 @@ message Buses {
     bool route_type = 7;
 }
 
-message Database {
+message Db {
     repeated Stops stops = 1;
     repeated Buses buses = 2;
 }

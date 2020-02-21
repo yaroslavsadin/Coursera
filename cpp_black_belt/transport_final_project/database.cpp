@@ -88,7 +88,7 @@ const Distances& BusDatabase::GetBusDistance(const std::string& name) const {
 }
 
 #include <cassert>
-void BusDatabase::Serialize(ProtoTransport::Database& t) const {
+void BusDatabase::Serialize(ProtoTransport::Db& t) const {
 #ifdef DEBUG
     TotalDuration serialize("BusDatabase::Serialize");
     ADD_DURATION(serialize);
@@ -124,7 +124,7 @@ void BusDatabase::Serialize(ProtoTransport::Database& t) const {
     }
 }
 
-void BusDatabase::Deserialize(const ProtoTransport::Database& t) {
+void BusDatabase::Deserialize(const ProtoTransport::Db& t) {
 #ifdef DEBUG
     TotalDuration deserialize("BusDatabase::Deserialize");
     ADD_DURATION(deserialize);
