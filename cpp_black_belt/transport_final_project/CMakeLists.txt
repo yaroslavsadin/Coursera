@@ -8,25 +8,35 @@ set(SVGLIBDIR ../week_1/svg)
 
 find_package(Protobuf REQUIRED)
 
-file(GLOB SOURCES 
+file(GLOB SRCS 
     *.cpp 
     ${SVGLIBDIR}/svg.cpp 
-    ../profile_advanced.cpp
+    ${UTILSDIR}/profile_advanced.cpp
 )
 
 add_executable(transport)
 
-file(GLOB PROTO_FILES *.proto)
+add_subdirectory(./transport_catalog)
+
+file(GLOB_RECURSE PROTO_FILES proto/*/*.proto)
 protobuf_generate(
     LANGUAGE cpp
     TARGET transport
+    IMPORT_DIRS proto
+    APPEND_PATH proto
+    PROTOC_OUT_DIR proto/generated
     PROTOS ${PROTO_FILES}
+)
+target_include_directories(
+    transport
+    PUBLIC
+        proto/generated
 )
 
 target_sources(
     transport 
     PUBLIC 
-        ${SOURCES}
+        ${SRCS}
 )
 target_include_directories(
     transport

@@ -177,356 +177,599 @@ cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s
 .PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s
 
-database.o: database.cpp.o
+proto/generated/address.pb.o: proto/generated/address.pb.cc.o
 
-.PHONY : database.o
-
-# target to build an object file
-database.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.cpp.o
-.PHONY : database.cpp.o
-
-database.i: database.cpp.i
-
-.PHONY : database.i
-
-# target to preprocess a source file
-database.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.cpp.i
-.PHONY : database.cpp.i
-
-database.s: database.cpp.s
-
-.PHONY : database.s
-
-# target to generate assembly for a file
-database.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.cpp.s
-.PHONY : database.cpp.s
-
-db.pb.o: db.pb.cc.o
-
-.PHONY : db.pb.o
+.PHONY : proto/generated/address.pb.o
 
 # target to build an object file
-db.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/db.pb.cc.o
-.PHONY : db.pb.cc.o
+proto/generated/address.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/address.pb.cc.o
+.PHONY : proto/generated/address.pb.cc.o
 
-db.pb.i: db.pb.cc.i
+proto/generated/address.pb.i: proto/generated/address.pb.cc.i
 
-.PHONY : db.pb.i
+.PHONY : proto/generated/address.pb.i
 
 # target to preprocess a source file
-db.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/db.pb.cc.i
-.PHONY : db.pb.cc.i
+proto/generated/address.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/address.pb.cc.i
+.PHONY : proto/generated/address.pb.cc.i
 
-db.pb.s: db.pb.cc.s
+proto/generated/address.pb.s: proto/generated/address.pb.cc.s
 
-.PHONY : db.pb.s
+.PHONY : proto/generated/address.pb.s
 
 # target to generate assembly for a file
-db.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/db.pb.cc.s
-.PHONY : db.pb.cc.s
+proto/generated/address.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/address.pb.cc.s
+.PHONY : proto/generated/address.pb.cc.s
 
-disances.o: disances.cpp.o
+proto/generated/company.pb.o: proto/generated/company.pb.cc.o
 
-.PHONY : disances.o
+.PHONY : proto/generated/company.pb.o
 
 # target to build an object file
-disances.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/disances.cpp.o
-.PHONY : disances.cpp.o
+proto/generated/company.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/company.pb.cc.o
+.PHONY : proto/generated/company.pb.cc.o
 
-disances.i: disances.cpp.i
+proto/generated/company.pb.i: proto/generated/company.pb.cc.i
 
-.PHONY : disances.i
+.PHONY : proto/generated/company.pb.i
 
 # target to preprocess a source file
-disances.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/disances.cpp.i
-.PHONY : disances.cpp.i
+proto/generated/company.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/company.pb.cc.i
+.PHONY : proto/generated/company.pb.cc.i
 
-disances.s: disances.cpp.s
+proto/generated/company.pb.s: proto/generated/company.pb.cc.s
 
-.PHONY : disances.s
+.PHONY : proto/generated/company.pb.s
 
 # target to generate assembly for a file
-disances.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/disances.cpp.s
-.PHONY : disances.cpp.s
+proto/generated/company.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/company.pb.cc.s
+.PHONY : proto/generated/company.pb.cc.s
 
-io.o: io.cpp.o
+proto/generated/database.pb.o: proto/generated/database.pb.cc.o
 
-.PHONY : io.o
+.PHONY : proto/generated/database.pb.o
 
 # target to build an object file
-io.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/io.cpp.o
-.PHONY : io.cpp.o
+proto/generated/database.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/database.pb.cc.o
+.PHONY : proto/generated/database.pb.cc.o
 
-io.i: io.cpp.i
+proto/generated/database.pb.i: proto/generated/database.pb.cc.i
 
-.PHONY : io.i
+.PHONY : proto/generated/database.pb.i
 
 # target to preprocess a source file
-io.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/io.cpp.i
-.PHONY : io.cpp.i
+proto/generated/database.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/database.pb.cc.i
+.PHONY : proto/generated/database.pb.cc.i
 
-io.s: io.cpp.s
+proto/generated/database.pb.s: proto/generated/database.pb.cc.s
 
-.PHONY : io.s
+.PHONY : proto/generated/database.pb.s
 
 # target to generate assembly for a file
-io.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/io.cpp.s
-.PHONY : io.cpp.s
+proto/generated/database.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/database.pb.cc.s
+.PHONY : proto/generated/database.pb.cc.s
 
-json.o: json.cpp.o
+proto/generated/db.pb.o: proto/generated/db.pb.cc.o
 
-.PHONY : json.o
+.PHONY : proto/generated/db.pb.o
 
 # target to build an object file
-json.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/json.cpp.o
-.PHONY : json.cpp.o
+proto/generated/db.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/db.pb.cc.o
+.PHONY : proto/generated/db.pb.cc.o
 
-json.i: json.cpp.i
+proto/generated/db.pb.i: proto/generated/db.pb.cc.i
 
-.PHONY : json.i
+.PHONY : proto/generated/db.pb.i
 
 # target to preprocess a source file
-json.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/json.cpp.i
-.PHONY : json.cpp.i
+proto/generated/db.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/db.pb.cc.i
+.PHONY : proto/generated/db.pb.cc.i
 
-json.s: json.cpp.s
+proto/generated/db.pb.s: proto/generated/db.pb.cc.s
 
-.PHONY : json.s
+.PHONY : proto/generated/db.pb.s
 
 # target to generate assembly for a file
-json.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/json.cpp.s
-.PHONY : json.cpp.s
+proto/generated/db.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/db.pb.cc.s
+.PHONY : proto/generated/db.pb.cc.s
 
-main.o: main.cpp.o
+proto/generated/name.pb.o: proto/generated/name.pb.cc.o
 
-.PHONY : main.o
+.PHONY : proto/generated/name.pb.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.o
-.PHONY : main.cpp.o
+proto/generated/name.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/name.pb.cc.o
+.PHONY : proto/generated/name.pb.cc.o
 
-main.i: main.cpp.i
+proto/generated/name.pb.i: proto/generated/name.pb.cc.i
 
-.PHONY : main.i
+.PHONY : proto/generated/name.pb.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.i
-.PHONY : main.cpp.i
+proto/generated/name.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/name.pb.cc.i
+.PHONY : proto/generated/name.pb.cc.i
 
-main.s: main.cpp.s
+proto/generated/name.pb.s: proto/generated/name.pb.cc.s
 
-.PHONY : main.s
+.PHONY : proto/generated/name.pb.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.s
-.PHONY : main.cpp.s
+proto/generated/name.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/name.pb.cc.s
+.PHONY : proto/generated/name.pb.cc.s
 
-main_serdes.o: main_serdes.cpp.o
+proto/generated/phone.pb.o: proto/generated/phone.pb.cc.o
 
-.PHONY : main_serdes.o
+.PHONY : proto/generated/phone.pb.o
 
 # target to build an object file
-main_serdes.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.o
-.PHONY : main_serdes.cpp.o
+proto/generated/phone.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/phone.pb.cc.o
+.PHONY : proto/generated/phone.pb.cc.o
 
-main_serdes.i: main_serdes.cpp.i
+proto/generated/phone.pb.i: proto/generated/phone.pb.cc.i
 
-.PHONY : main_serdes.i
+.PHONY : proto/generated/phone.pb.i
 
 # target to preprocess a source file
-main_serdes.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.i
-.PHONY : main_serdes.cpp.i
+proto/generated/phone.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/phone.pb.cc.i
+.PHONY : proto/generated/phone.pb.cc.i
 
-main_serdes.s: main_serdes.cpp.s
+proto/generated/phone.pb.s: proto/generated/phone.pb.cc.s
 
-.PHONY : main_serdes.s
+.PHONY : proto/generated/phone.pb.s
 
 # target to generate assembly for a file
-main_serdes.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.s
-.PHONY : main_serdes.cpp.s
+proto/generated/phone.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/phone.pb.cc.s
+.PHONY : proto/generated/phone.pb.cc.s
 
-misc.o: misc.cpp.o
+proto/generated/renderer.pb.o: proto/generated/renderer.pb.cc.o
 
-.PHONY : misc.o
+.PHONY : proto/generated/renderer.pb.o
 
 # target to build an object file
-misc.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.o
-.PHONY : misc.cpp.o
+proto/generated/renderer.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/renderer.pb.cc.o
+.PHONY : proto/generated/renderer.pb.cc.o
 
-misc.i: misc.cpp.i
+proto/generated/renderer.pb.i: proto/generated/renderer.pb.cc.i
 
-.PHONY : misc.i
+.PHONY : proto/generated/renderer.pb.i
 
 # target to preprocess a source file
-misc.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.i
-.PHONY : misc.cpp.i
+proto/generated/renderer.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/renderer.pb.cc.i
+.PHONY : proto/generated/renderer.pb.cc.i
 
-misc.s: misc.cpp.s
+proto/generated/renderer.pb.s: proto/generated/renderer.pb.cc.s
 
-.PHONY : misc.s
+.PHONY : proto/generated/renderer.pb.s
 
 # target to generate assembly for a file
-misc.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.s
-.PHONY : misc.cpp.s
+proto/generated/renderer.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/renderer.pb.cc.s
+.PHONY : proto/generated/renderer.pb.cc.s
 
-renderer.pb.o: renderer.pb.cc.o
+proto/generated/router.pb.o: proto/generated/router.pb.cc.o
 
-.PHONY : renderer.pb.o
+.PHONY : proto/generated/router.pb.o
 
 # target to build an object file
-renderer.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.o
-.PHONY : renderer.pb.cc.o
+proto/generated/router.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/router.pb.cc.o
+.PHONY : proto/generated/router.pb.cc.o
 
-renderer.pb.i: renderer.pb.cc.i
+proto/generated/router.pb.i: proto/generated/router.pb.cc.i
 
-.PHONY : renderer.pb.i
+.PHONY : proto/generated/router.pb.i
 
 # target to preprocess a source file
-renderer.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.i
-.PHONY : renderer.pb.cc.i
+proto/generated/router.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/router.pb.cc.i
+.PHONY : proto/generated/router.pb.cc.i
 
-renderer.pb.s: renderer.pb.cc.s
+proto/generated/router.pb.s: proto/generated/router.pb.cc.s
 
-.PHONY : renderer.pb.s
+.PHONY : proto/generated/router.pb.s
 
 # target to generate assembly for a file
-renderer.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/renderer.pb.cc.s
-.PHONY : renderer.pb.cc.s
+proto/generated/router.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/router.pb.cc.s
+.PHONY : proto/generated/router.pb.cc.s
 
-router.pb.o: router.pb.cc.o
+proto/generated/rubric.pb.o: proto/generated/rubric.pb.cc.o
 
-.PHONY : router.pb.o
+.PHONY : proto/generated/rubric.pb.o
 
 # target to build an object file
-router.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.o
-.PHONY : router.pb.cc.o
+proto/generated/rubric.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/rubric.pb.cc.o
+.PHONY : proto/generated/rubric.pb.cc.o
 
-router.pb.i: router.pb.cc.i
+proto/generated/rubric.pb.i: proto/generated/rubric.pb.cc.i
 
-.PHONY : router.pb.i
+.PHONY : proto/generated/rubric.pb.i
 
 # target to preprocess a source file
-router.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.i
-.PHONY : router.pb.cc.i
+proto/generated/rubric.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/rubric.pb.cc.i
+.PHONY : proto/generated/rubric.pb.cc.i
 
-router.pb.s: router.pb.cc.s
+proto/generated/rubric.pb.s: proto/generated/rubric.pb.cc.s
 
-.PHONY : router.pb.s
+.PHONY : proto/generated/rubric.pb.s
 
 # target to generate assembly for a file
-router.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.s
-.PHONY : router.pb.cc.s
+proto/generated/rubric.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/rubric.pb.cc.s
+.PHONY : proto/generated/rubric.pb.cc.s
 
-svg_render.o: svg_render.cpp.o
+proto/generated/sphere.pb.o: proto/generated/sphere.pb.cc.o
 
-.PHONY : svg_render.o
+.PHONY : proto/generated/sphere.pb.o
 
 # target to build an object file
-svg_render.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/svg_render.cpp.o
-.PHONY : svg_render.cpp.o
+proto/generated/sphere.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/sphere.pb.cc.o
+.PHONY : proto/generated/sphere.pb.cc.o
 
-svg_render.i: svg_render.cpp.i
+proto/generated/sphere.pb.i: proto/generated/sphere.pb.cc.i
 
-.PHONY : svg_render.i
+.PHONY : proto/generated/sphere.pb.i
 
 # target to preprocess a source file
-svg_render.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/svg_render.cpp.i
-.PHONY : svg_render.cpp.i
+proto/generated/sphere.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/sphere.pb.cc.i
+.PHONY : proto/generated/sphere.pb.cc.i
 
-svg_render.s: svg_render.cpp.s
+proto/generated/sphere.pb.s: proto/generated/sphere.pb.cc.s
 
-.PHONY : svg_render.s
+.PHONY : proto/generated/sphere.pb.s
 
 # target to generate assembly for a file
-svg_render.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/svg_render.cpp.s
-.PHONY : svg_render.cpp.s
+proto/generated/sphere.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/sphere.pb.cc.s
+.PHONY : proto/generated/sphere.pb.cc.s
 
-transport_catalog.pb.o: transport_catalog.pb.cc.o
+proto/generated/transport_catalog.pb.o: proto/generated/transport_catalog.pb.cc.o
 
-.PHONY : transport_catalog.pb.o
+.PHONY : proto/generated/transport_catalog.pb.o
 
 # target to build an object file
-transport_catalog.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.o
-.PHONY : transport_catalog.pb.cc.o
+proto/generated/transport_catalog.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/transport_catalog.pb.cc.o
+.PHONY : proto/generated/transport_catalog.pb.cc.o
 
-transport_catalog.pb.i: transport_catalog.pb.cc.i
+proto/generated/transport_catalog.pb.i: proto/generated/transport_catalog.pb.cc.i
 
-.PHONY : transport_catalog.pb.i
+.PHONY : proto/generated/transport_catalog.pb.i
 
 # target to preprocess a source file
-transport_catalog.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.i
-.PHONY : transport_catalog.pb.cc.i
+proto/generated/transport_catalog.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/transport_catalog.pb.cc.i
+.PHONY : proto/generated/transport_catalog.pb.cc.i
 
-transport_catalog.pb.s: transport_catalog.pb.cc.s
+proto/generated/transport_catalog.pb.s: proto/generated/transport_catalog.pb.cc.s
 
-.PHONY : transport_catalog.pb.s
+.PHONY : proto/generated/transport_catalog.pb.s
 
 # target to generate assembly for a file
-transport_catalog.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog.pb.cc.s
-.PHONY : transport_catalog.pb.cc.s
+proto/generated/transport_catalog.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/transport_catalog.pb.cc.s
+.PHONY : proto/generated/transport_catalog.pb.cc.s
 
-transport_router.o: transport_router.cpp.o
+proto/generated/url.pb.o: proto/generated/url.pb.cc.o
 
-.PHONY : transport_router.o
+.PHONY : proto/generated/url.pb.o
 
 # target to build an object file
-transport_router.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_router.cpp.o
-.PHONY : transport_router.cpp.o
+proto/generated/url.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/url.pb.cc.o
+.PHONY : proto/generated/url.pb.cc.o
 
-transport_router.i: transport_router.cpp.i
+proto/generated/url.pb.i: proto/generated/url.pb.cc.i
 
-.PHONY : transport_router.i
+.PHONY : proto/generated/url.pb.i
 
 # target to preprocess a source file
-transport_router.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_router.cpp.i
-.PHONY : transport_router.cpp.i
+proto/generated/url.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/url.pb.cc.i
+.PHONY : proto/generated/url.pb.cc.i
 
-transport_router.s: transport_router.cpp.s
+proto/generated/url.pb.s: proto/generated/url.pb.cc.s
 
-.PHONY : transport_router.s
+.PHONY : proto/generated/url.pb.s
 
 # target to generate assembly for a file
-transport_router.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_router.cpp.s
-.PHONY : transport_router.cpp.s
+proto/generated/url.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/url.pb.cc.s
+.PHONY : proto/generated/url.pb.cc.s
+
+proto/generated/working_time.pb.o: proto/generated/working_time.pb.cc.o
+
+.PHONY : proto/generated/working_time.pb.o
+
+# target to build an object file
+proto/generated/working_time.pb.cc.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/working_time.pb.cc.o
+.PHONY : proto/generated/working_time.pb.cc.o
+
+proto/generated/working_time.pb.i: proto/generated/working_time.pb.cc.i
+
+.PHONY : proto/generated/working_time.pb.i
+
+# target to preprocess a source file
+proto/generated/working_time.pb.cc.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/working_time.pb.cc.i
+.PHONY : proto/generated/working_time.pb.cc.i
+
+proto/generated/working_time.pb.s: proto/generated/working_time.pb.cc.s
+
+.PHONY : proto/generated/working_time.pb.s
+
+# target to generate assembly for a file
+proto/generated/working_time.pb.cc.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/proto/generated/working_time.pb.cc.s
+.PHONY : proto/generated/working_time.pb.cc.s
+
+transport_catalog/database.o: transport_catalog/database.cpp.o
+
+.PHONY : transport_catalog/database.o
+
+# target to build an object file
+transport_catalog/database.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.o
+.PHONY : transport_catalog/database.cpp.o
+
+transport_catalog/database.i: transport_catalog/database.cpp.i
+
+.PHONY : transport_catalog/database.i
+
+# target to preprocess a source file
+transport_catalog/database.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.i
+.PHONY : transport_catalog/database.cpp.i
+
+transport_catalog/database.s: transport_catalog/database.cpp.s
+
+.PHONY : transport_catalog/database.s
+
+# target to generate assembly for a file
+transport_catalog/database.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.s
+.PHONY : transport_catalog/database.cpp.s
+
+transport_catalog/disances.o: transport_catalog/disances.cpp.o
+
+.PHONY : transport_catalog/disances.o
+
+# target to build an object file
+transport_catalog/disances.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.o
+.PHONY : transport_catalog/disances.cpp.o
+
+transport_catalog/disances.i: transport_catalog/disances.cpp.i
+
+.PHONY : transport_catalog/disances.i
+
+# target to preprocess a source file
+transport_catalog/disances.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.i
+.PHONY : transport_catalog/disances.cpp.i
+
+transport_catalog/disances.s: transport_catalog/disances.cpp.s
+
+.PHONY : transport_catalog/disances.s
+
+# target to generate assembly for a file
+transport_catalog/disances.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.s
+.PHONY : transport_catalog/disances.cpp.s
+
+transport_catalog/io.o: transport_catalog/io.cpp.o
+
+.PHONY : transport_catalog/io.o
+
+# target to build an object file
+transport_catalog/io.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.o
+.PHONY : transport_catalog/io.cpp.o
+
+transport_catalog/io.i: transport_catalog/io.cpp.i
+
+.PHONY : transport_catalog/io.i
+
+# target to preprocess a source file
+transport_catalog/io.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.i
+.PHONY : transport_catalog/io.cpp.i
+
+transport_catalog/io.s: transport_catalog/io.cpp.s
+
+.PHONY : transport_catalog/io.s
+
+# target to generate assembly for a file
+transport_catalog/io.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.s
+.PHONY : transport_catalog/io.cpp.s
+
+transport_catalog/json.o: transport_catalog/json.cpp.o
+
+.PHONY : transport_catalog/json.o
+
+# target to build an object file
+transport_catalog/json.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.o
+.PHONY : transport_catalog/json.cpp.o
+
+transport_catalog/json.i: transport_catalog/json.cpp.i
+
+.PHONY : transport_catalog/json.i
+
+# target to preprocess a source file
+transport_catalog/json.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.i
+.PHONY : transport_catalog/json.cpp.i
+
+transport_catalog/json.s: transport_catalog/json.cpp.s
+
+.PHONY : transport_catalog/json.s
+
+# target to generate assembly for a file
+transport_catalog/json.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.s
+.PHONY : transport_catalog/json.cpp.s
+
+transport_catalog/main.o: transport_catalog/main.cpp.o
+
+.PHONY : transport_catalog/main.o
+
+# target to build an object file
+transport_catalog/main.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main.cpp.o
+.PHONY : transport_catalog/main.cpp.o
+
+transport_catalog/main.i: transport_catalog/main.cpp.i
+
+.PHONY : transport_catalog/main.i
+
+# target to preprocess a source file
+transport_catalog/main.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main.cpp.i
+.PHONY : transport_catalog/main.cpp.i
+
+transport_catalog/main.s: transport_catalog/main.cpp.s
+
+.PHONY : transport_catalog/main.s
+
+# target to generate assembly for a file
+transport_catalog/main.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main.cpp.s
+.PHONY : transport_catalog/main.cpp.s
+
+transport_catalog/main_serdes.o: transport_catalog/main_serdes.cpp.o
+
+.PHONY : transport_catalog/main_serdes.o
+
+# target to build an object file
+transport_catalog/main_serdes.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main_serdes.cpp.o
+.PHONY : transport_catalog/main_serdes.cpp.o
+
+transport_catalog/main_serdes.i: transport_catalog/main_serdes.cpp.i
+
+.PHONY : transport_catalog/main_serdes.i
+
+# target to preprocess a source file
+transport_catalog/main_serdes.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main_serdes.cpp.i
+.PHONY : transport_catalog/main_serdes.cpp.i
+
+transport_catalog/main_serdes.s: transport_catalog/main_serdes.cpp.s
+
+.PHONY : transport_catalog/main_serdes.s
+
+# target to generate assembly for a file
+transport_catalog/main_serdes.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/main_serdes.cpp.s
+.PHONY : transport_catalog/main_serdes.cpp.s
+
+transport_catalog/misc.o: transport_catalog/misc.cpp.o
+
+.PHONY : transport_catalog/misc.o
+
+# target to build an object file
+transport_catalog/misc.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.o
+.PHONY : transport_catalog/misc.cpp.o
+
+transport_catalog/misc.i: transport_catalog/misc.cpp.i
+
+.PHONY : transport_catalog/misc.i
+
+# target to preprocess a source file
+transport_catalog/misc.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.i
+.PHONY : transport_catalog/misc.cpp.i
+
+transport_catalog/misc.s: transport_catalog/misc.cpp.s
+
+.PHONY : transport_catalog/misc.s
+
+# target to generate assembly for a file
+transport_catalog/misc.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.s
+.PHONY : transport_catalog/misc.cpp.s
+
+transport_catalog/svg_render.o: transport_catalog/svg_render.cpp.o
+
+.PHONY : transport_catalog/svg_render.o
+
+# target to build an object file
+transport_catalog/svg_render.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.o
+.PHONY : transport_catalog/svg_render.cpp.o
+
+transport_catalog/svg_render.i: transport_catalog/svg_render.cpp.i
+
+.PHONY : transport_catalog/svg_render.i
+
+# target to preprocess a source file
+transport_catalog/svg_render.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.i
+.PHONY : transport_catalog/svg_render.cpp.i
+
+transport_catalog/svg_render.s: transport_catalog/svg_render.cpp.s
+
+.PHONY : transport_catalog/svg_render.s
+
+# target to generate assembly for a file
+transport_catalog/svg_render.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.s
+.PHONY : transport_catalog/svg_render.cpp.s
+
+transport_catalog/transport_router.o: transport_catalog/transport_router.cpp.o
+
+.PHONY : transport_catalog/transport_router.o
+
+# target to build an object file
+transport_catalog/transport_router.cpp.o:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.o
+.PHONY : transport_catalog/transport_router.cpp.o
+
+transport_catalog/transport_router.i: transport_catalog/transport_router.cpp.i
+
+.PHONY : transport_catalog/transport_router.i
+
+# target to preprocess a source file
+transport_catalog/transport_router.cpp.i:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.i
+.PHONY : transport_catalog/transport_router.cpp.i
+
+transport_catalog/transport_router.s: transport_catalog/transport_router.cpp.s
+
+.PHONY : transport_catalog/transport_router.s
+
+# target to generate assembly for a file
+transport_catalog/transport_router.cpp.s:
+	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.s
+.PHONY : transport_catalog/transport_router.cpp.s
 
 # Help Target
 help:
@@ -543,45 +786,72 @@ help:
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.i"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.s"
-	@echo "... database.o"
-	@echo "... database.i"
-	@echo "... database.s"
-	@echo "... db.pb.o"
-	@echo "... db.pb.i"
-	@echo "... db.pb.s"
-	@echo "... disances.o"
-	@echo "... disances.i"
-	@echo "... disances.s"
-	@echo "... io.o"
-	@echo "... io.i"
-	@echo "... io.s"
-	@echo "... json.o"
-	@echo "... json.i"
-	@echo "... json.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... main_serdes.o"
-	@echo "... main_serdes.i"
-	@echo "... main_serdes.s"
-	@echo "... misc.o"
-	@echo "... misc.i"
-	@echo "... misc.s"
-	@echo "... renderer.pb.o"
-	@echo "... renderer.pb.i"
-	@echo "... renderer.pb.s"
-	@echo "... router.pb.o"
-	@echo "... router.pb.i"
-	@echo "... router.pb.s"
-	@echo "... svg_render.o"
-	@echo "... svg_render.i"
-	@echo "... svg_render.s"
-	@echo "... transport_catalog.pb.o"
-	@echo "... transport_catalog.pb.i"
-	@echo "... transport_catalog.pb.s"
-	@echo "... transport_router.o"
-	@echo "... transport_router.i"
-	@echo "... transport_router.s"
+	@echo "... proto/generated/address.pb.o"
+	@echo "... proto/generated/address.pb.i"
+	@echo "... proto/generated/address.pb.s"
+	@echo "... proto/generated/company.pb.o"
+	@echo "... proto/generated/company.pb.i"
+	@echo "... proto/generated/company.pb.s"
+	@echo "... proto/generated/database.pb.o"
+	@echo "... proto/generated/database.pb.i"
+	@echo "... proto/generated/database.pb.s"
+	@echo "... proto/generated/db.pb.o"
+	@echo "... proto/generated/db.pb.i"
+	@echo "... proto/generated/db.pb.s"
+	@echo "... proto/generated/name.pb.o"
+	@echo "... proto/generated/name.pb.i"
+	@echo "... proto/generated/name.pb.s"
+	@echo "... proto/generated/phone.pb.o"
+	@echo "... proto/generated/phone.pb.i"
+	@echo "... proto/generated/phone.pb.s"
+	@echo "... proto/generated/renderer.pb.o"
+	@echo "... proto/generated/renderer.pb.i"
+	@echo "... proto/generated/renderer.pb.s"
+	@echo "... proto/generated/router.pb.o"
+	@echo "... proto/generated/router.pb.i"
+	@echo "... proto/generated/router.pb.s"
+	@echo "... proto/generated/rubric.pb.o"
+	@echo "... proto/generated/rubric.pb.i"
+	@echo "... proto/generated/rubric.pb.s"
+	@echo "... proto/generated/sphere.pb.o"
+	@echo "... proto/generated/sphere.pb.i"
+	@echo "... proto/generated/sphere.pb.s"
+	@echo "... proto/generated/transport_catalog.pb.o"
+	@echo "... proto/generated/transport_catalog.pb.i"
+	@echo "... proto/generated/transport_catalog.pb.s"
+	@echo "... proto/generated/url.pb.o"
+	@echo "... proto/generated/url.pb.i"
+	@echo "... proto/generated/url.pb.s"
+	@echo "... proto/generated/working_time.pb.o"
+	@echo "... proto/generated/working_time.pb.i"
+	@echo "... proto/generated/working_time.pb.s"
+	@echo "... transport_catalog/database.o"
+	@echo "... transport_catalog/database.i"
+	@echo "... transport_catalog/database.s"
+	@echo "... transport_catalog/disances.o"
+	@echo "... transport_catalog/disances.i"
+	@echo "... transport_catalog/disances.s"
+	@echo "... transport_catalog/io.o"
+	@echo "... transport_catalog/io.i"
+	@echo "... transport_catalog/io.s"
+	@echo "... transport_catalog/json.o"
+	@echo "... transport_catalog/json.i"
+	@echo "... transport_catalog/json.s"
+	@echo "... transport_catalog/main.o"
+	@echo "... transport_catalog/main.i"
+	@echo "... transport_catalog/main.s"
+	@echo "... transport_catalog/main_serdes.o"
+	@echo "... transport_catalog/main_serdes.i"
+	@echo "... transport_catalog/main_serdes.s"
+	@echo "... transport_catalog/misc.o"
+	@echo "... transport_catalog/misc.i"
+	@echo "... transport_catalog/misc.s"
+	@echo "... transport_catalog/svg_render.o"
+	@echo "... transport_catalog/svg_render.i"
+	@echo "... transport_catalog/svg_render.s"
+	@echo "... transport_catalog/transport_router.o"
+	@echo "... transport_catalog/transport_router.i"
+	@echo "... transport_catalog/transport_router.s"
 .PHONY : help
 
 

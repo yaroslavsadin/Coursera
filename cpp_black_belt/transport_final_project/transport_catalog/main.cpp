@@ -1,0 +1,239 @@
+#ifdef DEBUG
+#include <iostream>
+#include "test_runner.h"
+#include "misc.h"
+#include "io.h"
+#include "json.h"
+#include <string>
+#include <iomanip>
+#include "graph.h"
+#include "router.h"
+
+using namespace std;
+
+int main(void) {
+  stringstream input_base{R"(
+{
+    "serialization_settings": {
+        "file": "ser.bin"
+    },
+    "routing_settings": {
+        "bus_wait_time": 2,
+        "bus_velocity": 30
+    },
+    "render_settings": {
+        "width": 1200,
+        "height": 500,
+        "padding": 50,
+        "outer_margin": 150,
+        "stop_radius": 5,
+        "line_width": 14,
+        "bus_label_font_size": 20,
+        "bus_label_offset": [
+            7,
+            15
+        ],
+        "stop_label_font_size": 18,
+        "stop_label_offset": [
+            7,
+            -3
+        ],
+        "underlayer_color": [
+            255,
+            255,
+            255,
+            0.85
+        ],
+        "underlayer_width": 3,
+        "color_palette": [
+            "green",
+            [
+                255,
+                160,
+                0
+            ],
+            "red"
+        ],
+        "layers": [
+            "bus_lines",
+            "bus_labels",
+            "stop_points",
+            "stop_labels"
+        ]
+    },
+    "base_requests": [
+        {
+            "type": "Bus",
+            "name": "14",
+            "stops": [
+                "Улица Лизы Чайкиной",
+                "Электросети",
+                "Ривьерский мост",
+                "Гостиница Сочи",
+                "Кубанская улица",
+                "По требованию",
+                "Улица Докучаева",
+                "Улица Лизы Чайкиной"
+            ],
+            "is_roundtrip": true
+        },
+        {
+            "type": "Bus",
+            "name": "24",
+            "stops": [
+                "Улица Докучаева",
+                "Параллельная улица",
+                "Электросети",
+                "Санаторий Родина"
+            ],
+            "is_roundtrip": false
+        },
+        {
+            "type": "Bus",
+            "name": "114",
+            "stops": [
+                "Морской вокзал",
+                "Ривьерский мост"
+            ],
+            "is_roundtrip": false
+        },
+        {
+            "type": "Stop",
+            "name": "Улица Лизы Чайкиной",
+            "latitude": 43.590317,
+            "longitude": 39.746833,
+            "road_distances": {
+                "Электросети": 4300,
+                "Улица Докучаева": 2000
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Морской вокзал",
+            "latitude": 43.581969,
+            "longitude": 39.719848,
+            "road_distances": {
+                "Ривьерский мост": 850
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Электросети",
+            "latitude": 43.598701,
+            "longitude": 39.730623,
+            "road_distances": {
+                "Санаторий Родина": 4500,
+                "Параллельная улица": 1200,
+                "Ривьерский мост": 1900
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Ривьерский мост",
+            "latitude": 43.587795,
+            "longitude": 39.716901,
+            "road_distances": {
+                "Морской вокзал": 850,
+                "Гостиница Сочи": 1740
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Гостиница Сочи",
+            "latitude": 43.578079,
+            "longitude": 39.728068,
+            "road_distances": {
+                "Кубанская улица": 320
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Кубанская улица",
+            "latitude": 43.578509,
+            "longitude": 39.730959,
+            "road_distances": {
+                "По требованию": 370
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "По требованию",
+            "latitude": 43.579285,
+            "longitude": 39.733742,
+            "road_distances": {
+                "Улица Докучаева": 600
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Улица Докучаева",
+            "latitude": 43.585586,
+            "longitude": 39.733879,
+            "road_distances": {
+                "Параллельная улица": 1100
+            }
+        },
+        {
+            "type": "Stop",
+            "name": "Параллельная улица",
+            "latitude": 43.590041,
+            "longitude": 39.732886,
+            "road_distances": {}
+        },
+        {
+            "type": "Stop",
+            "name": "Санаторий Родина",
+            "latitude": 43.601202,
+            "longitude": 39.715498,
+            "road_distances": {}
+        }
+    ]
+}
+  )"};
+  stringstream input_stats{R"(
+{
+    "serialization_settings": {
+        "file": "ser.bin"
+    },
+    "stat_requests": [
+        {
+            "id": 218563507,
+            "type": "Bus",
+            "name": "14"
+        },
+        {
+            "id": 508658276,
+            "type": "Stop",
+            "name": "Электросети"
+        },
+        {
+            "id": 1964680131,
+            "type": "Route",
+            "from": "Морской вокзал",
+            "to": "Параллельная улица"
+        },
+        {
+            "id": 1359372752,
+            "type": "Map"
+        }
+    ]
+}
+  )"};
+
+    {
+        Json::Document doc = Json::Load(input_base);
+        TransportCatalog handler(doc);
+        handler.ProcessRequests();
+        handler.Serialize();
+    }
+    {
+        Json::Document doc = Json::Load(input_stats);
+        TransportCatalog handler(doc);
+        auto responses = handler.Deserialize().ProcessRequests().GetResponses();
+        cout << setprecision(6);
+        Json::Print(responses, cout);
+    }
+    
+    return 0;
+}
+#endif
