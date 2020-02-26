@@ -123,60 +123,6 @@ transport/fast:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/build
 .PHONY : transport/fast
 
-address.pb.o: address.pb.cc.o
-
-.PHONY : address.pb.o
-
-# target to build an object file
-address.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/address.pb.cc.o
-.PHONY : address.pb.cc.o
-
-address.pb.i: address.pb.cc.i
-
-.PHONY : address.pb.i
-
-# target to preprocess a source file
-address.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/address.pb.cc.i
-.PHONY : address.pb.cc.i
-
-address.pb.s: address.pb.cc.s
-
-.PHONY : address.pb.s
-
-# target to generate assembly for a file
-address.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/address.pb.cc.s
-.PHONY : address.pb.cc.s
-
-company.pb.o: company.pb.cc.o
-
-.PHONY : company.pb.o
-
-# target to build an object file
-company.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/company.pb.cc.o
-.PHONY : company.pb.cc.o
-
-company.pb.i: company.pb.cc.i
-
-.PHONY : company.pb.i
-
-# target to preprocess a source file
-company.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/company.pb.cc.i
-.PHONY : company.pb.cc.i
-
-company.pb.s: company.pb.cc.s
-
-.PHONY : company.pb.s
-
-# target to generate assembly for a file
-company.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/company.pb.cc.s
-.PHONY : company.pb.cc.s
-
 cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
 
 .PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o
@@ -257,33 +203,6 @@ database.s: database.cpp.s
 database.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.cpp.s
 .PHONY : database.cpp.s
-
-database.pb.o: database.pb.cc.o
-
-.PHONY : database.pb.o
-
-# target to build an object file
-database.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.o
-.PHONY : database.pb.cc.o
-
-database.pb.i: database.pb.cc.i
-
-.PHONY : database.pb.i
-
-# target to preprocess a source file
-database.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.i
-.PHONY : database.pb.cc.i
-
-database.pb.s: database.pb.cc.s
-
-.PHONY : database.pb.s
-
-# target to generate assembly for a file
-database.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/database.pb.cc.s
-.PHONY : database.pb.cc.s
 
 db.pb.o: db.pb.cc.o
 
@@ -474,60 +393,6 @@ misc.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/misc.cpp.s
 .PHONY : misc.cpp.s
 
-name.pb.o: name.pb.cc.o
-
-.PHONY : name.pb.o
-
-# target to build an object file
-name.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/name.pb.cc.o
-.PHONY : name.pb.cc.o
-
-name.pb.i: name.pb.cc.i
-
-.PHONY : name.pb.i
-
-# target to preprocess a source file
-name.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/name.pb.cc.i
-.PHONY : name.pb.cc.i
-
-name.pb.s: name.pb.cc.s
-
-.PHONY : name.pb.s
-
-# target to generate assembly for a file
-name.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/name.pb.cc.s
-.PHONY : name.pb.cc.s
-
-phone.pb.o: phone.pb.cc.o
-
-.PHONY : phone.pb.o
-
-# target to build an object file
-phone.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/phone.pb.cc.o
-.PHONY : phone.pb.cc.o
-
-phone.pb.i: phone.pb.cc.i
-
-.PHONY : phone.pb.i
-
-# target to preprocess a source file
-phone.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/phone.pb.cc.i
-.PHONY : phone.pb.cc.i
-
-phone.pb.s: phone.pb.cc.s
-
-.PHONY : phone.pb.s
-
-# target to generate assembly for a file
-phone.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/phone.pb.cc.s
-.PHONY : phone.pb.cc.s
-
 renderer.pb.o: renderer.pb.cc.o
 
 .PHONY : renderer.pb.o
@@ -581,60 +446,6 @@ router.pb.s: router.pb.cc.s
 router.pb.cc.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/router.pb.cc.s
 .PHONY : router.pb.cc.s
-
-rubric.pb.o: rubric.pb.cc.o
-
-.PHONY : rubric.pb.o
-
-# target to build an object file
-rubric.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/rubric.pb.cc.o
-.PHONY : rubric.pb.cc.o
-
-rubric.pb.i: rubric.pb.cc.i
-
-.PHONY : rubric.pb.i
-
-# target to preprocess a source file
-rubric.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/rubric.pb.cc.i
-.PHONY : rubric.pb.cc.i
-
-rubric.pb.s: rubric.pb.cc.s
-
-.PHONY : rubric.pb.s
-
-# target to generate assembly for a file
-rubric.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/rubric.pb.cc.s
-.PHONY : rubric.pb.cc.s
-
-sphere.pb.o: sphere.pb.cc.o
-
-.PHONY : sphere.pb.o
-
-# target to build an object file
-sphere.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/sphere.pb.cc.o
-.PHONY : sphere.pb.cc.o
-
-sphere.pb.i: sphere.pb.cc.i
-
-.PHONY : sphere.pb.i
-
-# target to preprocess a source file
-sphere.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/sphere.pb.cc.i
-.PHONY : sphere.pb.cc.i
-
-sphere.pb.s: sphere.pb.cc.s
-
-.PHONY : sphere.pb.s
-
-# target to generate assembly for a file
-sphere.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/sphere.pb.cc.s
-.PHONY : sphere.pb.cc.s
 
 svg_render.o: svg_render.cpp.o
 
@@ -717,60 +528,6 @@ transport_router.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_router.cpp.s
 .PHONY : transport_router.cpp.s
 
-url.pb.o: url.pb.cc.o
-
-.PHONY : url.pb.o
-
-# target to build an object file
-url.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/url.pb.cc.o
-.PHONY : url.pb.cc.o
-
-url.pb.i: url.pb.cc.i
-
-.PHONY : url.pb.i
-
-# target to preprocess a source file
-url.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/url.pb.cc.i
-.PHONY : url.pb.cc.i
-
-url.pb.s: url.pb.cc.s
-
-.PHONY : url.pb.s
-
-# target to generate assembly for a file
-url.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/url.pb.cc.s
-.PHONY : url.pb.cc.s
-
-working_time.pb.o: working_time.pb.cc.o
-
-.PHONY : working_time.pb.o
-
-# target to build an object file
-working_time.pb.cc.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/working_time.pb.cc.o
-.PHONY : working_time.pb.cc.o
-
-working_time.pb.i: working_time.pb.cc.i
-
-.PHONY : working_time.pb.i
-
-# target to preprocess a source file
-working_time.pb.cc.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/working_time.pb.cc.i
-.PHONY : working_time.pb.cc.i
-
-working_time.pb.s: working_time.pb.cc.s
-
-.PHONY : working_time.pb.s
-
-# target to generate assembly for a file
-working_time.pb.cc.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/working_time.pb.cc.s
-.PHONY : working_time.pb.cc.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -780,12 +537,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... transport"
 	@echo "... edit_cache"
-	@echo "... address.pb.o"
-	@echo "... address.pb.i"
-	@echo "... address.pb.s"
-	@echo "... company.pb.o"
-	@echo "... company.pb.i"
-	@echo "... company.pb.s"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s"
@@ -795,9 +546,6 @@ help:
 	@echo "... database.o"
 	@echo "... database.i"
 	@echo "... database.s"
-	@echo "... database.pb.o"
-	@echo "... database.pb.i"
-	@echo "... database.pb.s"
 	@echo "... db.pb.o"
 	@echo "... db.pb.i"
 	@echo "... db.pb.s"
@@ -819,24 +567,12 @@ help:
 	@echo "... misc.o"
 	@echo "... misc.i"
 	@echo "... misc.s"
-	@echo "... name.pb.o"
-	@echo "... name.pb.i"
-	@echo "... name.pb.s"
-	@echo "... phone.pb.o"
-	@echo "... phone.pb.i"
-	@echo "... phone.pb.s"
 	@echo "... renderer.pb.o"
 	@echo "... renderer.pb.i"
 	@echo "... renderer.pb.s"
 	@echo "... router.pb.o"
 	@echo "... router.pb.i"
 	@echo "... router.pb.s"
-	@echo "... rubric.pb.o"
-	@echo "... rubric.pb.i"
-	@echo "... rubric.pb.s"
-	@echo "... sphere.pb.o"
-	@echo "... sphere.pb.i"
-	@echo "... sphere.pb.s"
 	@echo "... svg_render.o"
 	@echo "... svg_render.i"
 	@echo "... svg_render.s"
@@ -846,12 +582,6 @@ help:
 	@echo "... transport_router.o"
 	@echo "... transport_router.i"
 	@echo "... transport_router.s"
-	@echo "... url.pb.o"
-	@echo "... url.pb.i"
-	@echo "... url.pb.s"
-	@echo "... working_time.pb.o"
-	@echo "... working_time.pb.i"
-	@echo "... working_time.pb.s"
 .PHONY : help
 
 
