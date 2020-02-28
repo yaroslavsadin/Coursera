@@ -18,6 +18,10 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${UTILSDIR} 
     ${SVGLIBDIR}
+    ./transport_catalog
+    ./transport_catalog/proto/generated
+    ./yellow_pages
+    ./yellow_pages/proto/generated
 )
 add_compile_options(
     -g -O0 -Wall
@@ -62,7 +66,9 @@ target_sources(
 )
 target_link_libraries(transport 
     ${Protobuf_LIBRARIES} 
+    transport_catalog
     transport_catalog_proto 
+    yellow_pages
     yellow_pages_proto
 )
 ###############################################
@@ -71,4 +77,5 @@ add_subdirectory(./transport_catalog)
 add_subdirectory(./yellow_pages)
 
 enable_testing()
-add_test(NAME transport COMMAND transport < input.json > output.json)
+add_test(NAME transport_catalog_tests COMMAND transport_catalog_tests)
+add_test(NAME yellow_pages_tests COMMAND yellow_pages_tests)

@@ -148,6 +148,32 @@ transport_catalog_proto/fast:
 .PHONY : transport_catalog_proto/fast
 
 #=============================================================================
+# Target rules for targets named transport_catalog
+
+# Build rule for target.
+transport_catalog: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 transport_catalog
+.PHONY : transport_catalog
+
+# fast build rule for target.
+transport_catalog/fast:
+	$(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/build
+.PHONY : transport_catalog/fast
+
+#=============================================================================
+# Target rules for targets named transport_catalog_tests
+
+# Build rule for target.
+transport_catalog_tests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 transport_catalog_tests
+.PHONY : transport_catalog_tests
+
+# fast build rule for target.
+transport_catalog_tests/fast:
+	$(MAKE) -f transport_catalog/tests/CMakeFiles/transport_catalog_tests.dir/build.make transport_catalog/tests/CMakeFiles/transport_catalog_tests.dir/build
+.PHONY : transport_catalog_tests/fast
+
+#=============================================================================
 # Target rules for targets named yellow_pages_proto
 
 # Build rule for target.
@@ -159,6 +185,32 @@ yellow_pages_proto: cmake_check_build_system
 yellow_pages_proto/fast:
 	$(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/build
 .PHONY : yellow_pages_proto/fast
+
+#=============================================================================
+# Target rules for targets named yellow_pages
+
+# Build rule for target.
+yellow_pages: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 yellow_pages
+.PHONY : yellow_pages
+
+# fast build rule for target.
+yellow_pages/fast:
+	$(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/build
+.PHONY : yellow_pages/fast
+
+#=============================================================================
+# Target rules for targets named yellow_pages_tests
+
+# Build rule for target.
+yellow_pages_tests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 yellow_pages_tests
+.PHONY : yellow_pages_tests
+
+# fast build rule for target.
+yellow_pages_tests/fast:
+	$(MAKE) -f yellow_pages/tests/CMakeFiles/yellow_pages_tests.dir/build.make yellow_pages/tests/CMakeFiles/yellow_pages_tests.dir/build
+.PHONY : yellow_pages_tests/fast
 
 cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
 
@@ -268,249 +320,6 @@ main_serdes.cpp.s:
 	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.s
 .PHONY : main_serdes.cpp.s
 
-transport_catalog/database.o: transport_catalog/database.cpp.o
-
-.PHONY : transport_catalog/database.o
-
-# target to build an object file
-transport_catalog/database.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.o
-.PHONY : transport_catalog/database.cpp.o
-
-transport_catalog/database.i: transport_catalog/database.cpp.i
-
-.PHONY : transport_catalog/database.i
-
-# target to preprocess a source file
-transport_catalog/database.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.i
-.PHONY : transport_catalog/database.cpp.i
-
-transport_catalog/database.s: transport_catalog/database.cpp.s
-
-.PHONY : transport_catalog/database.s
-
-# target to generate assembly for a file
-transport_catalog/database.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/database.cpp.s
-.PHONY : transport_catalog/database.cpp.s
-
-transport_catalog/disances.o: transport_catalog/disances.cpp.o
-
-.PHONY : transport_catalog/disances.o
-
-# target to build an object file
-transport_catalog/disances.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.o
-.PHONY : transport_catalog/disances.cpp.o
-
-transport_catalog/disances.i: transport_catalog/disances.cpp.i
-
-.PHONY : transport_catalog/disances.i
-
-# target to preprocess a source file
-transport_catalog/disances.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.i
-.PHONY : transport_catalog/disances.cpp.i
-
-transport_catalog/disances.s: transport_catalog/disances.cpp.s
-
-.PHONY : transport_catalog/disances.s
-
-# target to generate assembly for a file
-transport_catalog/disances.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/disances.cpp.s
-.PHONY : transport_catalog/disances.cpp.s
-
-transport_catalog/io.o: transport_catalog/io.cpp.o
-
-.PHONY : transport_catalog/io.o
-
-# target to build an object file
-transport_catalog/io.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.o
-.PHONY : transport_catalog/io.cpp.o
-
-transport_catalog/io.i: transport_catalog/io.cpp.i
-
-.PHONY : transport_catalog/io.i
-
-# target to preprocess a source file
-transport_catalog/io.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.i
-.PHONY : transport_catalog/io.cpp.i
-
-transport_catalog/io.s: transport_catalog/io.cpp.s
-
-.PHONY : transport_catalog/io.s
-
-# target to generate assembly for a file
-transport_catalog/io.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/io.cpp.s
-.PHONY : transport_catalog/io.cpp.s
-
-transport_catalog/json.o: transport_catalog/json.cpp.o
-
-.PHONY : transport_catalog/json.o
-
-# target to build an object file
-transport_catalog/json.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.o
-.PHONY : transport_catalog/json.cpp.o
-
-transport_catalog/json.i: transport_catalog/json.cpp.i
-
-.PHONY : transport_catalog/json.i
-
-# target to preprocess a source file
-transport_catalog/json.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.i
-.PHONY : transport_catalog/json.cpp.i
-
-transport_catalog/json.s: transport_catalog/json.cpp.s
-
-.PHONY : transport_catalog/json.s
-
-# target to generate assembly for a file
-transport_catalog/json.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/json.cpp.s
-.PHONY : transport_catalog/json.cpp.s
-
-transport_catalog/misc.o: transport_catalog/misc.cpp.o
-
-.PHONY : transport_catalog/misc.o
-
-# target to build an object file
-transport_catalog/misc.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.o
-.PHONY : transport_catalog/misc.cpp.o
-
-transport_catalog/misc.i: transport_catalog/misc.cpp.i
-
-.PHONY : transport_catalog/misc.i
-
-# target to preprocess a source file
-transport_catalog/misc.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.i
-.PHONY : transport_catalog/misc.cpp.i
-
-transport_catalog/misc.s: transport_catalog/misc.cpp.s
-
-.PHONY : transport_catalog/misc.s
-
-# target to generate assembly for a file
-transport_catalog/misc.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/misc.cpp.s
-.PHONY : transport_catalog/misc.cpp.s
-
-transport_catalog/svg_render.o: transport_catalog/svg_render.cpp.o
-
-.PHONY : transport_catalog/svg_render.o
-
-# target to build an object file
-transport_catalog/svg_render.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.o
-.PHONY : transport_catalog/svg_render.cpp.o
-
-transport_catalog/svg_render.i: transport_catalog/svg_render.cpp.i
-
-.PHONY : transport_catalog/svg_render.i
-
-# target to preprocess a source file
-transport_catalog/svg_render.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.i
-.PHONY : transport_catalog/svg_render.cpp.i
-
-transport_catalog/svg_render.s: transport_catalog/svg_render.cpp.s
-
-.PHONY : transport_catalog/svg_render.s
-
-# target to generate assembly for a file
-transport_catalog/svg_render.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/svg_render.cpp.s
-.PHONY : transport_catalog/svg_render.cpp.s
-
-transport_catalog/transport_router.o: transport_catalog/transport_router.cpp.o
-
-.PHONY : transport_catalog/transport_router.o
-
-# target to build an object file
-transport_catalog/transport_router.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.o
-.PHONY : transport_catalog/transport_router.cpp.o
-
-transport_catalog/transport_router.i: transport_catalog/transport_router.cpp.i
-
-.PHONY : transport_catalog/transport_router.i
-
-# target to preprocess a source file
-transport_catalog/transport_router.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.i
-.PHONY : transport_catalog/transport_router.cpp.i
-
-transport_catalog/transport_router.s: transport_catalog/transport_router.cpp.s
-
-.PHONY : transport_catalog/transport_router.s
-
-# target to generate assembly for a file
-transport_catalog/transport_router.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/transport_catalog/transport_router.cpp.s
-.PHONY : transport_catalog/transport_router.cpp.s
-
-yellow_pages/address.o: yellow_pages/address.cpp.o
-
-.PHONY : yellow_pages/address.o
-
-# target to build an object file
-yellow_pages/address.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/address.cpp.o
-.PHONY : yellow_pages/address.cpp.o
-
-yellow_pages/address.i: yellow_pages/address.cpp.i
-
-.PHONY : yellow_pages/address.i
-
-# target to preprocess a source file
-yellow_pages/address.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/address.cpp.i
-.PHONY : yellow_pages/address.cpp.i
-
-yellow_pages/address.s: yellow_pages/address.cpp.s
-
-.PHONY : yellow_pages/address.s
-
-# target to generate assembly for a file
-yellow_pages/address.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/address.cpp.s
-.PHONY : yellow_pages/address.cpp.s
-
-yellow_pages/company.o: yellow_pages/company.cpp.o
-
-.PHONY : yellow_pages/company.o
-
-# target to build an object file
-yellow_pages/company.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/company.cpp.o
-.PHONY : yellow_pages/company.cpp.o
-
-yellow_pages/company.i: yellow_pages/company.cpp.i
-
-.PHONY : yellow_pages/company.i
-
-# target to preprocess a source file
-yellow_pages/company.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/company.cpp.i
-.PHONY : yellow_pages/company.cpp.i
-
-yellow_pages/company.s: yellow_pages/company.cpp.s
-
-.PHONY : yellow_pages/company.s
-
-# target to generate assembly for a file
-yellow_pages/company.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/yellow_pages/company.cpp.s
-.PHONY : yellow_pages/company.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -522,7 +331,11 @@ help:
 	@echo "... transport"
 	@echo "... test"
 	@echo "... transport_catalog_proto"
+	@echo "... transport_catalog"
+	@echo "... transport_catalog_tests"
 	@echo "... yellow_pages_proto"
+	@echo "... yellow_pages"
+	@echo "... yellow_pages_tests"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i"
 	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s"
@@ -535,33 +348,6 @@ help:
 	@echo "... main_serdes.o"
 	@echo "... main_serdes.i"
 	@echo "... main_serdes.s"
-	@echo "... transport_catalog/database.o"
-	@echo "... transport_catalog/database.i"
-	@echo "... transport_catalog/database.s"
-	@echo "... transport_catalog/disances.o"
-	@echo "... transport_catalog/disances.i"
-	@echo "... transport_catalog/disances.s"
-	@echo "... transport_catalog/io.o"
-	@echo "... transport_catalog/io.i"
-	@echo "... transport_catalog/io.s"
-	@echo "... transport_catalog/json.o"
-	@echo "... transport_catalog/json.i"
-	@echo "... transport_catalog/json.s"
-	@echo "... transport_catalog/misc.o"
-	@echo "... transport_catalog/misc.i"
-	@echo "... transport_catalog/misc.s"
-	@echo "... transport_catalog/svg_render.o"
-	@echo "... transport_catalog/svg_render.i"
-	@echo "... transport_catalog/svg_render.s"
-	@echo "... transport_catalog/transport_router.o"
-	@echo "... transport_catalog/transport_router.i"
-	@echo "... transport_catalog/transport_router.s"
-	@echo "... yellow_pages/address.o"
-	@echo "... yellow_pages/address.i"
-	@echo "... yellow_pages/address.s"
-	@echo "... yellow_pages/company.o"
-	@echo "... yellow_pages/company.i"
-	@echo "... yellow_pages/company.s"
 .PHONY : help
 
 

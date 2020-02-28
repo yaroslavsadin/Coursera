@@ -136,6 +136,156 @@ transport_catalog_proto/fast:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/build
 .PHONY : transport_catalog_proto/fast
 
+# Convenience name for target.
+transport_catalog/CMakeFiles/transport_catalog.dir/rule:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f CMakeFiles/Makefile2 transport_catalog/CMakeFiles/transport_catalog.dir/rule
+.PHONY : transport_catalog/CMakeFiles/transport_catalog.dir/rule
+
+# Convenience name for target.
+transport_catalog: transport_catalog/CMakeFiles/transport_catalog.dir/rule
+
+.PHONY : transport_catalog
+
+# fast build rule for target.
+transport_catalog/fast:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/build
+.PHONY : transport_catalog/fast
+
+database.o: database.cpp.o
+
+.PHONY : database.o
+
+# target to build an object file
+database.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/database.cpp.o
+.PHONY : database.cpp.o
+
+database.i: database.cpp.i
+
+.PHONY : database.i
+
+# target to preprocess a source file
+database.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/database.cpp.i
+.PHONY : database.cpp.i
+
+database.s: database.cpp.s
+
+.PHONY : database.s
+
+# target to generate assembly for a file
+database.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/database.cpp.s
+.PHONY : database.cpp.s
+
+disances.o: disances.cpp.o
+
+.PHONY : disances.o
+
+# target to build an object file
+disances.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/disances.cpp.o
+.PHONY : disances.cpp.o
+
+disances.i: disances.cpp.i
+
+.PHONY : disances.i
+
+# target to preprocess a source file
+disances.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/disances.cpp.i
+.PHONY : disances.cpp.i
+
+disances.s: disances.cpp.s
+
+.PHONY : disances.s
+
+# target to generate assembly for a file
+disances.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/disances.cpp.s
+.PHONY : disances.cpp.s
+
+io.o: io.cpp.o
+
+.PHONY : io.o
+
+# target to build an object file
+io.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/io.cpp.o
+.PHONY : io.cpp.o
+
+io.i: io.cpp.i
+
+.PHONY : io.i
+
+# target to preprocess a source file
+io.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/io.cpp.i
+.PHONY : io.cpp.i
+
+io.s: io.cpp.s
+
+.PHONY : io.s
+
+# target to generate assembly for a file
+io.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/io.cpp.s
+.PHONY : io.cpp.s
+
+json.o: json.cpp.o
+
+.PHONY : json.o
+
+# target to build an object file
+json.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.o
+.PHONY : json.cpp.o
+
+json.i: json.cpp.i
+
+.PHONY : json.i
+
+# target to preprocess a source file
+json.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.i
+.PHONY : json.cpp.i
+
+json.s: json.cpp.s
+
+.PHONY : json.s
+
+# target to generate assembly for a file
+json.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.s
+.PHONY : json.cpp.s
+
+misc.o: misc.cpp.o
+
+.PHONY : misc.o
+
+# target to build an object file
+misc.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/misc.cpp.o
+.PHONY : misc.cpp.o
+
+misc.i: misc.cpp.i
+
+.PHONY : misc.i
+
+# target to preprocess a source file
+misc.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/misc.cpp.i
+.PHONY : misc.cpp.i
+
+misc.s: misc.cpp.s
+
+.PHONY : misc.s
+
+# target to generate assembly for a file
+misc.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/misc.cpp.s
+.PHONY : misc.cpp.s
+
 proto/generated/db.pb.o: proto/generated/db.pb.cc.o
 
 .PHONY : proto/generated/db.pb.o
@@ -244,6 +394,60 @@ proto/generated/transport_catalog.pb.cc.s:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/transport_catalog.pb.cc.s
 .PHONY : proto/generated/transport_catalog.pb.cc.s
 
+svg_render.o: svg_render.cpp.o
+
+.PHONY : svg_render.o
+
+# target to build an object file
+svg_render.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/svg_render.cpp.o
+.PHONY : svg_render.cpp.o
+
+svg_render.i: svg_render.cpp.i
+
+.PHONY : svg_render.i
+
+# target to preprocess a source file
+svg_render.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/svg_render.cpp.i
+.PHONY : svg_render.cpp.i
+
+svg_render.s: svg_render.cpp.s
+
+.PHONY : svg_render.s
+
+# target to generate assembly for a file
+svg_render.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/svg_render.cpp.s
+.PHONY : svg_render.cpp.s
+
+transport_router.o: transport_router.cpp.o
+
+.PHONY : transport_router.o
+
+# target to build an object file
+transport_router.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/transport_router.cpp.o
+.PHONY : transport_router.cpp.o
+
+transport_router.i: transport_router.cpp.i
+
+.PHONY : transport_router.i
+
+# target to preprocess a source file
+transport_router.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/transport_router.cpp.i
+.PHONY : transport_router.cpp.i
+
+transport_router.s: transport_router.cpp.s
+
+.PHONY : transport_router.s
+
+# target to generate assembly for a file
+transport_router.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/transport_router.cpp.s
+.PHONY : transport_router.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -254,6 +458,22 @@ help:
 	@echo "... edit_cache"
 	@echo "... transport_catalog_proto"
 	@echo "... test"
+	@echo "... transport_catalog"
+	@echo "... database.o"
+	@echo "... database.i"
+	@echo "... database.s"
+	@echo "... disances.o"
+	@echo "... disances.i"
+	@echo "... disances.s"
+	@echo "... io.o"
+	@echo "... io.i"
+	@echo "... io.s"
+	@echo "... json.o"
+	@echo "... json.i"
+	@echo "... json.s"
+	@echo "... misc.o"
+	@echo "... misc.i"
+	@echo "... misc.s"
 	@echo "... proto/generated/db.pb.o"
 	@echo "... proto/generated/db.pb.i"
 	@echo "... proto/generated/db.pb.s"
@@ -266,6 +486,12 @@ help:
 	@echo "... proto/generated/transport_catalog.pb.o"
 	@echo "... proto/generated/transport_catalog.pb.i"
 	@echo "... proto/generated/transport_catalog.pb.s"
+	@echo "... svg_render.o"
+	@echo "... svg_render.i"
+	@echo "... svg_render.s"
+	@echo "... transport_router.o"
+	@echo "... transport_router.i"
+	@echo "... transport_router.s"
 .PHONY : help
 
 
