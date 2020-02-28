@@ -78,6 +78,17 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest.exe --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # The main all target
 all: cmake_check_build_system
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project/CMakeFiles /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project/transport_catalog/CMakeFiles/progress.marks
@@ -110,6 +121,129 @@ depend:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+transport_catalog/CMakeFiles/transport_catalog_proto.dir/rule:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f CMakeFiles/Makefile2 transport_catalog/CMakeFiles/transport_catalog_proto.dir/rule
+.PHONY : transport_catalog/CMakeFiles/transport_catalog_proto.dir/rule
+
+# Convenience name for target.
+transport_catalog_proto: transport_catalog/CMakeFiles/transport_catalog_proto.dir/rule
+
+.PHONY : transport_catalog_proto
+
+# fast build rule for target.
+transport_catalog_proto/fast:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/build
+.PHONY : transport_catalog_proto/fast
+
+proto/generated/db.pb.o: proto/generated/db.pb.cc.o
+
+.PHONY : proto/generated/db.pb.o
+
+# target to build an object file
+proto/generated/db.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/db.pb.cc.o
+.PHONY : proto/generated/db.pb.cc.o
+
+proto/generated/db.pb.i: proto/generated/db.pb.cc.i
+
+.PHONY : proto/generated/db.pb.i
+
+# target to preprocess a source file
+proto/generated/db.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/db.pb.cc.i
+.PHONY : proto/generated/db.pb.cc.i
+
+proto/generated/db.pb.s: proto/generated/db.pb.cc.s
+
+.PHONY : proto/generated/db.pb.s
+
+# target to generate assembly for a file
+proto/generated/db.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/db.pb.cc.s
+.PHONY : proto/generated/db.pb.cc.s
+
+proto/generated/renderer.pb.o: proto/generated/renderer.pb.cc.o
+
+.PHONY : proto/generated/renderer.pb.o
+
+# target to build an object file
+proto/generated/renderer.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/renderer.pb.cc.o
+.PHONY : proto/generated/renderer.pb.cc.o
+
+proto/generated/renderer.pb.i: proto/generated/renderer.pb.cc.i
+
+.PHONY : proto/generated/renderer.pb.i
+
+# target to preprocess a source file
+proto/generated/renderer.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/renderer.pb.cc.i
+.PHONY : proto/generated/renderer.pb.cc.i
+
+proto/generated/renderer.pb.s: proto/generated/renderer.pb.cc.s
+
+.PHONY : proto/generated/renderer.pb.s
+
+# target to generate assembly for a file
+proto/generated/renderer.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/renderer.pb.cc.s
+.PHONY : proto/generated/renderer.pb.cc.s
+
+proto/generated/router.pb.o: proto/generated/router.pb.cc.o
+
+.PHONY : proto/generated/router.pb.o
+
+# target to build an object file
+proto/generated/router.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/router.pb.cc.o
+.PHONY : proto/generated/router.pb.cc.o
+
+proto/generated/router.pb.i: proto/generated/router.pb.cc.i
+
+.PHONY : proto/generated/router.pb.i
+
+# target to preprocess a source file
+proto/generated/router.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/router.pb.cc.i
+.PHONY : proto/generated/router.pb.cc.i
+
+proto/generated/router.pb.s: proto/generated/router.pb.cc.s
+
+.PHONY : proto/generated/router.pb.s
+
+# target to generate assembly for a file
+proto/generated/router.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/router.pb.cc.s
+.PHONY : proto/generated/router.pb.cc.s
+
+proto/generated/transport_catalog.pb.o: proto/generated/transport_catalog.pb.cc.o
+
+.PHONY : proto/generated/transport_catalog.pb.o
+
+# target to build an object file
+proto/generated/transport_catalog.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/transport_catalog.pb.cc.o
+.PHONY : proto/generated/transport_catalog.pb.cc.o
+
+proto/generated/transport_catalog.pb.i: proto/generated/transport_catalog.pb.cc.i
+
+.PHONY : proto/generated/transport_catalog.pb.i
+
+# target to preprocess a source file
+proto/generated/transport_catalog.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/transport_catalog.pb.cc.i
+.PHONY : proto/generated/transport_catalog.pb.cc.i
+
+proto/generated/transport_catalog.pb.s: proto/generated/transport_catalog.pb.cc.s
+
+.PHONY : proto/generated/transport_catalog.pb.s
+
+# target to generate assembly for a file
+proto/generated/transport_catalog.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/transport_catalog.pb.cc.s
+.PHONY : proto/generated/transport_catalog.pb.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -118,6 +252,20 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... transport_catalog_proto"
+	@echo "... test"
+	@echo "... proto/generated/db.pb.o"
+	@echo "... proto/generated/db.pb.i"
+	@echo "... proto/generated/db.pb.s"
+	@echo "... proto/generated/renderer.pb.o"
+	@echo "... proto/generated/renderer.pb.i"
+	@echo "... proto/generated/renderer.pb.s"
+	@echo "... proto/generated/router.pb.o"
+	@echo "... proto/generated/router.pb.i"
+	@echo "... proto/generated/router.pb.s"
+	@echo "... proto/generated/transport_catalog.pb.o"
+	@echo "... proto/generated/transport_catalog.pb.i"
+	@echo "... proto/generated/transport_catalog.pb.s"
 .PHONY : help
 
 

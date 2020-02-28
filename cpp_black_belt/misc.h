@@ -5,6 +5,7 @@
 #include <utility>
 #include <optional>
 #include <iostream>
+#include <type_traits>
 
 template<typename It>
 class Range {
@@ -42,3 +43,11 @@ T StringToOther(std::string_view str) {
     ss >> res;
     return res;
 }
+
+#define ENABLE_IF_TYPE_IS(templ_type, type) \
+typename std::enable_if_t<                  \
+std::is_same_v<                             \
+    std::remove_reference_t<templ_type>,    \
+    type                                    \
+>,                                          \
+std::remove_reference_t<templ_type>>* = nullptr

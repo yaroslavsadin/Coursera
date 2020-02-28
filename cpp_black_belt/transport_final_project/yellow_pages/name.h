@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace YellowPages {
+namespace YP {
     struct Name {
         enum class Type {
             MAIN,

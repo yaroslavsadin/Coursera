@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
 
-namespace YellowPages {
+namespace YP {
     class Phone {
     public:
-        
-    private:
         enum class Type {
             PHONE,
             FAX
         };
+        Phone() = default;
+    private:
         Type type;
         std::string formatted;
         std::string country_code;

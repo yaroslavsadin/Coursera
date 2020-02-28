@@ -2,8 +2,9 @@
 
 #include <vector>
 #include <string>
+#include "misc.h"
 
-namespace YellowPages {
+namespace YP {
     struct Coords {
         double lon;
         double lat;
@@ -23,6 +24,13 @@ namespace YellowPages {
 
     class Address {
     public:
+        Address() = default;
+        Address& AddComponent(const std::string& name, AddressComponent::Type type);
+        template<typename T,ENABLE_IF_TYPE_IS(T,std::vector<AddressComponent>)>
+        void SetComponents(T&& components_) {
+            components = std::forward<T>(components_);
+        }
+        Address& SetCoords(Coords coords);
     private:
         std::string formatted; // ?
         std::vector<AddressComponent> components;

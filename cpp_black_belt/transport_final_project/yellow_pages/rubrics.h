@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-namespace YellowPages {
+namespace YP {
     struct Rubric {
         std::string name;
         std::vector<std::string> keywords;

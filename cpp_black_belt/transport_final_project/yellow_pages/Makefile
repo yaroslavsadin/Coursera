@@ -78,6 +78,17 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest.exe --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # The main all target
 all: cmake_check_build_system
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(CMAKE_COMMAND) -E cmake_progress_start /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project/CMakeFiles /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project/yellow_pages/CMakeFiles/progress.marks
@@ -110,6 +121,264 @@ depend:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+yellow_pages/CMakeFiles/yellow_pages_proto.dir/rule:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f CMakeFiles/Makefile2 yellow_pages/CMakeFiles/yellow_pages_proto.dir/rule
+.PHONY : yellow_pages/CMakeFiles/yellow_pages_proto.dir/rule
+
+# Convenience name for target.
+yellow_pages_proto: yellow_pages/CMakeFiles/yellow_pages_proto.dir/rule
+
+.PHONY : yellow_pages_proto
+
+# fast build rule for target.
+yellow_pages_proto/fast:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/build
+.PHONY : yellow_pages_proto/fast
+
+proto/generated/address.pb.o: proto/generated/address.pb.cc.o
+
+.PHONY : proto/generated/address.pb.o
+
+# target to build an object file
+proto/generated/address.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/address.pb.cc.o
+.PHONY : proto/generated/address.pb.cc.o
+
+proto/generated/address.pb.i: proto/generated/address.pb.cc.i
+
+.PHONY : proto/generated/address.pb.i
+
+# target to preprocess a source file
+proto/generated/address.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/address.pb.cc.i
+.PHONY : proto/generated/address.pb.cc.i
+
+proto/generated/address.pb.s: proto/generated/address.pb.cc.s
+
+.PHONY : proto/generated/address.pb.s
+
+# target to generate assembly for a file
+proto/generated/address.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/address.pb.cc.s
+.PHONY : proto/generated/address.pb.cc.s
+
+proto/generated/company.pb.o: proto/generated/company.pb.cc.o
+
+.PHONY : proto/generated/company.pb.o
+
+# target to build an object file
+proto/generated/company.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/company.pb.cc.o
+.PHONY : proto/generated/company.pb.cc.o
+
+proto/generated/company.pb.i: proto/generated/company.pb.cc.i
+
+.PHONY : proto/generated/company.pb.i
+
+# target to preprocess a source file
+proto/generated/company.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/company.pb.cc.i
+.PHONY : proto/generated/company.pb.cc.i
+
+proto/generated/company.pb.s: proto/generated/company.pb.cc.s
+
+.PHONY : proto/generated/company.pb.s
+
+# target to generate assembly for a file
+proto/generated/company.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/company.pb.cc.s
+.PHONY : proto/generated/company.pb.cc.s
+
+proto/generated/database.pb.o: proto/generated/database.pb.cc.o
+
+.PHONY : proto/generated/database.pb.o
+
+# target to build an object file
+proto/generated/database.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/database.pb.cc.o
+.PHONY : proto/generated/database.pb.cc.o
+
+proto/generated/database.pb.i: proto/generated/database.pb.cc.i
+
+.PHONY : proto/generated/database.pb.i
+
+# target to preprocess a source file
+proto/generated/database.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/database.pb.cc.i
+.PHONY : proto/generated/database.pb.cc.i
+
+proto/generated/database.pb.s: proto/generated/database.pb.cc.s
+
+.PHONY : proto/generated/database.pb.s
+
+# target to generate assembly for a file
+proto/generated/database.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/database.pb.cc.s
+.PHONY : proto/generated/database.pb.cc.s
+
+proto/generated/name.pb.o: proto/generated/name.pb.cc.o
+
+.PHONY : proto/generated/name.pb.o
+
+# target to build an object file
+proto/generated/name.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/name.pb.cc.o
+.PHONY : proto/generated/name.pb.cc.o
+
+proto/generated/name.pb.i: proto/generated/name.pb.cc.i
+
+.PHONY : proto/generated/name.pb.i
+
+# target to preprocess a source file
+proto/generated/name.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/name.pb.cc.i
+.PHONY : proto/generated/name.pb.cc.i
+
+proto/generated/name.pb.s: proto/generated/name.pb.cc.s
+
+.PHONY : proto/generated/name.pb.s
+
+# target to generate assembly for a file
+proto/generated/name.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/name.pb.cc.s
+.PHONY : proto/generated/name.pb.cc.s
+
+proto/generated/phone.pb.o: proto/generated/phone.pb.cc.o
+
+.PHONY : proto/generated/phone.pb.o
+
+# target to build an object file
+proto/generated/phone.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/phone.pb.cc.o
+.PHONY : proto/generated/phone.pb.cc.o
+
+proto/generated/phone.pb.i: proto/generated/phone.pb.cc.i
+
+.PHONY : proto/generated/phone.pb.i
+
+# target to preprocess a source file
+proto/generated/phone.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/phone.pb.cc.i
+.PHONY : proto/generated/phone.pb.cc.i
+
+proto/generated/phone.pb.s: proto/generated/phone.pb.cc.s
+
+.PHONY : proto/generated/phone.pb.s
+
+# target to generate assembly for a file
+proto/generated/phone.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/phone.pb.cc.s
+.PHONY : proto/generated/phone.pb.cc.s
+
+proto/generated/rubric.pb.o: proto/generated/rubric.pb.cc.o
+
+.PHONY : proto/generated/rubric.pb.o
+
+# target to build an object file
+proto/generated/rubric.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/rubric.pb.cc.o
+.PHONY : proto/generated/rubric.pb.cc.o
+
+proto/generated/rubric.pb.i: proto/generated/rubric.pb.cc.i
+
+.PHONY : proto/generated/rubric.pb.i
+
+# target to preprocess a source file
+proto/generated/rubric.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/rubric.pb.cc.i
+.PHONY : proto/generated/rubric.pb.cc.i
+
+proto/generated/rubric.pb.s: proto/generated/rubric.pb.cc.s
+
+.PHONY : proto/generated/rubric.pb.s
+
+# target to generate assembly for a file
+proto/generated/rubric.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/rubric.pb.cc.s
+.PHONY : proto/generated/rubric.pb.cc.s
+
+proto/generated/sphere.pb.o: proto/generated/sphere.pb.cc.o
+
+.PHONY : proto/generated/sphere.pb.o
+
+# target to build an object file
+proto/generated/sphere.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/sphere.pb.cc.o
+.PHONY : proto/generated/sphere.pb.cc.o
+
+proto/generated/sphere.pb.i: proto/generated/sphere.pb.cc.i
+
+.PHONY : proto/generated/sphere.pb.i
+
+# target to preprocess a source file
+proto/generated/sphere.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/sphere.pb.cc.i
+.PHONY : proto/generated/sphere.pb.cc.i
+
+proto/generated/sphere.pb.s: proto/generated/sphere.pb.cc.s
+
+.PHONY : proto/generated/sphere.pb.s
+
+# target to generate assembly for a file
+proto/generated/sphere.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/sphere.pb.cc.s
+.PHONY : proto/generated/sphere.pb.cc.s
+
+proto/generated/url.pb.o: proto/generated/url.pb.cc.o
+
+.PHONY : proto/generated/url.pb.o
+
+# target to build an object file
+proto/generated/url.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/url.pb.cc.o
+.PHONY : proto/generated/url.pb.cc.o
+
+proto/generated/url.pb.i: proto/generated/url.pb.cc.i
+
+.PHONY : proto/generated/url.pb.i
+
+# target to preprocess a source file
+proto/generated/url.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/url.pb.cc.i
+.PHONY : proto/generated/url.pb.cc.i
+
+proto/generated/url.pb.s: proto/generated/url.pb.cc.s
+
+.PHONY : proto/generated/url.pb.s
+
+# target to generate assembly for a file
+proto/generated/url.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/url.pb.cc.s
+.PHONY : proto/generated/url.pb.cc.s
+
+proto/generated/working_time.pb.o: proto/generated/working_time.pb.cc.o
+
+.PHONY : proto/generated/working_time.pb.o
+
+# target to build an object file
+proto/generated/working_time.pb.cc.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/working_time.pb.cc.o
+.PHONY : proto/generated/working_time.pb.cc.o
+
+proto/generated/working_time.pb.i: proto/generated/working_time.pb.cc.i
+
+.PHONY : proto/generated/working_time.pb.i
+
+# target to preprocess a source file
+proto/generated/working_time.pb.cc.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/working_time.pb.cc.i
+.PHONY : proto/generated/working_time.pb.cc.i
+
+proto/generated/working_time.pb.s: proto/generated/working_time.pb.cc.s
+
+.PHONY : proto/generated/working_time.pb.s
+
+# target to generate assembly for a file
+proto/generated/working_time.pb.cc.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/working_time.pb.cc.s
+.PHONY : proto/generated/working_time.pb.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -118,6 +387,35 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... yellow_pages_proto"
+	@echo "... test"
+	@echo "... proto/generated/address.pb.o"
+	@echo "... proto/generated/address.pb.i"
+	@echo "... proto/generated/address.pb.s"
+	@echo "... proto/generated/company.pb.o"
+	@echo "... proto/generated/company.pb.i"
+	@echo "... proto/generated/company.pb.s"
+	@echo "... proto/generated/database.pb.o"
+	@echo "... proto/generated/database.pb.i"
+	@echo "... proto/generated/database.pb.s"
+	@echo "... proto/generated/name.pb.o"
+	@echo "... proto/generated/name.pb.i"
+	@echo "... proto/generated/name.pb.s"
+	@echo "... proto/generated/phone.pb.o"
+	@echo "... proto/generated/phone.pb.i"
+	@echo "... proto/generated/phone.pb.s"
+	@echo "... proto/generated/rubric.pb.o"
+	@echo "... proto/generated/rubric.pb.i"
+	@echo "... proto/generated/rubric.pb.s"
+	@echo "... proto/generated/sphere.pb.o"
+	@echo "... proto/generated/sphere.pb.i"
+	@echo "... proto/generated/sphere.pb.s"
+	@echo "... proto/generated/url.pb.o"
+	@echo "... proto/generated/url.pb.i"
+	@echo "... proto/generated/url.pb.s"
+	@echo "... proto/generated/working_time.pb.o"
+	@echo "... proto/generated/working_time.pb.i"
+	@echo "... proto/generated/working_time.pb.s"
 .PHONY : help
 
 
