@@ -1,10 +1,9 @@
 #include <iostream>
-#include "yellow_pages.h"
+#include "database.pb.h"
+#include "yp_index.h"
 
 int main(void) {
-    std::cout << "Hello from Yellow Pages tests!" << std::endl;
-    YP::Database db;
-    db.AddCompany("lol");
-    std::cout << "Succesfully added a company!" << std::endl;
+    YellowPages::Database db;
+    YP::YellowPagesIndex index(db);
     return 0;
 }

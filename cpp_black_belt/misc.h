@@ -47,7 +47,17 @@ T StringToOther(std::string_view str) {
 #define ENABLE_IF_TYPE_IS(templ_type, type) \
 typename std::enable_if_t<                  \
 std::is_same_v<                             \
-    std::remove_reference_t<templ_type>,    \
+    std::decay_t<templ_type>,               \
+    type                                    \
+>                                           \
+||                                          \
+std::is_convertible_v<                      \
+    std::decay_t<templ_type>,               \
+    type                                    \
+>                                           \
+||                                          \
+std::is_base_of_v<                          \
+    std::decay_t<templ_type>,               \
     type                                    \
 >,                                          \
-std::remove_reference_t<templ_type>>* = nullptr
+std::decay_t<templ_type>>* = nullptr

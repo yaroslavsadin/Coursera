@@ -448,6 +448,33 @@ proto/generated/working_time.pb.cc.s:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages_proto.dir/build.make yellow_pages/CMakeFiles/yellow_pages_proto.dir/proto/generated/working_time.pb.cc.s
 .PHONY : proto/generated/working_time.pb.cc.s
 
+yp_index.o: yp_index.cpp.o
+
+.PHONY : yp_index.o
+
+# target to build an object file
+yp_index.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_index.cpp.o
+.PHONY : yp_index.cpp.o
+
+yp_index.i: yp_index.cpp.i
+
+.PHONY : yp_index.i
+
+# target to preprocess a source file
+yp_index.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_index.cpp.i
+.PHONY : yp_index.cpp.i
+
+yp_index.s: yp_index.cpp.s
+
+.PHONY : yp_index.s
+
+# target to generate assembly for a file
+yp_index.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_index.cpp.s
+.PHONY : yp_index.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -492,6 +519,9 @@ help:
 	@echo "... proto/generated/working_time.pb.o"
 	@echo "... proto/generated/working_time.pb.i"
 	@echo "... proto/generated/working_time.pb.s"
+	@echo "... yp_index.o"
+	@echo "... yp_index.i"
+	@echo "... yp_index.s"
 .PHONY : help
 
 

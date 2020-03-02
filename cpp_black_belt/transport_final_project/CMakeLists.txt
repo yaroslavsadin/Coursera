@@ -58,6 +58,7 @@ file(GLOB SRCS
 )
 
 ############### Main executable ###############
+if(BUILD_MAIN==1)
 add_executable(transport)
 target_sources(
     transport 
@@ -71,11 +72,13 @@ target_link_libraries(transport
     yellow_pages
     yellow_pages_proto
 )
+endif()
 ###############################################
 
 add_subdirectory(./transport_catalog)
 add_subdirectory(./yellow_pages)
 
 enable_testing()
+
 add_test(NAME transport_catalog_tests COMMAND transport_catalog_tests)
 add_test(NAME yellow_pages_tests COMMAND yellow_pages_tests)

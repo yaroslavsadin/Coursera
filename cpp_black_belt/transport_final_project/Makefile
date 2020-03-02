@@ -67,17 +67,6 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake.exe -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target test
 test:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
@@ -88,6 +77,17 @@ test:
 test/fast: test
 
 .PHONY : test/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake.exe -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -120,19 +120,6 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named transport
-
-# Build rule for target.
-transport: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 transport
-.PHONY : transport
-
-# fast build rule for target.
-transport/fast:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/build
-.PHONY : transport/fast
 
 #=============================================================================
 # Target rules for targets named transport_catalog_proto
@@ -212,114 +199,6 @@ yellow_pages_tests/fast:
 	$(MAKE) -f yellow_pages/tests/CMakeFiles/yellow_pages_tests.dir/build.make yellow_pages/tests/CMakeFiles/yellow_pages_tests.dir/build
 .PHONY : yellow_pages_tests/fast
 
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o
-
-# target to build an object file
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.o
-
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i
-
-# target to preprocess a source file
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.i
-
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s: cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s
-
-# target to generate assembly for a file
-cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.cpp.s
-
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o: cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.o
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o
-
-# target to build an object file
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.o
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.o
-
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.i: cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.i
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.i
-
-# target to preprocess a source file
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.i
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.i
-
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.s: cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s
-
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.s
-
-# target to generate assembly for a file
-cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s
-.PHONY : cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.cpp.s
-
-main.o: main.cpp.o
-
-.PHONY : main.o
-
-# target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main.cpp.s
-.PHONY : main.cpp.s
-
-main_serdes.o: main_serdes.cpp.o
-
-.PHONY : main_serdes.o
-
-# target to build an object file
-main_serdes.cpp.o:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.o
-.PHONY : main_serdes.cpp.o
-
-main_serdes.i: main_serdes.cpp.i
-
-.PHONY : main_serdes.i
-
-# target to preprocess a source file
-main_serdes.cpp.i:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.i
-.PHONY : main_serdes.cpp.i
-
-main_serdes.s: main_serdes.cpp.s
-
-.PHONY : main_serdes.s
-
-# target to generate assembly for a file
-main_serdes.cpp.s:
-	$(MAKE) -f CMakeFiles/transport.dir/build.make CMakeFiles/transport.dir/main_serdes.cpp.s
-.PHONY : main_serdes.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -327,27 +206,14 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
-	@echo "... transport"
 	@echo "... test"
+	@echo "... edit_cache"
 	@echo "... transport_catalog_proto"
 	@echo "... transport_catalog"
 	@echo "... transport_catalog_tests"
 	@echo "... yellow_pages_proto"
 	@echo "... yellow_pages"
 	@echo "... yellow_pages_tests"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.o"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.i"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/profile_advanced.s"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.o"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.i"
-	@echo "... cygdrive/c/Work/Coursera/cpp_black_belt/week_1/svg/svg.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... main_serdes.o"
-	@echo "... main_serdes.i"
-	@echo "... main_serdes.s"
 .PHONY : help
 
 
