@@ -5,25 +5,64 @@
 #include <unordered_map>
 #include <algorithm>
 #include <array>
+#include <variant>
+#include <optional>
+#include "../../misc.h"
 #include "database.pb.h"
 
 namespace YP {
-    struct YellowPagesRequest {
-        
+    std::set<std::string_view> intersection (const std::vector<std::set<std::string_view>> &vecs);
+
+    class PhoneTemplate {
+    public:
+        PhoneTemplate(const std::string& type_)
+        : type(type_) {}
+        const std::string& GetType() const { return type; }
+        PhoneTemplate& SetCountryCode(std::string s);
+        const std::string& GetCountryCode() const;
+        bool HasCountryCode() const { return country_code.has_value(); }
+        PhoneTemplate& SetLocalCode(std::string s);
+        const std::string& GetLocalCode() const;
+        bool HasLocalCode() const { return country_code.has_value(); }
+        PhoneTemplate& SetNumber(std::string s);
+        const std::string& GetNumber() const;
+        bool HasNumber() const { return country_code.has_value(); }
+        PhoneTemplate& SetExtension(std::string s);
+        const std::string& GetExtension() const;
+        bool HasExtension() const { return country_code.has_value(); }
+    private:    
+        std::string type; // PHONE or FAX
+        std::optional<std::string> country_code;
+        std::optional<std::string> local_code;
+        std::optional<std::string> number;
+        std::optional<std::string> extenstion;
+    };
+
+    struct Item {
+        enum class Type {
+            NAMES, URLS, RUBRICS, PHONES
+        };
+        Type type;
+        std::variant<
+            std::vector<std::string>,
+            std::vector<PhoneTemplate>
+        > data;
     };
 
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
+        std::set<std::string_view> Search(const std::vector<Item>& requests);
     private:
-        using Index = std::unordered_map<std::string,std::string_view>;
+        using Index = std::unordered_map<std::string,std::set<std::string_view>>;
 
         std::vector<std::string> company_names;
 
         Index names;
         Index urls;
-        Index rurics;
+        Index rubrics;
 
+        // First for PHONE type, second for FAX type
         std::array<Index,2> phone_country_code;
         std::array<Index,2> phone_local_code;
         std::array<Index,2> phone_number;
