@@ -11,7 +11,25 @@
 #include "database.pb.h"
 
 namespace YP {
-    std::set<std::string_view> intersection (const std::vector<std::set<std::string_view>> &vecs);
+    template<typename It>
+    auto intersection (It begin_, It end_) {
+        using Container = typename It::value_type;
+        if(begin_ == end_) {
+            return Container{};
+        }
+
+        Container last_intersection = *begin_;
+        Container curr_intersection;
+
+        for (auto it = begin_ + 1; it != end_; ++it) {
+            std::set_intersection(last_intersection.begin(), last_intersection.end(),
+                it->begin(), it->end(),
+                std::inserter(curr_intersection, curr_intersection.end()));
+            std::swap(last_intersection, curr_intersection);
+            curr_intersection.clear();
+        }
+        return last_intersection;
+    }
 
     class PhoneTemplate {
     public:
@@ -52,9 +70,9 @@ namespace YP {
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
-        std::set<std::string_view> Search(const std::vector<Item>& requests);
+        std::set<size_t> Search(const std::vector<Item>& requests);
     private:
-        using Index = std::unordered_map<std::string,std::set<std::string_view>>;
+        using Index = std::unordered_map<std::string,std::vector<size_t>>;
 
         std::vector<std::string> company_names;
 
