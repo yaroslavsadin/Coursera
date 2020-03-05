@@ -41,22 +41,22 @@ namespace YP {
         bool HasCountryCode() const { return country_code.has_value(); }
         PhoneTemplate& SetLocalCode(std::string s);
         const std::string& GetLocalCode() const;
-        bool HasLocalCode() const { return country_code.has_value(); }
+        bool HasLocalCode() const { return local_code.has_value(); }
         PhoneTemplate& SetNumber(std::string s);
         const std::string& GetNumber() const;
-        bool HasNumber() const { return country_code.has_value(); }
+        bool HasNumber() const { return number.has_value(); }
         PhoneTemplate& SetExtension(std::string s);
         const std::string& GetExtension() const;
-        bool HasExtension() const { return country_code.has_value(); }
+        bool HasExtension() const { return extension.has_value(); }
     private:    
         std::string type; // PHONE or FAX
         std::optional<std::string> country_code;
         std::optional<std::string> local_code;
         std::optional<std::string> number;
-        std::optional<std::string> extenstion;
+        std::optional<std::string> extension;
     };
 
-    struct Item {
+    struct RequestItem {
         enum class Type {
             NAMES, URLS, RUBRICS, PHONES
         };
@@ -70,7 +70,7 @@ namespace YP {
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
-        std::set<size_t> Search(const std::vector<Item>& requests);
+        std::set<size_t> Search(const std::vector<RequestItem>& requests);
     private:
         using Index = std::unordered_map<std::string,std::vector<size_t>>;
 

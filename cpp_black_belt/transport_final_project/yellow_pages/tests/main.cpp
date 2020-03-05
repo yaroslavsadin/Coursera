@@ -28,20 +28,44 @@ int main(void) {
         name1->set_value("kek");
     }
     {
-        auto* comp = companies.Add()->mutable_names();
+        auto* company = companies.Add();
+        
+        auto* names = company->mutable_names();
+        auto* phones = company->mutable_phones();
 
-        auto* name = comp->Add();
+        auto* phone = phones->Add();
+        phone->set_type(YellowPages::Phone_Type::Phone_Type_PHONE);
+        phone->set_country_code("7");
+        // phone->set_local_code("812");
+        phone->set_number("3633659");
+
+        auto* name = names->Add();
         name->set_type(YellowPages::Name_Type::Name_Type_MAIN);
         name->set_value("Four");
 
-        auto* name1 = comp->Add();
+        auto* name1 = names->Add();
         name1->set_type(YellowPages::Name_Type::Name_Type_SYNONYM);
         name1->set_value("lol");
     }
     
     YP::YellowPagesIndex index(db);
-    std::vector<YP::Item> items;
-    items.push_back(YP::Item{YP::Item::Type::NAMES,std::vector<std::string>{"lol", "kek", "rofl"}});
+    std::vector<YP::RequestItem> items;
+    items.push_back(
+        YP::RequestItem{
+            YP::RequestItem::Type::NAMES,
+            std::vector<std::string>{
+                "lol", "kek", "rofl"
+            }
+        }
+    );
+    items.push_back(
+        YP::RequestItem{
+            YP::RequestItem::Type::PHONES,
+            std::vector<YP::PhoneTemplate>{
+                YP::PhoneTemplate{"PHONE"}.SetNumber("3633659")
+            }
+        }
+    );
     for(const auto& found : index.Search(items)) {
         std::cout << found << ' ';
     }

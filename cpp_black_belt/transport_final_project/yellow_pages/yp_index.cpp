@@ -48,11 +48,12 @@ namespace YP {
         }
     }
 
-    std::set<size_t> YellowPagesIndex::Search(const std::vector<Item>& requests) {
-        std::unordered_map<Item::Type,std::set<size_t>> candidates;
+    std::set<size_t> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) {
+        std::unordered_map<RequestItem::Type,std::set<size_t>> candidates;
 
-        auto f_process_simple = [&candidates](const Index& index, const Item& item) {
+        auto f_process_simple = [&candidates](const Index& index, const RequestItem& item) {
             for(const auto& name : std::get<std::vector<std::string>>(item.data)) {
+                candidates[item.type]; // create an entry for the Type anyway
                 if(index.count(name)) {
                     for(auto idx : index.at(name)) {
                         candidates[item.type].insert(idx);
@@ -61,35 +62,56 @@ namespace YP {
             }
         };
 
-        for(const Item& item : requests) {
+        for(const RequestItem& item : requests) {
             switch(item.type) {
-            case Item::Type::NAMES:
+            case RequestItem::Type::NAMES:
                 f_process_simple(names,item);
                 break;
-            case Item::Type::URLS:
+            case RequestItem::Type::URLS:
                 f_process_simple(urls,item);
                 break;
-            case Item::Type::RUBRICS:
+            case RequestItem::Type::RUBRICS:
                 f_process_simple(rubrics,item);
                 break;
             default: // PHONES
-                // for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
-                //     size_t type_idx = (phone_template.GetType() == "PHONE") ? 0 : 1;
-                //     std::vector<std::set<size_t>> phone_candidates;
-                //     if(phone_template.HasCountryCode()) {
-                //         phone_candidates.push_back(phone_country_code[type_idx].at(phone_template.GetCountryCode()));
-                //     }
-                //     if(phone_template.HasLocalCode()) {
-                //         phone_candidates.push_back(phone_local_code[type_idx].at(phone_template.GetLocalCode()));
-                //     }
-                //     if(phone_template.HasNumber()) {
-                //         phone_candidates.push_back(phone_number[type_idx].at(phone_template.GetNumber()));
-                //     }
-                //     if(phone_template.HasExtension()) {
-                //         phone_candidates.push_back(phone_extension[type_idx].at(phone_template.GetExtension()));
-                //     }
-                //     candidates.push_back(intersection(phone_candidates));
-                // }
+                for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
+                    std::vector<std::set<size_t>> phone_candidates;
+                    auto array_idx = (phone_template.GetType() == "PHONE") ? 0 : 1;
+                    
+                    auto f_process_phone_elem = [this,&phone_candidates]
+                        (const std::string& criterion, const Index& index) {
+                        if(index.count(criterion)) {
+                            auto& s = phone_candidates.emplace_back();
+                            for(auto idx : index.at(criterion)) {
+                                s.insert(idx);
+                            }
+                        }
+                    };
+
+                    if(phone_template.HasExtension()) {
+                        f_process_phone_elem(phone_template.GetExtension(), phone_extension[array_idx]);
+                    }
+                    if(phone_template.HasCountryCode()) {
+                        // If has country code it must match
+                        f_process_phone_elem(phone_template.GetCountryCode(), phone_country_code[array_idx]);
+                    }
+                    if(phone_template.HasLocalCode() || phone_template.HasCountryCode()) {
+                        // If has country code OR has local code, the last must match
+                        f_process_phone_elem(phone_template.GetLocalCode(), phone_local_code[array_idx]);
+                    }
+                    if(phone_template.HasNumber()) {
+                        // Has number, look up for it
+                        f_process_phone_elem(phone_template.GetNumber(), phone_number[array_idx]);
+                    } else {
+                        f_process_phone_elem("", phone_number[array_idx]);
+                    }
+                    // We need to at least create and entry in candidates 
+                    // in case none companies were found for the phone template
+                    candidates[item.type];
+                    for(auto idx : intersection(phone_candidates.begin(),phone_candidates.end())) {
+                        candidates[item.type].insert(idx);
+                    }
+                }
                 break;
             }
         }
@@ -123,10 +145,10 @@ namespace YP {
         return *number;
     }
     PhoneTemplate& PhoneTemplate::SetExtension(std::string s) {
-        extenstion = std::move(s);
+        extension = std::move(s);
         return *this;
     }
     const std::string& PhoneTemplate::GetExtension() const {
-        return *extenstion;
+        return *extension;
     }
 }
