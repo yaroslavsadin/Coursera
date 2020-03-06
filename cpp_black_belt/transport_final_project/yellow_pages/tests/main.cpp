@@ -1,77 +1,109 @@
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include "database.pb.h"
 #include "yp_index.h"
+#include "yp_serialize.h"
+#include "json.h"
+
+std::stringstream input{
+R"(
+{
+"yellow_pages": {
+        "rubrics": {
+            "1": {
+                "name": "Парк"
+            }
+        },
+        "companies": [
+            {
+                "names": [
+                    {
+                        "value": "Дендрарий"
+                    }
+                ],
+                "urls": [
+                    {
+                        "value": "http://dendrarium.ru"
+                    }
+                ],
+                "rubrics": [
+                    1
+                ],
+                "address": {
+                    "coords": {
+                        "lat": 43.573226,
+                        "lon": 39.742947
+                    }
+                },
+                "nearby_stops": [
+                    {
+                        "name": "Цирк",
+                        "meters": 180
+                    }
+                ],
+                "phones": [
+                    {
+                        "type": "PHONE",
+                        "country_code": "7",
+                        "local_code": "862",
+                        "number": "2671646"
+                    },
+                    {
+                        "type": "PHONE",
+                        "country_code": "7",
+                        "local_code": "862",
+                        "number": "2671842"
+                    }
+                ]
+            },
+            {
+                "names": [
+                    {
+                        "value": "им. Фрунзе"
+                    }
+                ],
+                "rubrics": [
+                    1
+                ],
+                "address": {
+                    "coords": {
+                        "lat": 43.567998,
+                        "lon": 39.734131
+                    }
+                },
+                "nearby_stops": [
+                    {
+                        "name": "Пансионат Светлана",
+                        "meters": 580
+                    },
+                    {
+                        "name": "Цирк",
+                        "meters": 700
+                    },
+                    {
+                        "name": "Театральная",
+                        "meters": 1000
+                    }
+                ]
+            }
+        ]
+    }
+}
+)"
+};
 
 int main(void) {
-    YellowPages::Database db;
-
-    auto& companies = *db.mutable_companies();
+    Json::Document doc = Json::Load(input);
     {
-        auto* name = companies.Add()->mutable_names()->Add();
-        name->set_type(YellowPages::Name_Type::Name_Type_MAIN);
-        name->set_value("One");
+        std::fstream ser_file("ser.bin", std::ios::binary | std::ios::out);
+        YP::Serialize(doc, ser_file);
     }
     {
-        auto* name = companies.Add()->mutable_names()->Add();
-        name->set_type(YellowPages::Name_Type::Name_Type_MAIN);
-        name->set_value("Two");
+        std::fstream ser_file("ser.bin", std::ios::binary | std::ios::in);
+        YellowPages::Database db;
+        db.ParseFromIstream(&ser_file);
+        YP::YellowPagesIndex index(db);
     }
-    {
-        auto* comp = companies.Add()->mutable_names();
-
-        auto* name = comp->Add();
-        name->set_type(YellowPages::Name_Type::Name_Type_MAIN);
-        name->set_value("Three");
-
-        auto* name1 = comp->Add();
-        name1->set_type(YellowPages::Name_Type::Name_Type_SYNONYM);
-        name1->set_value("kek");
-    }
-    {
-        auto* company = companies.Add();
-        
-        auto* names = company->mutable_names();
-        auto* phones = company->mutable_phones();
-
-        auto* phone = phones->Add();
-        phone->set_type(YellowPages::Phone_Type::Phone_Type_PHONE);
-        phone->set_country_code("7");
-        // phone->set_local_code("812");
-        phone->set_number("3633659");
-
-        auto* name = names->Add();
-        name->set_type(YellowPages::Name_Type::Name_Type_MAIN);
-        name->set_value("Four");
-
-        auto* name1 = names->Add();
-        name1->set_type(YellowPages::Name_Type::Name_Type_SYNONYM);
-        name1->set_value("lol");
-    }
-    
-    YP::YellowPagesIndex index(db);
-    std::vector<YP::RequestItem> items;
-    items.push_back(
-        YP::RequestItem{
-            YP::RequestItem::Type::NAMES,
-            std::vector<std::string>{
-                "lol", "kek", "rofl"
-            }
-        }
-    );
-    items.push_back(
-        YP::RequestItem{
-            YP::RequestItem::Type::PHONES,
-            std::vector<YP::PhoneTemplate>{
-                YP::PhoneTemplate{"PHONE"}.SetNumber("3633659")
-            }
-        }
-    );
-    for(const auto& found : index.Search(items)) {
-        std::cout << found << ' ';
-    }
-    std::vector<size_t> test;
-    auto it = std::inserter(test,test.end());
-    *it = 0;
-    *it = 1;
     return 0;
 }

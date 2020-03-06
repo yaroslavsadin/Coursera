@@ -22,6 +22,7 @@ include_directories(
     ./transport_catalog/proto/generated
     ./yellow_pages
     ./yellow_pages/proto/generated
+    ./json
 )
 add_compile_options(
     -g -O0 -Wall
@@ -58,23 +59,25 @@ file(GLOB SRCS
 )
 
 ############### Main executable ###############
-if(BUILD_MAIN==1)
-add_executable(transport)
-target_sources(
-    transport 
-    PUBLIC 
-        ${SRCS}
-)
-target_link_libraries(transport 
-    ${Protobuf_LIBRARIES} 
-    transport_catalog
-    transport_catalog_proto 
-    yellow_pages
-    yellow_pages_proto
-)
+if(DEFINED BUILD_MAIN)
+    add_executable(transport)
+    target_sources(
+        transport 
+        PUBLIC 
+            ${SRCS}
+    )
+    target_link_libraries(transport 
+        ${Protobuf_LIBRARIES} 
+        transport_catalog
+        transport_catalog_proto 
+        yellow_pages
+        yellow_pages_proto
+        json
+    )
 endif()
 ###############################################
 
+add_subdirectory(./json)
 add_subdirectory(./transport_catalog)
 add_subdirectory(./yellow_pages)
 

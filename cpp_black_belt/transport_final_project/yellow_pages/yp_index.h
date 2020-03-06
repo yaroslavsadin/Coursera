@@ -71,6 +71,7 @@ namespace YP {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
         std::set<size_t> Search(const std::vector<RequestItem>& requests);
+        const std::string CompanyNameByIdx(size_t idx);
     private:
         using Index = std::unordered_map<std::string,std::vector<size_t>>;
 

@@ -475,6 +475,33 @@ yp_index.cpp.s:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_index.cpp.s
 .PHONY : yp_index.cpp.s
 
+yp_serialize.o: yp_serialize.cpp.o
+
+.PHONY : yp_serialize.o
+
+# target to build an object file
+yp_serialize.cpp.o:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_serialize.cpp.o
+.PHONY : yp_serialize.cpp.o
+
+yp_serialize.i: yp_serialize.cpp.i
+
+.PHONY : yp_serialize.i
+
+# target to preprocess a source file
+yp_serialize.cpp.i:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_serialize.cpp.i
+.PHONY : yp_serialize.cpp.i
+
+yp_serialize.s: yp_serialize.cpp.s
+
+.PHONY : yp_serialize.s
+
+# target to generate assembly for a file
+yp_serialize.cpp.s:
+	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/yp_serialize.cpp.s
+.PHONY : yp_serialize.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -522,6 +549,9 @@ help:
 	@echo "... yp_index.o"
 	@echo "... yp_index.i"
 	@echo "... yp_index.s"
+	@echo "... yp_serialize.o"
+	@echo "... yp_serialize.i"
+	@echo "... yp_serialize.s"
 .PHONY : help
 
 

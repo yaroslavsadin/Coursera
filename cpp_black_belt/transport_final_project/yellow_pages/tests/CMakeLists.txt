@@ -13,6 +13,7 @@ target_link_libraries(yellow_pages_tests
     ${Protobuf_LIBRARIES}
     yellow_pages
     yellow_pages_proto
+    json
 )
 target_include_directories(yellow_pages_tests
     PRIVATE

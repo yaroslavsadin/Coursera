@@ -232,33 +232,6 @@ io.cpp.s:
 	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/io.cpp.s
 .PHONY : io.cpp.s
 
-json.o: json.cpp.o
-
-.PHONY : json.o
-
-# target to build an object file
-json.cpp.o:
-	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.o
-.PHONY : json.cpp.o
-
-json.i: json.cpp.i
-
-.PHONY : json.i
-
-# target to preprocess a source file
-json.cpp.i:
-	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.i
-.PHONY : json.cpp.i
-
-json.s: json.cpp.s
-
-.PHONY : json.s
-
-# target to generate assembly for a file
-json.cpp.s:
-	cd /cygdrive/c/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/json.cpp.s
-.PHONY : json.cpp.s
-
 misc.o: misc.cpp.o
 
 .PHONY : misc.o
@@ -468,9 +441,6 @@ help:
 	@echo "... io.o"
 	@echo "... io.i"
 	@echo "... io.s"
-	@echo "... json.o"
-	@echo "... json.i"
-	@echo "... json.s"
 	@echo "... misc.o"
 	@echo "... misc.i"
 	@echo "... misc.s"

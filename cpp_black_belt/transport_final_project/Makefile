@@ -122,6 +122,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named json
+
+# Build rule for target.
+json: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 json
+.PHONY : json
+
+# fast build rule for target.
+json/fast:
+	$(MAKE) -f json/CMakeFiles/json.dir/build.make json/CMakeFiles/json.dir/build
+.PHONY : json/fast
+
+#=============================================================================
 # Target rules for targets named transport_catalog_proto
 
 # Build rule for target.
@@ -208,6 +221,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... edit_cache"
+	@echo "... json"
 	@echo "... transport_catalog_proto"
 	@echo "... transport_catalog"
 	@echo "... transport_catalog_tests"

@@ -123,6 +123,10 @@ namespace YP {
         return intersection(candidates_.begin(),candidates_.end());
     }
 
+    const std::string YellowPagesIndex::CompanyNameByIdx(size_t idx) {
+        return company_names[idx];
+    }
+
     PhoneTemplate& PhoneTemplate::SetCountryCode(std::string s) {
         country_code = std::move(s);
         return *this;
