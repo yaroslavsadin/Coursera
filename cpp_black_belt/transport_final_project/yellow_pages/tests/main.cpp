@@ -85,6 +85,12 @@ R"(
                         "name": "Театральная",
                         "meters": 1000
                     }
+                ],
+                "phones": [
+                    {
+                        "type": "PHONE",
+                        "number": "666"
+                    }
                 ]
             }
         ]
@@ -104,6 +110,85 @@ int main(void) {
         YellowPages::Database db;
         db.ParseFromIstream(&ser_file);
         YP::YellowPagesIndex index(db);
+
+        {
+            auto res = index.Search(
+                std::vector<YP::RequestItem>{
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::RUBRICS, 
+                        .data = std::vector<std::string>{"Парк"}
+                    }
+                }
+            );
+            std::cout << "-----------Search results-----------\n";
+            for(auto idx : res) {
+                std::cout << index.CompanyNameByIdx(idx) << std::endl;
+            }
+            std::cout << "-------------Search end-------------\n";
+        }
+
+        {
+            auto res = index.Search(
+                std::vector<YP::RequestItem>{
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::RUBRICS, 
+                        .data = std::vector<std::string>{"Парк"}
+                    },
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::PHONES, 
+                        .data = std::vector<YP::PhoneTemplate>{
+                            YP::PhoneTemplate{}.SetNumber("2671646")
+                        }
+                    }
+                }
+            );
+            std::cout << "-----------Search results-----------\n";
+            for(auto idx : res) {
+                std::cout << index.CompanyNameByIdx(idx) << std::endl;
+            }
+            std::cout << "-------------Search end-------------\n";
+        }
+
+        {
+            auto res = index.Search(
+                std::vector<YP::RequestItem>{
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::RUBRICS, 
+                        .data = std::vector<std::string>{"Парк"}
+                    },
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::PHONES, 
+                        .data = std::vector<YP::PhoneTemplate>{
+                            YP::PhoneTemplate{}.SetNumber("2671646").SetType("PHONE")
+                        }
+                    }
+                }
+            );
+            std::cout << "-----------Search results-----------\n";
+            for(auto idx : res) {
+                std::cout << index.CompanyNameByIdx(idx) << std::endl;
+            }
+            std::cout << "-------------Search end-------------\n";
+        }
+
+        {
+            auto res = index.Search(
+                std::vector<YP::RequestItem>{
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::PHONES, 
+                        .data = std::vector<YP::PhoneTemplate>{
+                            YP::PhoneTemplate{}.SetType("PHONE")
+                        }
+                    }
+                }
+            );
+            std::cout << "-----------Search results-----------\n";
+            for(auto idx : res) {
+                std::cout << index.CompanyNameByIdx(idx) << std::endl;
+            }
+            std::cout << "-------------Search end-------------\n";
+        }
+
     }
     return 0;
 }

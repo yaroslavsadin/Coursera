@@ -27,23 +27,23 @@ namespace YP {
 
             // ------- Index names;
             for(const auto& name : proto_company_names) {
-                names[name.value()].push_back(main_idx);
+                names[name.value()].insert(main_idx);
             }
             // ------- Index urls;
             for(const auto& name : company.urls()) {
-                urls[name.value()].push_back(main_idx);
+                urls[name.value()].insert(main_idx);
             }
             // ------- Index rubsrics;
             for(size_t id : company.rubrics()) {
-                rubrics[rubrics_.at(id)].push_back(main_idx);
+                rubrics[rubrics_.at(id)].insert(main_idx);
             }
             
             // ------- Index phone
             for(const auto& phone : company.phones()) {
-                phone_country_code[phone.type()][phone.country_code()].push_back(main_idx);
-                phone_local_code[phone.type()][phone.local_code()].push_back(main_idx);
-                phone_number[phone.type()][phone.number()].push_back(main_idx);
-                phone_extension[phone.type()][phone.extension()].push_back(main_idx);
+                phone_country_code[phone.type()][phone.country_code()].insert(main_idx);
+                phone_local_code[phone.type()][phone.local_code()].insert(main_idx);
+                phone_number[phone.type()][phone.number()].insert(main_idx);
+                phone_extension[phone.type()][phone.extension()].insert(main_idx);
             }
         }
     }
@@ -76,34 +76,43 @@ namespace YP {
             default: // PHONES
                 for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
                     std::vector<std::set<size_t>> phone_candidates;
-                    auto array_idx = (phone_template.GetType() == "PHONE") ? 0 : 1;
                     
-                    auto f_process_phone_elem = [this,&phone_candidates]
-                        (const std::string& criterion, const Index& index) {
-                        if(index.count(criterion)) {
-                            auto& s = phone_candidates.emplace_back();
-                            for(auto idx : index.at(criterion)) {
-                                s.insert(idx);
+                    auto f_process_phone_elem = 
+                    [this,&phone_candidates,phone_template]
+                    (const std::string& criterion, const auto& indices) {
+                        auto& s = phone_candidates.emplace_back();
+                        if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::PHONE) {
+                            if(indices[YP::YellowPagesIndex::phone_idx].count(criterion)) {
+                                for(auto idx : indices[YP::YellowPagesIndex::phone_idx].at(criterion)) {
+                                    s.insert(idx);
+                                }
+                            }
+                        }
+                        if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::FAX) {
+                            if(indices[YP::YellowPagesIndex::fax_idx].count(criterion)) {
+                                for(auto idx : indices[YP::YellowPagesIndex::fax_idx].at(criterion)) {
+                                    s.insert(idx);
+                                }
                             }
                         }
                     };
 
                     if(phone_template.HasExtension()) {
-                        f_process_phone_elem(phone_template.GetExtension(), phone_extension[array_idx]);
+                        f_process_phone_elem(phone_template.GetExtension(), phone_extension);
                     }
                     if(phone_template.HasCountryCode()) {
                         // If has country code it must match
-                        f_process_phone_elem(phone_template.GetCountryCode(), phone_country_code[array_idx]);
+                        f_process_phone_elem(phone_template.GetCountryCode(), phone_country_code);
                     }
                     if(phone_template.HasLocalCode() || phone_template.HasCountryCode()) {
                         // If has country code OR has local code, the last must match
-                        f_process_phone_elem(phone_template.GetLocalCode(), phone_local_code[array_idx]);
+                        f_process_phone_elem(phone_template.GetLocalCode(), phone_local_code);
                     }
                     if(phone_template.HasNumber()) {
                         // Has number, look up for it
-                        f_process_phone_elem(phone_template.GetNumber(), phone_number[array_idx]);
+                        f_process_phone_elem(phone_template.GetNumber(), phone_number);
                     } else {
-                        f_process_phone_elem("", phone_number[array_idx]);
+                        f_process_phone_elem("", phone_number);
                     }
                     // We need to at least create and entry in candidates 
                     // in case none companies were found for the phone template
@@ -125,6 +134,15 @@ namespace YP {
 
     const std::string YellowPagesIndex::CompanyNameByIdx(size_t idx) {
         return company_names[idx];
+    }
+
+    PhoneTemplate& PhoneTemplate::SetType(std::string s) {
+        if(s == "PHONE") {
+            type = Type::PHONE;
+        } else {
+            type = Type::FAX;
+        }
+        return *this;
     }
 
     PhoneTemplate& PhoneTemplate::SetCountryCode(std::string s) {

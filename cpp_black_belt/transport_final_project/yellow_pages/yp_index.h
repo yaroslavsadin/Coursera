@@ -33,9 +33,13 @@ namespace YP {
 
     class PhoneTemplate {
     public:
-        PhoneTemplate(const std::string& type_)
-        : type(type_) {}
-        const std::string& GetType() const { return type; }
+        enum class Type {
+            PHONE,
+            FAX
+        };
+        PhoneTemplate& SetType(std::string s);
+        Type GetType() const { return *type; }
+        bool HasType() const { return type.has_value(); }
         PhoneTemplate& SetCountryCode(std::string s);
         const std::string& GetCountryCode() const;
         bool HasCountryCode() const { return country_code.has_value(); }
@@ -49,7 +53,7 @@ namespace YP {
         const std::string& GetExtension() const;
         bool HasExtension() const { return extension.has_value(); }
     private:    
-        std::string type; // PHONE or FAX
+        std::optional<Type> type; // PHONE or FAX
         std::optional<std::string> country_code;
         std::optional<std::string> local_code;
         std::optional<std::string> number;
@@ -73,7 +77,7 @@ namespace YP {
         std::set<size_t> Search(const std::vector<RequestItem>& requests);
         const std::string CompanyNameByIdx(size_t idx);
     private:
-        using Index = std::unordered_map<std::string,std::vector<size_t>>;
+        using Index = std::unordered_map<std::string,std::unordered_set<size_t>>;
 
         std::vector<std::string> company_names;
 
@@ -81,6 +85,8 @@ namespace YP {
         Index urls;
         Index rubrics;
 
+        constexpr static size_t phone_idx = 0;
+        constexpr static size_t fax_idx = 1;
         // First for PHONE type, second for FAX type
         std::array<Index,2> phone_country_code;
         std::array<Index,2> phone_local_code;
