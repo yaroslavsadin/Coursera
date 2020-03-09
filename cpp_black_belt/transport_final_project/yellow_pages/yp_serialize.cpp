@@ -52,8 +52,8 @@ namespace YP {
                 if(address_map.count("coords")) {
                     const auto& coords = address_map.at("coords").AsMap();
                     auto& proto_coords = *proto_address.mutable_coords();
-                    proto_coords.set_lat(coords.at("lat").AsDouble());
-                    proto_coords.set_lon(coords.at("lon").AsDouble());
+                    proto_coords.set_lat(atof(coords.at("lat").AsString().c_str()));
+                    proto_coords.set_lon(atof(coords.at("lon").AsString().c_str()));
                 }
             }
 

@@ -489,8 +489,8 @@ int main(void) {
                 ],
                 "address": {
                     "coords": {
-                        "lat": 43.573226,
-                        "lon": 39.742947
+                        "lat": "43.573226",
+                        "lon": "39.742947"
                     }
                 },
                 "nearby_stops": [
@@ -525,8 +525,8 @@ int main(void) {
                 ],
                 "address": {
                     "coords": {
-                        "lat": 43.567998,
-                        "lon": 39.734131
+                        "lat": "43.567998",
+                        "lon": "39.734131"
                     }
                 },
                 "nearby_stops": [
