@@ -42,7 +42,7 @@ struct Request {
 
 struct ModifyReqeust : public Request {
   using Request::Request;
-  virtual void Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const = 0;
+  virtual void Process() const = 0;
 };
 
 /******************************* 
@@ -53,7 +53,7 @@ template<typename ResT>
 struct ReadReqeust : public Request {
   ReadReqeust(Request::Type type_) : Request(type_) {}
   ReadReqeust(size_t id, Request::Type type_) : Request(type_), id_(id) {}
-  virtual ResT Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const = 0;
+  virtual ResT Process() const = 0;
   std::optional<int> id_;
 };
 
@@ -62,23 +62,27 @@ struct ReadReqeust : public Request {
 ********************************/
 
 struct AddBusRequest : public ModifyReqeust {
-  AddBusRequest(const Json::Node& json_node);
+  AddBusRequest(const Json::Node& json_node, BusDatabase& db);
   static Bus::RouteType GetRouteType(std::string_view request);
   static Bus::RouteType GetRouteType(const Json::Node& json_node);
-  void Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const override;
+  void Process() const override;
   std::string bus_name_;
   std::vector<std::string> stops_;
   Bus::RouteType route_type_;
+private:
+  BusDatabase& db;
 };
 
 using StopDistances = std::vector< std::pair< std::string, unsigned int > >;
 struct AddStopRequest : public ModifyReqeust {
-  AddStopRequest(const Json::Node& json_node);
-  void Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const override;
+  AddStopRequest(const Json::Node& json_node, BusDatabase& db);
+  void Process() const override;
   std::string name_;
   double latitude;
   double longtitude;
   StopDistances distances_to_stops_;
+private:
+  BusDatabase& db;
 };
 
 /******************************* 
@@ -86,27 +90,38 @@ struct AddStopRequest : public ModifyReqeust {
 ********************************/
 
 struct BusRequest : public ReadReqeust<Json::Node> {
-  BusRequest(const Json::Node& from_json_node);
+  BusRequest(const Json::Node& from_json_node, const BusDatabase& db);
   std::string bus_name_;
-  Json::Node Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const override;
+  Json::Node Process() const override;
+private:
+  const BusDatabase& db;
 };
 
 struct StopRequest : public ReadReqeust<Json::Node> {
-  StopRequest(const Json::Node& from_json_node);
+  StopRequest(const Json::Node& from_json_node, const BusDatabase& db);
   std::string stop_name_;
-  Json::Node Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const override;
+  Json::Node Process() const override;
+private:
+  const BusDatabase& db;
 };
 
 struct RouteRequest : public ReadReqeust<Json::Node> {
-  RouteRequest(const Json::Node& from_json_node);
+  RouteRequest(const Json::Node& from_json_node, const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer);
   std::string from_;
   std::string to_;
-  Json::Node Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const override;
+  Json::Node Process() const override;
+private:
+  const BusDatabase& db;
+  const TransportRouter& router;
+  const SvgRender& renderer;
 };
 
 struct MapRequest : public ReadReqeust<Json::Node> {
-  MapRequest(const Json::Node& from_json_node);
-  Json::Node Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const override;
+  MapRequest(const Json::Node& from_json_node, const BusDatabase& db, const SvgRender& renderer);
+  Json::Node Process() const override;
+private:
+  const BusDatabase& db;
+  const SvgRender& renderer;
 };
 
 /******************************* 
@@ -123,47 +138,8 @@ public:
   Respones GetResponses() {
     return move(responses_);
   }
-  TransportCatalog& Serialize() {
-#ifdef DEBUG
-    std::cerr << "--------------- SERIALIZATION ---------------" << std::endl;
-#endif
-    ProtoTransport::TransportCatalog t;
-    std::ofstream serial(
-        serial_file, std::ios::binary
-    );
-    {
-#ifdef DEBUG
-      TotalDuration serialize("TransportCatalog& Serialize()");
-      ADD_DURATION(serialize);
-#endif
-      db.Serialize(*t.mutable_db());
-      router.InitRouter(db.GetBuses(),db.GetStops());
-      router.Serialize(*t.mutable_router());
-      renderer.Serialize(*t.mutable_renderer());
-    }
-    t.SerializeToOstream(&serial);
-    // assert(!serial.bad());
-    return *this;
-  }
-  TransportCatalog& Deserialize() {
-#ifdef DEBUG
-    std::cerr << "-------------- DESERIALIZATION --------------" << std::endl;
-#endif
-    std::ifstream serial(
-        serial_file, std::ios::binary
-    );
-    ProtoTransport::TransportCatalog t;
-    t.ParseFromIstream(&serial);
-    // assert(!serial.bad());
-#ifdef DEBUG
-    TotalDuration deserialize("TransportCatalog& Deserialize()");
-    ADD_DURATION(deserialize);
-#endif
-    db.Deserialize(t.db());
-    router.Deserialize(t.router(),db.GetStops(),db.GetBuses());
-    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
-    return *this;
-  }
+  TransportCatalog& Serialize();
+  TransportCatalog& Deserialize();
 private:
   Requests requests_;
   Respones responses_;
@@ -173,42 +149,31 @@ private:
   SvgRender renderer;
 
   std::string serial_file;
-};
 
-struct ColorVisitor {
-    Svg::Color operator()(const std::vector<Json::Node>& underlayer_colors_array) const {
-        if(underlayer_colors_array.size() == 4) {
-            return (Svg::Color(
-                Svg::Rgb (
-                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
-                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
-                static_cast<uint8_t>(underlayer_colors_array[2].AsInt()),
-                underlayer_colors_array[3].AsDouble()
-                )
-            ));
-        } else {
-            return (Svg::Color(
-                Svg::Rgb (
-                static_cast<uint8_t>(underlayer_colors_array[0].AsInt()),
-                static_cast<uint8_t>(underlayer_colors_array[1].AsInt()),
-                static_cast<uint8_t>(underlayer_colors_array[2].AsInt())
-                )
-            ));
-        }
-    }
-    Svg::Color operator()(const std::string& underlayer_colors_string) const {
-        return Svg::Color(underlayer_colors_string);
-    }
-    Svg::Color operator()(bool) const {
-        return Svg::Color();
-    }
-    Svg::Color operator()(int) const {
-        return Svg::Color();
-    }
-    Svg::Color operator()(double) const {
-        return Svg::Color();
-    }
-    Svg::Color operator()(std::map<std::string, Json::Node>&) const {
-        return Svg::Color();
-    }
+  template<typename From>
+  unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request) {
+      switch(request_type) {
+          case Request::Type::ADD_BUS:
+              return make_unique<AddBusRequest>(request,db);
+              break;
+          case Request::Type::ADD_STOP:
+              return make_unique<AddStopRequest>(request,db);
+              break;
+          case Request::Type::GET_BUS_INFO:
+              return make_unique<BusRequest>(request,db);
+              break;
+          case Request::Type::GET_STOP_INFO:
+              return make_unique<StopRequest>(request,db);
+              break;
+          case Request::Type::GET_ROUTE:
+              return make_unique<RouteRequest>(request,db,router,renderer);
+              break;
+          case Request::Type::GET_MAP:
+              return make_unique<MapRequest>(request,db,renderer);
+              break;
+          default:
+              break;
+          }
+      throw invalid_argument("Unknown request type");
+  }
 };

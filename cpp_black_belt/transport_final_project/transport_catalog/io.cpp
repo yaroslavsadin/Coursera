@@ -33,33 +33,6 @@ Request::Type TypeFromString(string_view str, bool is_modify_request) {
     }
 }
 
-template<typename From>
-unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request) {
-    switch(request_type) {
-        case Request::Type::ADD_BUS:
-            return make_unique<AddBusRequest>(request);
-            break;
-        case Request::Type::ADD_STOP:
-            return make_unique<AddStopRequest>(request);
-            break;
-        case Request::Type::GET_BUS_INFO:
-            return make_unique<BusRequest>(request);
-            break;
-        case Request::Type::GET_STOP_INFO:
-            return make_unique<StopRequest>(request);
-            break;
-        case Request::Type::GET_ROUTE:
-            return make_unique<RouteRequest>(request);
-            break;
-        case Request::Type::GET_MAP:
-            return make_unique<MapRequest>(request);
-            break;
-        default:
-            break;
-        }
-    throw invalid_argument("Unknown request type");
-}
-
 // Ugly because visitor doesn't work with vector<variant>... 
 Svg::Color ColorFromJsonNode(const Json::Node& underlayer_color_) {
     if(holds_alternative<string>(underlayer_color_)) {
@@ -88,7 +61,7 @@ Svg::Color ColorFromJsonNode(const Json::Node& underlayer_color_) {
 }
 
 TransportCatalog::TransportCatalog(Json::Document doc)
-: db(), router(), renderer(db.GetBuses(),db.GetStops()) 
+: db(), router(), renderer(db.GetBuses(),db.GetStops())
 {
     const auto& root_ = doc.GetRoot().AsMap();
 
@@ -172,10 +145,10 @@ TransportCatalog& TransportCatalog::ProcessRequests() {
            request->type_ == Request::Type::GET_ROUTE ||
            request->type_ == Request::Type::GET_MAP) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
-            responses.push_back(request_.Process(db,router,renderer));
+            responses.push_back(request_.Process());
         } else {
             const auto& request_ = static_cast<const ModifyReqeust&>(*request);
-            request_.Process(db,router,renderer);
+            request_.Process();
         }
     }
     responses_ = Json::Node(move(responses));
@@ -191,15 +164,15 @@ inline size_t GetReqestId(const Json::Node& node) {
     return node.AsMap().at("id").AsInt();
 }
 
-BusRequest::BusRequest(const Json::Node& from_json_node) 
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO) 
+BusRequest::BusRequest(const Json::Node& from_json_node, const BusDatabase& db) 
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_BUS_INFO), db(db)
 {
     const auto& as_map = from_json_node.AsMap();
     bus_name_ = as_map.at("name").AsString();
 }
 
-StopRequest::StopRequest(const Json::Node& from_json_node) 
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_STOP_INFO) 
+StopRequest::StopRequest(const Json::Node& from_json_node, const BusDatabase& db) 
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_STOP_INFO), db(db) 
 {
     const auto& as_map = from_json_node.AsMap();
     stop_name_ = as_map.at("name").AsString();
@@ -222,8 +195,8 @@ Bus::RouteType AddBusRequest::GetRouteType(const Json::Node& json_node) {
     }
 }
 
-AddBusRequest::AddBusRequest(const Json::Node& json_node)
-: ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(json_node))
+AddBusRequest::AddBusRequest(const Json::Node& json_node, BusDatabase& db)
+: ModifyReqeust(Request::Type::ADD_BUS), route_type_(GetRouteType(json_node)), db(db)
 {
     const auto& as_map = json_node.AsMap();
     bus_name_ = as_map.at("name").AsString();
@@ -247,8 +220,8 @@ StopDistances GetStopDistances(const vector<string>& distances) {
     return res;
 }
 
-AddStopRequest::AddStopRequest(const Json::Node& json_node)
-: ModifyReqeust(Request::Type::ADD_STOP)
+AddStopRequest::AddStopRequest(const Json::Node& json_node, BusDatabase& db)
+: ModifyReqeust(Request::Type::ADD_STOP),db(db)
 {
     const auto& as_map = json_node.AsMap();
     name_ = as_map.at("name").AsString();
@@ -275,16 +248,16 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node)
     distances_to_stops_ = move(res);
 }
 
-RouteRequest::RouteRequest(const Json::Node& from_json_node)
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE) 
+RouteRequest::RouteRequest(const Json::Node& from_json_node, const BusDatabase& db, const TransportRouter& router , const SvgRender& renderer)
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE),db(db), router(router), renderer(renderer)
 {
     const auto& as_map = from_json_node.AsMap();
     from_ = as_map.at("from").AsString();
     to_ = as_map.at("to").AsString();
 }
 
-MapRequest::MapRequest(const Json::Node& from_json_node)
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_MAP) 
+MapRequest::MapRequest(const Json::Node& from_json_node, const BusDatabase& db, const SvgRender& renderer)
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_MAP), db(db), renderer(renderer) 
 {
 }
 
@@ -292,7 +265,7 @@ MapRequest::MapRequest(const Json::Node& from_json_node)
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
 
-Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
+Json::Node BusRequest::Process() const {
     auto info = db.GetBusInfo(bus_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -309,7 +282,7 @@ Json::Node BusRequest::Process(const BusDatabase& db, const TransportRouter& rou
     return Json::Node(res);
 }
 
-Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
+Json::Node StopRequest::Process() const {
     auto info = db.GetStopInfo(stop_name_);
     map<string,Json::Node> res;
     if(info.has_value()) {
@@ -330,7 +303,7 @@ Json::Node StopRequest::Process(const BusDatabase& db, const TransportRouter& ro
     }
     return Json::Node(res);
 }
-Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
+Json::Node RouteRequest::Process() const {
     auto route = router.BuildRoute(db.GetBuses(),db.GetStops(),from_,to_);
     map<string,Json::Node> res;
     res["request_id"] = Json::Node(*id_);
@@ -382,7 +355,7 @@ Json::Node RouteRequest::Process(const BusDatabase& db, const TransportRouter& r
     return Json::Node(move(res));
 }
 
-Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer) const {
+Json::Node MapRequest::Process() const {
     std::map<string,Json::Node> res;
     stringstream ss;
     renderer.Render().Render(ss);
@@ -391,11 +364,55 @@ Json::Node MapRequest::Process(const BusDatabase& db, const TransportRouter& rou
     return move(res);
 }
 
-void AddBusRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
+void AddBusRequest::Process() const {
     db.AddBus(
         move(bus_name_),move(stops_), (route_type_ == Bus::RouteType::ROUNDTRIP)
     );
 }
-void AddStopRequest::Process(BusDatabase& db, TransportRouter& router, SvgRender& renderer) const {
+void AddStopRequest::Process() const {
     db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }
+
+TransportCatalog& TransportCatalog::Serialize() {
+#ifdef DEBUG
+    std::cerr << "--------------- SERIALIZATION ---------------" << std::endl;
+#endif
+    ProtoTransport::TransportCatalog t;
+    std::ofstream serial(
+        serial_file, std::ios::binary
+    );
+    {
+#ifdef DEBUG
+      TotalDuration serialize("TransportCatalog& Serialize()");
+      ADD_DURATION(serialize);
+#endif
+      db.Serialize(*t.mutable_db());
+      router.InitRouter(db.GetBuses(),db.GetStops());
+      router.Serialize(*t.mutable_router());
+      renderer.Serialize(*t.mutable_renderer());
+    }
+    t.SerializeToOstream(&serial);
+    // assert(!serial.bad());
+    return *this;
+}
+
+TransportCatalog& TransportCatalog::Deserialize() {
+#ifdef DEBUG
+    std::cerr << "-------------- DESERIALIZATION --------------" << std::endl;
+#endif
+    std::ifstream serial(
+        serial_file, std::ios::binary
+    );
+    ProtoTransport::TransportCatalog t;
+    t.ParseFromIstream(&serial);
+    // assert(!serial.bad());
+#ifdef DEBUG
+    TotalDuration deserialize("TransportCatalog& Deserialize()");
+    ADD_DURATION(deserialize);
+#endif
+    db.Deserialize(t.db());
+    router.Deserialize(t.router(),db.GetStops(),db.GetBuses());
+    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
+    return *this;
+}
+

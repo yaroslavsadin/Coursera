@@ -117,6 +117,10 @@ int main(void) {
                     YP::RequestItem{
                         .type = YP::RequestItem::Type::RUBRICS, 
                         .data = std::vector<std::string>{"Парк"}
+                    },
+                    YP::RequestItem{
+                        .type = YP::RequestItem::Type::URLS, 
+                        .data = std::vector<std::string>{"http://dendrarium.ru"}
                     }
                 }
             );
