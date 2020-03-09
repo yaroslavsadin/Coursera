@@ -100,6 +100,7 @@ R"(
 };
 
 int main(void) {
+#if 0
     Json::Document doc = Json::Load(input);
     {
         std::fstream ser_file("ser.bin", std::ios::binary | std::ios::out);
@@ -194,5 +195,6 @@ int main(void) {
         }
 
     }
+#endif
     return 0;
 }

@@ -4,5 +4,5 @@
 #include "database.pb.h"
 
 namespace YP {
-    void Serialize(const Json::Document& doc, std::ostream& stream);
+    void Serialize(const Json::Document& doc, YellowPages::Database& db);
 }

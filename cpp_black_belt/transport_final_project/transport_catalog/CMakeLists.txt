@@ -6,7 +6,7 @@ file(GLOB_RECURSE PROTO_FILES ./proto/*.proto)
 protobuf_generate(
     LANGUAGE cpp
     TARGET transport_catalog_proto
-    IMPORT_DIRS ./proto
+    IMPORT_DIRS ./proto ../yellow_pages/proto
     APPEND_PATH ./proto
     PROTOC_OUT_DIR ./proto/generated
     PROTOS ${PROTO_FILES}

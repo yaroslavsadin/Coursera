@@ -7,7 +7,7 @@
 #include <array>
 #include <variant>
 #include <optional>
-#include "../../misc.h"
+#include "misc.h"
 #include "database.pb.h"
 
 namespace YP {
@@ -74,8 +74,8 @@ namespace YP {
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
-        std::set<size_t> Search(const std::vector<RequestItem>& requests);
-        const std::string CompanyNameByIdx(size_t idx);
+        std::set<size_t> Search(const std::vector<RequestItem>& requests) const;
+        const std::string& CompanyNameByIdx(size_t idx) const;
     private:
         using Index = std::unordered_map<std::string,std::unordered_set<size_t>>;
 

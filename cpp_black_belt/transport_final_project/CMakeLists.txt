@@ -85,3 +85,4 @@ enable_testing()
 
 add_test(NAME transport_catalog_tests COMMAND transport_catalog_tests)
 add_test(NAME yellow_pages_tests COMMAND yellow_pages_tests)
+add_test(NAME transport COMMAND transport)

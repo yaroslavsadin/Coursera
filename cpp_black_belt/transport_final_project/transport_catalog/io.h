@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "json.h"
 #include "svg_render.h"
+#include "yp_index.h"
 #include <stdexcept>
 #ifdef DEBUG
 #include "profile_advanced.h"
@@ -28,7 +29,8 @@ struct Request {
     GET_BUS_INFO,
     GET_STOP_INFO,
     GET_ROUTE,
-    GET_MAP
+    GET_MAP,
+    FIND_COMPANIES
   };
   Request(Type type) : type_(type) {}
   static std::unique_ptr<Request> MakeRequest(Type type);
@@ -124,6 +126,14 @@ private:
   const SvgRender& renderer;
 };
 
+struct FindCompaniesRequest : public ReadReqeust<Json::Node> {
+  FindCompaniesRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index);
+  Json::Node Process() const override;
+private:
+  std::vector<YP::RequestItem> requests;
+  const std::optional<YP::YellowPagesIndex>& index;
+};
+
 /******************************* 
        DATABASE WRAPPER        *
 ********************************/
@@ -147,33 +157,39 @@ private:
   BusDatabase db;
   TransportRouter router;
   SvgRender renderer;
+  std::optional<YP::YellowPagesIndex> index;
+
+  ProtoTransport::TransportCatalog proto_catalog;
 
   std::string serial_file;
 
   template<typename From>
-  unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request) {
+  std::unique_ptr<Request> MakeRequest(Request::Type request_type, const From& request) {
       switch(request_type) {
           case Request::Type::ADD_BUS:
-              return make_unique<AddBusRequest>(request,db);
+              return std::make_unique<AddBusRequest>(request,db);
               break;
           case Request::Type::ADD_STOP:
-              return make_unique<AddStopRequest>(request,db);
+              return std::make_unique<AddStopRequest>(request,db);
               break;
           case Request::Type::GET_BUS_INFO:
-              return make_unique<BusRequest>(request,db);
+              return std::make_unique<BusRequest>(request,db);
               break;
           case Request::Type::GET_STOP_INFO:
-              return make_unique<StopRequest>(request,db);
+              return std::make_unique<StopRequest>(request,db);
               break;
           case Request::Type::GET_ROUTE:
-              return make_unique<RouteRequest>(request,db,router,renderer);
+              return std::make_unique<RouteRequest>(request,db,router,renderer);
               break;
           case Request::Type::GET_MAP:
-              return make_unique<MapRequest>(request,db,renderer);
+              return std::make_unique<MapRequest>(request,db,renderer);
+              break;
+          case Request::Type::FIND_COMPANIES:
+              return std::make_unique<FindCompaniesRequest>(request,index);
               break;
           default:
               break;
           }
-      throw invalid_argument("Unknown request type");
+      throw std::invalid_argument("Unknown request type");
   }
 };

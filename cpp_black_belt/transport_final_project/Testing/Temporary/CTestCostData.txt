@@ -1,3 +1,4 @@
-transport_catalog_tests 82 0.0489477
-yellow_pages_tests 75 0.0158069
+transport_catalog_tests 96 0.0290467
+yellow_pages_tests 89 0.0335732
+transport 10 0.437538
 ---

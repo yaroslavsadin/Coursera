@@ -4,9 +4,11 @@ package ProtoTransport;
 import "db.proto";
 import "router.proto";
 import "renderer.proto";
+import "database.proto";
 
 message TransportCatalog {
     Db db = 1;
     Router router = 2;
     Renderer renderer = 3;
+    YellowPages.Database yp = 4;
 }

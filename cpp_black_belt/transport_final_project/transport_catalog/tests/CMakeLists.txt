@@ -16,6 +16,8 @@ target_link_libraries(transport_catalog_tests
     transport_catalog
     transport_catalog_proto
     json
+    yellow_pages
+    yellow_pages_proto
 )
 target_include_directories(transport_catalog_tests
     PRIVATE

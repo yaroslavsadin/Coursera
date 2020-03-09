@@ -1,14 +1,12 @@
 #include "yp_serialize.h"
 
 namespace YP {
-    void Serialize(const Json::Document& doc, std::ostream& stream) {
+    void Serialize(const Json::Document& doc, YellowPages::Database& db) {
         const auto& root = doc.GetRoot().AsMap();
         assert(root.count("yellow_pages"));
         const auto& top = root.at("yellow_pages").AsMap();
         assert(top.count("companies"));
         assert(top.count("rubrics"));
-
-        YellowPages::Database db;
 
         const auto& companies = top.at("companies").AsArray();
         const auto& rubrics = top.at("rubrics").AsMap();
@@ -118,7 +116,5 @@ namespace YP {
                 }
             }
         }
-
-        db.SerializeToOstream(&stream);
     }
 }

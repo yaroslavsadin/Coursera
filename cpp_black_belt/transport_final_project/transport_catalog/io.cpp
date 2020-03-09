@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <cassert>
 #include "router.h"
+#include "yp_serialize.h"
 
 using namespace std;
 
@@ -28,6 +29,8 @@ Request::Type TypeFromString(string_view str, bool is_modify_request) {
         return Request::Type::GET_ROUTE;
     }else if (type_str == "Map") {
         return Request::Type::GET_MAP;
+    }else if (type_str == "FindCompanies") {
+        return Request::Type::FIND_COMPANIES;    
     } else {
         throw invalid_argument("Unknown request type");
     }
@@ -135,6 +138,11 @@ TransportCatalog::TransportCatalog(Json::Document doc)
             requests_.push_back(MakeRequest(request_type,node));
         }
     }
+
+    /* Initialize Yellow Pages*/
+    if(root_.count("yellow_pages")) {
+        YP::Serialize(doc,*proto_catalog.mutable_yp());
+    }
 }
 
 TransportCatalog& TransportCatalog::ProcessRequests() {
@@ -143,7 +151,8 @@ TransportCatalog& TransportCatalog::ProcessRequests() {
         if(request->type_ == Request::Type::GET_BUS_INFO || 
            request->type_ == Request::Type::GET_STOP_INFO ||
            request->type_ == Request::Type::GET_ROUTE ||
-           request->type_ == Request::Type::GET_MAP) {
+           request->type_ == Request::Type::GET_MAP ||
+           request->type_ == Request::Type::FIND_COMPANIES) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
             responses.push_back(request_.Process());
         } else {
@@ -261,6 +270,56 @@ MapRequest::MapRequest(const Json::Node& from_json_node, const BusDatabase& db, 
 {
 }
 
+FindCompaniesRequest::FindCompaniesRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index)
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::FIND_COMPANIES), index(index)
+{
+    auto f_add_strings_request = [this](YP::RequestItem::Type type, const auto& strings) 
+    {
+        std::vector<std::string> data;
+        data.reserve(strings.size());
+        for(const auto& rubric : strings) {
+            data.push_back(rubric.AsString());
+        }
+        requests.emplace_back(YP::RequestItem{type,std::move(data)});
+    };
+
+    const auto& as_map = from_json_node.AsMap();
+    if(as_map.count("names")) {
+        f_add_strings_request(YP::RequestItem::Type::NAMES,as_map.at("names").AsArray());
+    }
+    if(as_map.count("urls")) {
+        f_add_strings_request(YP::RequestItem::Type::URLS,as_map.at("rubrics").AsArray());
+    }
+    if(as_map.count("rubrics")) {
+        f_add_strings_request(YP::RequestItem::Type::RUBRICS,as_map.at("rubrics").AsArray());
+    }
+    if(as_map.count("phones")) {
+        const auto& phones = as_map.at("phones").AsArray();
+        std::vector<YP::PhoneTemplate> data;
+        data.reserve(phones.size());
+        for(const auto& phone_node : phones) {
+            const auto& phone_as_map = phone_node.AsMap();
+            auto& phone = data.emplace_back();
+            if(phone_as_map.count("type")) {
+                phone.SetType(phone_as_map.at("type").AsString());
+            }
+            if(phone_as_map.count("number")) {
+                phone.SetNumber(phone_as_map.at("number").AsString());
+            }
+            if(phone_as_map.count("country_code")) {
+                phone.SetCountryCode(phone_as_map.at("country_code").AsString());
+            }
+            if(phone_as_map.count("local_code")) {
+                phone.SetLocalCode(phone_as_map.at("local_code").AsString());
+            }
+            if(phone_as_map.count("extension")) {
+                phone.SetExtension(phone_as_map.at("extension").AsString());
+            }
+        }
+        requests.emplace_back(YP::RequestItem{YP::RequestItem::Type::PHONES,std::move(data)});
+    }
+}
+
 /******************************* 
     REQUEST PROCESS FUNCTIONS  *
 ********************************/
@@ -361,7 +420,7 @@ Json::Node MapRequest::Process() const {
     renderer.Render().Render(ss);
     res["map"] = Json::Node(ss.str());
     res["request_id"] = Json::Node(*id_);
-    return move(res);
+    return res;
 }
 
 void AddBusRequest::Process() const {
@@ -373,11 +432,23 @@ void AddStopRequest::Process() const {
     db.AddStop(move(name_),latitude,longtitude,move(distances_to_stops_));
 }
 
+Json::Node FindCompaniesRequest::Process() const {
+    std::map<string,Json::Node> res;
+    std::vector<Json::Node> companies;
+    auto indices = index->Search(requests);
+    companies.reserve(indices.size());
+    for(size_t idx : indices) {
+        companies.emplace_back(index->CompanyNameByIdx(idx));
+    }
+    res["companies"] = std::move(companies);
+    res["request_id"] = Json::Node(*id_);
+    return res;
+}
+
 TransportCatalog& TransportCatalog::Serialize() {
 #ifdef DEBUG
     std::cerr << "--------------- SERIALIZATION ---------------" << std::endl;
 #endif
-    ProtoTransport::TransportCatalog t;
     std::ofstream serial(
         serial_file, std::ios::binary
     );
@@ -386,12 +457,12 @@ TransportCatalog& TransportCatalog::Serialize() {
       TotalDuration serialize("TransportCatalog& Serialize()");
       ADD_DURATION(serialize);
 #endif
-      db.Serialize(*t.mutable_db());
+      db.Serialize(*proto_catalog.mutable_db());
       router.InitRouter(db.GetBuses(),db.GetStops());
-      router.Serialize(*t.mutable_router());
-      renderer.Serialize(*t.mutable_renderer());
+      router.Serialize(*proto_catalog.mutable_router());
+      renderer.Serialize(*proto_catalog.mutable_renderer());
     }
-    t.SerializeToOstream(&serial);
+    proto_catalog.SerializeToOstream(&serial);
     // assert(!serial.bad());
     return *this;
 }
@@ -413,6 +484,7 @@ TransportCatalog& TransportCatalog::Deserialize() {
     db.Deserialize(t.db());
     router.Deserialize(t.router(),db.GetStops(),db.GetBuses());
     renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
+    index.emplace(t.yp());
     return *this;
 }
 

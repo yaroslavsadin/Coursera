@@ -1,12 +1,12 @@
 #include "yp_index.h"
 
 namespace YP {
-    YellowPagesIndex::YellowPagesIndex(const YellowPages::Database& proto_db)
+    YellowPagesIndex::YellowPagesIndex(const YellowPages::Database& proto_db) 
     {
         std::unordered_map<size_t,std::string> rubrics_;
-        for(const auto& [id,rubric] : proto_db.rubrics()) {
+        for(const auto& pair__ : proto_db.rubrics()) {
             // Ignoring keywords
-            rubrics_[id] = rubric.name();
+            rubrics_[pair__.first] = pair__.second.name();
         }
         company_names.reserve(proto_db.companies_size());
         for(const auto& company : proto_db.companies()) {
@@ -48,7 +48,7 @@ namespace YP {
         }
     }
 
-    std::set<size_t> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) {
+    std::set<size_t> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) const {
         std::unordered_map<RequestItem::Type,std::set<size_t>> candidates;
 
         auto f_process_simple = [&candidates](const Index& index, const RequestItem& item) {
@@ -132,7 +132,7 @@ namespace YP {
         return intersection(candidates_.begin(),candidates_.end());
     }
 
-    const std::string YellowPagesIndex::CompanyNameByIdx(size_t idx) {
+    const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
         return company_names[idx];
     }
 
