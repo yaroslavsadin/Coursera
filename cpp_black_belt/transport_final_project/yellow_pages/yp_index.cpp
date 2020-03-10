@@ -40,10 +40,17 @@ namespace YP {
             
             // ------- Index phone
             for(const auto& phone : company.phones()) {
-                phone_country_code[phone.type()][phone.country_code()].insert(main_idx);
-                phone_local_code[phone.type()][phone.local_code()].insert(main_idx);
-                phone_number[phone.type()][phone.number()].insert(main_idx);
-                phone_extension[phone.type()][phone.extension()].insert(main_idx);
+                if(phone.type() == YellowPages::Phone_Type::Phone_Type_PHONE) {
+                    phone_index[phone.number()].companies.insert(main_idx);
+                    phone_index[phone.number()].local_to_companies[phone.local_code()].insert(main_idx);
+                    phone_index[phone.number()].country_to_companies[phone.country_code()].insert(main_idx);
+                    phone_index[phone.number()].extension_to_companies[phone.extension()].insert(main_idx);
+                } else {
+                    fax_index[phone.number()].companies.insert(main_idx);
+                    fax_index[phone.number()].local_to_companies[phone.local_code()].insert(main_idx);
+                    fax_index[phone.number()].country_to_companies[phone.country_code()].insert(main_idx);
+                    fax_index[phone.number()].extension_to_companies[phone.extension()].insert(main_idx);
+                }
             }
         }
     }
@@ -53,7 +60,7 @@ namespace YP {
 
         auto f_process_simple = [&candidates](const Index& index, const RequestItem& item) {
             for(const auto& name : std::get<std::vector<std::string>>(item.data)) {
-                candidates[item.type]; // create an entry for the Type anyway
+                candidates[item.type];
                 if(index.count(name)) {
                     for(auto idx : index.at(name)) {
                         candidates[item.type].insert(idx);
@@ -74,52 +81,55 @@ namespace YP {
                 f_process_simple(rubrics,item);
                 break;
             default: // PHONES
-                for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
-                    std::vector<std::set<size_t>> phone_candidates;
-                    
-                    auto f_process_phone_elem = 
-                    [this,&phone_candidates,phone_template]
-                    (const std::string& criterion, const auto& indices) {
-                        auto& s = phone_candidates.emplace_back();
-                        if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::PHONE) {
-                            if(indices[YP::YellowPagesIndex::phone_idx].count(criterion)) {
-                                for(auto idx : indices[YP::YellowPagesIndex::phone_idx].at(criterion)) {
-                                    s.insert(idx);
-                                }
-                            }
-                        }
-                        if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::FAX) {
-                            if(indices[YP::YellowPagesIndex::fax_idx].count(criterion)) {
-                                for(auto idx : indices[YP::YellowPagesIndex::fax_idx].at(criterion)) {
-                                    s.insert(idx);
-                                }
-                            }
-                        }
-                    };
+                std::vector<std::set<size_t>> phone_candidates;
 
-                    if(phone_template.HasExtension()) {
-                        f_process_phone_elem(phone_template.GetExtension(), phone_extension);
+                auto f_search_subindex = [&phone_candidates]
+                (const auto& index, const auto& criterion) {
+                    auto& s = phone_candidates.emplace_back();
+                    if(index.count(criterion)) {
+                        for(const auto& company : index.at(criterion)) {
+                            s.insert(company);
+                        }
+                    }
+                };
+
+                auto f_search_index = [&phone_candidates,&f_search_subindex]
+                (const auto& index, const auto& phone_template) {
+                    const auto& phone_name = (phone_template.HasNumber()) ? phone_template.GetNumber() : "";
+                    if(!index.count(phone_name)) return;
+
+                    const auto& phone_data = index.at(phone_name);
+
+                    auto& s = phone_candidates.emplace_back();
+                    for(const auto& company : phone_data.companies) {
+                        s.insert(company);
                     }
                     if(phone_template.HasCountryCode()) {
-                        // If has country code it must match
-                        f_process_phone_elem(phone_template.GetCountryCode(), phone_country_code);
-                    }
+                        f_search_subindex(phone_data.country_to_companies, phone_template.GetCountryCode());
+                    } 
                     if(phone_template.HasLocalCode() || phone_template.HasCountryCode()) {
-                        // If has country code OR has local code, the last must match
-                        f_process_phone_elem(phone_template.GetLocalCode(), phone_local_code);
+                        f_search_subindex(phone_data.local_to_companies, 
+                            (phone_template.HasLocalCode()) ? phone_template.GetLocalCode() : ""
+                        );
                     }
-                    if(phone_template.HasNumber()) {
-                        // Has number, look up for it
-                        f_process_phone_elem(phone_template.GetNumber(), phone_number);
-                    } else {
-                        f_process_phone_elem("", phone_number);
+                    if(phone_template.HasExtension()) {
+                        f_search_subindex(phone_data.extension_to_companies, phone_template.GetExtension());
                     }
-                    // We need to at least create and entry in candidates 
-                    // in case none companies were found for the phone template
-                    candidates[item.type];
+                };
+                    
+                for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
+                    if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::PHONE) {
+                        f_search_index(phone_index,phone_template);
+                    }
+                    if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::FAX) {
+                        f_search_index(fax_index,phone_template);
+                    }
+                    
+                    candidates[item.type]; // Create entry for type in case intersection returns none
                     for(auto idx : intersection(phone_candidates.begin(),phone_candidates.end())) {
                         candidates[item.type].insert(idx);
                     }
+                    phone_candidates.clear();
                 }
                 break;
             }

@@ -85,12 +85,14 @@ namespace YP {
         Index urls;
         Index rubrics;
 
-        constexpr static size_t phone_idx = 0;
-        constexpr static size_t fax_idx = 1;
-        // First for PHONE type, second for FAX type
-        std::array<Index,2> phone_country_code;
-        std::array<Index,2> phone_local_code;
-        std::array<Index,2> phone_number;
-        std::array<Index,2> phone_extension;
+        struct PhoneDetails {
+            std::unordered_set<size_t> companies;
+            Index local_to_companies;
+            Index country_to_companies;
+            Index extension_to_companies;
+        };
+
+        std::unordered_map<std::string,PhoneDetails> phone_index;
+        std::unordered_map<std::string,PhoneDetails> fax_index;
     };
 }
