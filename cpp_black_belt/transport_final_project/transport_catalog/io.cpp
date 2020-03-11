@@ -295,25 +295,29 @@ FindCompaniesRequest::FindCompaniesRequest(const Json::Node& from_json_node, con
     }
     if(as_map.count("phones")) {
         const auto& phones = as_map.at("phones").AsArray();
-        std::vector<YP::PhoneTemplate> data;
+        std::vector<YP::Phone> data;
         data.reserve(phones.size());
         for(const auto& phone_node : phones) {
             const auto& phone_as_map = phone_node.AsMap();
             auto& phone = data.emplace_back();
             if(phone_as_map.count("type")) {
-                phone.SetType(phone_as_map.at("type").AsString());
+                if(phone_as_map.at("type").AsString() == "PHONE") {
+                    phone.type = YP::Phone::Type::PHONE;
+                } else {
+                    phone.type = YP::Phone::Type::FAX;
+                }
             }
             if(phone_as_map.count("number")) {
-                phone.SetNumber(phone_as_map.at("number").AsString());
+                phone.number = phone_as_map.at("number").AsString();
             }
             if(phone_as_map.count("country_code")) {
-                phone.SetCountryCode(phone_as_map.at("country_code").AsString());
+                phone.country_code = phone_as_map.at("country_code").AsString();
             }
             if(phone_as_map.count("local_code")) {
-                phone.SetLocalCode(phone_as_map.at("local_code").AsString());
+                phone.local_code =  phone_as_map.at("local_code").AsString();
             }
             if(phone_as_map.count("extension")) {
-                phone.SetExtension(phone_as_map.at("extension").AsString());
+                phone.extension = phone_as_map.at("extension").AsString();
             }
         }
         requests.emplace_back(YP::RequestItem{YP::RequestItem::Type::PHONES,std::move(data)});

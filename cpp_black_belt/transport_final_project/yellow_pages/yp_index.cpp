@@ -39,18 +39,14 @@ namespace YP {
             }
             
             // ------- Index phone
-            for(const auto& phone : company.phones()) {
-                if(phone.type() == YellowPages::Phone_Type::Phone_Type_PHONE) {
-                    phone_index[phone.number()].companies.insert(main_idx);
-                    phone_index[phone.number()].local_to_companies[phone.local_code()].insert(main_idx);
-                    phone_index[phone.number()].country_to_companies[phone.country_code()].insert(main_idx);
-                    phone_index[phone.number()].extension_to_companies[phone.extension()].insert(main_idx);
-                } else {
-                    fax_index[phone.number()].companies.insert(main_idx);
-                    fax_index[phone.number()].local_to_companies[phone.local_code()].insert(main_idx);
-                    fax_index[phone.number()].country_to_companies[phone.country_code()].insert(main_idx);
-                    fax_index[phone.number()].extension_to_companies[phone.extension()].insert(main_idx);
-                }
+            for(const auto& proto_phone : company.phones()) {
+                auto& phone = company_to_phones[main_idx].emplace_back();
+                phone.type = (proto_phone.type() == YellowPages::Phone_Type::Phone_Type_PHONE) ? 
+                                            Phone::Type::PHONE : Phone::Type::FAX;
+                phone.number = proto_phone.number();
+                phone.extension = proto_phone.extension();
+                phone.local_code = proto_phone.local_code();
+                phone.country_code = proto_phone.country_code();
             }
         }
     }
@@ -81,55 +77,17 @@ namespace YP {
                 f_process_simple(rubrics,item);
                 break;
             default: // PHONES
-                std::vector<std::set<size_t>> phone_candidates;
+                auto& phone_candidates = candidates[item.type];
 
-                auto f_search_subindex = [&phone_candidates]
-                (const auto& index, const auto& criterion) {
-                    auto& s = phone_candidates.emplace_back();
-                    if(index.count(criterion)) {
-                        for(const auto& company : index.at(criterion)) {
-                            s.insert(company);
+                for(const Phone& phone_template : std::get<std::vector<Phone>>(item.data)) {
+                    for(const auto& [company,phones] : company_to_phones) {
+                        for(const auto& phone : phones) {
+                            if(DoesPhoneMatch(phone_template,phone)) {
+                                phone_candidates.insert(company);
+                                break;
+                            }
                         }
                     }
-                };
-
-                auto f_search_index = [&phone_candidates,&f_search_subindex]
-                (const auto& index, const auto& phone_template) {
-                    const auto& phone_name = (phone_template.HasNumber()) ? phone_template.GetNumber() : "";
-                    if(!index.count(phone_name)) return;
-
-                    const auto& phone_data = index.at(phone_name);
-
-                    auto& s = phone_candidates.emplace_back();
-                    for(const auto& company : phone_data.companies) {
-                        s.insert(company);
-                    }
-                    if(phone_template.HasCountryCode()) {
-                        f_search_subindex(phone_data.country_to_companies, phone_template.GetCountryCode());
-                    } 
-                    if(phone_template.HasLocalCode() || phone_template.HasCountryCode()) {
-                        f_search_subindex(phone_data.local_to_companies, 
-                            (phone_template.HasLocalCode()) ? phone_template.GetLocalCode() : ""
-                        );
-                    }
-                    if(phone_template.HasExtension()) {
-                        f_search_subindex(phone_data.extension_to_companies, phone_template.GetExtension());
-                    }
-                };
-                    
-                for(const PhoneTemplate& phone_template : std::get<std::vector<PhoneTemplate>>(item.data)) {
-                    if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::PHONE) {
-                        f_search_index(phone_index,phone_template);
-                    }
-                    if(!phone_template.HasType() || phone_template.GetType() == PhoneTemplate::Type::FAX) {
-                        f_search_index(fax_index,phone_template);
-                    }
-                    
-                    candidates[item.type]; // Create entry for type in case intersection returns none
-                    for(auto idx : intersection(phone_candidates.begin(),phone_candidates.end())) {
-                        candidates[item.type].insert(idx);
-                    }
-                    phone_candidates.clear();
                 }
                 break;
             }
@@ -144,43 +102,5 @@ namespace YP {
 
     const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
         return company_names[idx];
-    }
-
-    PhoneTemplate& PhoneTemplate::SetType(std::string s) {
-        if(s == "PHONE") {
-            type = Type::PHONE;
-        } else {
-            type = Type::FAX;
-        }
-        return *this;
-    }
-
-    PhoneTemplate& PhoneTemplate::SetCountryCode(std::string s) {
-        country_code = std::move(s);
-        return *this;
-    }
-    const std::string& PhoneTemplate::GetCountryCode() const {
-        return *country_code;
-    }
-    PhoneTemplate& PhoneTemplate::SetLocalCode(std::string s) {
-        local_code = std::move(s);
-        return *this;
-    }
-    const std::string& PhoneTemplate::GetLocalCode() const {
-        return *local_code;
-    }
-    PhoneTemplate& PhoneTemplate::SetNumber(std::string s) {
-        number = std::move(s);
-        return *this;
-    }
-    const std::string& PhoneTemplate::GetNumber() const {
-        return *number;
-    }
-    PhoneTemplate& PhoneTemplate::SetExtension(std::string s) {
-        extension = std::move(s);
-        return *this;
-    }
-    const std::string& PhoneTemplate::GetExtension() const {
-        return *extension;
     }
 }

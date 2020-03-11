@@ -31,33 +31,18 @@ namespace YP {
         return last_intersection;
     }
 
-    class PhoneTemplate {
-    public:
+        struct Phone {
         enum class Type {
             PHONE,
             FAX
         };
-        PhoneTemplate& SetType(std::string s);
-        Type GetType() const { return *type; }
-        bool HasType() const { return type.has_value(); }
-        PhoneTemplate& SetCountryCode(std::string s);
-        const std::string& GetCountryCode() const;
-        bool HasCountryCode() const { return country_code.has_value(); }
-        PhoneTemplate& SetLocalCode(std::string s);
-        const std::string& GetLocalCode() const;
-        bool HasLocalCode() const { return local_code.has_value(); }
-        PhoneTemplate& SetNumber(std::string s);
-        const std::string& GetNumber() const;
-        bool HasNumber() const { return number.has_value(); }
-        PhoneTemplate& SetExtension(std::string s);
-        const std::string& GetExtension() const;
-        bool HasExtension() const { return extension.has_value(); }
-    private:    
-        std::optional<Type> type; // PHONE or FAX
-        std::optional<std::string> country_code;
-        std::optional<std::string> local_code;
-        std::optional<std::string> number;
-        std::optional<std::string> extension;
+        std::optional<Type> type;
+        std::string formatted;
+        std::string country_code;
+        std::string local_code;
+        std::string number;
+        std::string extension;
+        std::string description;
     };
 
     struct RequestItem {
@@ -67,7 +52,7 @@ namespace YP {
         Type type;
         std::variant<
             std::vector<std::string>,
-            std::vector<PhoneTemplate>
+            std::vector<Phone>
         > data;
     };
 
@@ -85,14 +70,26 @@ namespace YP {
         Index urls;
         Index rubrics;
 
-        struct PhoneDetails {
-            std::unordered_set<size_t> companies;
-            Index local_to_companies;
-            Index country_to_companies;
-            Index extension_to_companies;
-        };
+        std::unordered_map<size_t,std::vector<Phone>> company_to_phones;
 
-        std::unordered_map<std::string,PhoneDetails> phone_index;
-        std::unordered_map<std::string,PhoneDetails> fax_index;
+        static bool DoesPhoneMatch(const Phone& query, const Phone& object) {
+            // const Phone& query_phone = query.phone;
+            if (!query.extension.empty() && query.extension != object.extension) {
+                return false;
+            }
+            if (query.type.has_value() && query.type != object.type) {
+                return false;
+            }
+            if (!query.country_code.empty() && query.country_code != object.country_code) {
+                return false;
+            }
+            if (
+                (!query.local_code.empty() || !query.country_code.empty())
+                && query.local_code != object.local_code
+            ) {
+                return false;
+            }
+            return query.number == object.number;
+        }
     };
 }

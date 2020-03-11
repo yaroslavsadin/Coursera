@@ -2,14 +2,11 @@
 #include <string>
 
 namespace YP {
-    class Phone {
-    public:
+    struct Phone {
         enum class Type {
             PHONE,
             FAX
         };
-        Phone() = default;
-    private:
         Type type;
         std::string formatted;
         std::string country_code;
