@@ -71,25 +71,5 @@ namespace YP {
         Index rubrics;
 
         std::unordered_map<size_t,std::vector<Phone>> company_to_phones;
-
-        static bool DoesPhoneMatch(const Phone& query, const Phone& object) {
-            // const Phone& query_phone = query.phone;
-            if (!query.extension.empty() && query.extension != object.extension) {
-                return false;
-            }
-            if (query.type.has_value() && query.type != object.type) {
-                return false;
-            }
-            if (!query.country_code.empty() && query.country_code != object.country_code) {
-                return false;
-            }
-            if (
-                (!query.local_code.empty() || !query.country_code.empty())
-                && query.local_code != object.local_code
-            ) {
-                return false;
-            }
-            return query.number == object.number;
-        }
     };
 }

@@ -1,6 +1,26 @@
 #include "yp_index.h"
 
 namespace YP {
+    static bool DoesPhoneMatch(const Phone& query, const Phone& object) {
+        // const Phone& query_phone = query.phone;
+        if (!query.extension.empty() && query.extension != object.extension) {
+            return false;
+        }
+        if (query.type.has_value() && query.type != object.type) {
+            return false;
+        }
+        if (!query.country_code.empty() && query.country_code != object.country_code) {
+            return false;
+        }
+        if (
+            (!query.local_code.empty() || !query.country_code.empty())
+            && query.local_code != object.local_code
+        ) {
+            return false;
+        }
+        return query.number == object.number;
+    }
+
     YellowPagesIndex::YellowPagesIndex(const YellowPages::Database& proto_db) 
     {
         std::unordered_map<size_t,std::string> rubrics_;
@@ -52,14 +72,17 @@ namespace YP {
     }
 
     std::set<size_t> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) const {
-        std::unordered_map<RequestItem::Type,std::set<size_t>> candidates;
+        std::vector<std::set<size_t>> candidates;
 
         auto f_process_simple = [&candidates](const Index& index, const RequestItem& item) {
-            for(const auto& name : std::get<std::vector<std::string>>(item.data)) {
-                candidates[item.type];
-                if(index.count(name)) {
-                    for(auto idx : index.at(name)) {
-                        candidates[item.type].insert(idx);
+            const auto& requests = std::get<std::vector<std::string>>(item.data);
+            if(!requests.empty()) {
+                auto& candidate = candidates.emplace_back();
+                for(const auto& name : requests) {
+                    if(index.count(name)) {
+                        for(auto idx : index.at(name)) {
+                            candidate.insert(idx);
+                        }
                     }
                 }
             }
@@ -77,14 +100,16 @@ namespace YP {
                 f_process_simple(rubrics,item);
                 break;
             default: // PHONES
-                auto& phone_candidates = candidates[item.type];
-
-                for(const Phone& phone_template : std::get<std::vector<Phone>>(item.data)) {
-                    for(const auto& [company,phones] : company_to_phones) {
-                        for(const auto& phone : phones) {
-                            if(DoesPhoneMatch(phone_template,phone)) {
-                                phone_candidates.insert(company);
-                                break;
+                const auto& requests = std::get<std::vector<Phone>>(item.data);
+                if(!requests.empty()) {
+                    auto& phone_candidates = candidates.emplace_back();
+                    for(const Phone& phone_template : requests) {
+                        for(const auto& [company,phones] : company_to_phones) {
+                            for(const auto& phone : phones) {
+                                if(DoesPhoneMatch(phone_template,phone)) {
+                                    phone_candidates.insert(company);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -92,12 +117,7 @@ namespace YP {
                 break;
             }
         }
-        std::vector<std::set<size_t>> candidates_;
-        candidates_.reserve(candidates.size());
-        for(auto& [k,v] : candidates) {
-            candidates_.push_back(std::move(v));
-        }
-        return intersection(candidates_.begin(),candidates_.end());
+        return intersection(candidates.begin(),candidates.end());
     }
 
     const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
