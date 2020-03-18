@@ -151,60 +151,6 @@ yellow_pages/fast:
 	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/build
 .PHONY : yellow_pages/fast
 
-address.o: address.cpp.o
-
-.PHONY : address.o
-
-# target to build an object file
-address.cpp.o:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/address.cpp.o
-.PHONY : address.cpp.o
-
-address.i: address.cpp.i
-
-.PHONY : address.i
-
-# target to preprocess a source file
-address.cpp.i:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/address.cpp.i
-.PHONY : address.cpp.i
-
-address.s: address.cpp.s
-
-.PHONY : address.s
-
-# target to generate assembly for a file
-address.cpp.s:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/address.cpp.s
-.PHONY : address.cpp.s
-
-company.o: company.cpp.o
-
-.PHONY : company.o
-
-# target to build an object file
-company.cpp.o:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/company.cpp.o
-.PHONY : company.cpp.o
-
-company.i: company.cpp.i
-
-.PHONY : company.i
-
-# target to preprocess a source file
-company.cpp.i:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/company.cpp.i
-.PHONY : company.cpp.i
-
-company.s: company.cpp.s
-
-.PHONY : company.s
-
-# target to generate assembly for a file
-company.cpp.s:
-	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f yellow_pages/CMakeFiles/yellow_pages.dir/build.make yellow_pages/CMakeFiles/yellow_pages.dir/company.cpp.s
-.PHONY : company.cpp.s
-
 proto/generated/address.pb.o: proto/generated/address.pb.cc.o
 
 .PHONY : proto/generated/address.pb.o
@@ -513,12 +459,6 @@ help:
 	@echo "... test"
 	@echo "... yellow_pages_proto"
 	@echo "... yellow_pages"
-	@echo "... address.o"
-	@echo "... address.i"
-	@echo "... address.s"
-	@echo "... company.o"
-	@echo "... company.i"
-	@echo "... company.s"
 	@echo "... proto/generated/address.pb.o"
 	@echo "... proto/generated/address.pb.i"
 	@echo "... proto/generated/address.pb.s"
