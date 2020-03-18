@@ -288,7 +288,7 @@ FindCompaniesRequest::FindCompaniesRequest(const Json::Node& from_json_node, con
         f_add_strings_request(YP::RequestItem::Type::NAMES,as_map.at("names").AsArray());
     }
     if(as_map.count("urls")) {
-        f_add_strings_request(YP::RequestItem::Type::URLS,as_map.at("rubrics").AsArray());
+        f_add_strings_request(YP::RequestItem::Type::URLS,as_map.at("urls").AsArray());
     }
     if(as_map.count("rubrics")) {
         f_add_strings_request(YP::RequestItem::Type::RUBRICS,as_map.at("rubrics").AsArray());

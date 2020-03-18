@@ -97,10 +97,13 @@
         "hash_map": "cpp",
         "hash_set": "cpp",
         "charconv": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "bit": "cpp",
+        "any": "cpp"
     },
     "terminal.integrated.env.windows": {
-        "PATH":"C:\\cygwin64\\bin"
+        "PATH":"C:\\cygwin64\\bin",
+        "MAKEFLAGS":"--no-print-directory"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

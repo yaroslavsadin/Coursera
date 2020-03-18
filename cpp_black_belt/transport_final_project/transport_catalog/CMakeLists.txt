@@ -20,6 +20,7 @@ add_library(transport_catalog OBJECT ${SRCS} ${PROTO_HDRS})
 ###############################################
 
 #### Make the library depend on protobuf generated headers
+add_dependencies(transport_catalog_proto yellow_pages_proto)
 add_dependencies(transport_catalog transport_catalog_proto)
 
 add_subdirectory(tests)
