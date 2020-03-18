@@ -356,7 +356,7 @@ Json::Node StopRequest::Process() const {
                 for(string bus : (*info)->buses) {
                     res.push_back(bus);
                 }
-                return move(res);
+                return res;
             }()
         );
         res["request_id"] = Json::Node(*id_);

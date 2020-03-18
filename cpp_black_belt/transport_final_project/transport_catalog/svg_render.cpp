@@ -510,7 +510,7 @@ void SvgRender::Serialize(ProtoTransport::Renderer& r) const {
             const std::string& str = color.Get<std::string>();
             c.set_as_string(str);
         }
-        return std::move(c);
+        return c;
     };
 
     auto f_point_to_proto = [](const Svg::Point& point) {
