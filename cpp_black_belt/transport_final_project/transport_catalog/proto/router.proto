@@ -9,7 +9,12 @@ message Edge {
 }
 
 message EdgeInfo {
-    bool type = 1;
+    enum EdgeType {
+        WaitBus = 0;
+        RideBus = 1;
+        WalkToCompany = 2;
+    };
+    EdgeType type = 1;
     string item_name = 2;
     int32 span_count = 3;
     uint32 stop_from = 4;

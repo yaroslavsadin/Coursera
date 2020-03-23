@@ -32,7 +32,8 @@ struct Bus {
 
 enum class EdgeType {
     CHANGE,
-    RIDE
+    RIDE,
+    WALK
 };
 
 struct EdgeInfo {

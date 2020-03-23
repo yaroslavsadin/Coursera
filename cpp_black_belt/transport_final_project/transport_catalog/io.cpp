@@ -30,7 +30,9 @@ Request::Type TypeFromString(string_view str, bool is_modify_request) {
     }else if (type_str == "Map") {
         return Request::Type::GET_MAP;
     }else if (type_str == "FindCompanies") {
-        return Request::Type::FIND_COMPANIES;    
+        return Request::Type::FIND_COMPANIES;
+    }else if (type_str == "RouteToCompany") {
+        return Request::Type::ROUTE_TO_COMPANY;
     } else {
         throw invalid_argument("Unknown request type");
     }
@@ -80,6 +82,7 @@ TransportCatalog::TransportCatalog(Json::Document doc)
         const auto& route_settings = root_.at("routing_settings").AsMap();
         router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
         router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
+        router.SetPedestrianVelocity(route_settings.at("pedestrian_velocity").AsInt());
 
         /* Setting rendering settings */
         const auto& render_settings = root_.at("render_settings").AsMap();
@@ -142,6 +145,7 @@ TransportCatalog::TransportCatalog(Json::Document doc)
     /* Initialize Yellow Pages*/
     if(root_.count("yellow_pages")) {
         YP::Serialize(doc,*proto_catalog.mutable_yp());
+        index.emplace(proto_catalog.yp());
     }
 }
 
@@ -152,7 +156,8 @@ TransportCatalog& TransportCatalog::ProcessRequests() {
            request->type_ == Request::Type::GET_STOP_INFO ||
            request->type_ == Request::Type::GET_ROUTE ||
            request->type_ == Request::Type::GET_MAP ||
-           request->type_ == Request::Type::FIND_COMPANIES) {
+           request->type_ == Request::Type::FIND_COMPANIES ||
+           request->type_ == Request::Type::ROUTE_TO_COMPANY) {
             const auto& request_ = static_cast<const ReadReqeust<Json::Node>&>(*request);
             responses.push_back(request_.Process());
         } else {
@@ -258,71 +263,24 @@ AddStopRequest::AddStopRequest(const Json::Node& json_node, BusDatabase& db)
 }
 
 RouteRequest::RouteRequest(const Json::Node& from_json_node, const BusDatabase& db, const TransportRouter& router , const SvgRender& renderer)
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE),db(db), router(router), renderer(renderer)
-{
-    const auto& as_map = from_json_node.AsMap();
-    from_ = as_map.at("from").AsString();
-    to_ = as_map.at("to").AsString();
-}
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_ROUTE), 
+  impl(from_json_node.AsMap().at("from").AsString(),from_json_node.AsMap().at("to").AsString(),db,router,renderer)
+{}
 
 MapRequest::MapRequest(const Json::Node& from_json_node, const BusDatabase& db, const SvgRender& renderer)
 : ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::GET_MAP), db(db), renderer(renderer) 
-{
-}
+{}
 
 FindCompaniesRequest::FindCompaniesRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index)
-: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::FIND_COMPANIES), index(index)
-{
-    auto f_add_strings_request = [this](YP::RequestItem::Type type, const auto& strings) 
-    {
-        std::vector<std::string> data;
-        data.reserve(strings.size());
-        for(const auto& rubric : strings) {
-            data.push_back(rubric.AsString());
-        }
-        requests.emplace_back(YP::RequestItem{type,std::move(data)});
-    };
+: ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::FIND_COMPANIES), impl(from_json_node,index)
+{}
 
-    const auto& as_map = from_json_node.AsMap();
-    if(as_map.count("names")) {
-        f_add_strings_request(YP::RequestItem::Type::NAMES,as_map.at("names").AsArray());
-    }
-    if(as_map.count("urls")) {
-        f_add_strings_request(YP::RequestItem::Type::URLS,as_map.at("urls").AsArray());
-    }
-    if(as_map.count("rubrics")) {
-        f_add_strings_request(YP::RequestItem::Type::RUBRICS,as_map.at("rubrics").AsArray());
-    }
-    if(as_map.count("phones")) {
-        const auto& phones = as_map.at("phones").AsArray();
-        std::vector<YP::Phone> data;
-        data.reserve(phones.size());
-        for(const auto& phone_node : phones) {
-            const auto& phone_as_map = phone_node.AsMap();
-            auto& phone = data.emplace_back();
-            if(phone_as_map.count("type")) {
-                if(phone_as_map.at("type").AsString() == "PHONE") {
-                    phone.type = YP::Phone::Type::PHONE;
-                } else {
-                    phone.type = YP::Phone::Type::FAX;
-                }
-            }
-            if(phone_as_map.count("number")) {
-                phone.number = phone_as_map.at("number").AsString();
-            }
-            if(phone_as_map.count("country_code")) {
-                phone.country_code = phone_as_map.at("country_code").AsString();
-            }
-            if(phone_as_map.count("local_code")) {
-                phone.local_code =  phone_as_map.at("local_code").AsString();
-            }
-            if(phone_as_map.count("extension")) {
-                phone.extension = phone_as_map.at("extension").AsString();
-            }
-        }
-        requests.emplace_back(YP::RequestItem{YP::RequestItem::Type::PHONES,std::move(data)});
-    }
-}
+RouteToCompanyRequest::RouteToCompanyRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index,
+                const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer)
+:   ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::ROUTE_TO_COMPANY),
+    companies_impl(from_json_node.AsMap().at("companies"),index),
+    route_impl(from_json_node.AsMap().at("from").AsString(),42,db,router,renderer)
+{}
 
 /******************************* 
     REQUEST PROCESS FUNCTIONS  *
@@ -367,55 +325,9 @@ Json::Node StopRequest::Process() const {
     return Json::Node(res);
 }
 Json::Node RouteRequest::Process() const {
-    auto route = router.BuildRoute(db.GetBuses(),db.GetStops(),from_,to_);
-    map<string,Json::Node> res;
+    auto res = impl.Process();
     res["request_id"] = Json::Node(*id_);
-    if(route) {
-        size_t route_id = route->id;
-        size_t num_edges = route->edge_count;
-
-        SvgRender::RouteMap route_map;
-        if(!num_edges) {
-            res["total_time"] = 0;
-            res["items"] = vector<Json::Node>();
-        } else {
-            res["total_time"] = Json::Node(route->weight);
-
-            vector<Json::Node> items;
-            for(size_t i = 0; i < num_edges;i++) {
-                const size_t edge_info_idx = router.GetRouteEdgeId(route_id,i);
-                const EdgeInfo& edge_info = router.GetEdgeInfo(edge_info_idx);
-                switch(edge_info.type_) {
-                case EdgeType::CHANGE:
-                    items.push_back(map<string,Json::Node> {
-                        {"stop_name", edge_info.item_name_},
-                        {"time", router.GetEdgeWeight(edge_info_idx)},
-                        {"type", string("Wait")}
-                    });
-                    break;
-                case EdgeType::RIDE:
-                    items.push_back(map<string,Json::Node> {
-                        {"bus", edge_info.item_name_},
-                        {"time", router.GetEdgeWeight(edge_info_idx)},
-                        {"span_count", edge_info.span_count_},
-                        {"type", string("Bus")}
-                    });
-                    route_map.push_back(&edge_info);
-                    break;
-                default:
-                    throw runtime_error("Wrong edge type");
-                    break;
-                }
-            }
-            res["items"] = move(items);
-        }
-        stringstream ss;
-        renderer.RenderRoute(std::move(route_map)).Render(ss);
-        res["map"] = Json::Node(ss.str());
-    } else {
-        res["error_message"] = Json::Node(string("not found"));
-    }
-    return Json::Node(move(res));
+    return res;
 }
 
 Json::Node MapRequest::Process() const {
@@ -424,6 +336,25 @@ Json::Node MapRequest::Process() const {
     renderer.Render().Render(ss);
     res["map"] = Json::Node(ss.str());
     res["request_id"] = Json::Node(*id_);
+    return res;
+}
+
+Json::Node RouteToCompanyRequest::Process() const {
+    Json::Node res;
+    auto companies_filtered = companies_impl.FilterCompanies();
+    if(companies_filtered.size()) {
+        size_t min_weight = 0;
+        size_t min_idx = 0;
+        for(auto idx : companies_filtered) {
+            route_impl.SetTo(idx);
+            auto route_to = route_impl.BuildRoute();
+            if(route_to->weight < min_weight || !min_weight) {
+
+            }
+        }
+        route_impl.SetTo(min_idx);
+        res = route_impl.Process();
+    }
     return res;
 }
 
@@ -437,14 +368,7 @@ void AddStopRequest::Process() const {
 }
 
 Json::Node FindCompaniesRequest::Process() const {
-    std::map<string,Json::Node> res;
-    std::vector<Json::Node> companies;
-    auto indices = index->Search(requests);
-    companies.reserve(indices.size());
-    for(size_t idx : indices) {
-        companies.emplace_back(index->CompanyNameByIdx(idx));
-    }
-    res["companies"] = std::move(companies);
+    auto res = impl.Process();
     res["request_id"] = Json::Node(*id_);
     return res;
 }
@@ -462,7 +386,10 @@ TransportCatalog& TransportCatalog::Serialize() {
       ADD_DURATION(serialize);
 #endif
       db.Serialize(*proto_catalog.mutable_db());
-      router.InitRouter(db.GetBuses(),db.GetStops());
+      router.InitRouter(db.GetBuses(),db.GetStops(),
+      /// TODO: This is temporary to let the old tests pass
+        (index.has_value()) ? index->GetNearbyStops() : YP::NearbyStops{}
+      );
       router.Serialize(*proto_catalog.mutable_router());
       renderer.Serialize(*proto_catalog.mutable_renderer());
     }
@@ -486,9 +413,12 @@ TransportCatalog& TransportCatalog::Deserialize() {
     ADD_DURATION(deserialize);
 #endif
     db.Deserialize(t.db());
-    router.Deserialize(t.router(),db.GetStops(),db.GetBuses());
-    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
     index.emplace(t.yp());
+    router.Deserialize(t.router(),db.GetStops(),db.GetBuses(),
+      /// TODO: This is temporary to let the old tests pass
+        (index.has_value()) ? index->GetNearbyStops() : YP::NearbyStops{}
+      );
+    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
     return *this;
 }
 

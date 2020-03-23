@@ -68,6 +68,11 @@ namespace YP {
                 phone.local_code = proto_phone.local_code();
                 phone.country_code = proto_phone.country_code();
             }
+
+            auto& nearby_stops_ = nearby_stops.emplace_back();
+            for(const auto& proto_nearby_stop : company.nearby_stops()) {
+                nearby_stops_.emplace_back(proto_nearby_stop.name(),proto_nearby_stop.meters());
+            }
         }
     }
 
@@ -122,5 +127,8 @@ namespace YP {
 
     const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
         return company_names[idx];
+    }
+    const auto& YellowPagesIndex::CompanyNearbyStopsByIdx(size_t idx) const {
+        return nearby_stops[idx];
     }
 }

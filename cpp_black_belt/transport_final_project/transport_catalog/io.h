@@ -9,6 +9,7 @@
 #include "svg_render.h"
 #include "yp_index.h"
 #include <stdexcept>
+#include "req_impl.h"
 #ifdef DEBUG
 #include "profile_advanced.h"
 #endif
@@ -30,7 +31,8 @@ struct Request {
     GET_STOP_INFO,
     GET_ROUTE,
     GET_MAP,
-    FIND_COMPANIES
+    FIND_COMPANIES,
+    ROUTE_TO_COMPANY
   };
   Request(Type type) : type_(type) {}
   static std::unique_ptr<Request> MakeRequest(Type type);
@@ -109,13 +111,9 @@ private:
 
 struct RouteRequest : public ReadReqeust<Json::Node> {
   RouteRequest(const Json::Node& from_json_node, const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer);
-  std::string from_;
-  std::string to_;
   Json::Node Process() const override;
 private:
-  const BusDatabase& db;
-  const TransportRouter& router;
-  const SvgRender& renderer;
+  RouteRequestImpl<std::string,std::string> impl;
 };
 
 struct MapRequest : public ReadReqeust<Json::Node> {
@@ -130,8 +128,16 @@ struct FindCompaniesRequest : public ReadReqeust<Json::Node> {
   FindCompaniesRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index);
   Json::Node Process() const override;
 private:
-  std::vector<YP::RequestItem> requests;
-  const std::optional<YP::YellowPagesIndex>& index;
+  FindCompaniesRequestImpl impl;
+};
+
+struct RouteToCompanyRequest : public ReadReqeust<Json::Node> {
+  RouteToCompanyRequest(const Json::Node& from_json_node, const std::optional<YP::YellowPagesIndex>& index,
+                const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer);
+  Json::Node Process() const override;
+private:
+  FindCompaniesRequestImpl companies_impl;
+  mutable RouteRequestImpl<std::string,size_t> route_impl;
 };
 
 /******************************* 
@@ -186,6 +192,9 @@ private:
               break;
           case Request::Type::FIND_COMPANIES:
               return std::make_unique<FindCompaniesRequest>(request,index);
+              break;
+          case Request::Type::ROUTE_TO_COMPANY:
+              return std::make_unique<RouteToCompanyRequest>(request,index,db,router,renderer);
               break;
           default:
               break;

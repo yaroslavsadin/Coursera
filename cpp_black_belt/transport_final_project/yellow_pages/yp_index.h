@@ -56,15 +56,27 @@ namespace YP {
         > data;
     };
 
+    struct NearbyStop {
+        NearbyStop(std::string name_, uint32_t meters_)
+        : name(name_), meters(meters_) {}
+        std::string name;
+        uint32_t meters;
+    };
+
+    using NearbyStops = std::vector<std::vector<NearbyStop>>;
+
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
         std::set<size_t> Search(const std::vector<RequestItem>& requests) const;
         const std::string& CompanyNameByIdx(size_t idx) const;
+        const auto& CompanyNearbyStopsByIdx(size_t idx) const;
+        const NearbyStops& GetNearbyStops() const { return nearby_stops; }
     private:
         using Index = std::unordered_map<std::string,std::unordered_set<size_t>>;
 
         std::vector<std::string> company_names;
+        std::vector<std::vector<NearbyStop>> nearby_stops;
 
         Index names;
         Index urls;

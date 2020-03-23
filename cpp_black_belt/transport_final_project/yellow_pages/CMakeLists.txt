@@ -22,4 +22,4 @@ add_library(yellow_pages OBJECT ${SRCS} ${PROTO_HDRS})
 #### Make the library depend on protobuf generated headers
 add_dependencies(yellow_pages yellow_pages_proto)
 
-add_subdirectory(tests)
+# add_subdirectory(tests)

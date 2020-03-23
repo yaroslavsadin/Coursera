@@ -611,9 +611,9 @@ void SvgRender::Deserialize(const ProtoTransport::Renderer& r, const Stops& s, c
 
     FillBusColors();
 
-    Svg::Document doc;
-    for(const auto& layer : settings.layers) {
-        render_table.at(layer)(this,doc);
-    }
-    base_map_cache = std::move(doc);
+    // Svg::Document doc;
+    // for(const auto& layer : settings.layers) {
+    //     render_table.at(layer)(this,doc);
+    // }
+    // base_map_cache = std::move(doc);
 }
