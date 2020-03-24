@@ -39,6 +39,7 @@ enum class EdgeType {
 struct EdgeInfo {
     EdgeType type_;
     std::string item_name_;
+    std::string_view company_name_;
     int span_count_;
     
     struct RouteRange {
@@ -54,5 +55,8 @@ struct EdgeInfo {
     int span_count, int start_, int end_ ) 
     : type_(type), item_name_(bus_name), 
         span_count_(span_count) , route(RouteRange{start_,end_})
+    {}
+    EdgeInfo(EdgeType type, std::string stop_name, std::string_view company_name) 
+    : type_(type), item_name_(stop_name), company_name_(company_name)
     {}
 };

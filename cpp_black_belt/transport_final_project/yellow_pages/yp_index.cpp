@@ -69,14 +69,14 @@ namespace YP {
                 phone.country_code = proto_phone.country_code();
             }
 
-            auto& nearby_stops_ = nearby_stops.emplace_back();
+            auto& nearby_stops_ = nearby_stops[company_names.back()];
             for(const auto& proto_nearby_stop : company.nearby_stops()) {
                 nearby_stops_.emplace_back(proto_nearby_stop.name(),proto_nearby_stop.meters());
             }
         }
     }
 
-    std::set<size_t> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) const {
+    std::vector<std::string_view> YellowPagesIndex::Search(const std::vector<RequestItem>& requests) const {
         std::vector<std::set<size_t>> candidates;
 
         auto f_process_simple = [&candidates](const Index& index, const RequestItem& item) {
@@ -122,13 +122,17 @@ namespace YP {
                 break;
             }
         }
-        return intersection(candidates.begin(),candidates.end());
+        std::vector<std::string_view> res;
+        for(auto idx : intersection(candidates.begin(),candidates.end())) {
+            res.push_back(company_names[idx]);
+        }
+        return res;
     }
 
     const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
         return company_names[idx];
     }
     const auto& YellowPagesIndex::CompanyNearbyStopsByIdx(size_t idx) const {
-        return nearby_stops[idx];
+        return nearby_stops.at(company_names[idx]);
     }
 }

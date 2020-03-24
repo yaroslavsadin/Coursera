@@ -16,9 +16,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
             stop_to_vertices_[stop_name].board = current_vertex_id++;
             stop_to_vertices_[stop_name].change = current_vertex_id++;
         }
-        company_vertices_.resize(companies_.size());
-        for(auto& vertex_id : company_vertices_) {
-            vertex_id = current_vertex_id++;
+        for(auto [name,_] : companies_) {
+            company_to_vertices_[name] = current_vertex_id++;
         }
 
         graph_ = Graph::DirectedWeightedGraph<double>(current_vertex_id);
@@ -74,21 +73,19 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
                 }
             }
         }
-        for(auto i = 0u; i < companies_.size(); i++) {
-            const auto& nearby_stops = companies_[i];
+        for(auto [company_name,nearby_stops] : companies_) {
             for(const auto& stop : nearby_stops) {
                 graph_.AddEdge(
                     Graph::Edge<double> {
                         stop_to_vertices_.at(stop.name).change,
-                        company_vertices_[i],
+                        company_to_vertices_[company_name],
                         GetWalkTime(stop.meters)
                     }
                 );
                 edges_info.push_back(EdgeInfo(
                     EdgeType::WALK,
                     stop.name,
-                    42,
-                    42, 42
+                    company_name
                 ));
             }
         }
@@ -165,9 +162,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
                 stop_to_vertices_[stop_name].board = current_vertex_id++;
                 stop_to_vertices_[stop_name].change = current_vertex_id++;
             }
-            company_vertices_.resize(companies_.size());
-            for(auto& vertex_id : company_vertices_) {
-                vertex_id = current_vertex_id++;
+            for(auto [name,_] : companies_) {
+                company_to_vertices_[name] = current_vertex_id++;
             }
 
             const auto& edges = r.edges();
@@ -247,9 +243,9 @@ TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const stri
 }
 
 std::optional<RouterT::RouteInfo> 
-TransportRouter::BuildRoute(const Buses& buses_, const Stops& stops_, const string& from, size_t to) const {
+TransportRouter::BuildRouteToCompany(const Buses& buses_, const Stops& stops_, string_view from, string_view to) const {
     std::optional<RouterT::RouteInfo> route_info = 
-    router_->BuildRoute(stop_to_vertices_.at(from).change, company_vertices_[to]);
+    router_->BuildRoute(stop_to_vertices_.at(from).change, company_to_vertices_.at(to));
     if(route_info) {
         routes.push_back(route_info->id);
     }

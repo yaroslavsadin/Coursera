@@ -113,7 +113,7 @@ struct RouteRequest : public ReadReqeust<Json::Node> {
   RouteRequest(const Json::Node& from_json_node, const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer);
   Json::Node Process() const override;
 private:
-  RouteRequestImpl<std::string,std::string> impl;
+  RouteRequestImpl impl;
 };
 
 struct MapRequest : public ReadReqeust<Json::Node> {
@@ -137,7 +137,7 @@ struct RouteToCompanyRequest : public ReadReqeust<Json::Node> {
   Json::Node Process() const override;
 private:
   FindCompaniesRequestImpl companies_impl;
-  mutable RouteRequestImpl<std::string,size_t> route_impl;
+  RouteRequestImpl route_impl;
 };
 
 /******************************* 

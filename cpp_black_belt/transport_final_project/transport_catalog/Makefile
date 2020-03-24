@@ -367,6 +367,33 @@ proto/generated/transport_catalog.pb.cc.s:
 	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog_proto.dir/build.make transport_catalog/CMakeFiles/transport_catalog_proto.dir/proto/generated/transport_catalog.pb.cc.s
 .PHONY : proto/generated/transport_catalog.pb.cc.s
 
+req_impl.o: req_impl.cpp.o
+
+.PHONY : req_impl.o
+
+# target to build an object file
+req_impl.cpp.o:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/req_impl.cpp.o
+.PHONY : req_impl.cpp.o
+
+req_impl.i: req_impl.cpp.i
+
+.PHONY : req_impl.i
+
+# target to preprocess a source file
+req_impl.cpp.i:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/req_impl.cpp.i
+.PHONY : req_impl.cpp.i
+
+req_impl.s: req_impl.cpp.s
+
+.PHONY : req_impl.s
+
+# target to generate assembly for a file
+req_impl.cpp.s:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/req_impl.cpp.s
+.PHONY : req_impl.cpp.s
+
 svg_render.o: svg_render.cpp.o
 
 .PHONY : svg_render.o
@@ -456,6 +483,9 @@ help:
 	@echo "... proto/generated/transport_catalog.pb.o"
 	@echo "... proto/generated/transport_catalog.pb.i"
 	@echo "... proto/generated/transport_catalog.pb.s"
+	@echo "... req_impl.o"
+	@echo "... req_impl.i"
+	@echo "... req_impl.s"
 	@echo "... svg_render.o"
 	@echo "... svg_render.i"
 	@echo "... svg_render.s"

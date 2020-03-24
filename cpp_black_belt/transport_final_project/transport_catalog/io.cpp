@@ -279,7 +279,7 @@ RouteToCompanyRequest::RouteToCompanyRequest(const Json::Node& from_json_node, c
                 const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer)
 :   ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::ROUTE_TO_COMPANY),
     companies_impl(from_json_node.AsMap().at("companies"),index),
-    route_impl(from_json_node.AsMap().at("from").AsString(),42,db,router,renderer)
+    route_impl(from_json_node.AsMap().at("from").AsString(),"",db,router,renderer)
 {}
 
 /******************************* 
@@ -325,7 +325,7 @@ Json::Node StopRequest::Process() const {
     return Json::Node(res);
 }
 Json::Node RouteRequest::Process() const {
-    auto res = impl.Process();
+    auto res = impl.Build();
     res["request_id"] = Json::Node(*id_);
     return res;
 }
@@ -340,22 +340,7 @@ Json::Node MapRequest::Process() const {
 }
 
 Json::Node RouteToCompanyRequest::Process() const {
-    Json::Node res;
-    auto companies_filtered = companies_impl.FilterCompanies();
-    if(companies_filtered.size()) {
-        size_t min_weight = 0;
-        size_t min_idx = 0;
-        for(auto idx : companies_filtered) {
-            route_impl.SetTo(idx);
-            auto route_to = route_impl.BuildRoute();
-            if(route_to->weight < min_weight || !min_weight) {
-
-            }
-        }
-        route_impl.SetTo(min_idx);
-        res = route_impl.Process();
-    }
-    return res;
+    return route_impl.Build(companies_impl.FilterCompanies());
 }
 
 void AddBusRequest::Process() const {
@@ -368,7 +353,7 @@ void AddStopRequest::Process() const {
 }
 
 Json::Node FindCompaniesRequest::Process() const {
-    auto res = impl.Process();
+    auto res = impl.BuildResponse();
     res["request_id"] = Json::Node(*id_);
     return res;
 }

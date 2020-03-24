@@ -55,8 +55,8 @@ public:
 
     std::optional<RouterT::RouteInfo> BuildRoute(const Buses& buses_, const Stops& stops_, 
                                                     const std::string& from, const std::string& to) const;
-    std::optional<RouterT::RouteInfo> BuildRoute(const Buses& buses_, const Stops& stops_, 
-                                                    const std::string& from, size_t to) const;
+    std::optional<RouterT::RouteInfo> BuildRouteToCompany(const Buses& buses_, const Stops& stops_, 
+                                                    std::string_view from, std::string_view to) const;
     
     void Serialize(ProtoTransport::Router& r) const;
     void Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b, const YP::NearbyStops& companies_);
@@ -65,14 +65,14 @@ private:
         return stops_.at(stop_from).distance_to_stop_.at(stop_to) / 1000. / route_settings_.bus_velocity_ * 60;
     }
     double GetWalkTime(size_t meters) const { 
-        return meters / 1000. / route_settings_.bus_velocity_ * 60;
+        return meters / 1000. / route_settings_.pedestrian_velocity * 60;
     }
     RouteSettings route_settings_;
     // Bad but as router was designed...
     mutable GraphT graph_ = GraphT(0);
     mutable std::optional<RouterT> router_;
     mutable std::unordered_map<std::string_view,StopVertices> stop_to_vertices_;
-    mutable std::vector<Graph::VertexId> company_vertices_;
+    mutable std::unordered_map<std::string_view,Graph::VertexId> company_to_vertices_;
     mutable std::vector<EdgeInfo> edges_info;
     
     mutable std::vector<int> routes;

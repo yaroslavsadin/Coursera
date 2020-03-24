@@ -63,12 +63,12 @@ namespace YP {
         uint32_t meters;
     };
 
-    using NearbyStops = std::vector<std::vector<NearbyStop>>;
+    using NearbyStops = std::unordered_map<std::string_view,std::vector<NearbyStop>>;
 
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
-        std::set<size_t> Search(const std::vector<RequestItem>& requests) const;
+        std::vector<std::string_view> Search(const std::vector<RequestItem>& requests) const;
         const std::string& CompanyNameByIdx(size_t idx) const;
         const auto& CompanyNearbyStopsByIdx(size_t idx) const;
         const NearbyStops& GetNearbyStops() const { return nearby_stops; }
@@ -76,7 +76,7 @@ namespace YP {
         using Index = std::unordered_map<std::string,std::unordered_set<size_t>>;
 
         std::vector<std::string> company_names;
-        std::vector<std::vector<NearbyStop>> nearby_stops;
+        NearbyStops nearby_stops;
 
         Index names;
         Index urls;
