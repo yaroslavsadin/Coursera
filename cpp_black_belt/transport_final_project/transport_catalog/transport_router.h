@@ -29,7 +29,7 @@ public:
         size_t board;
     };
 
-    void InitRouter(const Buses& buses_, const Stops& stops_, const YP::NearbyStops& companies_) const;
+    void InitRouter(const Buses& buses_, const Stops& stops_, const YP::Companies& companies_) const;
 
     const EdgeInfo& GetEdgeInfo(size_t idx) const {
         return edges_info[idx];
@@ -59,7 +59,7 @@ public:
                                                     std::string_view from, std::string_view to) const;
     
     void Serialize(ProtoTransport::Router& r) const;
-    void Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b, const YP::NearbyStops& companies_);
+    void Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b, const YP::Companies& companies_);
 private:
     double GetRideTime(const Stops& stops_, const std::string& stop_from, const std::string& stop_to) const { 
         return stops_.at(stop_from).distance_to_stop_.at(stop_to) / 1000. / route_settings_.bus_velocity_ * 60;

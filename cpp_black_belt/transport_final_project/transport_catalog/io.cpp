@@ -66,7 +66,7 @@ Svg::Color ColorFromJsonNode(const Json::Node& underlayer_color_) {
 }
 
 TransportCatalog::TransportCatalog(Json::Document doc)
-: db(), router(), renderer(db.GetBuses(),db.GetStops())
+: db(), router()
 {
     const auto& root_ = doc.GetRoot().AsMap();
 
@@ -83,12 +83,22 @@ TransportCatalog::TransportCatalog(Json::Document doc)
         router.SetBusVelocity(route_settings.at("bus_velocity").AsInt());
         router.SetBusWaitTime(route_settings.at("bus_wait_time").AsInt());
         router.SetPedestrianVelocity(route_settings.at("pedestrian_velocity").AsInt());
+    }
 
-        /* Setting rendering settings */
+    /* Initialize Yellow Pages*/
+    if(root_.count("yellow_pages")) {
+        YP::Serialize(doc,*proto_catalog.mutable_yp());
+        index.emplace(proto_catalog.yp());
+    }
+
+    /* Setting rendering settings */
+    renderer.emplace(db.GetStops(),db.GetBuses(),index->GetCompanies());
+    if(root_.count("render_settings")) {
+        auto& renderer_ = *renderer;
         const auto& render_settings = root_.at("render_settings").AsMap();
         const auto& stop_label_offset_array = render_settings.at("stop_label_offset").AsArray();
         const auto& bus_label_offset_array = render_settings.at("bus_label_offset").AsArray();
-        renderer.SetWidth(render_settings.at("width").AsDouble())
+        renderer_.SetWidth(render_settings.at("width").AsDouble())
                 .SetHeight(render_settings.at("height").AsDouble())
                 .SetPadding(render_settings.at("padding").AsDouble())
                 .SetStopRadius(render_settings.at("stop_radius").AsDouble())
@@ -112,14 +122,14 @@ TransportCatalog::TransportCatalog(Json::Document doc)
         for(const auto& color_node : render_settings.at("color_palette").AsArray()) {
             colors.push_back(ColorFromJsonNode(color_node));
         }
-        renderer.SetColorPalette(move(colors));
+        renderer_.SetColorPalette(move(colors));
 
         vector<string> layers;
         colors.reserve(render_settings.at("layers").AsArray().size());
         for(const auto& layer_node : render_settings.at("layers").AsArray()) {
             layers.push_back(layer_node.AsString());
         }
-        renderer.SetLayers(move(layers));
+        renderer_.SetLayers(move(layers));
     }
 
     /* Read Base Requests*/
@@ -140,12 +150,6 @@ TransportCatalog::TransportCatalog(Json::Document doc)
             Request::Type request_type = TypeFromString(request.at("type").AsString(),false);
             requests_.push_back(MakeRequest(request_type,node));
         }
-    }
-
-    /* Initialize Yellow Pages*/
-    if(root_.count("yellow_pages")) {
-        YP::Serialize(doc,*proto_catalog.mutable_yp());
-        index.emplace(proto_catalog.yp());
     }
 }
 
@@ -373,10 +377,10 @@ TransportCatalog& TransportCatalog::Serialize() {
       db.Serialize(*proto_catalog.mutable_db());
       router.InitRouter(db.GetBuses(),db.GetStops(),
       /// TODO: This is temporary to let the old tests pass
-        (index.has_value()) ? index->GetNearbyStops() : YP::NearbyStops{}
+        (index.has_value()) ? index->GetCompanies() : YP::Companies{}
       );
       router.Serialize(*proto_catalog.mutable_router());
-      renderer.Serialize(*proto_catalog.mutable_renderer());
+      renderer->Serialize(*proto_catalog.mutable_renderer());
     }
     proto_catalog.SerializeToOstream(&serial);
     // assert(!serial.bad());
@@ -401,9 +405,12 @@ TransportCatalog& TransportCatalog::Deserialize() {
     index.emplace(t.yp());
     router.Deserialize(t.router(),db.GetStops(),db.GetBuses(),
       /// TODO: This is temporary to let the old tests pass
-        (index.has_value()) ? index->GetNearbyStops() : YP::NearbyStops{}
+        (index.has_value()) ? index->GetCompanies() : YP::Companies{}
       );
-    renderer.Deserialize(t.renderer(),db.GetStops(),db.GetBuses());
+    renderer->Deserialize(t.renderer(),db.GetStops(),db.GetBuses(),
+        /// TODO: This is temporary to let the old tests pass
+            (index.has_value()) ? index->GetCompanies() : YP::Companies{}
+        );
     return *this;
 }
 

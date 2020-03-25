@@ -15,12 +15,12 @@ int main(void) {
   stringstream input_base{R"(
 {
     "serialization_settings": {
-        "file": "/tmp/tmp2f3570x9"
+        "file": "/tmp/tmpynyc5yoi"
     },
     "routing_settings": {
         "bus_wait_time": 2,
         "bus_velocity": 30,
-        "pedestrian_velocity": 4
+        "pedestrian_velocity": 666
     },
     "render_settings": {
         "width": 1500,
@@ -28,9 +28,7 @@ int main(void) {
         "padding": 50,
         "outer_margin": 150,
         "stop_radius": 3,
-        "company_radius": 5,
         "line_width": 10,
-        "company_line_width": 2,
         "bus_label_font_size": 18,
         "bus_label_offset": [
             7,
@@ -57,12 +55,9 @@ int main(void) {
         ],
         "layers": [
             "bus_lines",
-            "company_lines",
             "bus_labels",
             "stop_points",
-            "company_points",
-            "stop_labels",
-            "company_labels"
+            "stop_labels"
         ]
     },
     "base_requests": [
@@ -471,137 +466,34 @@ int main(void) {
                 "Пансионат Светлана": 390
             }
         }
-    ],
-    "yellow_pages": {
-        "rubrics": {
-            "1": {
-                "name": "Парк"
-            }
-        },
-        "companies": [
-            {
-                "names": [
-                    {
-                        "value": "Дендрарий"
-                    }
-                ],
-                "urls": [
-                    {
-                        "value": "http://dendrarium.ru"
-                    }
-                ],
-                "rubrics": [
-                    1
-                ],
-                "address": {
-                    "coords": {
-                        "lat": "43.573226",
-                        "lon": "39.742947"
-                    }
-                },
-                "nearby_stops": [
-                    {
-                        "name": "Цирк",
-                        "meters": 180
-                    }
-                ],
-                "phones": [
-                    {
-                        "type": "PHONE",
-                        "country_code": "7",
-                        "local_code": "862",
-                        "number": "2671646"
-                    },
-                    {
-                        "type": "PHONE",
-                        "country_code": "7",
-                        "local_code": "862",
-                        "number": "2671842"
-                    }
-                ]
-            },
-            {
-                "names": [
-                    {
-                        "value": "им. Фрунзе"
-                    }
-                ],
-                "rubrics": [
-                    1
-                ],
-                "address": {
-                    "coords": {
-                        "lat": "43.567998",
-                        "lon": "39.734131"
-                    }
-                },
-                "nearby_stops": [
-                    {
-                        "name": "Пансионат Светлана",
-                        "meters": 580
-                    },
-                    {
-                        "name": "Цирк",
-                        "meters": 700
-                    },
-                    {
-                        "name": "Театральная",
-                        "meters": 1000
-                    }
-                ]
-            }
-        ]
-    }
+    ]
 }
   )"};
   stringstream input_stats{R"(
 {
     "serialization_settings": {
-        "file": "/tmp/tmp2f3570x9"
+        "file": "/tmp/tmpynyc5yoi"
     },
     "stat_requests": [
         {
-            "id": 1804726714,
+            "id": 80146768,
             "type": "Bus",
             "name": "13"
         },
         {
-            "id": 1601390749,
+            "id": 1571442892,
             "type": "Stop",
             "name": "Морской вокзал"
         },
         {
-            "id": 1804743431,
-            "type": "FindCompanies",
-            "rubrics": [
-                "Парк"
-            ]
-        },
-        {
-            "id": 179918605,
+            "id": 1490699931,
             "type": "Route",
-            "from": "Краево-Греческая улица",
-            "to": "Органный зал"
+            "from": "Пансионат Нева",
+            "to": "Улица Лысая Гора"
         },
         {
-            "id": 1578968634,
-            "type": "RouteToCompany",
-            "from": "Краево-Греческая улица",
-            "companies": {
-                "rubrics": [
-                    "Парк"
-                ]
-            }
-        },
-        {
-            "id": 1499333079,
-            "type": "RouteToCompany",
-            "from": "Цирк",
-            "companies": {
-                "rubrics": [
-                    "Парк"
-                ]
-            }
+            "id": 684758285,
+            "type": "Map"
         }
     ]
 }

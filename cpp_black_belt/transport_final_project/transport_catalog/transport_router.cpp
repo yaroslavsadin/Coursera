@@ -5,7 +5,7 @@ using namespace std;
 #include "profile_advanced.h"
 #endif
 
-void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const YP::NearbyStops& companies_) const {
+void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const YP::Companies& companies_) const {
     if(!router_) {
 #ifdef DEBUG
         TotalDuration init_router("TransportRouter::InitRouter()");
@@ -73,8 +73,8 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
                 }
             }
         }
-        for(auto [company_name,nearby_stops] : companies_) {
-            for(const auto& stop : nearby_stops) {
+        for(auto [company_name,description] : companies_) {
+            for(const auto& stop : description.nearby_stops) {
                 graph_.AddEdge(
                     Graph::Edge<double> {
                         stop_to_vertices_.at(stop.name).change,
@@ -151,7 +151,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
             }
         }
     }
-    void TransportRouter::Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b, const YP::NearbyStops& companies_) {
+    void TransportRouter::Deserialize(const ProtoTransport::Router& r, const Stops& s, const Buses& b, const YP::Companies& companies_) {
         {
 #ifdef DEBUG            
             TotalDuration deserialize("TransportRouter::Deserialize");

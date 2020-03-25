@@ -91,9 +91,9 @@ std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::
         }
         res["items"] = move(items);
     }
-    // stringstream ss;
-    // renderer.RenderRoute(std::move(route_map)).Render(ss);
-    // res["map"] = Json::Node(ss.str());
+    std::stringstream ss;
+    renderer.RenderRoute(std::move(route_map)).Render(ss);
+    res["map"] = Json::Node(ss.str());
     return res;
 }
 

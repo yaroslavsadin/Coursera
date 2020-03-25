@@ -299,31 +299,31 @@ void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const
     }
 }
 
-bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
-    const Stop& lhs = stops.at(one);
-    const Stop& rhs = stops.at(another);
-    std::unordered_set<std::string> intersection;
-    std::set_intersection(lhs.buses.begin(), lhs.buses.end(),
-                          rhs.buses.begin(), rhs.buses.end(),
-                          std::inserter(intersection,intersection.begin()));
-    if(!intersection.size()) {
-        return false;
-    }
-    for(const auto& bus_name : intersection) {
-        const Bus& bus = buses.at(bus_name);
+// bool SvgRender::StopsAreAdjacent(const std::string& one, const std::string& another) const {
+//     const Stop& lhs = stops.at(one);
+//     const Stop& rhs = stops.at(another);
+//     std::unordered_set<std::string> intersection;
+//     std::set_intersection(lhs.buses.begin(), lhs.buses.end(),
+//                           rhs.buses.begin(), rhs.buses.end(),
+//                           std::inserter(intersection,intersection.begin()));
+//     if(!intersection.size()) {
+//         return false;
+//     }
+//     for(const auto& bus_name : intersection) {
+//         const Bus& bus = buses.at(bus_name);
         
-        for (auto it1 = std::find(bus.route.begin(),bus.route.end(),one); 
-                it1 != bus.route.end();
-                it1 = std::find(next(it1),bus.route.end(),one)) 
-        {
-            if((it1 != bus.route.begin() && *prev(it1) == another) || 
-                (next(it1) != bus.route.end() && *next(it1) == another)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+//         for (auto it1 = std::find(bus.route.begin(),bus.route.end(),one); 
+//                 it1 != bus.route.end();
+//                 it1 = std::find(next(it1),bus.route.end(),one)) 
+//         {
+//             if((it1 != bus.route.begin() && *prev(it1) == another) || 
+//                 (next(it1) != bus.route.end() && *next(it1) == another)) {
+//                 return true;
+//             }
+//         }
+//     }
+//     return false;
+// }
 
 std::vector<std::string_view> SvgRender::GetAdjacentStops(const std::string_view stop_name, const std::unordered_set<std::string_view>& considered) const {
     const Stop& stop = stops.at(std::string(stop_name));
@@ -344,7 +344,7 @@ std::vector<std::string_view> SvgRender::GetAdjacentStops(const std::string_view
     return res;
 }
 
-size_t SvgRender::BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const {
+size_t SvgRender::BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double Coords::*field) const {
     size_t idx, max_idx = 0;
     std::unordered_set<std::string_view> considered;
     for(const auto [_,name] : sorted_map) {
@@ -458,8 +458,8 @@ void SvgRender::CompressStopsCoordinates() const {
         }
     }
     
-    size_t x_idx = BundleCoordinates(lon_sorted, &StopsPos::longitude);
-    size_t y_idx = BundleCoordinates(lat_sorted, &StopsPos::latitude);
+    size_t x_idx = BundleCoordinates(lon_sorted, &Coords::longitude);
+    size_t y_idx = BundleCoordinates(lat_sorted, &Coords::latitude);
     
     double x_step = (x_idx == 0) ? 0 : (settings.width - 2 * settings.padding) / (x_idx);
     double y_step = (y_idx == 0) ? 0 : (settings.height - 2 * settings.padding) / (y_idx);
@@ -551,7 +551,7 @@ void SvgRender::Serialize(ProtoTransport::Renderer& r) const {
         stop_info->set_lon(pos.longitude);
     }
 }
-void SvgRender::Deserialize(const ProtoTransport::Renderer& r, const Stops& s, const Buses& b) {
+void SvgRender::Deserialize(const ProtoTransport::Renderer& r, const Stops& s, const Buses& b, const YP::Companies& companies) {
     auto f_proto_to_color = [](const ProtoTransport::Color& color) {
         if(color.has_as_rgb()) {
             return Svg::Color(
@@ -611,9 +611,9 @@ void SvgRender::Deserialize(const ProtoTransport::Renderer& r, const Stops& s, c
 
     FillBusColors();
 
-    // Svg::Document doc;
-    // for(const auto& layer : settings.layers) {
-    //     render_table.at(layer)(this,doc);
-    // }
-    // base_map_cache = std::move(doc);
+    Svg::Document doc;
+    for(const auto& layer : settings.layers) {
+        render_table.at(layer)(this,doc);
+    }
+    base_map_cache = std::move(doc);
 }

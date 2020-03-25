@@ -7,6 +7,7 @@
 #include <array>
 #include <variant>
 #include <optional>
+#include "descriptions.h"
 #include "misc.h"
 #include "database.pb.h"
 
@@ -63,20 +64,24 @@ namespace YP {
         uint32_t meters;
     };
 
-    using NearbyStops = std::unordered_map<std::string_view,std::vector<NearbyStop>>;
+    struct CompanyDescription {
+        Coords coords;
+        std::vector<NearbyStop> nearby_stops;
+    };
+
+    using Companies = std::unordered_map<std::string_view,CompanyDescription>;
 
     class YellowPagesIndex {
     public:
         YellowPagesIndex(const YellowPages::Database& proto_db);
         std::vector<std::string_view> Search(const std::vector<RequestItem>& requests) const;
         const std::string& CompanyNameByIdx(size_t idx) const;
-        const auto& CompanyNearbyStopsByIdx(size_t idx) const;
-        const NearbyStops& GetNearbyStops() const { return nearby_stops; }
+        const Companies& GetCompanies() const { return descriptions; }
     private:
         using Index = std::unordered_map<std::string,std::unordered_set<size_t>>;
 
         std::vector<std::string> company_names;
-        NearbyStops nearby_stops;
+        Companies descriptions;
 
         Index names;
         Index urls;

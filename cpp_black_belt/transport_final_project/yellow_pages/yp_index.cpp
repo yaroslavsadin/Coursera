@@ -69,10 +69,15 @@ namespace YP {
                 phone.country_code = proto_phone.country_code();
             }
 
-            auto& nearby_stops_ = nearby_stops[company_names.back()];
+            auto& nearby_stops_ = descriptions[company_names.back()].nearby_stops;
             for(const auto& proto_nearby_stop : company.nearby_stops()) {
                 nearby_stops_.emplace_back(proto_nearby_stop.name(),proto_nearby_stop.meters());
             }
+
+            descriptions[company_names.back()].coords = {
+                company.address().coords().lat(),
+                company.address().coords().lon()
+            };
         }
     }
 
@@ -131,8 +136,5 @@ namespace YP {
 
     const std::string& YellowPagesIndex::CompanyNameByIdx(size_t idx) const {
         return company_names[idx];
-    }
-    const auto& YellowPagesIndex::CompanyNearbyStopsByIdx(size_t idx) const {
-        return nearby_stops.at(company_names[idx]);
     }
 }

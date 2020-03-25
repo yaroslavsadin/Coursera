@@ -5,6 +5,7 @@
 #include <deque>
 #include <functional>
 #include <unordered_set>
+#include "yp_index.h"
 #include "renderer.pb.h"
 
 struct RenderSettings {
@@ -29,17 +30,13 @@ public:
     using RouteMap = std::vector<const EdgeInfo*>;
     using BaseRenderFP = void(SvgRender::*)(Svg::Document&) const;
     using RouteRenderFP = void(SvgRender::*)(Svg::Document&,const RouteMap&) const;
-    struct StopsPos {
-        double latitude;
-        double longitude;
-    };
 
-    SvgRender(const Buses& buses, const Stops& stops)
-    : buses(buses), stops(stops) {
+    SvgRender(const Stops& stops, const Buses& buses, const YP::Companies& companies)
+    : buses(buses), stops(stops), companies(companies) {
     }
 
     void Serialize(ProtoTransport::Renderer& r) const;
-    void Deserialize(const ProtoTransport::Renderer& r, const Stops& s, const Buses& b);
+    void Deserialize(const ProtoTransport::Renderer& r, const Stops& s, const Buses& b, const YP::Companies& companies);
 
     SvgRender& SetWidth(double);
     SvgRender& SetHeight(double);
@@ -62,8 +59,10 @@ private:
     RenderSettings settings;
     const Buses& buses;
     const Stops& stops;
+    const YP::Companies& companies;
     /// TODO: why not unordered_map???
-    mutable std::map<std::string_view,StopsPos> stops_compressed;
+    mutable std::map<std::string_view,Coords> stops_compressed;
+    mutable std::map<std::string_view,Coords> companies_compressed;
     mutable std::unordered_map<std::string_view,Svg::Color> bus_to_color;
 
     mutable std::optional<Svg::Document> base_map_cache;
@@ -94,7 +93,7 @@ private:
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
     bool StopsAreAdjacent(const std::string& one, const std::string& another) const;
-    size_t BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double StopsPos::*field) const;
+    size_t BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double Coords::*field) const;
     bool StopIsBase(const std::string& stop) const;
     std::vector<std::string_view> GetAdjacentStops(const std::string_view stop_name, const std::unordered_set<std::string_view>& considered) const;
 };

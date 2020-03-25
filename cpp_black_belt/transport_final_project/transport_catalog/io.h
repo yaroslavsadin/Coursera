@@ -162,7 +162,7 @@ private:
   
   BusDatabase db;
   TransportRouter router;
-  SvgRender renderer;
+  std::optional<SvgRender> renderer;
   std::optional<YP::YellowPagesIndex> index;
 
   ProtoTransport::TransportCatalog proto_catalog;
@@ -185,16 +185,16 @@ private:
               return std::make_unique<StopRequest>(request,db);
               break;
           case Request::Type::GET_ROUTE:
-              return std::make_unique<RouteRequest>(request,db,router,renderer);
+              return std::make_unique<RouteRequest>(request,db,router,*renderer);
               break;
           case Request::Type::GET_MAP:
-              return std::make_unique<MapRequest>(request,db,renderer);
+              return std::make_unique<MapRequest>(request,db,*renderer);
               break;
           case Request::Type::FIND_COMPANIES:
               return std::make_unique<FindCompaniesRequest>(request,index);
               break;
           case Request::Type::ROUTE_TO_COMPANY:
-              return std::make_unique<RouteToCompanyRequest>(request,index,db,router,renderer);
+              return std::make_unique<RouteToCompanyRequest>(request,index,db,router,*renderer);
               break;
           default:
               break;

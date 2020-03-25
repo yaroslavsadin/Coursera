@@ -6,6 +6,11 @@
 #include <unordered_map>
 #include <deque>
 
+struct Coords {
+    double latitude;
+    double longitude;
+};
+
 struct Stop;
 struct Bus;
 
