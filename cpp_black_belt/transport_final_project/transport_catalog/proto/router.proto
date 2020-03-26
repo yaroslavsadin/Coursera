@@ -16,9 +16,10 @@ message EdgeInfo {
     };
     EdgeType type = 1;
     string item_name = 2;
-    int32 span_count = 3;
-    uint32 stop_from = 4;
-    uint32 stop_to = 5;
+    string company_name = 3;
+    int32 span_count = 4;
+    uint32 stop_from = 5;
+    uint32 stop_to = 6;
 }
 
 message RouteData {

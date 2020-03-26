@@ -115,7 +115,9 @@ TransportCatalog::TransportCatalog(Json::Document doc)
                                     bus_label_offset_array[0].AsDouble(),
                                     bus_label_offset_array[1].AsDouble()
                                     })
-                .SetOuterMargin(render_settings.at("outer_margin").AsDouble());
+                .SetOuterMargin(render_settings.at("outer_margin").AsDouble())
+                .SetCompanyRadius(render_settings.at("company_radius").AsDouble())
+                .SetCompanyLineWidth(render_settings.at("company_line_width").AsDouble());
 
         vector<Svg::Color> colors;
         colors.reserve(render_settings.at("color_palette").AsArray().size());

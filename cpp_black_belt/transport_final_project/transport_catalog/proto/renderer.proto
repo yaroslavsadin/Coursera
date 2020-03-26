@@ -45,13 +45,14 @@ message RenderSettings {
     double outer_margin = 14; 
 };
 
-message StopsCompressed {
+message Compressed {
     string name = 1;
     double lat = 2;
     double lon = 3;
 }
 
 message Renderer {
-    repeated StopsCompressed stops = 1;
-    RenderSettings settings = 2;
+    repeated Compressed stops = 1;
+    repeated Compressed companies = 2;
+    RenderSettings settings = 3;
 }

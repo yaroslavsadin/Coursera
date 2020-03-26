@@ -23,6 +23,8 @@ struct RenderSettings {
     std::vector<Svg::Color> color_palette;
     std::vector<std::string> layers;
     double outer_margin; 
+    double company_radius;
+    double company_line_width;
 };
 
 class SvgRender {
@@ -52,10 +54,19 @@ public:
     SvgRender& SetColorPalette(std::vector<Svg::Color>);
     SvgRender& SetLayers(std::vector<std::string>);
     SvgRender& SetOuterMargin (double);
+    SvgRender& SetCompanyRadius (double);
+    SvgRender& SetCompanyLineWidth (double);
 
     Svg::Document Render() const;
     Svg::Document RenderRoute(RouteMap route) const;
 private:
+    struct MapPoint {
+        enum class Type {
+            STOP, COMPANY
+        } type;
+        std::string_view name;
+    };
+
     RenderSettings settings;
     const Buses& buses;
     const Stops& stops;
@@ -81,6 +92,9 @@ private:
     void RenderStops(Svg::Document& doc, const RouteMap& route_map) const;
     void RenderBusLabels(Svg::Document& doc, const RouteMap& route_map) const;
     void RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderCompanyLabels(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderCompanyPoints(Svg::Document& doc, const RouteMap& route_map) const;
+    void RenderCompanyLines(Svg::Document& doc, const RouteMap& route_map) const;
 
     static const std::unordered_map<
         std::string,
@@ -92,8 +106,7 @@ private:
     > render_table_route;
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
-    bool StopsAreAdjacent(const std::string& one, const std::string& another) const;
-    size_t BundleCoordinates(const std::map<double,std::string_view>& sorted_map, double Coords::*field) const;
+    size_t BundleCoordinates(const std::map<double,MapPoint>& sorted_map, double Coords::*field) const;
     bool StopIsBase(const std::string& stop) const;
-    std::vector<std::string_view> GetAdjacentStops(const std::string_view stop_name, const std::unordered_set<std::string_view>& considered) const;
+    std::vector<std::string_view> GetAdjacentStops(MapPoint point, const std::unordered_set<std::string_view>& considered) const;
 };

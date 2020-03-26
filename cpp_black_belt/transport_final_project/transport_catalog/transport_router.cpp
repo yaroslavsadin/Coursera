@@ -128,6 +128,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
                 proto_edge_info->set_type(ProtoTransport::EdgeInfo_EdgeType_RideBus);
             } else {
                 proto_edge_info->set_type(ProtoTransport::EdgeInfo_EdgeType_WalkToCompany);
+                proto_edge_info->set_company_name(std::string(edge_info.company_name_));
             }
         }
         const RouterT::RoutesInternalData& router_internal_data = router_->GetRouteInternalData();
@@ -199,9 +200,7 @@ void TransportRouter::InitRouter(const Buses& buses_, const Stops& stops_, const
                         EdgeInfo(
                             EdgeType::WALK,
                             proto_edge_info.item_name(),
-                            proto_edge_info.span_count(),
-                            proto_edge_info.stop_from(),
-                            proto_edge_info.stop_to()
+                            companies_.find(proto_edge_info.company_name())->first
                         )
                     );
                 }
