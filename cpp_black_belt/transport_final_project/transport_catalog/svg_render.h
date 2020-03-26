@@ -108,5 +108,5 @@ private:
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
     size_t BundleCoordinates(const std::map<double,MapPoint>& sorted_map, double Coords::*field) const;
     bool StopIsBase(const std::string& stop) const;
-    std::vector<std::string_view> GetAdjacentStops(MapPoint point, const std::unordered_set<std::string_view>& considered) const;
+    std::vector<Coords> GetAdjacentStops(MapPoint point) const;
 };

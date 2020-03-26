@@ -237,32 +237,32 @@ void SvgRender::RenderBuses(Svg::Document& doc, const RouteMap& route_map) const
 }
 void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) const {
     std::unordered_set<std::string_view> drawn;
+    /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
+    auto f_add_label = [this,&doc](std::string_view stop_name){
+        const auto& stop = stops_compressed.at(stop_name);
+        Svg::Text common = Svg::Text{}
+            .SetPoint(PointFromLocation(stop.latitude, stop.longitude))
+            .SetOffset(settings.stop_label_offset)
+            .SetFontSize(settings.stop_label_font_size)
+            .SetFontFamily("Verdana")
+            .SetData(std::string(stop_name));
+        Svg::Text underlayer = common;
+        doc.Add(
+            underlayer
+            .SetFillColor(settings.underlayer_color)
+            .SetStrokeColor(settings.underlayer_color)
+            .SetStrokeWidth(settings.underlayer_width)
+            .SetStrokeLineCap("round")
+            .SetStrokeLineJoin("round")
+        );
+        doc.Add(
+            common.SetFillColor("black")
+        );
+    };
     for(auto edge : route_map) {
         if(edge->type_ == EdgeType::RIDE) {
             std::string_view stop_begin = buses.at(edge->item_name_).route[edge->route->start];
             std::string_view stop_end = buses.at(edge->item_name_).route[edge->route->end];
-            /// TODO: f_add_label would be useful as a method to reuse in other RenderStopLabels overload
-            auto f_add_label = [this,&doc](std::string_view stop_name){
-                const auto& stop = stops_compressed.at(stop_name);
-                Svg::Text common = Svg::Text{}
-                    .SetPoint(PointFromLocation(stop.latitude, stop.longitude))
-                    .SetOffset(settings.stop_label_offset)
-                    .SetFontSize(settings.stop_label_font_size)
-                    .SetFontFamily("Verdana")
-                    .SetData(std::string(stop_name));
-                Svg::Text underlayer = common;
-                doc.Add(
-                    underlayer
-                    .SetFillColor(settings.underlayer_color)
-                    .SetStrokeColor(settings.underlayer_color)
-                    .SetStrokeWidth(settings.underlayer_width)
-                    .SetStrokeLineCap("round")
-                    .SetStrokeLineJoin("round")
-                );
-                doc.Add(
-                    common.SetFillColor("black")
-                );
-            };
             if(!drawn.count(stop_begin)) {
                 f_add_label(stop_begin);
                 drawn.insert(stop_begin);
@@ -271,6 +271,8 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) 
                 f_add_label(stop_end);
                 drawn.insert(stop_end);
             }
+        } else {
+            f_add_label(route_map.back()->item_name_);
         }
     }
 }
@@ -348,7 +350,7 @@ void SvgRender::RenderCompanyPoints(Svg::Document& doc, const RouteMap& route_ma
         doc.Add(
             Svg::Circle{}
             .SetFillColor("black")
-            .SetRadius(settings.stop_radius)
+            .SetRadius(settings.company_radius)
             .SetCenter(PointFromLocation(
                 companies_compressed.at(route_map.back()->company_name_).latitude, 
                 companies_compressed.at(route_map.back()->company_name_).longitude
@@ -358,16 +360,33 @@ void SvgRender::RenderCompanyPoints(Svg::Document& doc, const RouteMap& route_ma
 }
 void SvgRender::RenderCompanyLines(Svg::Document& doc, const RouteMap& route_map) const {
     if(!route_map.empty() && route_map.back()->type_ == EdgeType::WALK) {
-
+        Svg::Polyline line;
+        line.SetStrokeColor("black")
+            .SetStrokeWidth(settings.company_line_width)
+            .SetStrokeLineCap("round")
+            .SetStrokeLineJoin("round");
+        line.AddPoint(
+            PointFromLocation(
+                companies_compressed.at(route_map.back()->company_name_).latitude, 
+                companies_compressed.at(route_map.back()->company_name_).longitude
+            )
+        );
+        line.AddPoint(
+            PointFromLocation(
+                stops_compressed.at(route_map.back()->item_name_).latitude, 
+                stops_compressed.at(route_map.back()->item_name_).longitude
+            )
+        );
+        doc.Add(std::move(line));
     }
 }
 
-std::vector<std::string_view> SvgRender::GetAdjacentStops(MapPoint point, const std::unordered_set<std::string_view>& considered) const {
-    std::vector<std::string_view> res;
+std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point) const {
+    std::vector<Coords> res;
     if(point.type == MapPoint::Type::COMPANY) {
         for(auto stop : companies.at(point.name).nearby_stops) {
-            if(considered.count(stop.name)) {    
-                res.push_back(stop.name);
+            if(stops_compressed.count(stop.name)) {    
+                res.push_back(stops_compressed.at(stop.name));
             }
         }
     } else {
@@ -377,11 +396,22 @@ std::vector<std::string_view> SvgRender::GetAdjacentStops(MapPoint point, const 
             for (auto it = std::find(bus.route.begin(),bus.route.end(),point.name); 
                     it != bus.route.end();
                     it = std::find(next(it),bus.route.end(),point.name)) {
-                if(it != bus.route.begin() && considered.count(*prev(it))) {
-                    res.push_back(*prev(it));
+                if(it != bus.route.begin() && stops_compressed.count(*prev(it))) {
+                    res.push_back(stops_compressed.at(*prev(it)));
                 }
-                if(it != prev(bus.route.end()) && considered.count(*next(it))) {
-                    res.push_back(*next(it));
+                if(it != prev(bus.route.end()) && stops_compressed.count(*next(it))) {
+                    res.push_back(stops_compressed.at(*next(it)));
+                }
+            }
+        }
+        for(const auto& [company_name,description] : companies) {
+            auto it = std::find_if(description.nearby_stops.begin(),description.nearby_stops.end(),
+            [&point](const auto& nearby_stop){
+                return nearby_stop.name == point.name;
+            });
+            if(it != description.nearby_stops.end()) {
+                if(companies_compressed.count(company_name)) {
+                    res.push_back(companies_compressed.at(company_name));
                 }
             }
         }
@@ -390,19 +420,15 @@ std::vector<std::string_view> SvgRender::GetAdjacentStops(MapPoint point, const 
 }
 
 size_t SvgRender::BundleCoordinates(const std::map<double,MapPoint>& sorted_map, double Coords::*field) const {
-    size_t idx, max_idx = 0;
-    std::unordered_set<std::string_view> considered;
+    size_t max_idx = 0;
     for(const auto [_,point] : sorted_map) {
         auto& compressed = (point.type == MapPoint::Type::STOP) ? stops_compressed : companies_compressed;
-        auto neighbours = GetAdjacentStops(point,considered);
-        idx = 0;
-        for(const std::string_view stop : neighbours) {
-            idx = std::max(idx,static_cast<size_t>(stops_compressed.at(stop).*field) + 1);
+        auto neighbours = GetAdjacentStops(point);
+        size_t idx = 0;
+        for(const auto& stop : neighbours) {
+            idx = std::max(idx,static_cast<size_t>(stop.*field) + 1);
         }
         compressed[point.name].*field = idx;
-        if(point.type == MapPoint::Type::STOP) {
-            considered.insert(point.name);
-        }
         max_idx = std::max(idx,max_idx);
     }
     return max_idx;

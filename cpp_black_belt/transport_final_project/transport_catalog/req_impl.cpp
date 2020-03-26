@@ -77,7 +77,7 @@ std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::
                 break;
                 case EdgeType::WALK:
                 items.push_back(std::map<std::string,Json::Node> {
-                    {"company", edge_info.item_name_},
+                    {"company", std::string(edge_info.company_name_)},
                     {"time", router.GetEdgeWeight(edge_info_idx)},
                     {"stop_name", edge_info.item_name_},
                     {"type", std::string("WalkToCompany")}

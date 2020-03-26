@@ -346,7 +346,9 @@ Json::Node MapRequest::Process() const {
 }
 
 Json::Node RouteToCompanyRequest::Process() const {
-    return route_impl.Build(companies_impl.FilterCompanies());
+    auto res = route_impl.Build(companies_impl.FilterCompanies());
+    res["request_id"] = Json::Node(*id_);
+    return res;
 }
 
 void AddBusRequest::Process() const {

@@ -259,14 +259,14 @@ int main(void) {
     },
     "stat_requests": [
         {
-            "id": 463508520,
+            "id": 1084893800,
             "type": "FindCompanies",
             "rubrics": [
                 "Сквер"
             ]
         },
         {
-            "id": 1457284289,
+            "id": 472803976,
             "type": "FindCompanies",
             "names": [
                 "Комсомольский",
@@ -277,7 +277,7 @@ int main(void) {
             ]
         },
         {
-            "id": 638533243,
+            "id": 294203670,
             "type": "RouteToCompany",
             "from": "Параллельная улица",
             "companies": {
@@ -287,7 +287,7 @@ int main(void) {
             }
         },
         {
-            "id": 774281590,
+            "id": 2104435957,
             "type": "RouteToCompany",
             "from": "Морской вокзал",
             "companies": {
