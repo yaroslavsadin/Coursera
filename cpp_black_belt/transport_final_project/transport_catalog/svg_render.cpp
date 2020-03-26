@@ -259,20 +259,22 @@ void SvgRender::RenderStopLabels(Svg::Document& doc, const RouteMap& route_map) 
             common.SetFillColor("black")
         );
     };
-    for(auto edge : route_map) {
-        if(edge->type_ == EdgeType::RIDE) {
-            std::string_view stop_begin = buses.at(edge->item_name_).route[edge->route->start];
-            std::string_view stop_end = buses.at(edge->item_name_).route[edge->route->end];
-            if(!drawn.count(stop_begin)) {
-                f_add_label(stop_begin);
-                drawn.insert(stop_begin);
+    if(route_map.size() == 1 && route_map.back()->type_ == EdgeType::WALK) {
+        f_add_label(route_map.back()->item_name_);
+    } else {
+        for(auto edge : route_map) {
+            if(edge->type_ == EdgeType::RIDE) {
+                std::string_view stop_begin = buses.at(edge->item_name_).route[edge->route->start];
+                std::string_view stop_end = buses.at(edge->item_name_).route[edge->route->end];
+                if(!drawn.count(stop_begin)) {
+                    f_add_label(stop_begin);
+                    drawn.insert(stop_begin);
+                }
+                if(!drawn.count(stop_end)) {
+                    f_add_label(stop_end);
+                    drawn.insert(stop_end);
+                }
             }
-            if(!drawn.count(stop_end)) {
-                f_add_label(stop_end);
-                drawn.insert(stop_end);
-            }
-        } else {
-            f_add_label(route_map.back()->item_name_);
         }
     }
 }
@@ -324,13 +326,22 @@ void SvgRender::RenderStops(Svg::Document& doc, const RouteMap& route_map) const
 
 void SvgRender::RenderCompanyLabels(Svg::Document& doc, const RouteMap& route_map) const {
     if(!route_map.empty() && route_map.back()->type_ == EdgeType::WALK) {
-        const auto& company = companies_compressed.at(route_map.back()->company_name_);
+        auto company_name = route_map.back()->company_name_;
+        const auto& company = companies_compressed.at(company_name);
+        auto full_name = 
+                (companies.at(std::string(company_name)).rubric.has_value()) ?
+                std::string(*companies.at(std::string(company_name)).rubric)
+                + " " +
+                std::string(company_name)
+                :
+                std::string(company_name);
         Svg::Text common = Svg::Text{}
             .SetPoint(PointFromLocation(company.latitude, company.longitude))
             .SetOffset(settings.stop_label_offset)
             .SetFontSize(settings.stop_label_font_size)
             .SetFontFamily("Verdana")
-            .SetData(std::string(route_map.back()->company_name_));
+            /// TODO: Full name somehow caused JSON error
+            .SetData(std::string(company_name));
         Svg::Text underlayer = common;
         doc.Add(
             underlayer

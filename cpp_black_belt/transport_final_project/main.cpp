@@ -197,7 +197,7 @@ int main(void) {
     "yellow_pages": {
         "rubrics": {
             "1": {
-                "name": "Сквер"
+                "name": "Skver"
             },
             "2": {
                 "name": "Вокзал"
@@ -207,7 +207,7 @@ int main(void) {
             {
                 "names": [
                     {
-                        "value": "Комсомольский"
+                        "value": "Komsomol'sky"
                     }
                 ],
                 "rubrics": [
@@ -262,18 +262,18 @@ int main(void) {
             "id": 1084893800,
             "type": "FindCompanies",
             "rubrics": [
-                "Сквер"
+                "Skver"
             ]
         },
         {
             "id": 472803976,
             "type": "FindCompanies",
             "names": [
-                "Комсомольский",
+                "Komsomol'sky",
                 "Кооперативный"
             ],
             "rubrics": [
-                "Сквер"
+                "Skver"
             ]
         },
         {
@@ -282,7 +282,7 @@ int main(void) {
             "from": "Параллельная улица",
             "companies": {
                 "rubrics": [
-                    "Сквер"
+                    "Skver"
                 ]
             }
         },
@@ -292,11 +292,11 @@ int main(void) {
             "from": "Морской вокзал",
             "companies": {
                 "names": [
-                    "Комсомольский",
+                    "Komsomol'sky",
                     "Кооперативный"
                 ],
                 "rubrics": [
-                    "Сквер"
+                    "Skver"
                 ]
             }
         }

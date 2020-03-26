@@ -67,6 +67,7 @@ namespace YP {
     struct CompanyDescription {
         Coords coords;
         std::vector<NearbyStop> nearby_stops;
+        std::optional<std::string_view> rubric;
     };
 
     using Companies = std::unordered_map<std::string_view,CompanyDescription>;

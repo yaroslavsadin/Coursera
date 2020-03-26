@@ -45,6 +45,16 @@ namespace YP {
             );
             auto main_idx = company_names.size() - 1;
 
+            auto& nearby_stops_ = descriptions[company_names.back()].nearby_stops;
+            for(const auto& proto_nearby_stop : company.nearby_stops()) {
+                nearby_stops_.emplace_back(proto_nearby_stop.name(),proto_nearby_stop.meters());
+            }
+
+            descriptions[company_names.back()].coords = {
+                company.address().coords().lat(),
+                company.address().coords().lon()
+            };
+
             // ------- Index names;
             for(const auto& name : proto_company_names) {
                 names[name.value()].insert(main_idx);
@@ -55,6 +65,9 @@ namespace YP {
             }
             // ------- Index rubsrics;
             for(size_t id : company.rubrics()) {
+                if(!descriptions[company_names.back()].rubric) {
+                    descriptions[company_names.back()].rubric = rubrics_.at(id);
+                }
                 rubrics[rubrics_.at(id)].insert(main_idx);
             }
             
@@ -68,16 +81,6 @@ namespace YP {
                 phone.local_code = proto_phone.local_code();
                 phone.country_code = proto_phone.country_code();
             }
-
-            auto& nearby_stops_ = descriptions[company_names.back()].nearby_stops;
-            for(const auto& proto_nearby_stop : company.nearby_stops()) {
-                nearby_stops_.emplace_back(proto_nearby_stop.name(),proto_nearby_stop.meters());
-            }
-
-            descriptions[company_names.back()].coords = {
-                company.address().coords().lat(),
-                company.address().coords().lon()
-            };
         }
     }
 
