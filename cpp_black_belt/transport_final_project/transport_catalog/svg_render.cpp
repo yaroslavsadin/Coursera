@@ -328,7 +328,7 @@ void SvgRender::RenderCompanyLabels(Svg::Document& doc, const RouteMap& route_ma
     if(!route_map.empty() && route_map.back()->type_ == EdgeType::WALK) {
         auto company_name = route_map.back()->company_name_;
         const auto& company = companies_compressed.at(company_name);
-        auto full_name = 
+        std::string full_name = 
                 (companies.at(std::string(company_name)).rubric.has_value()) ?
                 std::string(*companies.at(std::string(company_name)).rubric)
                 + " " +
@@ -341,7 +341,7 @@ void SvgRender::RenderCompanyLabels(Svg::Document& doc, const RouteMap& route_ma
             .SetFontSize(settings.stop_label_font_size)
             .SetFontFamily("Verdana")
             /// TODO: Full name somehow caused JSON error
-            .SetData(std::string(company_name));
+            .SetData(full_name);
         Svg::Text underlayer = common;
         doc.Add(
             underlayer

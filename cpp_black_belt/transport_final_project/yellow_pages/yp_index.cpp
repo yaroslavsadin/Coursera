@@ -65,10 +65,10 @@ namespace YP {
             }
             // ------- Index rubsrics;
             for(size_t id : company.rubrics()) {
-                if(!descriptions[company_names.back()].rubric) {
-                    descriptions[company_names.back()].rubric = rubrics_.at(id);
-                }
                 rubrics[rubrics_.at(id)].insert(main_idx);
+                if(auto it = rubrics.find(rubrics_.at(id)); !descriptions[company_names.back()].rubric) {
+                    descriptions[company_names.back()].rubric = it->first;
+                }
             }
             
             // ------- Index phone
