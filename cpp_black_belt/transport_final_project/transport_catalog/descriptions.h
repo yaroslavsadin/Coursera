@@ -6,9 +6,10 @@
 #include <unordered_map>
 #include <deque>
 
+// Could devise an adapter using std::optional
 struct Coords {
-    double latitude;
-    double longitude;
+    double latitude = -1;
+    double longitude = -1;
 };
 
 struct Stop;

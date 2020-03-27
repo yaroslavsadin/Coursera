@@ -392,11 +392,14 @@ void SvgRender::RenderCompanyLines(Svg::Document& doc, const RouteMap& route_map
     }
 }
 
-std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point) const {
+std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point, double Coords::*field) const {
+    static auto f_check_coord_processed = [](const auto& compressed, std::string_view name, double Coords::*field) {
+        return compressed.count(name) && compressed.at(name).*field != -1.;
+    };
     std::vector<Coords> res;
     if(point.type == MapPoint::Type::COMPANY) {
         for(auto stop : companies.at(point.name).nearby_stops) {
-            if(stops_compressed.count(stop.name)) {    
+            if(f_check_coord_processed(stops_compressed,stop.name,field)) {    
                 res.push_back(stops_compressed.at(stop.name));
             }
         }
@@ -407,10 +410,10 @@ std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point) const {
             for (auto it = std::find(bus.route.begin(),bus.route.end(),point.name); 
                     it != bus.route.end();
                     it = std::find(next(it),bus.route.end(),point.name)) {
-                if(it != bus.route.begin() && stops_compressed.count(*prev(it))) {
+                if(it != bus.route.begin() && f_check_coord_processed(stops_compressed,*prev(it),field)) {
                     res.push_back(stops_compressed.at(*prev(it)));
                 }
-                if(it != prev(bus.route.end()) && stops_compressed.count(*next(it))) {
+                if(it != prev(bus.route.end()) && f_check_coord_processed(stops_compressed,*next(it),field)) {
                     res.push_back(stops_compressed.at(*next(it)));
                 }
             }
@@ -421,7 +424,7 @@ std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point) const {
                 return nearby_stop.name == point.name;
             });
             if(it != description.nearby_stops.end()) {
-                if(companies_compressed.count(company_name)) {
+                if(f_check_coord_processed(companies_compressed,company_name,field)) {
                     res.push_back(companies_compressed.at(company_name));
                 }
             }
@@ -434,7 +437,7 @@ size_t SvgRender::BundleCoordinates(const std::map<double,MapPoint>& sorted_map,
     size_t max_idx = 0;
     for(const auto [_,point] : sorted_map) {
         auto& compressed = (point.type == MapPoint::Type::STOP) ? stops_compressed : companies_compressed;
-        auto neighbours = GetAdjacentStops(point);
+        auto neighbours = GetAdjacentStops(point,field);
         size_t idx = 0;
         for(const auto& stop : neighbours) {
             idx = std::max(idx,static_cast<size_t>(stop.*field) + 1);
@@ -621,6 +624,8 @@ void SvgRender::Serialize(ProtoTransport::Renderer& r) const {
     proto_settings->set_height(settings.height);
     proto_settings->set_padding(settings.padding);
     proto_settings->set_stop_radius(settings.stop_radius);
+    proto_settings->set_company_radius(settings.company_radius);
+    proto_settings->set_company_line_width(settings.company_line_width);
     proto_settings->set_line_width(settings.line_width);
     proto_settings->set_stop_label_font_size(settings.stop_label_font_size);
     *proto_settings->mutable_stop_label_offset() = f_point_to_proto(settings.stop_label_offset);
@@ -689,7 +694,9 @@ void SvgRender::Deserialize(const ProtoTransport::Renderer& r, const Stops& s, c
     settings.height = proto_settings.height();
     settings.padding= proto_settings.padding();
     settings.stop_radius= proto_settings.stop_radius();
+    settings.company_radius= proto_settings.company_radius();
     settings.line_width= proto_settings.line_width();
+    settings.company_line_width= proto_settings.company_line_width();
     settings.stop_label_font_size= proto_settings.stop_label_font_size();
     settings.stop_label_offset = f_proto_to_point(proto_settings.stop_label_offset());
     settings.underlayer_color = f_proto_to_color(proto_settings.underlayer_color());

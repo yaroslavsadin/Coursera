@@ -43,6 +43,8 @@ message RenderSettings {
     repeated Color color_palette = 12;
     repeated string layers = 13;
     double outer_margin = 14; 
+    double company_radius = 15; 
+    double company_line_width = 16; 
 };
 
 message Compressed {
