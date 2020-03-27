@@ -378,14 +378,14 @@ void SvgRender::RenderCompanyLines(Svg::Document& doc, const RouteMap& route_map
             .SetStrokeLineJoin("round");
         line.AddPoint(
             PointFromLocation(
-                companies_compressed.at(route_map.back()->company_name_).latitude, 
-                companies_compressed.at(route_map.back()->company_name_).longitude
+                stops_compressed.at(route_map.back()->item_name_).latitude, 
+                stops_compressed.at(route_map.back()->item_name_).longitude
             )
         );
         line.AddPoint(
             PointFromLocation(
-                stops_compressed.at(route_map.back()->item_name_).latitude, 
-                stops_compressed.at(route_map.back()->item_name_).longitude
+                companies_compressed.at(route_map.back()->company_name_).latitude, 
+                companies_compressed.at(route_map.back()->company_name_).longitude
             )
         );
         doc.Add(std::move(line));

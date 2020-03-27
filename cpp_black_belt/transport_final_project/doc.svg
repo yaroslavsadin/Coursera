@@ -58,6 +58,6 @@
     <text fill="black" stroke="none" stroke-width="1" x="270" y="116.667" dx="7" dy="-3" font-size="18" font-family="Verdana">Электросети</text>
     <text fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x="50" y="183.333" dx="7" dy="-3" font-size="18" font-family="Verdana">Ривьерский мост</text>
     <text fill="black" stroke="none" stroke-width="1" x="50" y="183.333" dx="7" dy="-3" font-size="18" font-family="Verdana">Ривьерский мост</text>
-    <text fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x="270" y="450" dx="7" dy="-3" font-size="18" font-family="Verdana">Komsomol'sky</text>
-    <text fill="black" stroke="none" stroke-width="1" x="270" y="450" dx="7" dy="-3" font-size="18" font-family="Verdana">Komsomol'sky</text>
+    <text fill="rgba(255,255,255,0.85)" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" x="270" y="450" dx="7" dy="-3" font-size="18" font-family="Verdana">Skver Komsomol'sky</text>
+    <text fill="black" stroke="none" stroke-width="1" x="270" y="450" dx="7" dy="-3" font-size="18" font-family="Verdana">Skver Komsomol'sky</text>
 </svg>
