@@ -174,6 +174,19 @@ transport_catalog/fast:
 .PHONY : transport_catalog/fast
 
 #=============================================================================
+# Target rules for targets named transport_catalog_tests
+
+# Build rule for target.
+transport_catalog_tests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 transport_catalog_tests
+.PHONY : transport_catalog_tests
+
+# fast build rule for target.
+transport_catalog_tests/fast:
+	$(MAKE) -f transport_catalog/tests/CMakeFiles/transport_catalog_tests.dir/build.make transport_catalog/tests/CMakeFiles/transport_catalog_tests.dir/build
+.PHONY : transport_catalog_tests/fast
+
+#=============================================================================
 # Target rules for targets named yellow_pages_proto
 
 # Build rule for target.
@@ -320,6 +333,7 @@ help:
 	@echo "... json"
 	@echo "... transport_catalog_proto"
 	@echo "... transport_catalog"
+	@echo "... transport_catalog_tests"
 	@echo "... yellow_pages_proto"
 	@echo "... yellow_pages"
 	@echo "... cygdrive/e/Work/Coursera/cpp_black_belt/profile_advanced.o"

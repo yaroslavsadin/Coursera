@@ -9,6 +9,7 @@
 #include <optional>
 #include "descriptions.h"
 #include "misc.h"
+#include "time_interval.h"
 #include "database.pb.h"
 
 namespace YP {

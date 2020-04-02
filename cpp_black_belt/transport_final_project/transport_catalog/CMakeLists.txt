@@ -23,4 +23,4 @@ add_library(transport_catalog OBJECT ${SRCS} ${PROTO_HDRS})
 add_dependencies(transport_catalog_proto yellow_pages_proto)
 add_dependencies(transport_catalog transport_catalog_proto)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)

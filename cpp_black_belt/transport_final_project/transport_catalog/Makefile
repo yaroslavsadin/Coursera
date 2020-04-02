@@ -421,6 +421,33 @@ svg_render.cpp.s:
 	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/svg_render.cpp.s
 .PHONY : svg_render.cpp.s
 
+time_interval.o: time_interval.cpp.o
+
+.PHONY : time_interval.o
+
+# target to build an object file
+time_interval.cpp.o:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/time_interval.cpp.o
+.PHONY : time_interval.cpp.o
+
+time_interval.i: time_interval.cpp.i
+
+.PHONY : time_interval.i
+
+# target to preprocess a source file
+time_interval.cpp.i:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/time_interval.cpp.i
+.PHONY : time_interval.cpp.i
+
+time_interval.s: time_interval.cpp.s
+
+.PHONY : time_interval.s
+
+# target to generate assembly for a file
+time_interval.cpp.s:
+	cd /cygdrive/e/Work/Coursera/cpp_black_belt/transport_final_project && $(MAKE) -f transport_catalog/CMakeFiles/transport_catalog.dir/build.make transport_catalog/CMakeFiles/transport_catalog.dir/time_interval.cpp.s
+.PHONY : time_interval.cpp.s
+
 transport_router.o: transport_router.cpp.o
 
 .PHONY : transport_router.o
@@ -489,6 +516,9 @@ help:
 	@echo "... svg_render.o"
 	@echo "... svg_render.i"
 	@echo "... svg_render.s"
+	@echo "... time_interval.o"
+	@echo "... time_interval.i"
+	@echo "... time_interval.s"
 	@echo "... transport_router.o"
 	@echo "... transport_router.i"
 	@echo "... transport_router.s"
