@@ -141,8 +141,8 @@ namespace YP {
                 for(const auto& interval_node : company_map.at("working_time").AsMap().at("intervals").AsArray()) {
                     auto& item = *proto_working_time.add_intervals();
                     item.set_day(f_string_to_proto_day(interval_node.AsMap().at("day").AsString()));
-                    item.set_minutes_from(interval_node.AsMap().at("minutes_from").AsInt());
-                    item.set_minutes_to(interval_node.AsMap().at("minutes_to").AsInt());
+                    item.set_minutes_from(interval_node.AsMap().at("minutes_from").AsDouble());
+                    item.set_minutes_to(interval_node.AsMap().at("minutes_to").AsDouble());
                 }
             }
         }

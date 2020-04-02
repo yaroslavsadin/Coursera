@@ -139,6 +139,7 @@ private:
   FindCompaniesRequestImpl companies_impl;
   RouteRequestImpl route_impl;
   Time current_time;
+  const YP::Companies& companies;
 };
 
 /******************************* 

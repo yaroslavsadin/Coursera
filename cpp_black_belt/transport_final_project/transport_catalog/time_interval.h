@@ -28,6 +28,23 @@ public:
 
     double Mins() const { return mins; }
     DayT Day() const { return day; }
+    Time operator+(double mins) const {
+        auto day_cnt = 0ul;
+        while(mins > 24 * 60) {
+            mins -= 24 * 60;
+            day_cnt++;
+        }
+        auto new_mins = mins + this->mins;
+        if(new_mins > 24 * 60) {
+            new_mins -= 24 * 60;
+            day_cnt++;
+        }
+        DayT new_day = this->day;
+        while(day_cnt--) {
+            new_day = IncDay(new_day);
+        }
+        return Time(static_cast<size_t>(new_day),new_mins);
+    }
 private:
     DayT day;
     double mins;

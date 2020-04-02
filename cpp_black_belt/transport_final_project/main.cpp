@@ -15,7 +15,7 @@ int main(void) {
   stringstream input_base{R"(
 {
     "serialization_settings": {
-        "file": "/tmp/tmp8h4r0nnk"
+        "file": "/tmp/tmppn3ab4sf"
     },
     "routing_settings": {
         "bus_wait_time": 2,
@@ -197,7 +197,7 @@ int main(void) {
     "yellow_pages": {
         "rubrics": {
             "1": {
-                "name": "Skver"
+                "name": "Сквер"
             },
             "2": {
                 "name": "Вокзал"
@@ -207,7 +207,7 @@ int main(void) {
             {
                 "names": [
                     {
-                        "value": "Komsomol'sky"
+                        "value": "Комсомольский"
                     }
                 ],
                 "rubrics": [
@@ -224,7 +224,26 @@ int main(void) {
                         "name": "Ривьерский мост",
                         "meters": 150
                     }
-                ]
+                ],
+                "working_time": {
+                    "intervals": [
+                        {
+                            "day": "MONDAY",
+                            "minutes_from": 600,
+                            "minutes_to": 1020
+                        },
+                        {
+                            "day": "WEDNESDAY",
+                            "minutes_from": 600,
+                            "minutes_to": 1020
+                        },
+                        {
+                            "day": "FRIDAY",
+                            "minutes_from": 600,
+                            "minutes_to": 1080
+                        }
+                    ]
+                }
             },
             {
                 "names": [
@@ -246,7 +265,21 @@ int main(void) {
                         "name": "Морской вокзал",
                         "meters": 15
                     }
-                ]
+                ],
+                "working_time": {
+                    "intervals": [
+                        {
+                            "day": "TUESDAY",
+                            "minutes_from": 540,
+                            "minutes_to": 900
+                        },
+                        {
+                            "day": "THURSDAY",
+                            "minutes_from": 540,
+                            "minutes_to": 900
+                        }
+                    ]
+                }
             }
         ]
     }
@@ -255,50 +288,143 @@ int main(void) {
   stringstream input_stats{R"(
 {
     "serialization_settings": {
-        "file": "/tmp/tmp8h4r0nnk"
+        "file": "/tmp/tmppn3ab4sf"
     },
     "stat_requests": [
         {
-            "id": 1084893800,
+            "id": 832750872,
             "type": "FindCompanies",
             "rubrics": [
-                "Skver"
+                "Сквер"
             ]
         },
         {
-            "id": 472803976,
+            "id": 418346118,
             "type": "FindCompanies",
             "names": [
-                "Komsomol'sky",
+                "Комсомольский",
                 "Кооперативный"
             ],
             "rubrics": [
-                "Skver"
+                "Сквер"
             ]
         },
         {
-            "id": 294203670,
+            "id": 1432155602,
             "type": "RouteToCompany",
             "from": "Параллельная улица",
             "companies": {
                 "rubrics": [
-                    "Skver"
+                    "Сквер"
                 ]
-            }
+            },
+            "datetime": [
+                0,
+                0,
+                0
+            ]
         },
         {
-            "id": 2104435957,
+            "id": 1415390029,
+            "type": "RouteToCompany",
+            "from": "Параллельная улица",
+            "companies": {
+                "rubrics": [
+                    "Сквер"
+                ]
+            },
+            "datetime": [
+                2,
+                12,
+                0
+            ]
+        },
+        {
+            "id": 38380221,
+            "type": "RouteToCompany",
+            "from": "Параллельная улица",
+            "companies": {
+                "rubrics": [
+                    "Сквер"
+                ]
+            },
+            "datetime": [
+                2,
+                16,
+                47
+            ]
+        },
+        {
+            "id": 1199638138,
+            "type": "RouteToCompany",
+            "from": "Параллельная улица",
+            "companies": {
+                "rubrics": [
+                    "Сквер"
+                ]
+            },
+            "datetime": [
+                2,
+                16,
+                48
+            ]
+        },
+        {
+            "id": 193771898,
             "type": "RouteToCompany",
             "from": "Морской вокзал",
             "companies": {
                 "names": [
-                    "Komsomol'sky",
+                    "Комсомольский",
                     "Кооперативный"
                 ],
                 "rubrics": [
-                    "Skver"
+                    "Сквер"
                 ]
-            }
+            },
+            "datetime": [
+                1,
+                7,
+                45
+            ]
+        },
+        {
+            "id": 464638028,
+            "type": "RouteToCompany",
+            "from": "Морской вокзал",
+            "companies": {
+                "names": [
+                    "Комсомольский",
+                    "Кооперативный"
+                ],
+                "rubrics": [
+                    "Сквер"
+                ]
+            },
+            "datetime": [
+                1,
+                9,
+                0
+            ]
+        },
+        {
+            "id": 1317455601,
+            "type": "RouteToCompany",
+            "from": "Морской вокзал",
+            "companies": {
+                "names": [
+                    "Комсомольский",
+                    "Кооперативный"
+                ],
+                "rubrics": [
+                    "Сквер"
+                ]
+            },
+            "datetime": [
+                1,
+                15,
+                0
+            ]
         }
     ]
 }

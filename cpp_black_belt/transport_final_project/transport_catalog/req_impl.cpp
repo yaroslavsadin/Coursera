@@ -1,4 +1,5 @@
 #include "req_impl.h"
+#include "time_interval.h"
 
 RouteRequestImpl::RouteRequestImpl(
     std::string from,
@@ -10,7 +11,9 @@ RouteRequestImpl::RouteRequestImpl(
 : from_(from), to_(to), db(db), router(router), renderer(renderer)
 {}
 
-std::map<std::string,Json::Node> RouteRequestImpl::Build(const std::vector<std::string_view> companies) const {
+std::map<std::string,Json::Node> RouteRequestImpl::Build(
+    const std::vector<std::string_view> companies, const Time& current_time, const YP::Companies& companies_descriptions
+) const {
     std::vector<RouterT::RouteInfo> route_ids;
     for(auto company_name : companies) {
         auto route = router.BuildRouteToCompany(db.GetBuses(),db.GetStops(),from_,company_name);
@@ -24,8 +27,12 @@ std::map<std::string,Json::Node> RouteRequestImpl::Build(const std::vector<std::
         return res;
     } else {
         auto it = std::min_element(route_ids.begin(),route_ids.end(),
-        [this](const auto& lhs, const auto& rhs){
-            return lhs.weight < rhs.weight;
+        [this,current_time,&companies_descriptions](const auto& lhs, const auto& rhs){
+            auto lhs_company_name = router.GetEdgeInfo(router.GetRouteEdgeId(lhs.id,lhs.edge_count-1)).company_name_;
+            auto rhs_company_name = router.GetEdgeInfo(router.GetRouteEdgeId(rhs.id,rhs.edge_count-1)).company_name_;
+            return 
+            lhs.weight + GetWaitingTime(current_time + lhs.weight, companies_descriptions.at(lhs_company_name).intervals) 
+            < rhs.weight + GetWaitingTime(current_time + rhs.weight, companies_descriptions.at(rhs_company_name).intervals);
         });
         return BuildResponse(*it);
     }

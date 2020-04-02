@@ -290,7 +290,8 @@ RouteToCompanyRequest::RouteToCompanyRequest(const Json::Node& from_json_node, c
         from_json_node.AsMap().at("datetime").AsArray()[0].AsInt(),
         from_json_node.AsMap().at("datetime").AsArray()[1].AsInt(),
         from_json_node.AsMap().at("datetime").AsArray()[2].AsInt())
-    )
+    ),
+    companies(index->GetCompanies())
 {}
 
 /******************************* 
@@ -351,7 +352,7 @@ Json::Node MapRequest::Process() const {
 }
 
 Json::Node RouteToCompanyRequest::Process() const {
-    auto res = route_impl.Build(companies_impl.FilterCompanies());
+    auto res = route_impl.Build(companies_impl.FilterCompanies(),current_time,companies);
     res["request_id"] = Json::Node(*id_);
     return res;
 }

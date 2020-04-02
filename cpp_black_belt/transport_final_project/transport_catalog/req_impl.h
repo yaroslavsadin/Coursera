@@ -17,7 +17,9 @@ public:
         const SvgRender& renderer
     );
     std::map<std::string,Json::Node> Build() const;
-    std::map<std::string,Json::Node> Build(const std::vector<std::string_view> companies) const;
+    std::map<std::string,Json::Node> Build(
+        const std::vector<std::string_view> companies, const Time& current_time, const YP::Companies& companies_descriptions
+    ) const;
 private:
     std::string from_;
     std::string to_;
