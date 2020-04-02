@@ -21,29 +21,29 @@ public:
     }
     
     Time() = default;
-    Time(size_t day_, size_t hour_, size_t mins_)
+    Time(size_t day_, double hour_, double mins_)
     : day(static_cast<DayT>(day_)), mins(hour_ * 60 + mins_) {}
-    Time(size_t day_, size_t mins_)
+    Time(size_t day_, double mins_)
     : day(static_cast<DayT>(day_)), mins(mins_) {}
 
-    size_t Mins() const { return mins; }
+    double Mins() const { return mins; }
     DayT Day() const { return day; }
 private:
     DayT day;
-    size_t mins;
+    double mins;
 };
 
 class TimeInterval {
 public:
-    TimeInterval(size_t day_, size_t mins_from_, size_t mins_to_)
+    TimeInterval(size_t day_, double mins_from_, double mins_to_)
     : t(day_, mins_from_), mins_to(mins_to_) 
     {}
-    size_t MinsFrom() const { return t.Mins(); }
-    size_t MinsTo() const { return mins_to; }
+    double MinsFrom() const { return t.Mins(); }
+    double MinsTo() const { return mins_to; }
     Time::DayT Day() const { return t.Day(); }
 private:
     Time t;
-    size_t mins_to;
+    double mins_to;
 };
 
-size_t GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& intervals);
+double GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& intervals);
