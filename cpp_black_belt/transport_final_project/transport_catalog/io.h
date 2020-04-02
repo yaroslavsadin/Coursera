@@ -138,6 +138,7 @@ struct RouteToCompanyRequest : public ReadReqeust<Json::Node> {
 private:
   FindCompaniesRequestImpl companies_impl;
   RouteRequestImpl route_impl;
+  Time current_time;
 };
 
 /******************************* 

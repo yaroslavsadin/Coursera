@@ -68,6 +68,7 @@ namespace YP {
         Coords coords;
         std::vector<NearbyStop> nearby_stops;
         std::optional<std::string_view> rubric;
+        std::vector<TimeInterval> intervals;
     };
 
     using Companies = std::unordered_map<std::string_view,CompanyDescription>;

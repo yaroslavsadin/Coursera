@@ -115,6 +115,36 @@ namespace YP {
                     }
                 }
             }
+
+            static auto f_string_to_proto_day = [](const std::string& str) {
+                if(str == "EVERYDAY") {
+                    return YellowPages::WorkingTimeInterval::EVERYDAY;
+                } else if(str == "MONDAY") {
+                    return YellowPages::WorkingTimeInterval::MONDAY;
+                } else if(str == "TUESDAY") {
+                    return YellowPages::WorkingTimeInterval::TUESDAY;
+                } else if(str == "WEDNESDAY") {
+                    return YellowPages::WorkingTimeInterval::WEDNESDAY;
+                } else if(str == "THURSDAY") {
+                    return YellowPages::WorkingTimeInterval::THURSDAY;
+                } else if(str == "FRIDAY") {
+                    return YellowPages::WorkingTimeInterval::FRIDAY;
+                } else if(str == "SATURDAY") {
+                    return YellowPages::WorkingTimeInterval::SATURDAY;
+                } else {
+                    return YellowPages::WorkingTimeInterval::SUNDAY;                 
+                }
+            };
+
+            if(company_map.count("working_time")) {
+                auto& proto_working_time = *proto_company.mutable_working_time();
+                for(const auto& interval_node : company_map.at("working_time").AsMap().at("intervals").AsArray()) {
+                    auto& item = *proto_working_time.add_intervals();
+                    item.set_day(f_string_to_proto_day(interval_node.AsMap().at("day").AsString()));
+                    item.set_minutes_from(interval_node.AsMap().at("minutes_from").AsInt());
+                    item.set_minutes_to(interval_node.AsMap().at("minutes_to").AsInt());
+                }
+            }
         }
     }
 }

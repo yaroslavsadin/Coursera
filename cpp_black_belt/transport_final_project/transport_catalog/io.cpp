@@ -285,7 +285,12 @@ RouteToCompanyRequest::RouteToCompanyRequest(const Json::Node& from_json_node, c
                 const BusDatabase& db, const TransportRouter& router, const SvgRender& renderer)
 :   ReadReqeust<Json::Node>(GetReqestId(from_json_node), Request::Type::ROUTE_TO_COMPANY),
     companies_impl(from_json_node.AsMap().at("companies"),index),
-    route_impl(from_json_node.AsMap().at("from").AsString(),"",db,router,renderer)
+    route_impl(from_json_node.AsMap().at("from").AsString(),"",db,router,renderer),
+    current_time(Time(
+        from_json_node.AsMap().at("datetime").AsArray()[0].AsInt(),
+        from_json_node.AsMap().at("datetime").AsArray()[1].AsInt(),
+        from_json_node.AsMap().at("datetime").AsArray()[2].AsInt())
+    )
 {}
 
 /******************************* 

@@ -81,6 +81,13 @@ namespace YP {
                 phone.local_code = proto_phone.local_code();
                 phone.country_code = proto_phone.country_code();
             }
+
+            for(const auto& proto_interval : company.working_time().intervals()) {
+                descriptions[company_names.back()].intervals.emplace_back(
+                    static_cast<size_t>(proto_interval.day()),
+                    proto_interval.minutes_from(), proto_interval.minutes_to()
+                );
+            }
         }
     }
 
