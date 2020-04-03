@@ -3,6 +3,8 @@
 #include <vector>
 #include <optional>
 
+constexpr auto MINS_IN_DAY = 24 * 60ul;
+
 enum class DayT {
     MONDAY,
     TUESDAY,
@@ -31,13 +33,13 @@ public:
     DayT Day() const { return day; }
     Time operator+(double mins) const {
         auto day_cnt = 0ul;
-        while(mins > 24 * 60) {
-            mins -= 24 * 60;
+        while(mins > MINS_IN_DAY) {
+            mins -= MINS_IN_DAY;
             day_cnt++;
         }
         auto new_mins = mins + this->mins;
-        if(new_mins > 24 * 60) {
-            new_mins -= 24 * 60;
+        if(new_mins > MINS_IN_DAY) {
+            new_mins -= MINS_IN_DAY;
             day_cnt++;
         }
         DayT new_day = this->day;

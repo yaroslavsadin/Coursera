@@ -27,7 +27,7 @@ private:
     const TransportRouter& router;
     const SvgRender& renderer;
 
-    std::map<std::string,Json::Node> BuildResponse(const RouterT::RouteInfo& route, std::optional<double> wait_time) const;
+    std::map<std::string,Json::Node> BuildResponse(const RouterT::RouteInfo& route, double wait_time = 0) const;
 };
 
 class FindCompaniesRequestImpl {

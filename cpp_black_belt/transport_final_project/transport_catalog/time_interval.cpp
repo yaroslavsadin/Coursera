@@ -2,7 +2,7 @@
 #include <cassert>
 
 template<typename It> 
-std::optional<std::pair<It,It>> FindDayIntervals(DayT day, It intervals_begin, It intervals_end)  
+std::optional<std::pair<It,It>> FindDayIntervals(It intervals_begin, It intervals_end, DayT day)  
 {
     auto it_lower = std::lower_bound(intervals_begin, intervals_end, day,
     [](const TimeInterval& interval, DayT day_){
@@ -42,14 +42,14 @@ double GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& i
         double cur_mins = start_time.Mins();
         double acced_mins = 0;
         for(auto day = start_time.Day();;day = Time::IncDay(day)) {
-            if(auto opt_it = FindDayIntervals(day,intervals.begin(),intervals.end()); opt_it) {
+            if(auto opt_it = FindDayIntervals(intervals.begin(),intervals.end(),day); opt_it) {
                 auto [it_begin,it_end] = *opt_it;
                 auto res = ProcessDayIntervals(it_begin,it_end,cur_mins);
                 if(res) {
                     return *res + acced_mins;
                 }
             }
-            acced_mins += 24 * 60 - cur_mins;
+            acced_mins += MINS_IN_DAY - cur_mins;
             cur_mins = 0;
         }
        
@@ -59,7 +59,7 @@ double GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& i
             return *res;
         } else {
             // Wait till the next day
-            return *ProcessDayIntervals(intervals.begin(),intervals.end(),0ul) + 24 * 60 - start_time.Mins();
+            return *ProcessDayIntervals(intervals.begin(),intervals.end(),0ul) + MINS_IN_DAY - start_time.Mins();
         }
     }
     return 666;
