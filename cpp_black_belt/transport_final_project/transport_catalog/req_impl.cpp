@@ -34,14 +34,21 @@ std::map<std::string,Json::Node> RouteRequestImpl::Build(
             lhs.weight + GetWaitingTime(current_time + lhs.weight, companies_descriptions.at(lhs_company_name).intervals) 
             < rhs.weight + GetWaitingTime(current_time + rhs.weight, companies_descriptions.at(rhs_company_name).intervals);
         });
-        return BuildResponse(*it);
+        auto company_name = router.GetEdgeInfo(router.GetRouteEdgeId(it->id,it->edge_count-1)).company_name_;
+        auto wait_time = GetWaitingTime(current_time + it->weight, companies_descriptions.at(company_name).intervals);
+        if(wait_time == 0) {
+            return BuildResponse(*it,std::nullopt);
+        } else {
+            return BuildResponse(*it,wait_time);
+        }
+        
     }
 }
 
 std::map<std::string,Json::Node> RouteRequestImpl::Build() const {
     auto route = router.BuildRoute(db.GetBuses(),db.GetStops(),from_,to_);
     if(route) {
-        return BuildResponse(*route);
+        return BuildResponse(*route,std::nullopt);
     } else {
         std::map<std::string,Json::Node> res;
         res["error_message"] = Json::Node(std::string("not found"));
@@ -49,7 +56,7 @@ std::map<std::string,Json::Node> RouteRequestImpl::Build() const {
     }
 }
 
-std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::RouteInfo& route) const {
+std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::RouteInfo& route, std::optional<double> wait_time) const {
     std::map<std::string,Json::Node> res;
     size_t route_id = route.id;
     size_t num_edges = route.edge_count;
@@ -59,7 +66,11 @@ std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::
         res["total_time"] = 0;
         res["items"] = std::vector<Json::Node>();
     } else {
-        res["total_time"] = Json::Node(route.weight);
+        if(wait_time.has_value()){    
+            res["total_time"] = Json::Node(route.weight + *wait_time);
+        } else {
+            res["total_time"] = Json::Node(route.weight);
+        }
 
         std::vector<Json::Node> items;
         for(size_t i = 0; i < num_edges;i++) {
@@ -90,6 +101,13 @@ std::map<std::string,Json::Node> RouteRequestImpl::BuildResponse(const RouterT::
                     {"type", std::string("WalkToCompany")}
                 });
                 route_map.push_back(&edge_info);
+                if(wait_time.has_value()){
+                    items.push_back(std::map<std::string,Json::Node> {
+                        {"company", std::string(edge_info.company_name_)},
+                        {"time", *wait_time},
+                        {"type", std::string("WaitCompany")}
+                    });
+                }
                 break;
             default:
                 throw std::runtime_error("Wrong edge type");

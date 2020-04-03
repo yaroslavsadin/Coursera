@@ -2,20 +2,16 @@
 #include <cassert>
 
 template<typename It> 
-std::optional<std::pair<It,It>> FindDayIntervals(Time::DayT day, It intervals_begin, It intervals_end)  
+std::optional<std::pair<It,It>> FindDayIntervals(DayT day, It intervals_begin, It intervals_end)  
 {
     auto it_lower = std::lower_bound(intervals_begin, intervals_end, day,
-    [](const TimeInterval& interval, Time::DayT day_){
-        return static_cast<double>(interval.Day()) < static_cast<double>(day_);
+    [](const TimeInterval& interval, DayT day_){
+        return static_cast<double>(*interval.Day()) < static_cast<double>(day_);
     });
     auto it_upper = std::upper_bound(intervals_begin, intervals_end, day,
-    [](Time::DayT day_, const TimeInterval& interval){
-        return static_cast<double>(day_) < static_cast<double>(interval.Day());
+    [](DayT day_, const TimeInterval& interval){
+        return static_cast<double>(day_) < static_cast<double>(*interval.Day());
     });
-    
-    for(auto it = it_lower; it != it_upper; it++) {
-        assert(it->Day() == day);
-    }
 
     if(it_lower == it_upper) {
         return std::nullopt;
@@ -42,15 +38,7 @@ double GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& i
     if(intervals.empty()) {
         return 0;
     }
-    if(intervals[0].Day() == Time::DayT::EVERYDAY) {
-        auto res = ProcessDayIntervals(intervals.begin(),intervals.end(),start_time.Mins());
-        if(res) {
-            return *res;
-        } else {
-            // Wait till the next day
-            return *ProcessDayIntervals(intervals.begin(),intervals.end(),0ul) + 24 * 60 - start_time.Mins();
-        }
-    } else {
+    if(intervals[0].Day().has_value()) {
         double cur_mins = start_time.Mins();
         double acced_mins = 0;
         for(auto day = start_time.Day();;day = Time::IncDay(day)) {
@@ -63,6 +51,15 @@ double GetWaitingTime(const Time& start_time, const std::vector<TimeInterval>& i
             }
             acced_mins += 24 * 60 - cur_mins;
             cur_mins = 0;
+        }
+       
+    } else {
+        auto res = ProcessDayIntervals(intervals.begin(),intervals.end(),start_time.Mins());
+        if(res) {
+            return *res;
+        } else {
+            // Wait till the next day
+            return *ProcessDayIntervals(intervals.begin(),intervals.end(),0ul) + 24 * 60 - start_time.Mins();
         }
     }
     return 666;

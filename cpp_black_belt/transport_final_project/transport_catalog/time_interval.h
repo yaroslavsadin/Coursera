@@ -1,19 +1,20 @@
 #pragma once
 #include <algorithm>
+#include <vector>
+#include <optional>
+
+enum class DayT {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+};
 
 class Time {
 public:
-    enum class DayT {
-        EVERYDAY, // for intervals
-        MONDAY,
-        TUESDAY,
-        WEDNESDAY,
-        THURSDAY,
-        FRIDAY,
-        SATURDAY,
-        SUNDAY
-    };
-
     static DayT IncDay(DayT day) {
         return (day == DayT::SUNDAY) ? 
                 DayT::MONDAY : 
@@ -53,13 +54,15 @@ private:
 class TimeInterval {
 public:
     TimeInterval(size_t day_, double mins_from_, double mins_to_)
-    : t(day_, mins_from_), mins_to(mins_to_) 
+    : day((day_ == 0) ? std::nullopt : std::optional<DayT>(static_cast<DayT>(day_ - 1ul))),
+      mins_from(mins_from_), mins_to(mins_to_) 
     {}
-    double MinsFrom() const { return t.Mins(); }
+    double MinsFrom() const { return mins_from; }
     double MinsTo() const { return mins_to; }
-    Time::DayT Day() const { return t.Day(); }
+    auto Day() const { return day; }
 private:
-    Time t;
+    std::optional<DayT> day;
+    double mins_from;
     double mins_to;
 };
 
