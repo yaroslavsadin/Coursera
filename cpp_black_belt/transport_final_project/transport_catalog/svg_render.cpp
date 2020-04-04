@@ -433,17 +433,19 @@ std::vector<Coords> SvgRender::GetAdjacentStops(MapPoint point, double Coords::*
     return res;
 }
 
-size_t SvgRender::BundleCoordinates(const std::map<double,MapPoint>& sorted_map, double Coords::*field) const {
+size_t SvgRender::BundleCoordinates(const std::map<double,std::vector<MapPoint>>& sorted_map, double Coords::*field) const {
     size_t max_idx = 0;
-    for(const auto [_,point] : sorted_map) {
-        auto& compressed = (point.type == MapPoint::Type::STOP) ? stops_compressed : companies_compressed;
-        auto neighbours = GetAdjacentStops(point,field);
-        size_t idx = 0;
-        for(const auto& stop : neighbours) {
-            idx = std::max(idx,static_cast<size_t>(stop.*field) + 1);
+    for(const auto [_,points] : sorted_map) {
+        for(const auto& point : points) {    
+            auto& compressed = (point.type == MapPoint::Type::STOP) ? stops_compressed : companies_compressed;
+            auto neighbours = GetAdjacentStops(point,field);
+            size_t idx = 0;
+            for(const auto& stop : neighbours) {
+                idx = std::max(idx,static_cast<size_t>(stop.*field) + 1);
+            }
+            compressed[point.name].*field = idx;
+            max_idx = std::max(idx,max_idx);
         }
-        compressed[point.name].*field = idx;
-        max_idx = std::max(idx,max_idx);
     }
     return max_idx;
 }
@@ -499,8 +501,8 @@ Svg::Document SvgRender::RenderRoute(RouteMap route) const {
 void SvgRender::CompressStopsCoordinates() const {
     std::unordered_map<std::string_view,double> lat;
     std::unordered_map<std::string_view,double> lon;
-    std::map<double,MapPoint> lat_sorted;
-    std::map<double,MapPoint> lon_sorted;
+    std::map<double,std::vector<MapPoint>> lat_sorted;
+    std::map<double,std::vector<MapPoint>> lon_sorted;
 
     for(const auto& [name,bus] : buses) {
         if(bus.route.empty()) continue;
@@ -538,17 +540,17 @@ void SvgRender::CompressStopsCoordinates() const {
 
     for(const auto& [name,stop] : stops) {
         if(lat.count(name)) {
-            lat_sorted[lat.at(name)] = {MapPoint::Type::STOP,name};
-            lon_sorted[lon.at(name)] = {MapPoint::Type::STOP,name};
+            lat_sorted[lat.at(name)].emplace_back(MapPoint{MapPoint::Type::STOP,name});
+            lon_sorted[lon.at(name)].emplace_back(MapPoint{MapPoint::Type::STOP,name});
         } else {
-            lat_sorted[stop.latitude] = {MapPoint::Type::STOP,name};
-            lon_sorted[stop.longtitude] = {MapPoint::Type::STOP,name};
+            lat_sorted[stop.latitude].emplace_back(MapPoint{MapPoint::Type::STOP,name});
+            lon_sorted[stop.longtitude].emplace_back(MapPoint{MapPoint::Type::STOP,name});
         }
     }
 
     for(const auto& [name,company] : companies) {
-        lat_sorted[company.coords.latitude] = {MapPoint::Type::COMPANY,name};
-        lon_sorted[company.coords.longitude] = {MapPoint::Type::COMPANY,name};
+        lat_sorted[company.coords.latitude].emplace_back(MapPoint{MapPoint::Type::COMPANY,name});
+        lon_sorted[company.coords.longitude].emplace_back(MapPoint{MapPoint::Type::COMPANY,name});
     }
     
     size_t x_idx = BundleCoordinates(lon_sorted, &Coords::longitude);
@@ -560,11 +562,34 @@ void SvgRender::CompressStopsCoordinates() const {
     for(auto& [name,coordinates] : stops_compressed) {
         coordinates.longitude = coordinates.longitude * x_step + settings.padding;
         coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
+        // if(coordinates.longitude < 0 || coordinates.latitude < 0) {
+        //     std::cerr << "COMPANIES: ";
+        //     for(const auto& [k,v] : companies_compressed) {
+        //         std::cerr << "[" << v.latitude << ' ' << v.longitude << "] ";
+        //     }
+        //     std::cerr << "STOPS: ";
+        //     for(const auto& [k,v] : stops_compressed) {
+        //         std::cerr << "[" << v.latitude << ' ' << v.longitude << "] ";
+        //     }
+        //     throw std::runtime_error("");
+        // }
     }
 
     for(auto& [name,coordinates] : companies_compressed) {
         coordinates.longitude = coordinates.longitude * x_step + settings.padding;
         coordinates.latitude = settings.height - settings.padding - (coordinates.latitude * y_step);
+        // if(coordinates.longitude < 0 || coordinates.latitude < 0) {
+        //     std::cerr << "COMPANIES: ";
+        //     for(const auto& [k,v] : companies_compressed) {
+        //         std::cerr << "[" << v.latitude << ' ' << v.longitude << "] ";
+        //     }
+        //     std::cerr << "STOPS: ";
+        //     for(const auto& [k,v] : stops_compressed) {
+        //         std::cerr << "[" << v.latitude << ' ' << v.longitude << "] ";
+        //     }
+        //     std::cerr << x_idx << ' ' << y_idx;
+        //     throw std::runtime_error("");
+        // }
     }
 }
 

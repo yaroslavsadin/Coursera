@@ -106,7 +106,7 @@ private:
     > render_table_route;
 
     void AddBusLabel(Svg::Document& doc,const std::string& bus_name, const std::string& stop, Svg::Color color) const;
-    size_t BundleCoordinates(const std::map<double,MapPoint>& sorted_map, double Coords::*field) const;
+    size_t BundleCoordinates(const std::map<double,std::vector<MapPoint>>& sorted_map, double Coords::*field) const;
     bool StopIsBase(const std::string& stop) const;
     std::vector<Coords> GetAdjacentStops(MapPoint point, double Coords::*field) const;
 };
