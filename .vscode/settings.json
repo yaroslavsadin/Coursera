@@ -119,7 +119,7 @@
         "xutility": "cpp"
     },
     "terminal.integrated.env.windows": {
-        "PATH":"C:\\cygwin64\\bin",
+        "PATH":"C:\\cygwin64\\bin;C:\\Javalib;C:\\Windows\\System32;C:\\Program Files\\Java\\jdk1.7.0_80\\bin",
         "MAKEFLAGS":"--no-print-directory"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"

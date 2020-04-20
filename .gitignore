@@ -19,3 +19,5 @@ CMakeFiles/
 CMakeCache.txt
 *.pb.cc
 *.pb.h
+antlr4_runtime/
+*.jar
