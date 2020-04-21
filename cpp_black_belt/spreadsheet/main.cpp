@@ -1,7 +1,8 @@
-#include "common.h"
-#include "formula.h"
+// #include "common.h"
+// #include "formula.h"
+#include "ast.h"
 #include "test_runner.h"
-
+#if 0
 std::ostream& operator<<(std::ostream& output, Position pos) {
   return output << "(" << pos.row << ", " << pos.col << ")";
 }
@@ -566,8 +567,9 @@ namespace {
     ASSERT_EQUAL(sheet->GetCell("M6"_pos)->GetText(), "Ready");
   }
 }
-
+#endif
 int main() {
+#if 0
   TestRunner tr;
   RUN_TEST(tr, TestPositionAndStringConversion);
   RUN_TEST(tr, TestPositionToStringInvalid);
@@ -595,5 +597,7 @@ int main() {
   RUN_TEST(tr, TestCellReferences);
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
+#endif
+  ParseFormula(std::cin);
   return 0;
 }

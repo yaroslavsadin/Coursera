@@ -10,18 +10,20 @@ if(MSVC)
 else()
   set(
     CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror -Wno-unused-parameter -Wno-implicit-fallthrough"
+    "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-implicit-fallthrough"
   )
 endif()
 
 
-set(ANTLR_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/antlr-4.7.2-complete.jar)
+set(ANTLR_EXECUTABLE antlr-4.7.2-complete.jar)
 include(${CMAKE_CURRENT_SOURCE_DIR}/FindANTLR.cmake)
 
 add_definitions(
   -DANTLR4CPP_STATIC
   -D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 )
+
+set (ANTLR_TARGET_OUTPUT_DIRECTORY antlr4cpp_generated_src/Formula CACHE INTERNAL "")
 
 set(WITH_STATIC_CRT OFF CACHE BOOL "Visual C++ static CRT for ANTLR" FORCE)
 add_subdirectory(antlr4_runtime)

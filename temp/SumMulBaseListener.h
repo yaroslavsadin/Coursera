@@ -1,5 +1,5 @@
 
-// Generated from SumMul.g4 by ANTLR 4.8
+// Generated from SumMul.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -19,8 +19,14 @@ public:
   virtual void enterMain(SumMulParser::MainContext * /*ctx*/) override { }
   virtual void exitMain(SumMulParser::MainContext * /*ctx*/) override { }
 
-  virtual void enterExpr(SumMulParser::ExprContext * /*ctx*/) override { }
-  virtual void exitExpr(SumMulParser::ExprContext * /*ctx*/) override { }
+  virtual void enterMul(SumMulParser::MulContext * /*ctx*/) override { }
+  virtual void exitMul(SumMulParser::MulContext * /*ctx*/) override { }
+
+  virtual void enterNumber(SumMulParser::NumberContext * /*ctx*/) override { }
+  virtual void exitNumber(SumMulParser::NumberContext * /*ctx*/) override { }
+
+  virtual void enterAdd(SumMulParser::AddContext * /*ctx*/) override { }
+  virtual void exitAdd(SumMulParser::AddContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

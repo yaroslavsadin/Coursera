@@ -1,5 +1,5 @@
 
-// Generated from SumMul.g4 by ANTLR 4.7.2
+// Generated from Formula.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -9,18 +9,19 @@
 
 
 
-class  SumMulParser : public antlr4::Parser {
+class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    ADD = 1, MUL = 2, NUMBER = 3, WS = 4
+    T__0 = 1, T__1 = 2, NUMBER = 3, ADD = 4, SUB = 5, MUL = 6, DIV = 7, 
+    CELL = 8, WS = 9
   };
 
   enum {
     RuleMain = 0, RuleExpr = 1
   };
 
-  SumMulParser(antlr4::TokenStream *input);
-  ~SumMulParser();
+  FormulaParser(antlr4::TokenStream *input);
+  ~FormulaParser();
 
   virtual std::string getGrammarFileName() const override;
   virtual const antlr4::atn::ATN& getATN() const override { return _atn; };
@@ -59,33 +60,54 @@ public:
    
   };
 
-  class  MulContext : public ExprContext {
+  class  ParensContext : public ExprContext {
   public:
-    MulContext(ExprContext *ctx);
+    ParensContext(ExprContext *ctx);
 
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *MUL();
+    ExprContext *expr();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };
 
-  class  NumberContext : public ExprContext {
+  class  UnaryOpContext : public ExprContext {
   public:
-    NumberContext(ExprContext *ctx);
+    UnaryOpContext(ExprContext *ctx);
+
+    ExprContext *expr();
+    antlr4::tree::TerminalNode *ADD();
+    antlr4::tree::TerminalNode *SUB();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  CellContext : public ExprContext {
+  public:
+    CellContext(ExprContext *ctx);
+
+    antlr4::tree::TerminalNode *CELL();
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+  };
+
+  class  LiteralContext : public ExprContext {
+  public:
+    LiteralContext(ExprContext *ctx);
 
     antlr4::tree::TerminalNode *NUMBER();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };
 
-  class  AddContext : public ExprContext {
+  class  BinaryOpContext : public ExprContext {
   public:
-    AddContext(ExprContext *ctx);
+    BinaryOpContext(ExprContext *ctx);
 
     std::vector<ExprContext *> expr();
     ExprContext* expr(size_t i);
+    antlr4::tree::TerminalNode *MUL();
+    antlr4::tree::TerminalNode *DIV();
     antlr4::tree::TerminalNode *ADD();
+    antlr4::tree::TerminalNode *SUB();
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
   };

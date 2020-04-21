@@ -1,5 +1,5 @@
 
-// Generated from SumMul.g4 by ANTLR 4.8
+// Generated from SumMul.g4 by ANTLR 4.7.2
 
 
 #include "SumMulListener.h"
@@ -92,43 +92,85 @@ SumMulParser::ExprContext::ExprContext(ParserRuleContext *parent, size_t invokin
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* SumMulParser::ExprContext::NUMBER() {
-  return getToken(SumMulParser::NUMBER, 0);
-}
-
-std::vector<SumMulParser::ExprContext *> SumMulParser::ExprContext::expr() {
-  return getRuleContexts<SumMulParser::ExprContext>();
-}
-
-SumMulParser::ExprContext* SumMulParser::ExprContext::expr(size_t i) {
-  return getRuleContext<SumMulParser::ExprContext>(i);
-}
-
-tree::TerminalNode* SumMulParser::ExprContext::MUL() {
-  return getToken(SumMulParser::MUL, 0);
-}
-
-tree::TerminalNode* SumMulParser::ExprContext::ADD() {
-  return getToken(SumMulParser::ADD, 0);
-}
-
 
 size_t SumMulParser::ExprContext::getRuleIndex() const {
   return SumMulParser::RuleExpr;
 }
 
-void SumMulParser::ExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<SumMulListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterExpr(this);
+void SumMulParser::ExprContext::copyFrom(ExprContext *ctx) {
+  ParserRuleContext::copyFrom(ctx);
 }
 
-void SumMulParser::ExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<SumMulListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitExpr(this);
+//----------------- MulContext ------------------------------------------------------------------
+
+std::vector<SumMulParser::ExprContext *> SumMulParser::MulContext::expr() {
+  return getRuleContexts<SumMulParser::ExprContext>();
 }
 
+SumMulParser::ExprContext* SumMulParser::MulContext::expr(size_t i) {
+  return getRuleContext<SumMulParser::ExprContext>(i);
+}
+
+tree::TerminalNode* SumMulParser::MulContext::MUL() {
+  return getToken(SumMulParser::MUL, 0);
+}
+
+SumMulParser::MulContext::MulContext(ExprContext *ctx) { copyFrom(ctx); }
+
+void SumMulParser::MulContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterMul(this);
+}
+void SumMulParser::MulContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitMul(this);
+}
+//----------------- NumberContext ------------------------------------------------------------------
+
+tree::TerminalNode* SumMulParser::NumberContext::NUMBER() {
+  return getToken(SumMulParser::NUMBER, 0);
+}
+
+SumMulParser::NumberContext::NumberContext(ExprContext *ctx) { copyFrom(ctx); }
+
+void SumMulParser::NumberContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterNumber(this);
+}
+void SumMulParser::NumberContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitNumber(this);
+}
+//----------------- AddContext ------------------------------------------------------------------
+
+std::vector<SumMulParser::ExprContext *> SumMulParser::AddContext::expr() {
+  return getRuleContexts<SumMulParser::ExprContext>();
+}
+
+SumMulParser::ExprContext* SumMulParser::AddContext::expr(size_t i) {
+  return getRuleContext<SumMulParser::ExprContext>(i);
+}
+
+tree::TerminalNode* SumMulParser::AddContext::ADD() {
+  return getToken(SumMulParser::ADD, 0);
+}
+
+SumMulParser::AddContext::AddContext(ExprContext *ctx) { copyFrom(ctx); }
+
+void SumMulParser::AddContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAdd(this);
+}
+void SumMulParser::AddContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<SumMulListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAdd(this);
+}
 
 SumMulParser::ExprContext* SumMulParser::expr() {
    return expr(0);
@@ -151,6 +193,10 @@ SumMulParser::ExprContext* SumMulParser::expr(int precedence) {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
+    _localctx = _tracker.createInstance<NumberContext>(_localctx);
+    _ctx = _localctx;
+    previousContext = _localctx;
+
     setState(8);
     match(SumMulParser::NUMBER);
     _ctx->stop = _input->LT(-1);
@@ -166,8 +212,9 @@ SumMulParser::ExprContext* SumMulParser::expr(int precedence) {
         _errHandler->sync(this);
         switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx)) {
         case 1: {
-          _localctx = _tracker.createInstance<ExprContext>(parentContext, parentState);
-          pushNewRecursionContext(_localctx, startState, RuleExpr);
+          auto newContext = _tracker.createInstance<MulContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
+          _localctx = newContext;
+          pushNewRecursionContext(newContext, startState, RuleExpr);
           setState(10);
 
           if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
@@ -179,8 +226,9 @@ SumMulParser::ExprContext* SumMulParser::expr(int precedence) {
         }
 
         case 2: {
-          _localctx = _tracker.createInstance<ExprContext>(parentContext, parentState);
-          pushNewRecursionContext(_localctx, startState, RuleExpr);
+          auto newContext = _tracker.createInstance<AddContext>(_tracker.createInstance<ExprContext>(parentContext, parentState));
+          _localctx = newContext;
+          pushNewRecursionContext(newContext, startState, RuleExpr);
           setState(13);
 
           if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");

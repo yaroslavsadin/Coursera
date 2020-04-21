@@ -1,5 +1,5 @@
 
-// Generated from SumMul.g4 by ANTLR 4.7.2
+// Generated from Formula.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -9,14 +9,15 @@
 
 
 
-class  SumMulLexer : public antlr4::Lexer {
+class  FormulaLexer : public antlr4::Lexer {
 public:
   enum {
-    ADD = 1, MUL = 2, NUMBER = 3, WS = 4
+    T__0 = 1, T__1 = 2, NUMBER = 3, ADD = 4, SUB = 5, MUL = 6, DIV = 7, 
+    CELL = 8, WS = 9
   };
 
-  SumMulLexer(antlr4::CharStream *input);
-  ~SumMulLexer();
+  FormulaLexer(antlr4::CharStream *input);
+  ~FormulaLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

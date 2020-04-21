@@ -9,7 +9,10 @@
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
-            ]
+            ],
+            "compilerPath": "C:/cygwin64/bin/g++.exe -m32",
+            "cppStandard": "c++17",
+            "compilerArgs": ["-m32"]
         }
     ],
     "version": 4
