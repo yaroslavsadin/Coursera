@@ -21,8 +21,11 @@ struct Position {
 
   static Position FromString(std::string_view str);
 
-  static const int kMaxRows = 16384;
-  static const int kMaxCols = 16384;
+  static constexpr int kMaxRows = 16384;
+  static constexpr int kMaxCols = 16384;
+  
+  static constexpr int ALPHA_NORM_VALUE {64}; 
+  static constexpr int ALPHA_SIZE {26};
 };
 
 struct Size {

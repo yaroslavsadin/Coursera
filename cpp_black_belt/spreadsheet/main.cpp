@@ -1,4 +1,4 @@
-// #include "common.h"
+#include "common.h"
 // #include "formula.h"
 #include "ast.h"
 #include "test_runner.h"
@@ -35,16 +35,18 @@ std::string_view ToString(IFormula::HandlingResult hr) {
 std::ostream& operator<<(std::ostream& output, IFormula::HandlingResult hr) {
   return output << ToString(hr);
 }
-
+#endif
 namespace {
+#if 0
   std::string ToString(FormulaError::Category category) {
     return std::string(FormulaError(category).ToString());
   }
+#endif
 
   void TestPositionAndStringConversion() {
     auto testSingle = [](Position pos, std::string_view str) {
       ASSERT_EQUAL(pos.ToString(), str);
-      ASSERT_EQUAL(Position::FromString(str), pos);
+      ASSERT(Position::FromString(str) == pos);
     };
 
     for (int i = 0; i < 25; ++i) {
@@ -89,7 +91,7 @@ namespace {
     ASSERT(!Position::FromString("A1234567890123456789").IsValid());
     ASSERT(!Position::FromString("ABCDEFGHIJKLMNOPQRS8").IsValid());
   }
-
+#if 0
   void TestEmpty() {
     auto sheet = CreateSheet();
     ASSERT_EQUAL(sheet->GetPrintableSize(), (Size{0, 0}));
@@ -566,16 +568,35 @@ namespace {
     ASSERT(caught);
     ASSERT_EQUAL(sheet->GetCell("M6"_pos)->GetText(), "Ready");
   }
-}
 #endif
+  void TestPosition() {
+    for(int i = 0; i < 10; i++) {
+      for(int j = 0; j < 16383; j++) {
+        Position one {i,j};
+        Position another = Position::FromString(one.ToString());
+        ASSERT(one == another);
+      }  
+    }
+    {
+      Position one {42,666};
+      ASSERT(one.IsValid());
+      one.row += 16384;
+      ASSERT(!one.IsValid());
+      one.row -= 16384; one.col += 16384;
+      ASSERT(!one.IsValid());
+    }
+  }
+}
+
 int main() {
-#if 0
   TestRunner tr;
+  RUN_TEST(tr, TestPosition);
   RUN_TEST(tr, TestPositionAndStringConversion);
   RUN_TEST(tr, TestPositionToStringInvalid);
   RUN_TEST(tr, TestStringToPositionInvalid);
-  RUN_TEST(tr, TestEmpty);
+#if 0
   RUN_TEST(tr, TestInvalidPosition);
+  RUN_TEST(tr, TestEmpty);
   RUN_TEST(tr, TestSetCellPlainText);
   RUN_TEST(tr, TestClearCell);
   RUN_TEST(tr, TestFormulaArithmetic);
@@ -598,6 +619,5 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
-  ParseFormula(std::cin);
   return 0;
 }

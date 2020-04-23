@@ -8,14 +8,14 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/cpp_black_belt/transport_final_project/transport.exe",
+            "program": "E:/Work/Coursera/cpp_black_belt/spreadsheet/spreadsheet.exe",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\cygwin64\\bin\\gdb.exe",
+            "miDebuggerPath": "C://cygwin64//bin//gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

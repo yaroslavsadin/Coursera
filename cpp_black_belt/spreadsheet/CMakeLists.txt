@@ -58,4 +58,7 @@ install(
   EXPORT spreadsheet
 )
 
+target_compile_options(spreadsheet PRIVATE -O0 -g)
+target_link_options(spreadsheet PRIVATE -O0 -g)
+
 set_directory_properties(PROPERTIES VS_STARTUP_PROJECT spreadsheet)

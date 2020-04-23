@@ -339,6 +339,33 @@ ast.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast.cpp.s
 .PHONY : ast.cpp.s
 
+common.o: common.cpp.o
+
+.PHONY : common.o
+
+# target to build an object file
+common.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/common.cpp.o
+.PHONY : common.cpp.o
+
+common.i: common.cpp.i
+
+.PHONY : common.i
+
+# target to preprocess a source file
+common.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/common.cpp.i
+.PHONY : common.cpp.i
+
+common.s: common.cpp.s
+
+.PHONY : common.s
+
+# target to generate assembly for a file
+common.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/common.cpp.s
+.PHONY : common.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -365,6 +392,33 @@ main.s: main.cpp.s
 main.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+position.o: position.cpp.o
+
+.PHONY : position.o
+
+# target to build an object file
+position.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/position.cpp.o
+.PHONY : position.cpp.o
+
+position.i: position.cpp.i
+
+.PHONY : position.i
+
+# target to preprocess a source file
+position.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/position.cpp.i
+.PHONY : position.cpp.i
+
+position.s: position.cpp.s
+
+.PHONY : position.s
+
+# target to generate assembly for a file
+position.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/position.cpp.s
+.PHONY : position.cpp.s
 
 # Help Target
 help:
@@ -397,9 +451,15 @@ help:
 	@echo "... ast.o"
 	@echo "... ast.i"
 	@echo "... ast.s"
+	@echo "... common.o"
+	@echo "... common.i"
+	@echo "... common.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... position.o"
+	@echo "... position.i"
+	@echo "... position.s"
 .PHONY : help
 
 
