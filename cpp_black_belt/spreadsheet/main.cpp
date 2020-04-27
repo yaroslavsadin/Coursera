@@ -1,6 +1,7 @@
 #include "common.h"
-// #include "formula.h"
+#include "formula.h"
 #include "ast.h"
+#include "sheet.h"
 #include "test_runner.h"
 #if 0
 std::ostream& operator<<(std::ostream& output, Position pos) {
@@ -619,5 +620,19 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
+  Ast::NumberNode op1(42);
+  Ast::NumberNode op2(43);
+  Ast::NumberNode op3(44);
+  Ast::NumberNode op4(45);
+  Ast::NumberNode null(0);
+  Ast::BinaryNode<'+'> plus(op1,op2);
+  Ast::BinaryNode<'-'> minus(op4,op3);
+  Ast::BinaryNode<'*'> mul(plus,minus);
+  Ast::BinaryNode<'/'> div(mul,null);
+  try {  
+    std::cout << div.Evaluate(Sheet()) << std::endl;
+  } catch(FormulaError err) {
+    std::cout << err.ToString() << std::endl;
+  }
   return 0;
 }

@@ -339,6 +339,33 @@ ast.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast.cpp.s
 .PHONY : ast.cpp.s
 
+cell.o: cell.cpp.o
+
+.PHONY : cell.o
+
+# target to build an object file
+cell.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/cell.cpp.o
+.PHONY : cell.cpp.o
+
+cell.i: cell.cpp.i
+
+.PHONY : cell.i
+
+# target to preprocess a source file
+cell.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/cell.cpp.i
+.PHONY : cell.cpp.i
+
+cell.s: cell.cpp.s
+
+.PHONY : cell.s
+
+# target to generate assembly for a file
+cell.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/cell.cpp.s
+.PHONY : cell.cpp.s
+
 common.o: common.cpp.o
 
 .PHONY : common.o
@@ -365,6 +392,33 @@ common.s: common.cpp.s
 common.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/common.cpp.s
 .PHONY : common.cpp.s
+
+formula.o: formula.cpp.o
+
+.PHONY : formula.o
+
+# target to build an object file
+formula.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/formula.cpp.o
+.PHONY : formula.cpp.o
+
+formula.i: formula.cpp.i
+
+.PHONY : formula.i
+
+# target to preprocess a source file
+formula.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/formula.cpp.i
+.PHONY : formula.cpp.i
+
+formula.s: formula.cpp.s
+
+.PHONY : formula.s
+
+# target to generate assembly for a file
+formula.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/formula.cpp.s
+.PHONY : formula.cpp.s
 
 main.o: main.cpp.o
 
@@ -420,6 +474,33 @@ position.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/position.cpp.s
 .PHONY : position.cpp.s
 
+sheet.o: sheet.cpp.o
+
+.PHONY : sheet.o
+
+# target to build an object file
+sheet.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/sheet.cpp.o
+.PHONY : sheet.cpp.o
+
+sheet.i: sheet.cpp.i
+
+.PHONY : sheet.i
+
+# target to preprocess a source file
+sheet.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/sheet.cpp.i
+.PHONY : sheet.cpp.i
+
+sheet.s: sheet.cpp.s
+
+.PHONY : sheet.s
+
+# target to generate assembly for a file
+sheet.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/sheet.cpp.s
+.PHONY : sheet.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -451,15 +532,24 @@ help:
 	@echo "... ast.o"
 	@echo "... ast.i"
 	@echo "... ast.s"
+	@echo "... cell.o"
+	@echo "... cell.i"
+	@echo "... cell.s"
 	@echo "... common.o"
 	@echo "... common.i"
 	@echo "... common.s"
+	@echo "... formula.o"
+	@echo "... formula.i"
+	@echo "... formula.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
 	@echo "... position.o"
 	@echo "... position.i"
 	@echo "... position.s"
+	@echo "... sheet.o"
+	@echo "... sheet.i"
+	@echo "... sheet.s"
 .PHONY : help
 
 

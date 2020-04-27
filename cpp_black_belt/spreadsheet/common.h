@@ -7,6 +7,7 @@
 #include <string_view>
 #include <variant>
 #include <vector>
+#include <unordered_map>
 
 // Позиция ячейки. Индексация с нуля.
 struct Position {
@@ -32,7 +33,9 @@ struct Size {
   int rows = 0;
   int cols = 0;
 
-  bool operator==(const Size& rhs) const;
+  bool operator==(const Size& rhs) const {
+    return rows == rhs.rows && cols == rhs.cols;
+  }
 };
 
 // Описывает ошибки, которые могут возникнуть при вычислении формулы.
@@ -52,6 +55,12 @@ public:
 
   std::string_view ToString() const;
 
+  static const inline std::unordered_map<FormulaError::Category,std::string> formula_err_to_string 
+  {
+    {FormulaError::Category::Ref, "#REF!"},
+    {FormulaError::Category::Value, "#VALUE!"},
+    {FormulaError::Category::Div0, "#DIV/0!"}
+  };
 private:
   Category category_;
 };
