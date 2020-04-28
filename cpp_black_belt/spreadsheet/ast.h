@@ -20,28 +20,45 @@ namespace Ast {
     };
 
     template<char op>
-    class BinaryNode : public Node {
+    class UnaryNode : public Node {
     public:
-        BinaryNode(const Node& lhs, const Node& rhs) : lhs(lhs), rhs(rhs) {}
+        UnaryNode(std::unique_ptr<Node> rhs) : rhs(std::move(rhs)) {}
         virtual double Evaluate(const ISheet& context) const override {
-            static_assert(op == '+' || op == '-' || op == '/' || op == '*');
+            static_assert(op == '+' || op == '-');
             if constexpr(op == '+') {
-                return lhs.Evaluate(context) + rhs.Evaluate(context);
+                return rhs->Evaluate(context);
             } else if constexpr(op == '-') {
-                return lhs.Evaluate(context) - rhs.Evaluate(context);
-            } else if constexpr(op == '/') {
-                auto rhs_val = rhs.Evaluate(context);
-                if(!rhs_val) {
-                    throw FormulaError(FormulaError::Category::Div0);
-                }
-                return lhs.Evaluate(context) / rhs_val;
-            } else if constexpr(op == '*') {
-                return lhs.Evaluate(context) * rhs.Evaluate(context);
+                return - rhs->Evaluate(context);
             }
         }
     private:
-        const Node& lhs;
-        const Node& rhs;
+        std::unique_ptr<Node> rhs;
+    };
+
+    template<char op>
+    class BinaryNode : public Node {
+    public:
+        BinaryNode(std::unique_ptr<Node> lhs, std::unique_ptr<Node> rhs) : 
+        lhs(std::move(lhs)), rhs(std::move(rhs)) {}
+        virtual double Evaluate(const ISheet& context) const override {
+            static_assert(op == '+' || op == '-' || op == '/' || op == '*');
+            if constexpr(op == '+') {
+                return lhs->Evaluate(context) + rhs->Evaluate(context);
+            } else if constexpr(op == '-') {
+                return lhs->Evaluate(context) - rhs->Evaluate(context);
+            } else if constexpr(op == '/') {
+                auto rhs_val = rhs->Evaluate(context);
+                if(!rhs_val) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return lhs->Evaluate(context) / rhs_val;
+            } else if constexpr(op == '*') {
+                return lhs->Evaluate(context) * rhs->Evaluate(context);
+            }
+        }
+    private:
+        std::unique_ptr<Node> lhs;
+        std::unique_ptr<Node> rhs;
     };
 
     static std::optional<double> ToNum(const std::string& str) {

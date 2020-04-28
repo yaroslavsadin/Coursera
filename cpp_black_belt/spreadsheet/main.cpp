@@ -620,6 +620,8 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
+  Ast::ParseFormula("2+ 2");
+  Ast::ParseFormula("-2 + (--2)");
   Ast::ParseFormula("(12+13) * (14+(13-24/(1+1))*55-46)");
   return 0;
 }
