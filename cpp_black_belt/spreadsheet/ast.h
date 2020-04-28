@@ -97,5 +97,5 @@ namespace Ast {
         Position cell_pos;
     };
 
-    void ParseFormula(std::string in);
+    std::unique_ptr<Node> ParseFormula(const std::string& in);
 }

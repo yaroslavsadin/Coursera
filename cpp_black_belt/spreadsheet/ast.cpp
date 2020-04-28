@@ -71,7 +71,7 @@ void FormulaBaseListener::visitTerminal(antlr4::tree::TerminalNode * /*node*/)  
 void FormulaBaseListener::visitErrorNode(antlr4::tree::ErrorNode * /*node*/)  { }
 
 namespace Ast {
-    void ParseFormula(std::string in) {
+    std::unique_ptr<Node> ParseFormula(const std::string& in) {
         antlr4::ANTLRInputStream input(in);
         FormulaLexer lexer(&input);
         antlr4::CommonTokenStream tokens(&lexer);
@@ -79,6 +79,6 @@ namespace Ast {
         antlr4::tree::ParseTree* tree = parser.main();
         FormulaBaseListener listener;
         antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
-        std::cout << listener.getAst()->Evaluate(*CreateSheet()) << std::endl;
+        return listener.getAst();
     }
 }

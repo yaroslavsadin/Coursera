@@ -1,5 +1,6 @@
 #pragma once
 #include "formula.h"
+#include "ast.h"
 
 class Formula : public IFormula {
 public:
@@ -12,5 +13,6 @@ public:
     virtual HandlingResult HandleDeletedRows(int first, int count = 1) override;
     virtual HandlingResult HandleDeletedCols(int first, int count = 1) override;
 private:
-    
+    std::string text;
+    std::unique_ptr<Ast::Node> top;
 };

@@ -149,7 +149,7 @@ namespace {
     sheet->ClearCell("A1"_pos);
     sheet->ClearCell("J10"_pos);
   }
-#if 0
+
   void TestFormulaArithmetic() {
     auto sheet = CreateSheet();
     auto evaluate = [&](std::string expr) {
@@ -165,6 +165,7 @@ namespace {
     ASSERT_EQUAL(evaluate("(12+13) * (14+(13-24/(1+1))*55-46)"), 575);
   }
 
+#if 0
   void TestFormulaReferences() {
     auto sheet = CreateSheet();
     auto evaluate = [&](std::string expr) {
@@ -599,8 +600,8 @@ int main() {
   RUN_TEST(tr, TestInvalidPosition);
   RUN_TEST(tr, TestSetCellPlainText);
   RUN_TEST(tr, TestClearCell);
-#if 0
   RUN_TEST(tr, TestFormulaArithmetic);
+#if 0
   RUN_TEST(tr, TestFormulaReferences);
   RUN_TEST(tr, TestFormulaExpressionFormatting);
   RUN_TEST(tr, TestFormulaReferencedCells);
@@ -620,8 +621,5 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
-  Ast::ParseFormula("2+ 2");
-  Ast::ParseFormula("-2 + (--2)");
-  Ast::ParseFormula("(12+13) * (14+(13-24/(1+1))*55-46)");
   return 0;
 }

@@ -24,7 +24,7 @@ public:
     auto res = std::move(builder.top());
     builder.pop();
     assert(builder.empty());
-    return std::move(res);
+    return res;
   }
 
   virtual void enterMain(FormulaParser::MainContext * ctx) override;
