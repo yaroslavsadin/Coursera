@@ -80,5 +80,5 @@ namespace Ast {
         Position cell_pos;
     };
 
-    void ParseFormula(std::istream& in);
+    void ParseFormula(std::string in);
 }

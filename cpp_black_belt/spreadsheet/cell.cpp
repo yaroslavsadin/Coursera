@@ -5,20 +5,21 @@ Cell::Cell(std::string str) {
 
     if(text[0] == '=' && text.size() > 1) {
         /* Parse Formula */
+        throw std::runtime_error("Formula not implemented");
     } else if (text[0] == '\'') {
         std::string_view view(text);
         view.remove_prefix(1);
-        value = std::string(text);
+        value = std::string(view);
     } else {
         value = text;
     }
 }
 
 Cell::Value Cell::GetValue() const {
-    return 42;
+    return value;
 }
 std::string Cell::GetText() const {
-    return "42";
+    return text;
 }
 std::vector<Position> Cell::GetReferencedCells() const {
     return {};

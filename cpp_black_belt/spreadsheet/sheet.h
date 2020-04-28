@@ -2,6 +2,7 @@
 #include "common.h"
 
 class Sheet : public ISheet {
+public:
     virtual void SetCell(Position pos, std::string text) override;
     virtual const ICell* GetCell(Position pos) const override;
     virtual ICell* GetCell(Position pos) override;
@@ -13,4 +14,6 @@ class Sheet : public ISheet {
     virtual Size GetPrintableSize() const override;
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
+private:
+    std::vector<std::vector<std::unique_ptr<ICell>>> storage;
 };

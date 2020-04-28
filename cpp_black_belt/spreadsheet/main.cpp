@@ -3,7 +3,7 @@
 #include "ast.h"
 #include "sheet.h"
 #include "test_runner.h"
-#if 0
+
 std::ostream& operator<<(std::ostream& output, Position pos) {
   return output << "(" << pos.row << ", " << pos.col << ")";
 }
@@ -36,7 +36,7 @@ std::string_view ToString(IFormula::HandlingResult hr) {
 std::ostream& operator<<(std::ostream& output, IFormula::HandlingResult hr) {
   return output << ToString(hr);
 }
-#endif
+
 namespace {
 #if 0
   std::string ToString(FormulaError::Category category) {
@@ -92,7 +92,7 @@ namespace {
     ASSERT(!Position::FromString("A1234567890123456789").IsValid());
     ASSERT(!Position::FromString("ABCDEFGHIJKLMNOPQRS8").IsValid());
   }
-#if 0
+
   void TestEmpty() {
     auto sheet = CreateSheet();
     ASSERT_EQUAL(sheet->GetPrintableSize(), (Size{0, 0}));
@@ -149,7 +149,7 @@ namespace {
     sheet->ClearCell("A1"_pos);
     sheet->ClearCell("J10"_pos);
   }
-
+#if 0
   void TestFormulaArithmetic() {
     auto sheet = CreateSheet();
     auto evaluate = [&](std::string expr) {
@@ -595,11 +595,11 @@ int main() {
   RUN_TEST(tr, TestPositionAndStringConversion);
   RUN_TEST(tr, TestPositionToStringInvalid);
   RUN_TEST(tr, TestStringToPositionInvalid);
-#if 0
-  RUN_TEST(tr, TestInvalidPosition);
   RUN_TEST(tr, TestEmpty);
+  RUN_TEST(tr, TestInvalidPosition);
   RUN_TEST(tr, TestSetCellPlainText);
   RUN_TEST(tr, TestClearCell);
+#if 0
   RUN_TEST(tr, TestFormulaArithmetic);
   RUN_TEST(tr, TestFormulaReferences);
   RUN_TEST(tr, TestFormulaExpressionFormatting);
@@ -620,19 +620,6 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
-  Ast::NumberNode op1(42);
-  Ast::NumberNode op2(43);
-  Ast::NumberNode op3(44);
-  Ast::NumberNode op4(45);
-  Ast::NumberNode null(0);
-  Ast::BinaryNode<'+'> plus(op1,op2);
-  Ast::BinaryNode<'-'> minus(op4,op3);
-  Ast::BinaryNode<'*'> mul(plus,minus);
-  Ast::BinaryNode<'/'> div(mul,null);
-  try {  
-    std::cout << div.Evaluate(Sheet()) << std::endl;
-  } catch(FormulaError err) {
-    std::cout << err.ToString() << std::endl;
-  }
+  Ast::ParseFormula("(12+13) * (14+(13-24/(1+1))*55-46)");
   return 0;
 }
