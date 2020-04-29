@@ -4,7 +4,9 @@
 #include "FormulaBaseListener.h"
 
 void FormulaBaseListener::enterMain(FormulaParser::MainContext * ctx)  { }
-void FormulaBaseListener::exitMain(FormulaParser::MainContext * ctx)  { }
+void FormulaBaseListener::exitMain(FormulaParser::MainContext * ctx)  { 
+    std::cerr << ctx->getText() << std::endl;
+ }
 
 void FormulaBaseListener::enterUnaryOp(FormulaParser::UnaryOpContext * ctx)  { }
 void FormulaBaseListener::exitUnaryOp(FormulaParser::UnaryOpContext * ctx)  {
@@ -24,7 +26,7 @@ void FormulaBaseListener::exitParens(FormulaParser::ParensContext * ctx)  { }
 
 void FormulaBaseListener::enterCell(FormulaParser::CellContext * ctx)  { }
 void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  { 
-    /// TODO: 
+    builder.push(std::make_unique<Ast::CellNode>(ctx->getText()));
 }
 
 void FormulaBaseListener::enterLiteral(FormulaParser::LiteralContext * ctx)  { }

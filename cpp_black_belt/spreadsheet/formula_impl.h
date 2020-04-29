@@ -15,4 +15,5 @@ public:
 private:
     std::string text;
     std::unique_ptr<Ast::Node> top;
+    std::vector<Position> referenced_cells;
 };

@@ -16,7 +16,7 @@ void Sheet::SetCell(Position pos, std::string text){
     if(storage[pos.row].size() <= pos.col) {
         storage[pos.row].resize(pos.col + 1);
     }
-    storage[pos.row][pos.col] = std::make_unique<Cell>(text);
+    storage[pos.row][pos.col] = std::make_unique<Cell>(*this,text);
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);

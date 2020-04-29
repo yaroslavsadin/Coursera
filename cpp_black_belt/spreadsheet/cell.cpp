@@ -1,26 +1,39 @@
 #include "cell.h"
 
-Cell::Cell(std::string str) {
-    text = std::move(str);
-
-    if(text[0] == '=' && text.size() > 1) {
-        /* Parse Formula */
-        throw std::runtime_error("Formula not implemented");
-    } else if (text[0] == '\'') {
-        std::string_view view(text);
+Cell::Cell(const ISheet& sheet, std::string str) : sheet(sheet) {
+    if(str[0] == '=' && str.size() > 1) {
+        std::string_view view(str);
         view.remove_prefix(1);
-        value = std::string(view);
+        formula = ParseFormula(std::string(view));
+        auto eval = formula->Evaluate(sheet);
+        if(std::holds_alternative<double>(eval)) {
+            value = std::get<double>(eval);
+        } else {
+            value = std::get<FormulaError>(eval);
+        }
     } else {
-        value = text;
+        value = str;
     }
 }
 
 Cell::Value Cell::GetValue() const {
-    return value;
+    std::string_view view = std::get<std::string>(value);
+    if(view[0] == '\'') {
+        view.remove_prefix(1);
+    }
+    return std::string(view);
 }
 std::string Cell::GetText() const {
-    return text;
+    if(formula) {
+        formula->GetExpression();
+    } else {
+        return std::get<std::string>(value);
+    }
 }
 std::vector<Position> Cell::GetReferencedCells() const {
-    return {};
+    if(formula) {
+        return formula->GetReferencedCells();
+    } else {    
+        return {};
+    }
 }

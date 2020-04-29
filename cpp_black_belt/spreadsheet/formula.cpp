@@ -28,6 +28,7 @@ std::string Formula::GetExpression() const{
     return text;
 }
 std::vector<Position> Formula::GetReferencedCells() const{
+    return referenced_cells;
 }
 Formula::HandlingResult Formula::HandleInsertedRows(int before, int count){
 }

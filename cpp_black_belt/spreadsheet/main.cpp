@@ -165,7 +165,6 @@ namespace {
     ASSERT_EQUAL(evaluate("(12+13) * (14+(13-24/(1+1))*55-46)"), 575);
   }
 
-#if 0
   void TestFormulaReferences() {
     auto sheet = CreateSheet();
     auto evaluate = [&](std::string expr) {
@@ -189,6 +188,7 @@ namespace {
       return ParseFormula(std::move(expr))->GetExpression();
     };
 
+    ASSERT_EQUAL(reformat("(2*3)+4"), "2*3+4");
     ASSERT_EQUAL(reformat("  1  "), "1");
     ASSERT_EQUAL(reformat("  -1  "), "-1");
     ASSERT_EQUAL(reformat("2 + 2"), "2+2");
@@ -200,7 +200,7 @@ namespace {
     ASSERT_EQUAL(reformat("(1 / 2) / 3"), "1/2/3");
     ASSERT_EQUAL(reformat("1 / (2 / 3)"), "1/(2/3)");
   }
-
+#if 0
   void TestFormulaReferencedCells() {
     ASSERT(ParseFormula("1")->GetReferencedCells().empty());
 
@@ -601,9 +601,9 @@ int main() {
   RUN_TEST(tr, TestSetCellPlainText);
   RUN_TEST(tr, TestClearCell);
   RUN_TEST(tr, TestFormulaArithmetic);
-#if 0
   RUN_TEST(tr, TestFormulaReferences);
   RUN_TEST(tr, TestFormulaExpressionFormatting);
+#if 0
   RUN_TEST(tr, TestFormulaReferencedCells);
   RUN_TEST(tr, TestFormulaHandleInsertion);
   RUN_TEST(tr, TestInsertionOverflow);

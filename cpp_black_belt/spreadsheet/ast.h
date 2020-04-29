@@ -71,11 +71,11 @@ namespace Ast {
 
     class CellNode : public Node {
     public:
-        CellNode(Position cell_pos) : cell_pos(cell_pos) {}
+        CellNode(std::string_view cell_name) : cell_pos(Position::FromString(cell_name)) {}
         virtual double Evaluate(const ISheet& context) const override {
             auto* cell_ptr = context.GetCell(cell_pos);
             if(cell_ptr == nullptr) {
-                throw FormulaError(FormulaError::Category::Ref);
+                return 0;
             }
             const auto& val = cell_ptr->GetValue();
             if(std::holds_alternative<std::string>(val)) {
