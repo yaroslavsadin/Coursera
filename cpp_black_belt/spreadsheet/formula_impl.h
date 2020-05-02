@@ -1,6 +1,6 @@
 #pragma once
 #include "formula.h"
-#include "ast.h"
+#include "ast_node.h"
 
 class Formula : public IFormula {
 public:

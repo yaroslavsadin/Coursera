@@ -3,6 +3,7 @@
 #include "common.h"
 #include <optional>
 #include <sstream>
+#include "ast_visitor.h"
 
 namespace Ast {
     class NodeVisitor;
@@ -13,24 +14,7 @@ namespace Ast {
         virtual void Accept(NodeVisitor& visitor) const = 0;
     };
 
-    class NumberNode;
-    template<char op>
-    class UnaryNode;
-    template<char op>
-    class BinaryNode;
-    class CellNode;
-
-    class NodeVisitor {
-    public:
-        virtual void Visit(const NumberNode& node) = 0;
-        virtual void Visit(const UnaryNode<'-'>& node) = 0;
-        virtual void Visit(const UnaryNode<'+'>& node) = 0;
-        virtual void Visit(const BinaryNode<'+'>& node) = 0;
-        virtual void Visit(const BinaryNode<'-'>& node) = 0;
-        virtual void Visit(const BinaryNode<'*'>& node) = 0;
-        virtual void Visit(const BinaryNode<'/'>& node) = 0;
-        virtual void Visit(const CellNode& node) = 0;
-    };
+    std::unique_ptr<Node> ParseFormula(const std::string& in);
 
     class NumberNode : public Node {
     public:
@@ -146,96 +130,4 @@ namespace Ast {
     private:
         Position cell_pos;
     };
-
-    class AstPrintExpressionVisitor : public NodeVisitor {
-    private:
-        enum class Context {
-            MAIN,
-            BINARY_MUL,
-            BINARY_DIV,
-            BINARY_PLUS,
-            BINARY_MINUS,
-            UNARY_MINUS,
-            UNARY_PLUS
-        };
-    public:
-        virtual void Visit(const NumberNode& node) {
-            accumulator << node.GetValue();
-        }
-        virtual void Visit(const UnaryNode<'-'>& node) {
-            current_ctx = Context::UNARY_MINUS;
-            accumulator << '-';
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const UnaryNode<'+'>& node){
-            current_ctx = Context::UNARY_PLUS;
-            accumulator << '+';
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'+'>& node){
-            auto ctx = current_ctx;
-            current_ctx = Context::BINARY_PLUS;
-            if(ctx == Context::UNARY_MINUS || ctx == Context::UNARY_PLUS || 
-            ctx == Context::BINARY_MUL || ctx == Context::BINARY_DIV) {
-                accumulator << '(';
-            }
-            node.GetLeft().Accept(*this);
-            accumulator << '+';
-            node.GetRight().Accept(*this);
-            if(ctx == Context::UNARY_MINUS || ctx == Context::UNARY_PLUS || 
-            ctx == Context::BINARY_MUL || ctx == Context::BINARY_DIV) {
-                accumulator << ')';
-            }
-        }
-        virtual void Visit(const BinaryNode<'-'>& node){
-            auto ctx = current_ctx;
-            current_ctx = Context::BINARY_MINUS;
-            if(ctx == Context::UNARY_MINUS || ctx == Context::UNARY_PLUS || 
-            ctx == Context::BINARY_MUL || ctx == Context::BINARY_DIV) {
-                accumulator << '(';
-            }
-            node.GetLeft().Accept(*this);
-            accumulator << '-';
-            node.GetRight().Accept(*this);
-            if(ctx == Context::UNARY_MINUS || ctx == Context::UNARY_PLUS || 
-            ctx == Context::BINARY_MUL || ctx == Context::BINARY_DIV) {
-                accumulator << ')';
-            }
-        }
-        virtual void Visit(const BinaryNode<'*'>& node){
-            current_ctx = Context::BINARY_MUL;
-            node.GetLeft().Accept(*this);
-            accumulator << '*';
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'/'>& node){
-            auto ctx = current_ctx;
-            bool is_divisor_ = is_divisor;
-            current_ctx = Context::BINARY_DIV;
-            is_divisor = false;
-            if(ctx == Context::BINARY_DIV && is_divisor_) {
-                accumulator << '(';
-            }
-            node.GetLeft().Accept(*this);
-            accumulator << '/';
-            is_divisor = true;
-            node.GetRight().Accept(*this);
-            is_divisor = false;
-            if(ctx == Context::BINARY_DIV && is_divisor_) {
-                accumulator << ')';
-            }
-        }
-        virtual void Visit(const CellNode& node){
-            accumulator << node.GetPosition().ToString();
-        }
-        std::string Get() const {
-            return accumulator.str();
-        }
-    private:
-        Context current_ctx = Context::MAIN;
-        bool is_divisor = false;
-        std::stringstream accumulator;
-    };
-
-    std::unique_ptr<Node> ParseFormula(const std::string& in);
 }

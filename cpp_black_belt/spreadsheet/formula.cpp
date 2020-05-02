@@ -1,6 +1,7 @@
 #include "common.h"
 #include "formula_impl.h"
 #include <sstream>
+#include "ast_print_visitor.h"
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();
