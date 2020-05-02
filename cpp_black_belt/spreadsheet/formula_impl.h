@@ -14,5 +14,4 @@ public:
     virtual HandlingResult HandleDeletedCols(int first, int count = 1) override;
 private:
     std::unique_ptr<Ast::Node> top;
-    std::vector<Position> referenced_cells;
 };

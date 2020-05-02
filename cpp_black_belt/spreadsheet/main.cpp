@@ -200,7 +200,7 @@ namespace {
     ASSERT_EQUAL(reformat("(1 / 2) / 3"), "1/2/3");
     ASSERT_EQUAL(reformat("1 / (2 / 3)"), "1/(2/3)");
   }
-#if 0
+
   void TestFormulaReferencedCells() {
     ASSERT(ParseFormula("1")->GetReferencedCells().empty());
 
@@ -215,7 +215,7 @@ namespace {
     ASSERT_EQUAL(tricky->GetReferencedCells(),
                  (std::vector{"A1"_pos, "A2"_pos, "A3"_pos}));
   }
-
+#if 0
   void TestFormulaHandleInsertion() {
     auto f = ParseFormula("A1");
     ASSERT_EQUAL(f->GetReferencedCells(), std::vector{"A1"_pos});
@@ -603,8 +603,8 @@ int main() {
   RUN_TEST(tr, TestFormulaArithmetic);
   RUN_TEST(tr, TestFormulaReferences);
   RUN_TEST(tr, TestFormulaExpressionFormatting);
-#if 0
   RUN_TEST(tr, TestFormulaReferencedCells);
+#if 0
   RUN_TEST(tr, TestFormulaHandleInsertion);
   RUN_TEST(tr, TestInsertionOverflow);
   RUN_TEST(tr, TestFormulaHandleDeletion);

@@ -2,6 +2,7 @@
 #include "formula_impl.h"
 #include <sstream>
 #include "ast_print_visitor.h"
+#include "ast_ref_cells_visitor.h"
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();
@@ -29,11 +30,12 @@ Formula::Value Formula::Evaluate(const ISheet& sheet) const{
 std::string Formula::GetExpression() const{
     Ast::AstPrintExpressionVisitor visitor;
     top->Accept(visitor);
-    auto res = visitor.Get();
-    return res;
+    return visitor.Get();
 }
 std::vector<Position> Formula::GetReferencedCells() const{
-    return referenced_cells;
+    Ast::AstReferencedCellsVisitor visitor;
+    top->Accept(visitor);
+    return visitor.Get();
 }
 Formula::HandlingResult Formula::HandleInsertedRows(int before, int count){
 }
