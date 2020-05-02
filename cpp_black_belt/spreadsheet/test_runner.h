@@ -79,23 +79,34 @@ inline void Assert(bool b, const std::string& hint) {
   AssertEqual(b, true, hint);
 }
 
+constexpr auto RED_TEXT_START = "\033[1;31m";
+constexpr auto CYAN_TEXT_START = "\033[1;36m";
+constexpr auto BLUE_TEXT_START = "\033[1;34m";
+constexpr auto MAGENTA_TEXT_START = "\033[1;35m";
+constexpr auto YELLOW_TEXT_START = "\033[1;33m";
+constexpr auto TEXT_COLOR_RESET = "\033[0m";
+
 class TestRunner {
 public:
+  TestRunner() {
+    std::cerr << BLUE_TEXT_START << "============== Test Runner Start ==============" << TEXT_COLOR_RESET << std::endl;
+  }
   template <class TestFunc>
   void RunTest(TestFunc func, const std::string& test_name) {
     try {
       func();
-      std::cerr << test_name << " OK" << std::endl;
+      std::cerr << CYAN_TEXT_START << test_name << " OK" << TEXT_COLOR_RESET << std::endl;
     } catch (std::exception& e) {
       ++fail_count;
-      std::cerr << test_name << " fail: " << e.what() << std::endl;
+      std::cerr << RED_TEXT_START << test_name << " fail: " << std::endl << TEXT_COLOR_RESET << e.what() << std::endl;
     } catch (...) {
       ++fail_count;
-      std::cerr << "Unknown exception caught" << std::endl;
+      std::cerr << RED_TEXT_START << "Unknown exception caught" << TEXT_COLOR_RESET << std::endl;
     }
   }
 
   ~TestRunner() {
+    std::cerr << BLUE_TEXT_START << "============= Test Runner Finished ============" << TEXT_COLOR_RESET << std::endl;
     std::cerr.flush();
     if (fail_count > 0) {
       std::cerr << fail_count << " unit tests failed. Terminate" << std::endl;
@@ -114,7 +125,7 @@ private:
 #define ASSERT_EQUAL(x, y)                                               \
   {                                                                      \
     std::ostringstream __assert_equal_private_os;                        \
-    __assert_equal_private_os << #x << " != " << #y << ", " << FILE_NAME \
+    __assert_equal_private_os << #x << " != " << #y << "\n" << FILE_NAME \
                               << ":" << __LINE__;                        \
     AssertEqual(x, y, __assert_equal_private_os.str());                  \
   }
@@ -122,7 +133,7 @@ private:
 #define ASSERT(x)                                                  \
   {                                                                \
     std::ostringstream __assert_private_os;                        \
-    __assert_private_os << #x << " is false, " << FILE_NAME << ":" \
+    __assert_private_os << #x << " is false\n" << FILE_NAME << ":" \
                         << __LINE__;                               \
     Assert(x, __assert_private_os.str());                          \
   }

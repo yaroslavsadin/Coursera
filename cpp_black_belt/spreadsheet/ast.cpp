@@ -1,20 +1,23 @@
-#include "ast.h"
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
 #include "FormulaBaseListener.h"
 
 void FormulaBaseListener::enterMain(FormulaParser::MainContext * ctx)  { }
-void FormulaBaseListener::exitMain(FormulaParser::MainContext * ctx)  { 
-    std::cerr << ctx->getText() << std::endl;
- }
+void FormulaBaseListener::exitMain(FormulaParser::MainContext * ctx)  { }
 
 void FormulaBaseListener::enterUnaryOp(FormulaParser::UnaryOpContext * ctx)  { }
 void FormulaBaseListener::exitUnaryOp(FormulaParser::UnaryOpContext * ctx)  {
+    auto rhs = std::move(builder.top());
+    builder.pop();
     if(ctx->getText()[0] == '-') {
-        auto rhs = std::move(builder.top());
-        builder.pop();
         builder.push(
             std::make_unique<Ast::UnaryNode<'-'>>(
+                std::move(rhs)
+            )
+        );
+    } else {
+        builder.push(
+            std::make_unique<Ast::UnaryNode<'+'>>(
                 std::move(rhs)
             )
         );
@@ -30,7 +33,7 @@ void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  {
 }
 
 void FormulaBaseListener::enterLiteral(FormulaParser::LiteralContext * ctx)  { }
-void FormulaBaseListener::exitLiteral(FormulaParser::LiteralContext * ctx)  { 
+void FormulaBaseListener::exitLiteral(FormulaParser::LiteralContext * ctx)  {
     builder.push(
         std::make_unique<Ast::NumberNode>(
             std::atof(ctx->getText().c_str())

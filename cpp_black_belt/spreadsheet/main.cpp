@@ -196,6 +196,7 @@ namespace {
     ASSERT_EQUAL(reformat("(2*3)-4"), "2*3-4");
     ASSERT_EQUAL(reformat("( ( (  1) ) )"), "1");
     ASSERT_EQUAL(reformat("-(123 + 456) / -B35 * 1"), "-(123+456)/-B35*1");
+    ASSERT_EQUAL(reformat("(123 + 456) / -B35 * 1"), "(123+456)/-B35*1");
     ASSERT_EQUAL(reformat("+(123 - 456) / -B35 * 1"), "+(123-456)/-B35*1");
     ASSERT_EQUAL(reformat("(1 / 2) / 3"), "1/2/3");
     ASSERT_EQUAL(reformat("1 / (2 / 3)"), "1/(2/3)");

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "formula_impl.h"
+#include <sstream>
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();
@@ -18,14 +19,17 @@ std::string_view FormulaError::ToString() const {
 }
 
 Formula::Formula(std::string text)
-: text(std::move(text)), top(Ast::ParseFormula(this->text))
+: top(Ast::ParseFormula(text))
 {
 }
 Formula::Value Formula::Evaluate(const ISheet& sheet) const{
     return top->Evaluate(sheet);
 }
 std::string Formula::GetExpression() const{
-    return text;
+    Ast::AstPrintExpressionVisitor visitor;
+    top->Accept(visitor);
+    auto res = visitor.Get();
+    return res;
 }
 std::vector<Position> Formula::GetReferencedCells() const{
     return referenced_cells;

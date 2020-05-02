@@ -13,7 +13,6 @@ public:
     virtual HandlingResult HandleDeletedRows(int first, int count = 1) override;
     virtual HandlingResult HandleDeletedCols(int first, int count = 1) override;
 private:
-    std::string text;
     std::unique_ptr<Ast::Node> top;
     std::vector<Position> referenced_cells;
 };

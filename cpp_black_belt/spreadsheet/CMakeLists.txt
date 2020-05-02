@@ -34,6 +34,7 @@ include_directories(
   ${ANTLR4_INCLUDE_DIRS}
   ${ANTLR_FormulaParser_OUTPUT_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/antlr4_runtime/runtime/src
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 file(GLOB sources
@@ -59,6 +60,7 @@ install(
 )
 
 target_compile_options(spreadsheet PRIVATE -O0 -g)
+target_compile_definitions(spreadsheet PRIVATE _DEBUG)
 target_link_options(spreadsheet PRIVATE -O0 -g)
 
 set_directory_properties(PROPERTIES VS_STARTUP_PROJECT spreadsheet)

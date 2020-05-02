@@ -9,6 +9,7 @@
 #include <iostream>
 #include <utility>
 #include <stack>
+#include "ast.h"
 
 /**
  * This class provides an empty implementation of FormulaListener,
