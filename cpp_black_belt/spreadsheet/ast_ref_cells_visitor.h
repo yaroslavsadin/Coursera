@@ -6,30 +6,6 @@
 namespace Ast {
     class AstReferencedCellsVisitor : public NodeVisitor {
     public:
-        virtual void Visit(const NumberNode& node) noexcept override  {
-        }
-        virtual void Visit(const UnaryNode<'-'>& node) override {
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const UnaryNode<'+'>& node) override {
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'+'>& node) override {
-            node.GetLeft().Accept(*this);
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'-'>& node) override {
-            node.GetLeft().Accept(*this);
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'*'>& node) override {
-            node.GetLeft().Accept(*this);
-            node.GetRight().Accept(*this);
-        }
-        virtual void Visit(const BinaryNode<'/'>& node) override {
-            node.GetLeft().Accept(*this);
-            node.GetRight().Accept(*this);
-        }
         virtual void Visit(const CellNode& node) override {
             if(!counted.count(node.GetPosition().ToString())) {
                 referenced_cells.push_back(node.GetPosition());

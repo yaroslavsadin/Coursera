@@ -366,6 +366,33 @@ ast_print_visitor.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast_print_visitor.cpp.s
 .PHONY : ast_print_visitor.cpp.s
 
+ast_visitor.o: ast_visitor.cpp.o
+
+.PHONY : ast_visitor.o
+
+# target to build an object file
+ast_visitor.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast_visitor.cpp.o
+.PHONY : ast_visitor.cpp.o
+
+ast_visitor.i: ast_visitor.cpp.i
+
+.PHONY : ast_visitor.i
+
+# target to preprocess a source file
+ast_visitor.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast_visitor.cpp.i
+.PHONY : ast_visitor.cpp.i
+
+ast_visitor.s: ast_visitor.cpp.s
+
+.PHONY : ast_visitor.s
+
+# target to generate assembly for a file
+ast_visitor.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/ast_visitor.cpp.s
+.PHONY : ast_visitor.cpp.s
+
 cell.o: cell.cpp.o
 
 .PHONY : cell.o
@@ -562,6 +589,9 @@ help:
 	@echo "... ast_print_visitor.o"
 	@echo "... ast_print_visitor.i"
 	@echo "... ast_print_visitor.s"
+	@echo "... ast_visitor.o"
+	@echo "... ast_visitor.i"
+	@echo "... ast_visitor.s"
 	@echo "... cell.o"
 	@echo "... cell.i"
 	@echo "... cell.s"

@@ -10,13 +10,13 @@ namespace Ast {
 
     class NodeVisitor {
     public:
-        virtual void Visit(const NumberNode& node) = 0;
-        virtual void Visit(const UnaryNode<'-'>& node) = 0;
-        virtual void Visit(const UnaryNode<'+'>& node) = 0;
-        virtual void Visit(const BinaryNode<'+'>& node) = 0;
-        virtual void Visit(const BinaryNode<'-'>& node) = 0;
-        virtual void Visit(const BinaryNode<'*'>& node) = 0;
-        virtual void Visit(const BinaryNode<'/'>& node) = 0;
-        virtual void Visit(const CellNode& node) = 0;
+        virtual void Visit(const NumberNode& node);
+        virtual void Visit(const UnaryNode<'-'>& node);
+        virtual void Visit(const UnaryNode<'+'>& node);
+        virtual void Visit(const BinaryNode<'+'>& node);
+        virtual void Visit(const BinaryNode<'-'>& node);
+        virtual void Visit(const BinaryNode<'*'>& node);
+        virtual void Visit(const BinaryNode<'/'>& node);
+        virtual void Visit(const CellNode& node);
     };
 }
