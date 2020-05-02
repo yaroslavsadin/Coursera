@@ -3,6 +3,7 @@
 #include <sstream>
 #include "ast_print_visitor.h"
 #include "ast_ref_cells_visitor.h"
+#include "ast_insert_visitor.h"
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();
@@ -28,18 +29,24 @@ Formula::Value Formula::Evaluate(const ISheet& sheet) const{
     return top->Evaluate(sheet);
 }
 std::string Formula::GetExpression() const{
-    Ast::AstPrintExpressionVisitor visitor;
+    Ast::PrintExpressionVisitor visitor;
     top->Accept(visitor);
     return visitor.Get();
 }
 std::vector<Position> Formula::GetReferencedCells() const{
-    Ast::AstReferencedCellsVisitor visitor;
+    Ast::ReferencedCellsVisitor visitor;
     top->Accept(visitor);
     return visitor.Get();
 }
 Formula::HandlingResult Formula::HandleInsertedRows(int before, int count){
+    Ast::InsertVisitor visitor(Ast::InsertVisitor::Type::ROWS, before, count);
+    top->Accept(visitor);
+    return (visitor.Get()) ? HandlingResult::ReferencesRenamedOnly : HandlingResult::NothingChanged;
 }
 Formula::HandlingResult Formula::HandleInsertedCols(int before, int count){
+    Ast::InsertVisitor visitor(Ast::InsertVisitor::Type::COLS, before, count);
+    top->Accept(visitor);
+    return (visitor.Get()) ? HandlingResult::ReferencesRenamedOnly : HandlingResult::NothingChanged;
 }
 Formula::HandlingResult Formula::HandleDeletedRows(int first, int count){
 }

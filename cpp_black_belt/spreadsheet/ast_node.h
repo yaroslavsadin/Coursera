@@ -12,6 +12,7 @@ namespace Ast {
     public:
         virtual double Evaluate(const ISheet& context) const = 0;
         virtual void Accept(NodeVisitor& visitor) const = 0;
+        virtual void Accept(NodeVisitorModifier& visitor) = 0;
     };
 
     std::unique_ptr<Node> ParseFormula(const std::string& in);
@@ -22,12 +23,15 @@ namespace Ast {
         virtual double Evaluate(const ISheet& context) const noexcept override  {
             return value;
         }
-         virtual void Accept(NodeVisitor& visitor) const override {
-             visitor.Visit(*this);
-         }
-         double GetValue() const noexcept {
-             return value;
-         }
+        virtual void Accept(NodeVisitor& visitor) const override {
+            visitor.Visit(*this);
+        }
+        virtual void Accept(NodeVisitorModifier& visitor) override {
+            visitor.Visit(*this);
+        }
+        double GetValue() const noexcept {
+            return value;
+        }
     private:
         double value;
     };
@@ -47,7 +51,13 @@ namespace Ast {
         const Node& GetRight() const {
             return *rhs;
         }
+        Node& GetRight() {
+            return *rhs;
+        }
         virtual void Accept(NodeVisitor& visitor) const override {
+            visitor.Visit(*this);
+        }
+        virtual void Accept(NodeVisitorModifier& visitor) override {
             visitor.Visit(*this);
         }
     private:
@@ -81,9 +91,18 @@ namespace Ast {
         const Node& GetLeft() const {
             return *lhs;
         }
+        Node& GetRight() {
+            return *rhs;
+        }
+         Node& GetLeft() {
+            return *lhs;
+        }
         virtual void Accept(NodeVisitor& visitor) const override {
             visitor.Visit(*this);
-         }
+        }
+        virtual void Accept(NodeVisitorModifier& visitor) override {
+            visitor.Visit(*this);
+        }
     private:
         std::unique_ptr<Node> lhs;
         std::unique_ptr<Node> rhs;
@@ -124,7 +143,13 @@ namespace Ast {
         Position GetPosition() const noexcept {
             return cell_pos;
         }
+        void SetPosition(Position pos) noexcept {
+            cell_pos = pos;
+        }
         virtual void Accept(NodeVisitor& visitor) const override {
+            visitor.Visit(*this);
+        }
+        virtual void Accept(NodeVisitorModifier& visitor) override {
             visitor.Visit(*this);
         }
     private:

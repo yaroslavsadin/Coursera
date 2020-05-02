@@ -30,4 +30,32 @@ namespace Ast {
     void NodeVisitor::Visit(const CellNode& node) {
 
     }
+    void NodeVisitorModifier::Visit(NumberNode& node) {
+
+    }
+    void NodeVisitorModifier::Visit(UnaryNode<'-'>& node)  {
+            node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(UnaryNode<'+'>& node)  {
+        node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(BinaryNode<'+'>& node)  {
+        node.GetLeft().Accept(*this);
+        node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(BinaryNode<'-'>& node)  {
+        node.GetLeft().Accept(*this);
+        node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(BinaryNode<'*'>& node)  {
+        node.GetLeft().Accept(*this);
+        node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(BinaryNode<'/'>& node)  {
+        node.GetLeft().Accept(*this);
+        node.GetRight().Accept(*this);
+    }
+    void NodeVisitorModifier::Visit(CellNode& node) {
+
+    }
 }

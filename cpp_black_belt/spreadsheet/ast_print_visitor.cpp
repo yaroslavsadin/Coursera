@@ -1,20 +1,20 @@
 #include "ast_print_visitor.h"
 
 namespace Ast {
-    void AstPrintExpressionVisitor::Visit(const NumberNode& node) {
+    void PrintExpressionVisitor::Visit(const NumberNode& node) {
         accumulator << node.GetValue();
     }
-    void AstPrintExpressionVisitor::Visit(const UnaryNode<'-'>& node) {
+    void PrintExpressionVisitor::Visit(const UnaryNode<'-'>& node) {
         current_ctx = Context::UNARY_MINUS;
         accumulator << '-';
         node.GetRight().Accept(*this);
     }
-    void AstPrintExpressionVisitor::Visit(const UnaryNode<'+'>& node){
+    void PrintExpressionVisitor::Visit(const UnaryNode<'+'>& node){
         current_ctx = Context::UNARY_PLUS;
         accumulator << '+';
         node.GetRight().Accept(*this);
     }
-    void AstPrintExpressionVisitor::Visit(const BinaryNode<'+'>& node){
+    void PrintExpressionVisitor::Visit(const BinaryNode<'+'>& node){
         auto ctx = current_ctx;
         current_ctx = Context::BINARY_PLUS;
         if(CheckPlusMinusPresedence(ctx)) {
@@ -27,7 +27,7 @@ namespace Ast {
             accumulator << ')';
         }
     }
-    void AstPrintExpressionVisitor::Visit(const BinaryNode<'-'>& node){
+    void PrintExpressionVisitor::Visit(const BinaryNode<'-'>& node){
         auto ctx = current_ctx;
         current_ctx = Context::BINARY_MINUS;
         if(CheckPlusMinusPresedence(ctx)) {
@@ -40,13 +40,13 @@ namespace Ast {
             accumulator << ')';
         }
     }
-    void AstPrintExpressionVisitor::Visit(const BinaryNode<'*'>& node){
+    void PrintExpressionVisitor::Visit(const BinaryNode<'*'>& node){
         current_ctx = Context::BINARY_MUL;
         node.GetLeft().Accept(*this);
         accumulator << '*';
         node.GetRight().Accept(*this);
     }
-    void AstPrintExpressionVisitor::Visit(const BinaryNode<'/'>& node){
+    void PrintExpressionVisitor::Visit(const BinaryNode<'/'>& node){
         auto ctx = current_ctx;
         bool is_divisor_ = is_divisor;
         current_ctx = Context::BINARY_DIV;
@@ -63,10 +63,10 @@ namespace Ast {
             accumulator << ')';
         }
     }
-    void AstPrintExpressionVisitor::Visit(const CellNode& node){
+    void PrintExpressionVisitor::Visit(const CellNode& node){
         accumulator << node.GetPosition().ToString();
     }
-    std::string AstPrintExpressionVisitor::Get() const {
+    std::string PrintExpressionVisitor::Get() const {
         return accumulator.str();
     }
 }

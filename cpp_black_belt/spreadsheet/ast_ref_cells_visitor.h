@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 namespace Ast {
-    class AstReferencedCellsVisitor : public NodeVisitor {
+    class ReferencedCellsVisitor : public NodeVisitor {
     public:
         virtual void Visit(const CellNode& node) override {
             if(!counted.count(node.GetPosition().ToString())) {

@@ -4,7 +4,7 @@
 #include <sstream>
 
 namespace Ast {
-    class AstPrintExpressionVisitor : public NodeVisitor {
+    class PrintExpressionVisitor : public NodeVisitor {
     private:
         enum class Context {
             MAIN,
