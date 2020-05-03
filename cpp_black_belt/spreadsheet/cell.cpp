@@ -25,7 +25,7 @@ Cell::Value Cell::GetValue() const {
 }
 std::string Cell::GetText() const {
     if(formula) {
-        formula->GetExpression();
+        return formula->GetExpression();
     } else {
         return std::get<std::string>(value);
     }
@@ -35,5 +35,19 @@ std::vector<Position> Cell::GetReferencedCells() const {
         return formula->GetReferencedCells();
     } else {    
         return {};
+    }
+}
+
+void Cell::HandleInsertedRows(int before, int count) {
+    if(formula) {
+        auto result = formula->HandleDeletedRows(before,count);
+        /// TODO: do something with the result
+    }
+}
+
+void Cell::HandleInsertedCols(int before, int count) {
+    if(formula) {
+        auto result = formula->HandleDeletedCols(before,count);
+        /// TODO: do something with the result
     }
 }

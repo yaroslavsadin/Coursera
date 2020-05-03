@@ -115,6 +115,9 @@ public:
   // формуле. Список отсортирован по возрастанию и не содержит повторяющихся
   // ячеек. В случае текстовой ячейки список пуст.
   virtual std::vector<Position> GetReferencedCells() const = 0;
+
+  virtual void HandleInsertedRows(int before, int count = 1) = 0;
+  virtual void HandleInsertedCols(int before, int count = 1) = 0;
 };
 
 inline constexpr char kFormulaSign = '=';

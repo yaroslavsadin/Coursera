@@ -259,7 +259,7 @@ namespace {
     ASSERT_EQUAL(hr, IFormula::HandlingResult::ReferencesRenamedOnly);
     ASSERT_EQUAL(f->GetReferencedCells(), (std::vector{"D4"_pos, "F6"_pos}));
   }
-#if 0
+
   void TestInsertionOverflow() {
     const auto maxp = Position{Position::kMaxRows - 1, Position::kMaxCols - 1};
 
@@ -294,7 +294,7 @@ namespace {
       ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetText(), text);
     }
   }
-
+#if 0
   void TestFormulaHandleDeletion() {
     auto f = ParseFormula("B2");
     ASSERT_EQUAL(f->GetReferencedCells(), std::vector{"B2"_pos});
@@ -605,8 +605,8 @@ int main() {
   RUN_TEST(tr, TestFormulaExpressionFormatting);
   RUN_TEST(tr, TestFormulaReferencedCells);
   RUN_TEST(tr, TestFormulaHandleInsertion);
-#if 0
   RUN_TEST(tr, TestInsertionOverflow);
+#if 0
   RUN_TEST(tr, TestFormulaHandleDeletion);
   RUN_TEST(tr, TestErrorValue);
   RUN_TEST(tr, TestErrorDiv0);

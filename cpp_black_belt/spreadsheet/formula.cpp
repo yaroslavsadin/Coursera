@@ -49,8 +49,10 @@ Formula::HandlingResult Formula::HandleInsertedCols(int before, int count){
     return (visitor.Get()) ? HandlingResult::ReferencesRenamedOnly : HandlingResult::NothingChanged;
 }
 Formula::HandlingResult Formula::HandleDeletedRows(int first, int count){
+    return HandlingResult::NothingChanged;
 }
 Formula::HandlingResult Formula::HandleDeletedCols(int first, int count){
+    return HandlingResult::NothingChanged;
 }
 
 std::unique_ptr<IFormula> ParseFormula(std::string expression) {

@@ -15,5 +15,9 @@ public:
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
 private:
+    size_t NumRows() const { return storage.size(); }
+    size_t NumCols() const { return (storage.empty()) ? 0u : storage[0].size(); }
+    void Extend(size_t rows, size_t cols);
+    bool CellExists(Position pos) const;
     std::vector<std::vector<std::unique_ptr<ICell>>> storage;
 };

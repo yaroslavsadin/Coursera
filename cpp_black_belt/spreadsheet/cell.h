@@ -8,6 +8,8 @@ public:
     virtual Value GetValue() const override;
     virtual std::string GetText() const override;
     virtual std::vector<Position> GetReferencedCells() const override;
+    virtual void HandleInsertedRows(int before, int count = 1) override;
+    virtual void HandleInsertedCols(int before, int count = 1) override;
 private:
     const ISheet& sheet;
     Value value;
