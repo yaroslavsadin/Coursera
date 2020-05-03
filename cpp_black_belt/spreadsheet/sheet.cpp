@@ -31,6 +31,11 @@ void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
     Extend(pos.row + 1,pos.col + 1);
     storage[pos.row][pos.col] = std::make_unique<Cell>(*this,text);
+    for(auto pos : storage[pos.row][pos.col]->GetReferencedCells()) {
+        if(!CellExists(pos)) {
+            SetCell(pos, "=0");
+        }
+    }
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);

@@ -5,12 +5,6 @@ Cell::Cell(const ISheet& sheet, std::string str) : sheet(sheet) {
         std::string_view view(str);
         view.remove_prefix(1);
         formula = ParseFormula(std::string(view));
-        auto eval = formula->Evaluate(sheet);
-        if(std::holds_alternative<double>(eval)) {
-            value = std::get<double>(eval);
-        } else {
-            value = std::get<FormulaError>(eval);
-        }
     } else {
         value = str;
     }
@@ -25,7 +19,7 @@ Cell::Value Cell::GetValue() const {
 }
 std::string Cell::GetText() const {
     if(formula) {
-        return formula->GetExpression();
+        return "=" + formula->GetExpression();
     } else {
         return std::get<std::string>(value);
     }
