@@ -7,7 +7,7 @@ namespace Ast {
     class ReferencedCellsVisitor : public NodeVisitor {
     public:
         virtual void Visit(const CellNode& node) override {
-            if(!counted.count(node.GetPosition().ToString())) {
+            if(!counted.count(node.GetPosition().ToString()) && !(node.GetPosition() == CellNode::REF)) {
                 referenced_cells.push_back(node.GetPosition());
                 counted.insert(node.GetPosition().ToString());
             }

@@ -34,9 +34,7 @@ void Sheet::InsertCell(Position pos) {
 }
 
 bool Sheet::CellExists(Position pos) const {
-    return 
-        storage.size() > pos.row && 
-        storage[pos.row].size() > pos.col;
+    return storage.size() > pos.row && storage[pos.row].size() > pos.col;
 }
 
 void Sheet::SetCell(Position pos, std::string text){

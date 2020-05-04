@@ -4,6 +4,7 @@
 #include "ast_print_visitor.h"
 #include "ast_ref_cells_visitor.h"
 #include "ast_insert_visitor.h"
+#include "ast_delete_visitor.h"
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();
@@ -41,18 +42,22 @@ std::vector<Position> Formula::GetReferencedCells() const{
 Formula::HandlingResult Formula::HandleInsertedRows(int before, int count){
     Ast::InsertVisitor visitor(Ast::InsertVisitor::Type::ROWS, before, count);
     top->Accept(visitor);
-    return (visitor.Get()) ? HandlingResult::ReferencesRenamedOnly : HandlingResult::NothingChanged;
+    return visitor.Get();
 }
 Formula::HandlingResult Formula::HandleInsertedCols(int before, int count){
     Ast::InsertVisitor visitor(Ast::InsertVisitor::Type::COLS, before, count);
     top->Accept(visitor);
-    return (visitor.Get()) ? HandlingResult::ReferencesRenamedOnly : HandlingResult::NothingChanged;
+    return visitor.Get();
 }
 Formula::HandlingResult Formula::HandleDeletedRows(int first, int count){
-    return HandlingResult::NothingChanged;
+    Ast::DeleteVisitor visitor(Ast::DeleteVisitor::Type::ROWS, first, count);
+    top->Accept(visitor);
+    return visitor.Get();
 }
 Formula::HandlingResult Formula::HandleDeletedCols(int first, int count){
-    return HandlingResult::NothingChanged;
+    Ast::DeleteVisitor visitor(Ast::DeleteVisitor::Type::COLS, first, count);
+    top->Accept(visitor);
+    return visitor.Get();
 }
 
 std::unique_ptr<IFormula> ParseFormula(std::string expression) {

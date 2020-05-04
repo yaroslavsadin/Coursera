@@ -64,7 +64,12 @@ namespace Ast {
         }
     }
     void PrintExpressionVisitor::Visit(const CellNode& node){
-        accumulator << node.GetPosition().ToString();
+        auto pos = node.GetPosition();
+        if(pos == CellNode::REF) {    
+            accumulator << "#REF!";
+        } else {
+            accumulator << pos.ToString();
+        }
     }
     std::string PrintExpressionVisitor::Get() const {
         return accumulator.str();

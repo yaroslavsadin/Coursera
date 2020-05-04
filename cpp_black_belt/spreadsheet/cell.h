@@ -10,6 +10,8 @@ public:
     virtual std::vector<Position> GetReferencedCells() const override;
     virtual void HandleInsertedRows(int before, int count = 1) override;
     virtual void HandleInsertedCols(int before, int count = 1) override;
+    virtual void HandleDeletedRows(int first, int count = 1) override;
+    virtual void HandleDeletedCols(int first, int count = 1) override;
 private:
     const ISheet& sheet;
     Value value;

@@ -118,6 +118,8 @@ public:
 
   virtual void HandleInsertedRows(int before, int count = 1) = 0;
   virtual void HandleInsertedCols(int before, int count = 1) = 0;
+  virtual void HandleDeletedRows(int first, int count = 1) = 0;
+  virtual void HandleDeletedCols(int first, int count = 1) = 0;
 };
 
 inline constexpr char kFormulaSign = '=';
