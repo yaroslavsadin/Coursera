@@ -332,7 +332,7 @@ namespace {
     ASSERT_EQUAL(hr, IFormula::HandlingResult::ReferencesChanged);
     ASSERT(f->GetReferencedCells().empty());
   }
-#if 0
+
   void TestErrorValue() {
     auto sheet = CreateSheet();
     sheet->SetCell("E2"_pos, "A1");
@@ -344,7 +344,7 @@ namespace {
     ASSERT_EQUAL(sheet->GetCell("E4"_pos)->GetValue(),
                  ICell::Value(FormulaError::Category::Value));
   }
-
+#if 0
   void TestErrorDiv0() {
     auto sheet = CreateSheet();
 
@@ -605,8 +605,8 @@ int main() {
   RUN_TEST(tr, TestFormulaHandleInsertion);
   RUN_TEST(tr, TestInsertionOverflow);
   RUN_TEST(tr, TestFormulaHandleDeletion);
-#if 0
   RUN_TEST(tr, TestErrorValue);
+#if 0
   RUN_TEST(tr, TestErrorDiv0);
   RUN_TEST(tr, TestEmptyCellTreatedAsZero);
   RUN_TEST(tr, TestFormulaInvalidPosition);

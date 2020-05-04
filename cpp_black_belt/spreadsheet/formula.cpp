@@ -27,7 +27,11 @@ Formula::Formula(std::string text)
 {
 }
 Formula::Value Formula::Evaluate(const ISheet& sheet) const{
-    return top->Evaluate(sheet);
+    try {    
+        return top->Evaluate(sheet);
+    } catch(FormulaError err) {
+        return err;
+    }
 }
 std::string Formula::GetExpression() const{
     Ast::PrintExpressionVisitor visitor;

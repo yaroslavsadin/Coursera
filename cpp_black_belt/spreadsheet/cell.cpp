@@ -11,6 +11,14 @@ Cell::Cell(const ISheet& sheet, std::string str) : sheet(sheet) {
 }
 
 Cell::Value Cell::GetValue() const {
+    if(formula) {
+        auto res = formula->Evaluate(sheet);
+        if(std::holds_alternative<double>(res)) {
+            return std::get<double>(res);
+        } else {
+            return std::get<FormulaError>(res);
+        }
+    }
     std::string_view view = std::get<std::string>(value);
     if(view[0] == '\'') {
         view.remove_prefix(1);

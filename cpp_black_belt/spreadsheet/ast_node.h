@@ -109,11 +109,12 @@ namespace Ast {
     };
 
     static std::optional<double> ToNum(const std::string& str) {
-        try {
-            return std::stod(str);
-        } catch(...) {
-            return std::nullopt;
+        for(char c : str) {
+            if(!std::isdigit(c) && c != '.') {
+                return std::nullopt;
+            }
         }
+        return std::stod(str);
     }
 
     class CellNode : public Node {
