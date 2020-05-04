@@ -3,6 +3,12 @@
 #include "cell.h"
 #include <cassert>
 
+static inline void CheckPosition(Position pos, std::string message) {
+    if(!pos.IsValid()) {
+        throw InvalidPositionException(message);
+    }
+}
+
 void Sheet::Extend(size_t rows, size_t cols) {
     if(NumRows() < rows) {
         storage.resize(rows);
@@ -15,21 +21,26 @@ void Sheet::Extend(size_t rows, size_t cols) {
     }
 }
 
+void Sheet::InsertCell(Position pos) {
+    CheckPosition(pos, __FUNCTION__);
+    if(NumRows() < pos.row + 1) {
+        storage.resize(pos.row + 1);
+        size.rows = storage.size();
+    }
+    if(storage[pos.row].size() < pos.col + 1) {
+        storage[pos.row].resize(pos.col + 1);
+        size.cols = std::max(static_cast<size_t>(size.cols),storage[pos.row].size());
+    }
+}
+
 bool Sheet::CellExists(Position pos) const {
     return 
         storage.size() > pos.row && 
         storage[pos.row].size() > pos.col;
 }
 
-static inline void CheckPosition(Position pos, std::string message) {
-    if(!pos.IsValid()) {
-        throw InvalidPositionException(message);
-    }
-}
-
 void Sheet::SetCell(Position pos, std::string text){
-    CheckPosition(pos, __FUNCTION__);
-    Extend(pos.row + 1,pos.col + 1);
+    InsertCell(pos);
     storage[pos.row][pos.col] = std::make_unique<Cell>(*this,text);
     for(auto pos : storage[pos.row][pos.col]->GetReferencedCells()) {
         if(!CellExists(pos)) {
@@ -96,7 +107,7 @@ void Sheet::DeleteRows(int first, int count){
 void Sheet::DeleteCols(int first, int count){
 }
 Size Sheet::GetPrintableSize() const{
-    return Size{NumRows(),NumCols()};
+    return size;
 }
 void Sheet::PrintValues(std::ostream& output) const{
 }

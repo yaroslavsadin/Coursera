@@ -18,6 +18,8 @@ private:
     size_t NumRows() const { return storage.size(); }
     size_t NumCols() const { return (storage.empty()) ? 0u : storage[0].size(); }
     void Extend(size_t rows, size_t cols);
+    void InsertCell(Position pos);
     bool CellExists(Position pos) const;
+    Size size;
     std::vector<std::vector<std::unique_ptr<ICell>>> storage;
 };

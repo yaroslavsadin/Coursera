@@ -37,11 +37,9 @@ std::ostream& operator<<(std::ostream& output, IFormula::HandlingResult hr) {
 }
 
 namespace {
-#if 0
   std::string ToString(FormulaError::Category category) {
     return std::string(FormulaError(category).ToString());
   }
-#endif
 
   void TestPositionAndStringConversion() {
     auto testSingle = [](Position pos, std::string_view str) {
@@ -294,7 +292,7 @@ namespace {
       ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetText(), text);
     }
   }
-#if 0
+
   void TestFormulaHandleDeletion() {
     auto f = ParseFormula("B2");
     ASSERT_EQUAL(f->GetReferencedCells(), std::vector{"B2"_pos});
@@ -334,7 +332,7 @@ namespace {
     ASSERT_EQUAL(hr, IFormula::HandlingResult::ReferencesChanged);
     ASSERT(f->GetReferencedCells().empty());
   }
-
+#if 0
   void TestErrorValue() {
     auto sheet = CreateSheet();
     sheet->SetCell("E2"_pos, "A1");
@@ -606,8 +604,8 @@ int main() {
   RUN_TEST(tr, TestFormulaReferencedCells);
   RUN_TEST(tr, TestFormulaHandleInsertion);
   RUN_TEST(tr, TestInsertionOverflow);
-#if 0
   RUN_TEST(tr, TestFormulaHandleDeletion);
+#if 0
   RUN_TEST(tr, TestErrorValue);
   RUN_TEST(tr, TestErrorDiv0);
   RUN_TEST(tr, TestEmptyCellTreatedAsZero);

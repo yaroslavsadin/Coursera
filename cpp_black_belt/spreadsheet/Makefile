@@ -528,6 +528,33 @@ position.cpp.s:
 	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/position.cpp.s
 .PHONY : position.cpp.s
 
+profile_advanced.o: profile_advanced.cpp.o
+
+.PHONY : profile_advanced.o
+
+# target to build an object file
+profile_advanced.cpp.o:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/profile_advanced.cpp.o
+.PHONY : profile_advanced.cpp.o
+
+profile_advanced.i: profile_advanced.cpp.i
+
+.PHONY : profile_advanced.i
+
+# target to preprocess a source file
+profile_advanced.cpp.i:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/profile_advanced.cpp.i
+.PHONY : profile_advanced.cpp.i
+
+profile_advanced.s: profile_advanced.cpp.s
+
+.PHONY : profile_advanced.s
+
+# target to generate assembly for a file
+profile_advanced.cpp.s:
+	$(MAKE) -f CMakeFiles/spreadsheet.dir/build.make CMakeFiles/spreadsheet.dir/profile_advanced.cpp.s
+.PHONY : profile_advanced.cpp.s
+
 sheet.o: sheet.cpp.o
 
 .PHONY : sheet.o
@@ -607,6 +634,9 @@ help:
 	@echo "... position.o"
 	@echo "... position.i"
 	@echo "... position.s"
+	@echo "... profile_advanced.o"
+	@echo "... profile_advanced.i"
+	@echo "... profile_advanced.s"
 	@echo "... sheet.o"
 	@echo "... sheet.i"
 	@echo "... sheet.s"
