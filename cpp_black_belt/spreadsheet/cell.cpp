@@ -6,31 +6,32 @@ Cell::Cell(const ISheet& sheet, std::string str) : sheet(sheet) {
         view.remove_prefix(1);
         formula = ParseFormula(std::string(view));
     } else {
-        value = str;
+        cache.SetText(str);
+        std::string_view view = str;
+        if(view[0] == '\'') {
+            view.remove_prefix(1);
+        }
+        cache.SetValue(std::string(view));
     }
 }
 
 Cell::Value Cell::GetValue() const {
-    if(formula) {
+    if(!cache.HasValue()) {
+        // Imply we have formula
         auto res = formula->Evaluate(sheet);
         if(std::holds_alternative<double>(res)) {
-            return std::get<double>(res);
+            cache.SetValue(std::get<double>(res));
         } else {
-            return std::get<FormulaError>(res);
+            cache.SetValue(std::get<FormulaError>(res));
         }
     }
-    std::string_view view = std::get<std::string>(value);
-    if(view[0] == '\'') {
-        view.remove_prefix(1);
-    }
-    return std::string(view);
+    return cache.GetValue();
 }
 std::string Cell::GetText() const {
-    if(formula) {
-        return "=" + formula->GetExpression();
-    } else {
-        return std::get<std::string>(value);
+    if(!cache.HasText()) {
+        cache.SetText("=" + formula->GetExpression());
     }
+    return cache.GetText();
 }
 std::vector<Position> Cell::GetReferencedCells() const {
     if(formula) {
