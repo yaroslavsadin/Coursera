@@ -2,6 +2,7 @@
 #include "formula.h"
 #include "sheet.h"
 #include "test_runner.h"
+#include "table.h"
 
 std::ostream& operator<<(std::ostream& output, Position pos) {
   return output << "(" << pos.row << ", " << pos.col << ")";
@@ -588,6 +589,82 @@ namespace {
   }
 }
 
+void TestTable() {
+  {
+    Table<int> table;
+    int i = 5;
+    table.SetElement(5,5,i);
+    ASSERT_EQUAL(table.GetColCount(),6);
+    ASSERT_EQUAL(table.GetRowCount(),6);
+    table.SetElement(42,1,5);
+    ASSERT_EQUAL(table.GetColCount(),6);
+    ASSERT_EQUAL(table.GetRowCount(),43);
+  }
+  {
+    Table<int> table;
+    auto it_begin = table.begin();
+    auto it_end = table.end();
+    ASSERT(it_begin == it_end);
+    table.SetElement(5,0,42);
+    table.SetElement(5,1,43);
+    table.SetElement(7,0,44);
+    auto it_begin_ = table.begin();
+    auto it_end_ = table.end();
+    ASSERT(*it_begin_ == 42);
+    it_begin_++;
+    ASSERT(*it_begin_ == 43);
+    it_begin_++;
+    ASSERT(*it_begin_ == 44);
+  }
+  {
+    Table<int> table;
+    table.SetElement(0,0,42);
+    table.SetElement(0,10,42);
+    table.SetElement(1,0,43);
+    table.SetElement(1,10,43);
+    table.SetElement(4,0,45);
+    table.SetElement(4,10,45);
+    table.SetElement(3,0,44);
+    table.SetElement(3,10,44);
+    table.SetElement(4,5,666);
+    table.SetElement(0,11,667);
+    std::string res;
+    for(auto it = table.begin(); it != table.end(); it++) {
+      res += std::to_string(*it) + " ";
+    }
+    ASSERT_EQUAL(res,"42 0 0 0 0 0 0 0 0 0 42 667 43 0 0 0 0 0 0 0 0 0 43 44 0 0 0 0 0 0 0 0 0 44 45 0 0 0 0 666 0 0 0 0 45 ");
+  }
+  {
+    Table<int> table;
+    table.InsertRows(0,5);
+    ASSERT(table.GetRowCount() == 5);
+    ASSERT(table.GetColCount() == 0);
+    table.SetElement(3,0,42);
+    ASSERT(table.GetRowCount() == 5);
+    ASSERT(table.GetColCount() == 1);
+    ASSERT_EQUAL(*table.begin(),42);
+    table.InsertRows(3,5);
+    ASSERT(table.GetRowCount() == 10);
+    ASSERT(table.GetColCount() == 1);
+    ASSERT_EQUAL(*table.begin(),42);
+    table.InsertCols(0);
+    ASSERT(table.GetRowCount() == 10);
+    ASSERT(table.GetColCount() == 2);
+    ASSERT_EQUAL(*table.begin(),42);
+    table.InsertCols(1,2);
+    ASSERT(table.GetRowCount() == 10);
+    ASSERT(table.GetColCount() == 4);
+    ASSERT_EQUAL(*table.begin(),42);
+    table.SetElement(8,1,43);
+    ASSERT(table.GetRowCount() == 10);
+    ASSERT(table.GetColCount() == 4);
+    ASSERT_EQUAL(*table.begin(),43);
+    for(auto it = table.begin(); it != table.end(); it++) {
+      std::cerr << std::to_string(*it) + " ";
+    }
+  }
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -619,5 +696,6 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
+  RUN_TEST(tr, TestTable);
   return 0;
 }

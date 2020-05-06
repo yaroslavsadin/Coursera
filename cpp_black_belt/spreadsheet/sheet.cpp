@@ -67,7 +67,7 @@ void Sheet::ClearCell(Position pos){
     }
 }
 void Sheet::InsertRows(int before, int count){
-    if(storage.size() + count > Position::kMaxRows) {
+    if(NumRows() + count > Position::kMaxRows) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         Extend(before + count + 1,NumCols());
@@ -86,7 +86,7 @@ void Sheet::InsertRows(int before, int count){
     }
 }
 void Sheet::InsertCols(int before, int count){    
-    if(storage.size() + count > Position::kMaxCols) {
+    if(NumCols() + count > Position::kMaxCols) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         Extend(NumRows(),before + count + 1);
@@ -101,8 +101,24 @@ void Sheet::InsertCols(int before, int count){
     }
 }
 void Sheet::DeleteRows(int first, int count){
+    if(NumRows() >= first) {
+        auto it_start = storage.begin() + first;
+        auto it_end = (std::distance(storage.begin(),storage.end()) < count) ? 
+        storage.begin() + first + count : storage.end();
+        storage.erase(it_start,it_end);
+    }
 }
 void Sheet::DeleteCols(int first, int count){
+    if(NumCols() >= first) {
+        for(auto& row : storage) {
+            if(row.size() >= first) {
+                auto it_start = row.begin() + first;
+                auto it_end = (std::distance(row.begin(),row.end()) < count) ? 
+                row.begin() + first + count : row.end();
+                row.erase(it_start,it_end);
+            }
+        }
+    }
 }
 Size Sheet::GetPrintableSize() const{
     return size;
