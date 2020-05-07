@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include "table.h"
 
 class Sheet : public ISheet {
 public:

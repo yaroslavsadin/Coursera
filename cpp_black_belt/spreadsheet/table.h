@@ -1,79 +1,50 @@
 #pragma once
+#include "common.h"
 #include <vector>
 #include <string>
+#include <set>
+#include <cassert>
 
 template<typename T>
 class Table {
 private:
-    using Storage = std::vector<std::vector<T>>;
+    using Row = std::vector<std::unique_ptr<T>>;
+    using Storage = std::vector<Row>;
 public:
-    class iterator {
-    public:
-        friend class Table; 
-        iterator(Storage* storage, int row, int col)
-        : storage(storage), row(row), col(col) {}
-        T& operator*() {
-            return (*storage)[row][col];
-        }
-        const T& operator*() const {
-            return (*storage)[row][col];
-        }
-        iterator operator++(int) {
-            if(++col == (*storage)[row].size()) {
-                col = 0;
-                if(++row == storage->size()) {
-                    return *this; // past-the-end
-                } else {
-                    while((*storage)[row].empty() && row != storage->size()) {
-                        row++;
-                    }
-                    if(row == storage->size()) {
-                        return *this; // past-the-end;
-                    }
-                }
+    using const_iterator = typename Storage::const_iterator;
+    using row_iterator = typename Row::const_iterator;
+
+    Table() : storage(), row_count(0), col_count(0) {}
+
+    const_iterator begin() const {
+        return storage.cbegin();
+    }
+    const_iterator end() const {
+        return storage.cend();
+    }
+
+    const Row& GetRow(size_t row_num) const {
+        assert(row_num < row_count);
+        return storage[row_num];
+    }
+
+    const Row& operator[](size_t row_num) const {
+        return GetRow(row_num);
+    }
+
+    T* GetCell(size_t row_num, size_t col_num) const {
+        if(row_num < storage.size()) {
+            if(col_num < storage[row_num].size()) {
+                return storage[row_num][col_num].get();
             }
-            return *this;
         }
-        bool operator==(iterator other) const {
-            return (storage == other.storage) && (row == other.row) && (col == other.col);
-        }
-        bool operator!=(iterator other) const {
-            return !(*this == other);
-        }
-    private:
-        Storage* storage;
-        int row;
-        int col;
-    };
-
-    Table() : storage(), row_count(0), col_count(0), 
-    invalid(&storage,-1,-1), begin_(invalid), end_(invalid) {}
-
-    iterator begin() {
-        return begin_;
+        return nullptr;
     }
-    iterator end() {
-        return end_;
-    }
-
-    // const_iterator begin() const {
-    //     return begin();
-    // }
-    // const_iterator end() const {
-    //     return end_;
-    // }
-
-    // const_iterator cbegin() const {
-    //     return begin_;
-    // }
-    // const_iterator cend() const {
-    //     return end_;
-    // }
 
     template<typename ElemType>
-    void SetElement(int row, int col, ElemType&& elem) {
+    void SetCell(int row, int col, ElemType&& elem) {
         static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
-        if(row_count < row + 1) {
+        if(storage.size() < row + 1) {
             storage.resize(row + 1);
             row_count = storage.size();
         }
@@ -81,59 +52,57 @@ public:
             storage[row].resize(col + 1);
             col_count = std::max(col_count,storage[row].size());
         }
-        storage[row][col] = std::forward<T>(elem);
-
-        if(row < begin_.row || (row == begin_.row && col < begin_.col) || begin_ == invalid) {
-            begin_.row = row;
-            begin_.col = col;
-        }
-        if(row > end_.row || (row == end_.row && col > end_.col) || end_ == invalid) {
-            end_.row = row;
-            end_.col = col;
-            end_++;
-        }
+        storage[row][col] = std::make_unique<T>(std::forward<T>(elem));
     }
 
     void InsertRows(size_t before, size_t count = 1) {
-        if(row_count - 1 < before) {
-            storage.resize(before + 1);
-        }
-        auto it = storage.begin() + before;
-        while(count--) {
-            it = storage.emplace(it);
-            row_count++;
-            if(begin_ != invalid && begin_.row >= before) {
-                begin_.row ++;
-            }
-            if(end_ != invalid) {
-                end_.row ++;
+        if(row_count && before < row_count ) {
+            auto it = storage.begin() + before;
+            while(count--) {
+                it = storage.emplace(it);
+                row_count++;
             }
         }
     }
 
     void InsertCols(size_t before, size_t count = 1) {
-        for(auto& row : storage) {
-            if(row.size() - 1 < before) {
-                row.resize(before + 1);
+        if(before < col_count) {
+            for(auto& row : storage) {
+                if(row.size() && before < row.size()) {
+                    auto it = row.begin() + before;
+                    auto count_ = count;
+                    while(count_--) {
+                        it = row.emplace(it);
+                        col_count++;
+                    }
+                }
             }
-            auto it = row.begin() + before;
-            auto count_ = count;
-            while(count_--) {
-                it = row.emplace(it);
-            }
-        }
-        col_count += count;
-        if(begin_ != invalid && begin_.col >= before) {
-            begin_.col += count;
         }
     }
 
     void DeleteRows(size_t first, size_t count = 1) {
-
+        if(first < row_count) {
+            for(auto it = storage.begin() + first; count && it != storage.end(); count--) {
+                it = storage.erase(it);
+                row_count--;
+            }
+        }
     }
 
     void DeleteCols(size_t first, size_t count = 1) {
-
+        if(first < col_count) {    
+            size_t erased_max = 0;
+            for(auto& row : storage) {
+                if(first < row.size()) {
+                    size_t erased = 0;
+                    for(auto it = row.begin() + first; (erased != count) && it != row.end();  erased++) {
+                        it = row.erase(it);
+                    }
+                    erased_max = std::max(erased_max,erased);
+                }
+            }
+            col_count -= erased_max;
+        }
     }
 
     size_t GetRowCount() const noexcept {
@@ -145,10 +114,7 @@ public:
     }
 
 private:
-  Storage storage;
-  size_t row_count;
-  size_t col_count;
-  iterator invalid;
-  iterator begin_;
-  iterator end_;
+    Storage storage;
+    size_t row_count;
+    size_t col_count;
 };

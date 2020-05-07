@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include "formula.h"
+#include <iostream>
 
 class Cell : public ICell {
 public:
