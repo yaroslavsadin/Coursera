@@ -1,10 +1,18 @@
 #include "common.h"
 #include "formula_impl.h"
 #include <sstream>
+#include <unordered_map>
 #include "ast_print_visitor.h"
 #include "ast_ref_cells_visitor.h"
 #include "ast_insert_visitor.h"
 #include "ast_delete_visitor.h"
+
+static const std::unordered_map<FormulaError::Category,std::string> formula_err_to_string 
+{
+    {FormulaError::Category::Ref, "#REF!"},
+    {FormulaError::Category::Value, "#VALUE!"},
+    {FormulaError::Category::Div0, "#DIV/0!"}
+};
 
 std::ostream& operator<<(std::ostream& output, FormulaError fe) {
   return output << fe.ToString();

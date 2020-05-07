@@ -3,6 +3,10 @@
 #include "cell.h"
 #include <cassert>
 
+bool Size::operator==(const Size& rhs) const {
+    return rows == rhs.rows && cols == rhs.cols;
+}
+
 static inline void CheckPosition(Position pos, std::string message) {
     if(!pos.IsValid()) {
         throw InvalidPositionException(message);
@@ -11,10 +15,10 @@ static inline void CheckPosition(Position pos, std::string message) {
 
 void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
-    storage.SetCell(pos.row,pos.col,Cell(*this,text));
+    storage.SetCell(pos.row,pos.col,std::make_unique<Cell>(*this,text));
     for(auto pos : storage[pos.row][pos.col]->GetReferencedCells()) {
         if(storage.GetCell(pos.row,pos.col) == nullptr) {
-            storage.SetCell(pos.row,pos.col,Cell(*this,""));
+            storage.SetCell(pos.row,pos.col,std::make_unique<Cell>(*this,text));
         }
     }
 }

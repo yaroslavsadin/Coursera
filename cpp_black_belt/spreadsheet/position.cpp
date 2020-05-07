@@ -2,6 +2,9 @@
 #include <tuple>
 #include <algorithm>
 
+static constexpr int ALPHA_NORM_VALUE {64}; 
+static constexpr int ALPHA_SIZE {26};
+
 bool Position::operator==(const Position& rhs) const {
     return std::tie(row,col) == std::tie(rhs.row,rhs.col); 
 }

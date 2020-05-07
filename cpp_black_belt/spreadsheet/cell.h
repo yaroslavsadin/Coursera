@@ -2,6 +2,7 @@
 #include "common.h"
 #include "formula.h"
 #include <iostream>
+#include <optional>
 
 class Cell : public ICell {
 public:
@@ -9,10 +10,10 @@ public:
     virtual Value GetValue() const override;
     virtual std::string GetText() const override;
     virtual std::vector<Position> GetReferencedCells() const override;
-    virtual void HandleInsertedRows(int before, int count = 1) override;
-    virtual void HandleInsertedCols(int before, int count = 1) override;
-    virtual void HandleDeletedRows(int first, int count = 1) override;
-    virtual void HandleDeletedCols(int first, int count = 1) override;
+    void HandleInsertedRows(int before, int count = 1);
+    void HandleInsertedCols(int before, int count = 1);
+    void HandleDeletedRows(int first, int count = 1);
+    void HandleDeletedCols(int first, int count = 1);
 private:
     class CellCache {
     public:

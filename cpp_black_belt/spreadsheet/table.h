@@ -42,7 +42,7 @@ public:
     }
 
     template<typename ElemType>
-    void SetCell(int row, int col, ElemType&& elem) {
+    void SetCell(int row, int col, ElemType&& data) {
         static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
         if(storage.size() < row + 1) {
             storage.resize(row + 1);
@@ -52,7 +52,19 @@ public:
             storage[row].resize(col + 1);
             col_count = std::max(col_count,storage[row].size());
         }
-        storage[row][col] = std::make_unique<T>(std::forward<T>(elem));
+        storage[row][col] = std::make_unique<ElemType>(std::forward<ElemType>(data));
+    }
+
+    void SetCell(int row, int col, std::unique_ptr<T> data) {
+        if(storage.size() < row + 1) {
+            storage.resize(row + 1);
+            row_count = storage.size();
+        }
+        if(storage[row].size() < col + 1) {
+            storage[row].resize(col + 1);
+            col_count = std::max(col_count,storage[row].size());
+        }
+        storage[row][col] = std::move(data);
     }
 
     void ClearCell(int row, int col) {

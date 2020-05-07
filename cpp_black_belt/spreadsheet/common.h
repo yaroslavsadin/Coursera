@@ -7,7 +7,6 @@
 #include <string_view>
 #include <variant>
 #include <vector>
-#include <unordered_map>
 
 // Позиция ячейки. Индексация с нуля.
 struct Position {
@@ -22,20 +21,15 @@ struct Position {
 
   static Position FromString(std::string_view str);
 
-  static constexpr int kMaxRows = 16384;
-  static constexpr int kMaxCols = 16384;
-  
-  static constexpr int ALPHA_NORM_VALUE {64}; 
-  static constexpr int ALPHA_SIZE {26};
+  static const int kMaxRows = 16384;
+  static const int kMaxCols = 16384;
 };
 
 struct Size {
   int rows = 0;
   int cols = 0;
 
-  bool operator==(const Size& rhs) const {
-    return rows == rhs.rows && cols == rhs.cols;
-  }
+  bool operator==(const Size& rhs) const;
 };
 
 // Описывает ошибки, которые могут возникнуть при вычислении формулы.
@@ -55,12 +49,6 @@ public:
 
   std::string_view ToString() const;
 
-  static const inline std::unordered_map<FormulaError::Category,std::string> formula_err_to_string 
-  {
-    {FormulaError::Category::Ref, "#REF!"},
-    {FormulaError::Category::Value, "#VALUE!"},
-    {FormulaError::Category::Div0, "#DIV/0!"}
-  };
 private:
   Category category_;
 };
@@ -115,11 +103,6 @@ public:
   // формуле. Список отсортирован по возрастанию и не содержит повторяющихся
   // ячеек. В случае текстовой ячейки список пуст.
   virtual std::vector<Position> GetReferencedCells() const = 0;
-
-  virtual void HandleInsertedRows(int before, int count = 1) = 0;
-  virtual void HandleInsertedCols(int before, int count = 1) = 0;
-  virtual void HandleDeletedRows(int first, int count = 1) = 0;
-  virtual void HandleDeletedCols(int first, int count = 1) = 0;
 };
 
 inline constexpr char kFormulaSign = '=';

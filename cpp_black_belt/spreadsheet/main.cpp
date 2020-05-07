@@ -589,6 +589,8 @@ namespace {
   }
 }
 
+#include "cell.h"
+
 void TestTable() {
   Table<int> table;
   ASSERT_EQUAL(table.GetRowCount(),0);
@@ -625,6 +627,7 @@ void TestTable() {
   ASSERT_EQUAL(table.GetColCount(),1);
   ASSERT(table.GetCell(0,0) == nullptr);
   ASSERT(table.GetCell(42,24) == nullptr);
+
 }
 
 int main() {
