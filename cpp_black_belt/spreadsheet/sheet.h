@@ -2,6 +2,8 @@
 #include "common.h"
 #include "table.h"
 
+class Cell;
+
 class Sheet : public ISheet {
 public:
     virtual void SetCell(Position pos, std::string text) override;
@@ -16,11 +18,5 @@ public:
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
 private:
-    size_t NumRows() const { return size.rows; }
-    size_t NumCols() const { return size.cols; }
-    void Extend(size_t rows, size_t cols);
-    void InsertCell(Position pos);
-    bool CellExists(Position pos) const;
-    Size size;
-    std::vector<std::vector<std::unique_ptr<ICell>>> storage;
+    Table<Cell> storage;
 };

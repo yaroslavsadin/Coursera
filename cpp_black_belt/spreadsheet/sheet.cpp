@@ -9,119 +9,50 @@ static inline void CheckPosition(Position pos, std::string message) {
     }
 }
 
-void Sheet::Extend(size_t rows, size_t cols) {
-    if(NumRows() < rows) {
-        storage.resize(rows);
-    }
-    if(NumRows() != 0) {
-        cols = std::max(NumCols(),cols);
-        for(auto& row : storage) {
-            row.resize(cols);
-        }
-    }
-}
-
-void Sheet::InsertCell(Position pos) {
-    CheckPosition(pos, __FUNCTION__);
-    if(NumRows() < pos.row + 1) {
-        storage.resize(pos.row + 1);
-        size.rows = storage.size();
-    }
-    if(storage[pos.row].size() < pos.col + 1) {
-        storage[pos.row].resize(pos.col + 1);
-        size.cols = std::max(static_cast<size_t>(size.cols),storage[pos.row].size());
-    }
-}
-
-bool Sheet::CellExists(Position pos) const {
-    return storage.size() > pos.row && storage[pos.row].size() > pos.col;
-}
-
 void Sheet::SetCell(Position pos, std::string text){
-    InsertCell(pos);
-    storage[pos.row][pos.col] = std::make_unique<Cell>(*this,text);
+    CheckPosition(pos, __FUNCTION__);
+    storage.SetCell(pos.row,pos.col,Cell(*this,text));
     for(auto pos : storage[pos.row][pos.col]->GetReferencedCells()) {
-        if(!CellExists(pos)) {
-            SetCell(pos, "=0");
+        if(storage.GetCell(pos.row,pos.col) == nullptr) {
+            storage.SetCell(pos.row,pos.col,Cell(*this,""));
         }
     }
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);
-    if(CellExists(pos)) {
-        return storage.at(pos.row).at(pos.col).get();
-    }
-    return nullptr;
+    return static_cast<ICell*>(storage.GetCell(pos.row,pos.col));
 }
 ICell* Sheet::GetCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    if(CellExists(pos)) {
-        return storage.at(pos.row).at(pos.col).get();
-    }
-    return nullptr;
+    return static_cast<ICell*>(storage.GetCell(pos.row,pos.col));
 }
 void Sheet::ClearCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    if(CellExists(pos)) {
-        storage[pos.row][pos.col].reset();
-    }
+    storage.ClearCell(pos.row,pos.col);
 }
 void Sheet::InsertRows(int before, int count){
-    if(NumRows() + count > Position::kMaxRows) {
+    if(before < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {
         throw TableTooBigException(__FUNCTION__);
     } else {
-        Extend(before + count + 1,NumCols());
-        std::vector<std::vector<std::unique_ptr<ICell>>> temp(count);
-        for(auto& row : temp) row.resize(NumCols());
-        storage.insert(
-            storage.begin()+before,
-            std::make_move_iterator(temp.begin()),
-            std::make_move_iterator(temp.end())
-        );
-        for(const auto& row : storage) {
-            for(auto& cell : row) {
-                cell->HandleInsertedRows(before,count);
-            }
-        }
+        storage.InsertRows(before,count);
     }
 }
 void Sheet::InsertCols(int before, int count){    
-    if(NumCols() + count > Position::kMaxCols) {
+    if(before < storage.GetColCount() && storage.GetColCount() + count > Position::kMaxCols) {
         throw TableTooBigException(__FUNCTION__);
     } else {
-        Extend(NumRows(),before + count + 1);
-        for(auto& row : storage) {
-            row.insert(row.begin()+before,nullptr);
-        }
-        for(const auto& row : storage) {
-            for(auto& cell : row) {
-                cell->HandleInsertedCols(before,count);
-            }
-        }
+        storage.InsertCols(before,count);
     }
 }
+
 void Sheet::DeleteRows(int first, int count){
-    if(NumRows() >= first) {
-        auto it_start = storage.begin() + first;
-        auto it_end = (std::distance(storage.begin(),storage.end()) < count) ? 
-        storage.begin() + first + count : storage.end();
-        storage.erase(it_start,it_end);
-    }
+    storage.DeleteRows(first,count);
 }
 void Sheet::DeleteCols(int first, int count){
-    if(NumCols() >= first) {
-        for(auto& row : storage) {
-            if(row.size() >= first) {
-                auto it_start = row.begin() + first;
-                auto it_end = (std::distance(row.begin(),row.end()) < count) ? 
-                row.begin() + first + count : row.end();
-                row.erase(it_start,it_end);
-            }
-        }
-    }
+    storage.DeleteCols(first,count);
 }
 Size Sheet::GetPrintableSize() const{
-    return size;
+    return {storage.GetRowCount(),storage.GetColCount()};
 }
 void Sheet::PrintValues(std::ostream& output) const{
 }

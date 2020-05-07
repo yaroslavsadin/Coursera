@@ -55,6 +55,12 @@ public:
         storage[row][col] = std::make_unique<T>(std::forward<T>(elem));
     }
 
+    void ClearCell(int row, int col) {
+        if(row < storage.size() && col < storage[row].size()) {
+            storage[row][col].reset();
+        }
+    }
+
     void InsertRows(size_t before, size_t count = 1) {
         if(row_count && before < row_count ) {
             auto it = storage.begin() + before;
