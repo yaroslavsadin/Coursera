@@ -88,10 +88,10 @@ public:
 
     void DeleteRows(size_t first, size_t count = 1) {
         if(first < row_count) {
-            for(auto it = storage.begin() + first; count && it != storage.end(); count--) {
-                it = storage.erase(it);
-                row_count--;
-            }
+            auto it_last = (first + count < storage.size()) ? storage.begin() + first + count : storage.end();
+            size_t row_count_delta = std::distance(storage.begin() + first,it_last);
+            storage.erase(storage.begin() + first,it_last);
+            row_count -= row_count_delta;
         }
     }
 
@@ -100,11 +100,10 @@ public:
             size_t erased_max = 0;
             for(auto& row : storage) {
                 if(first < row.size()) {
-                    size_t erased = 0;
-                    for(auto it = row.begin() + first; (erased != count) && it != row.end();  erased++) {
-                        it = row.erase(it);
-                    }
-                    erased_max = std::max(erased_max,erased);
+                    auto it_last = (first + count < row.size()) ? row.begin() + first + count : row.end();
+                    size_t col_count_delta = std::distance(row.begin() + first,it_last);
+                    row.erase(row.begin() + first,it_last);
+                    erased_max = std::max(erased_max,col_count_delta);
                 }
             }
             col_count -= erased_max;
