@@ -29,6 +29,9 @@ void FormulaBaseListener::exitParens(FormulaParser::ParensContext * ctx)  { }
 
 void FormulaBaseListener::enterCell(FormulaParser::CellContext * ctx)  { }
 void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  {   
+    if(ctx->exception) {
+        std::cerr << "Exception" << std::endl;
+    }
     builder.push(std::make_unique<Ast::CellNode>(ctx->getText()));
 }
 
@@ -74,18 +77,42 @@ void FormulaBaseListener::enterEveryRule(antlr4::ParserRuleContext * ctx)  { }
 void FormulaBaseListener::exitEveryRule(antlr4::ParserRuleContext * ctx)  { }
 void FormulaBaseListener::visitTerminal(antlr4::tree::TerminalNode * /*node*/)  { }
 void FormulaBaseListener::visitErrorNode(antlr4::tree::ErrorNode * ctx)  {
-    throw FormulaException(ctx->getText());
 }
+
+class BailErrorListener : public antlr4::BaseErrorListener {
+public:
+    void syntaxError(antlr4::Recognizer* /* recognizer */,
+                     antlr4::Token* /* offendingSymbol */, size_t /* line */,
+                     size_t /* charPositionInLine */, const std::string& msg,
+                     std::exception_ptr /* e */
+    ) override {
+        throw std::runtime_error("Error when lexing: " + msg);
+    }
+};
 
 namespace Ast {
     std::unique_ptr<Node> ParseFormula(const std::string& in) {
         antlr4::ANTLRInputStream input(in);
+
         FormulaLexer lexer(&input);
+        BailErrorListener error_listener;
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(&error_listener);
+        
         antlr4::CommonTokenStream tokens(&lexer);
+
         FormulaParser parser(&tokens);
-        antlr4::tree::ParseTree* tree = parser.main();
-        FormulaBaseListener listener;
-        antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
-        return listener.getAst();
+        auto error_handler = std::make_shared<antlr4::BailErrorStrategy>();
+        parser.setErrorHandler(error_handler);
+        parser.removeErrorListeners();
+
+        try {
+            antlr4::tree::ParseTree* tree = parser.main();
+            FormulaBaseListener listener;
+            antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+            return listener.getAst();
+        } catch(std::exception& err) {
+            throw FormulaException(err.what());
+        }
     }
 }
