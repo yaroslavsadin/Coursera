@@ -435,7 +435,7 @@ namespace {
     ASSERT(value == ICell::Value(FormulaError::Category::Ref) ||
            value == ICell::Value(FormulaError::Category::Div0));
   }
-#if 0
+
   void TestCellsDeletionSimple() {
     auto sheet = CreateSheet();
     sheet->SetCell("A1"_pos, "1");
@@ -490,21 +490,6 @@ namespace {
     sheet->DeleteCols(0);
   }
 
-  void TestPrint() {
-    auto sheet = CreateSheet();
-    sheet->SetCell("A2"_pos, "meow");
-    sheet->SetCell("B2"_pos, "=35");
-
-    ASSERT_EQUAL(sheet->GetPrintableSize(), (Size{2, 2}));
-
-    std::ostringstream texts;
-    sheet->PrintTexts(texts);
-    ASSERT_EQUAL(texts.str(), "\t\nmeow\t=35\n");
-
-    std::ostringstream values;
-    sheet->PrintValues(values);
-    ASSERT_EQUAL(values.str(), "\t\nmeow\t35\n");
-  }
 
   void TestCellReferences() {
     auto sheet = CreateSheet();
@@ -567,6 +552,22 @@ namespace {
 
     ASSERT(caught);
     ASSERT_EQUAL(sheet->GetCell("M6"_pos)->GetText(), "Ready");
+  }
+#if 0
+  void TestPrint() {
+    auto sheet = CreateSheet();
+    sheet->SetCell("A2"_pos, "meow");
+    sheet->SetCell("B2"_pos, "=35");
+
+    ASSERT_EQUAL(sheet->GetPrintableSize(), (Size{2, 2}));
+
+    std::ostringstream texts;
+    sheet->PrintTexts(texts);
+    ASSERT_EQUAL(texts.str(), "\t\nmeow\t=35\n");
+
+    std::ostringstream values;
+    sheet->PrintValues(values);
+    ASSERT_EQUAL(values.str(), "\t\nmeow\t35\n");
   }
 #endif
   void TestPosition() {
@@ -684,14 +685,14 @@ int main() {
   RUN_TEST(tr, TestEmptyCellTreatedAsZero);
   RUN_TEST(tr, TestFormulaInvalidPosition);
   RUN_TEST(tr, TestCellErrorPropagation);
-#if 0
   RUN_TEST(tr, TestCellsDeletionSimple);
   RUN_TEST(tr, TestCellsDeletion);
-  RUN_TEST(tr, TestCellsDeletionAdjacent);
-  RUN_TEST(tr, TestPrint);
+  RUN_TEST(tr, TestCellsDeletionAdjacent);  
   RUN_TEST(tr, TestCellReferences);
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
+#if 0
+  RUN_TEST(tr, TestPrint);
 #endif
   RUN_TEST(tr, TestTable);
   RUN_TEST(tr, TestCached);
