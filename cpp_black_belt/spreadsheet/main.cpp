@@ -2,7 +2,6 @@
 #include "formula.h"
 #include "sheet.h"
 #include "test_runner.h"
-#include "table.h"
 
 std::ostream& operator<<(std::ostream& output, Position pos) {
   return output << "(" << pos.row << ", " << pos.col << ")";
@@ -345,7 +344,7 @@ namespace {
     ASSERT_EQUAL(sheet->GetCell("E4"_pos)->GetValue(),
                  ICell::Value(FormulaError::Category::Value));
   }
-#if 0
+
   void TestErrorDiv0() {
     auto sheet = CreateSheet();
 
@@ -413,7 +412,7 @@ namespace {
     try_formula("=XFE16384");
     try_formula("=R2D2");
   }
-
+#if 0
   void TestCellErrorPropagation() {
     auto sheet = CreateSheet();
     sheet->SetCell("A1"_pos, "=1");
@@ -681,10 +680,10 @@ int main() {
   RUN_TEST(tr, TestInsertionOverflow);
   RUN_TEST(tr, TestFormulaHandleDeletion);
   RUN_TEST(tr, TestErrorValue);
-#if 0
   RUN_TEST(tr, TestErrorDiv0);
   RUN_TEST(tr, TestEmptyCellTreatedAsZero);
   RUN_TEST(tr, TestFormulaInvalidPosition);
+#if 0
   RUN_TEST(tr, TestCellErrorPropagation);
   RUN_TEST(tr, TestCellsDeletionSimple);
   RUN_TEST(tr, TestCellsDeletion);

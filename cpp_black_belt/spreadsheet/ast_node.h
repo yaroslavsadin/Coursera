@@ -3,6 +3,7 @@
 #include "common.h"
 #include <optional>
 #include <sstream>
+#include <cmath>
 #include "ast_visitor.h"
 
 namespace Ast {
@@ -72,17 +73,29 @@ namespace Ast {
         virtual double Evaluate(const ISheet& context) const override {
             static_assert(op == '+' || op == '-' || op == '/' || op == '*');
             if constexpr(op == '+') {
-                return lhs->Evaluate(context) + rhs->Evaluate(context);
-            } else if constexpr(op == '-') {
-                return lhs->Evaluate(context) - rhs->Evaluate(context);
-            } else if constexpr(op == '/') {
-                auto rhs_val = rhs->Evaluate(context);
-                if(!rhs_val) {
+                auto res = lhs->Evaluate(context) + rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
                     throw FormulaError(FormulaError::Category::Div0);
                 }
-                return lhs->Evaluate(context) / rhs_val;
+                return res;
+            } else if constexpr(op == '-') {
+                auto res = lhs->Evaluate(context) - rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return res;
+            } else if constexpr(op == '/') {
+                auto res = lhs->Evaluate(context) / rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return res;
             } else if constexpr(op == '*') {
-                return lhs->Evaluate(context) * rhs->Evaluate(context);
+                auto res = lhs->Evaluate(context) * rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return res;
             }
         }
         const Node& GetRight() const {
@@ -109,12 +122,14 @@ namespace Ast {
     };
 
     static std::optional<double> ToNum(const std::string& str) {
-        for(char c : str) {
-            if(!std::isdigit(c) && c != '.') {
-                return std::nullopt;
-            }
+        std::istringstream iss(str);
+        double f;
+        iss >> std::noskipws >> f;
+        if(iss.eof() && !iss.fail()) {
+            return f;
+        } else {
+            return std::nullopt;
         }
-        return std::stod(str);
     }
 
     class CellNode : public Node {

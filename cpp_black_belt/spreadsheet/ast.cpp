@@ -28,7 +28,7 @@ void FormulaBaseListener::enterParens(FormulaParser::ParensContext * ctx)  { }
 void FormulaBaseListener::exitParens(FormulaParser::ParensContext * ctx)  { }
 
 void FormulaBaseListener::enterCell(FormulaParser::CellContext * ctx)  { }
-void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  { 
+void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  {   
     builder.push(std::make_unique<Ast::CellNode>(ctx->getText()));
 }
 
@@ -73,7 +73,9 @@ void FormulaBaseListener::exitBinaryOp(FormulaParser::BinaryOpContext * ctx)  {
 void FormulaBaseListener::enterEveryRule(antlr4::ParserRuleContext * ctx)  { }
 void FormulaBaseListener::exitEveryRule(antlr4::ParserRuleContext * ctx)  { }
 void FormulaBaseListener::visitTerminal(antlr4::tree::TerminalNode * /*node*/)  { }
-void FormulaBaseListener::visitErrorNode(antlr4::tree::ErrorNode * /*node*/)  { }
+void FormulaBaseListener::visitErrorNode(antlr4::tree::ErrorNode * ctx)  {
+    throw FormulaException(ctx->getText());
+}
 
 namespace Ast {
     std::unique_ptr<Node> ParseFormula(const std::string& in) {

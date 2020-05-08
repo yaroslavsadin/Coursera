@@ -49,7 +49,13 @@ std::string Formula::GetExpression() const{
 std::vector<Position> Formula::GetReferencedCells() const{
     Ast::ReferencedCellsVisitor visitor;
     top->Accept(visitor);
-    return visitor.Get();
+    auto res = visitor.Get();
+    for(Position pos : res) {
+        if(!pos.IsValid()) {
+            throw FormulaException("Referenced cell invalid position");
+        }
+    }
+    return res;
 }
 Formula::HandlingResult Formula::HandleInsertedRows(int before, int count){
     Ast::InsertVisitor visitor(Ast::InsertVisitor::Type::ROWS, before, count);
