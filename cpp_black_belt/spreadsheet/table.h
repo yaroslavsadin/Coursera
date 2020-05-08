@@ -43,7 +43,7 @@ public:
     }
 
     template<typename ElemType>
-    void SetCell(int row, int col, ElemType&& data) {
+    void SetCell(size_t row, size_t col, ElemType&& data) {
         static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
         if(storage.size() < row + 1) {
             storage.resize(row + 1);
@@ -56,7 +56,7 @@ public:
         storage[row][col] = std::make_shared<ElemType>(std::forward<ElemType>(data));
     }
 
-    void SetCell(int row, int col, std::shared_ptr<T> data) {
+    void SetCell(size_t row, size_t col, std::shared_ptr<T> data) {
         if(storage.size() < row + 1) {
             storage.resize(row + 1);
             row_count = storage.size();
@@ -68,7 +68,7 @@ public:
         storage[row][col] = std::move(data);
     }
 
-    void ClearCell(int row, int col) {
+    void ClearCell(size_t row, size_t col) {
         if(row < storage.size() && col < storage[row].size()) {
             storage[row][col].reset();
         }

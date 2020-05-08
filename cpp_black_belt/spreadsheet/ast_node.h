@@ -14,6 +14,7 @@ namespace Ast {
         virtual double Evaluate(const ISheet& context) const = 0;
         virtual void Accept(NodeVisitor& visitor) const = 0;
         virtual void Accept(NodeVisitorModifier& visitor) = 0;
+        virtual ~Node() = default;
     };
 
     std::unique_ptr<Node> ParseFormula(const std::string& in);

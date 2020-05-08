@@ -40,7 +40,7 @@ void Sheet::ClearCell(Position pos){
     storage.ClearCell(pos.row,pos.col);
 }
 void Sheet::InsertRows(int before, int count){
-    if(before < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {
+    if(static_cast<size_t>(before) < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertRows(before,count);
@@ -54,7 +54,7 @@ void Sheet::InsertRows(int before, int count){
     }
 }
 void Sheet::InsertCols(int before, int count){    
-    if(before < storage.GetColCount() && storage.GetColCount() + count > Position::kMaxCols) {
+    if(static_cast<size_t>(before) < storage.GetColCount() && storage.GetColCount() + count > Position::kMaxCols) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertCols(before,count);
@@ -69,7 +69,7 @@ void Sheet::InsertCols(int before, int count){
 }
 
 void Sheet::DeleteRows(int first, int count){
-    storage.DeleteRows(first,count);
+    storage.DeleteRows(static_cast<size_t>(first),count);
     for(const auto& row : storage) {
         for(auto cell : row) {
             if(cell) {  
@@ -79,7 +79,7 @@ void Sheet::DeleteRows(int first, int count){
     }
 }
 void Sheet::DeleteCols(int first, int count){
-    storage.DeleteCols(first,count);
+    storage.DeleteCols(static_cast<size_t>(first),count);
     for(const auto& row : storage) {
         for(auto cell : row) {
             if(cell) {  
@@ -89,19 +89,20 @@ void Sheet::DeleteCols(int first, int count){
     }
 }
 Size Sheet::GetPrintableSize() const{
-    return {storage.GetRowCount(),storage.GetColCount()};
+    return {static_cast<int>(storage.GetRowCount()),static_cast<int>(storage.GetColCount())};
 }
 void Sheet::PrintValues(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage) {
-        for(auto i = 0; i < storage.GetColCount(); i++) {
+        for(auto i = 0u; i < storage.GetColCount(); i++) {
             if(i < row.size() && row[i] != nullptr) {
                 std::stringstream ss;
-                auto to_string_f = [&ss](const auto& val) {
+                std::visit(
+                [&ss](const auto& val) {
                     ss << val;
                     return ss.str();
-                };
-                std::visit(to_string_f,row[i]->GetValue());
+                }, 
+                row[i]->GetValue());
                 res += ss.str();
             }
             res.push_back('\t');
@@ -113,7 +114,7 @@ void Sheet::PrintValues(std::ostream& output) const{
 void Sheet::PrintTexts(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage) {
-        for(auto i = 0; i < storage.GetColCount(); i++) {
+        for(auto i = 0u; i < storage.GetColCount(); i++) {
             if(i < row.size() && row[i] != nullptr) {
                 res += row[i]->GetText();
             }

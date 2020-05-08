@@ -21,3 +21,4 @@ CMakeCache.txt
 *.pb.h
 antlr4_runtime/
 *.jar
+*.tgz

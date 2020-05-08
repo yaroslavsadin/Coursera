@@ -1,12 +1,44 @@
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
 #include "FormulaBaseListener.h"
+#include "ast_node.h"
 
-void FormulaBaseListener::enterMain(FormulaParser::MainContext * ctx)  { }
-void FormulaBaseListener::exitMain(FormulaParser::MainContext * ctx)  { }
+class NodeTreeListener : public FormulaBaseListener {
+private:
+  std::stack<std::unique_ptr<Ast::Node>> builder;
+public:
 
-void FormulaBaseListener::enterUnaryOp(FormulaParser::UnaryOpContext * ctx)  { }
-void FormulaBaseListener::exitUnaryOp(FormulaParser::UnaryOpContext * ctx)  {
+  std::unique_ptr<Ast::Node> getAst() {
+    auto res = std::move(builder.top());
+    builder.pop();
+    assert(builder.empty());
+    return res;
+  }
+
+  virtual void enterMain(FormulaParser::MainContext * ctx) override;
+  virtual void exitMain(FormulaParser::MainContext * ctx) override;
+  virtual void enterUnaryOp(FormulaParser::UnaryOpContext * ctx) override;
+  virtual void exitUnaryOp(FormulaParser::UnaryOpContext * ctx) override;
+  virtual void enterParens(FormulaParser::ParensContext * ctx) override;
+  virtual void exitParens(FormulaParser::ParensContext * ctx) override;
+  virtual void enterCell(FormulaParser::CellContext * ctx) override;
+  virtual void exitCell(FormulaParser::CellContext * ctx) override;
+  virtual void enterLiteral(FormulaParser::LiteralContext * ctx) override;
+  virtual void exitLiteral(FormulaParser::LiteralContext * ctx) override;
+  virtual void enterBinaryOp(FormulaParser::BinaryOpContext * ctx) override;
+  virtual void exitBinaryOp(FormulaParser::BinaryOpContext * ctx) override;
+  virtual void enterEveryRule(antlr4::ParserRuleContext * ctx) override;
+  virtual void exitEveryRule(antlr4::ParserRuleContext * ctx) override;
+  virtual void visitTerminal(antlr4::tree::TerminalNode * /*node*/) override;
+  virtual void visitErrorNode(antlr4::tree::ErrorNode * /*node*/) override;
+
+};
+
+void NodeTreeListener::enterMain(FormulaParser::MainContext * ctx)  { }
+void NodeTreeListener::exitMain(FormulaParser::MainContext * ctx)  { }
+
+void NodeTreeListener::enterUnaryOp(FormulaParser::UnaryOpContext * ctx)  { }
+void NodeTreeListener::exitUnaryOp(FormulaParser::UnaryOpContext * ctx)  {
     auto rhs = std::move(builder.top());
     builder.pop();
     if(ctx->getText()[0] == '-') {
@@ -24,19 +56,19 @@ void FormulaBaseListener::exitUnaryOp(FormulaParser::UnaryOpContext * ctx)  {
     }
 }
 
-void FormulaBaseListener::enterParens(FormulaParser::ParensContext * ctx)  { }
-void FormulaBaseListener::exitParens(FormulaParser::ParensContext * ctx)  { }
+void NodeTreeListener::enterParens(FormulaParser::ParensContext * ctx)  { }
+void NodeTreeListener::exitParens(FormulaParser::ParensContext * ctx)  { }
 
-void FormulaBaseListener::enterCell(FormulaParser::CellContext * ctx)  { }
-void FormulaBaseListener::exitCell(FormulaParser::CellContext * ctx)  {   
+void NodeTreeListener::enterCell(FormulaParser::CellContext * ctx)  { }
+void NodeTreeListener::exitCell(FormulaParser::CellContext * ctx)  {   
     if(ctx->exception) {
         std::cerr << "Exception" << std::endl;
     }
     builder.push(std::make_unique<Ast::CellNode>(ctx->getText()));
 }
 
-void FormulaBaseListener::enterLiteral(FormulaParser::LiteralContext * ctx)  { }
-void FormulaBaseListener::exitLiteral(FormulaParser::LiteralContext * ctx)  {
+void NodeTreeListener::enterLiteral(FormulaParser::LiteralContext * ctx)  { }
+void NodeTreeListener::exitLiteral(FormulaParser::LiteralContext * ctx)  {
     builder.push(
         std::make_unique<Ast::NumberNode>(
             std::atof(ctx->getText().c_str())
@@ -44,8 +76,8 @@ void FormulaBaseListener::exitLiteral(FormulaParser::LiteralContext * ctx)  {
     ); 
 }
 
-void FormulaBaseListener::enterBinaryOp(FormulaParser::BinaryOpContext * ctx)  { }
-void FormulaBaseListener::exitBinaryOp(FormulaParser::BinaryOpContext * ctx)  {
+void NodeTreeListener::enterBinaryOp(FormulaParser::BinaryOpContext * ctx)  { }
+void NodeTreeListener::exitBinaryOp(FormulaParser::BinaryOpContext * ctx)  {
     size_t ttype = FormulaParser::ADD;
     for(; ttype <= FormulaParser::DIV; ttype++) {
         if(auto token = ctx->getToken(ttype,0); token) 
@@ -73,10 +105,10 @@ void FormulaBaseListener::exitBinaryOp(FormulaParser::BinaryOpContext * ctx)  {
     }
 }
 
-void FormulaBaseListener::enterEveryRule(antlr4::ParserRuleContext * ctx)  { }
-void FormulaBaseListener::exitEveryRule(antlr4::ParserRuleContext * ctx)  { }
-void FormulaBaseListener::visitTerminal(antlr4::tree::TerminalNode * /*node*/)  { }
-void FormulaBaseListener::visitErrorNode(antlr4::tree::ErrorNode * ctx)  {
+void NodeTreeListener::enterEveryRule(antlr4::ParserRuleContext * ctx)  { }
+void NodeTreeListener::exitEveryRule(antlr4::ParserRuleContext * ctx)  { }
+void NodeTreeListener::visitTerminal(antlr4::tree::TerminalNode * /*node*/)  { }
+void NodeTreeListener::visitErrorNode(antlr4::tree::ErrorNode * ctx)  {
 }
 
 class BailErrorListener : public antlr4::BaseErrorListener {
@@ -108,7 +140,7 @@ namespace Ast {
 
         try {
             antlr4::tree::ParseTree* tree = parser.main();
-            FormulaBaseListener listener;
+            NodeTreeListener listener;
             antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
             return listener.getAst();
         } catch(std::exception& err) {
