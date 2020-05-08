@@ -18,6 +18,5 @@ public:
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
 private:
-    bool CheckCircular(Position pos, const std::vector<Position>& referenced);
     Table<Cell> storage;
 };

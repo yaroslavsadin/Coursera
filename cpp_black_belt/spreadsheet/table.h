@@ -131,16 +131,6 @@ public:
         return col_count;
     }
 
-    void Print(std::ostream& output) const {
-        // for(const auto& row : storage) {
-        //     for(auto val : row) {
-        //         output << val->GetValue() << " | ";
-        //     }
-        //     output << '\n';
-        // }
-        // output << '\n';
-    }
-
 private:
     Storage storage;
     size_t row_count;

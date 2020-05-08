@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <sstream>
 #include "sheet.h"
 #include "cell.h"
 
@@ -91,9 +92,36 @@ Size Sheet::GetPrintableSize() const{
     return {storage.GetRowCount(),storage.GetColCount()};
 }
 void Sheet::PrintValues(std::ostream& output) const{
-    storage.Print(output);
+    std::string res;
+    for(const auto& row : storage) {
+        for(auto i = 0; i < storage.GetColCount(); i++) {
+            if(i < row.size() && row[i] != nullptr) {
+                std::stringstream ss;
+                auto to_string_f = [&ss](const auto& val) {
+                    ss << val;
+                    return ss.str();
+                };
+                std::visit(to_string_f,row[i]->GetValue());
+                res += ss.str();
+            }
+            res.push_back('\t');
+        }
+        res.back() = '\n';
+    }
+    output << res;
 }
 void Sheet::PrintTexts(std::ostream& output) const{
+    std::string res;
+    for(const auto& row : storage) {
+        for(auto i = 0; i < storage.GetColCount(); i++) {
+            if(i < row.size() && row[i] != nullptr) {
+                res += row[i]->GetText();
+            }
+            res.push_back('\t');
+        }
+        res.back() = '\n';
+    }
+    output << res;
 }
 
 std::unique_ptr<ISheet> CreateSheet() {

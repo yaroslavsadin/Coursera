@@ -553,7 +553,7 @@ namespace {
     ASSERT(caught);
     ASSERT_EQUAL(sheet->GetCell("M6"_pos)->GetText(), "Ready");
   }
-#if 0
+
   void TestPrint() {
     auto sheet = CreateSheet();
     sheet->SetCell("A2"_pos, "meow");
@@ -569,7 +569,7 @@ namespace {
     sheet->PrintValues(values);
     ASSERT_EQUAL(values.str(), "\t\nmeow\t35\n");
   }
-#endif
+
   void TestPosition() {
     for(int i = 0; i < 10; i++) {
       for(int j = 0; j < 16383; j++) {
@@ -691,9 +691,7 @@ int main() {
   RUN_TEST(tr, TestCellReferences);
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
-#if 0
   RUN_TEST(tr, TestPrint);
-#endif
   RUN_TEST(tr, TestTable);
   RUN_TEST(tr, TestCached);
   return 0;
