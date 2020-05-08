@@ -412,7 +412,7 @@ namespace {
     try_formula("=XFE16384");
     try_formula("=R2D2");
   }
-#if 0
+
   void TestCellErrorPropagation() {
     auto sheet = CreateSheet();
     sheet->SetCell("A1"_pos, "=1");
@@ -435,7 +435,7 @@ namespace {
     ASSERT(value == ICell::Value(FormulaError::Category::Ref) ||
            value == ICell::Value(FormulaError::Category::Div0));
   }
-
+#if 0
   void TestCellsDeletionSimple() {
     auto sheet = CreateSheet();
     sheet->SetCell("A1"_pos, "1");
@@ -683,8 +683,8 @@ int main() {
   RUN_TEST(tr, TestErrorDiv0);
   RUN_TEST(tr, TestEmptyCellTreatedAsZero);
   RUN_TEST(tr, TestFormulaInvalidPosition);
-#if 0
   RUN_TEST(tr, TestCellErrorPropagation);
+#if 0
   RUN_TEST(tr, TestCellsDeletionSimple);
   RUN_TEST(tr, TestCellsDeletion);
   RUN_TEST(tr, TestCellsDeletionAdjacent);
