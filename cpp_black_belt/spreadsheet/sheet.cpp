@@ -42,8 +42,10 @@ void Sheet::InsertRows(int before, int count){
     } else {
         storage.InsertRows(before,count);
         for(const auto& row : storage) {
-            for(auto& cell : row) {
-                cell->HandleInsertedRows(before,count);
+            for(auto cell : row) {
+                if(cell) {  
+                    cell->HandleInsertedRows(before,count);
+                }
             }
         }
     }
@@ -54,8 +56,10 @@ void Sheet::InsertCols(int before, int count){
     } else {
         storage.InsertCols(before,count);
         for(const auto& row : storage) {
-            for(auto& cell : row) {
-                cell->HandleInsertedCols(before,count);
+            for(auto cell : row) {
+                if(cell) {  
+                    cell->HandleInsertedCols(before,count);
+                }
             }
         }
     }
@@ -64,16 +68,20 @@ void Sheet::InsertCols(int before, int count){
 void Sheet::DeleteRows(int first, int count){
     storage.DeleteRows(first,count);
     for(const auto& row : storage) {
-        for(auto& cell : row) {
-            cell->HandleDeletedRows(first,count);
+        for(auto cell : row) {
+            if(cell) {  
+                cell->HandleDeletedRows(first,count);
+            }
         }
     }
 }
 void Sheet::DeleteCols(int first, int count){
     storage.DeleteCols(first,count);
     for(const auto& row : storage) {
-        for(auto& cell : row) {
-            cell->HandleDeletedCols(first,count);
+        for(auto cell : row) {
+            if(cell) {  
+                cell->HandleDeletedCols(first,count);
+            }
         }
     }
 }
@@ -81,6 +89,7 @@ Size Sheet::GetPrintableSize() const{
     return {storage.GetRowCount(),storage.GetColCount()};
 }
 void Sheet::PrintValues(std::ostream& output) const{
+    storage.Print(output);
 }
 void Sheet::PrintTexts(std::ostream& output) const{
 }

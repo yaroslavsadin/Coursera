@@ -630,6 +630,39 @@ void TestTable() {
 
 }
 
+void TestCached() {
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "42");
+  sheet->SetCell("A2"_pos, "=A1");
+  sheet->SetCell("A3"_pos, "=A2");
+  sheet->SetCell("A4"_pos, "=A3");
+  sheet->SetCell("B2"_pos, "=A1+B1");
+  sheet->SetCell("B3"_pos, "=A2+B2");
+  sheet->SetCell("B4"_pos, "=A3+B3");
+  sheet->SetCell("C3"_pos, "=B2+C2");
+  sheet->SetCell("C4"_pos, "=B3+C3");
+  sheet->SetCell("D4"_pos, "=C3+D3");
+
+  ASSERT_EQUAL(sheet->GetCell("B3"_pos)->GetValue(),ICell::Value(84));
+  ASSERT_EQUAL(sheet->GetCell("B4"_pos)->GetValue(),ICell::Value(126));
+  sheet->SetCell("A1"_pos, "24");
+  ASSERT_EQUAL(sheet->GetCell("B3"_pos)->GetValue(),ICell::Value(48));
+  ASSERT_EQUAL(sheet->GetCell("B4"_pos)->GetValue(),ICell::Value(72));
+  
+  sheet->InsertCols(1,2);
+  ASSERT_EQUAL(sheet->GetCell("D3"_pos)->GetValue(),ICell::Value(48));
+  ASSERT_EQUAL(sheet->GetCell("D4"_pos)->GetValue(),ICell::Value(72));
+  
+  sheet->SetCell("E3"_pos, "665");
+  ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(665));
+  sheet->SetCell("F3"_pos, "1");
+  ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(666));
+
+  sheet->InsertRows(3);
+  ASSERT_EQUAL(sheet->GetCell("A5"_pos)->GetValue(),ICell::Value(24));
+  ASSERT_EQUAL(sheet->GetCell("F5"_pos)->GetValue(),ICell::Value(666));
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -662,5 +695,6 @@ int main() {
   RUN_TEST(tr, TestCellCircularReferences);
 #endif
   RUN_TEST(tr, TestTable);
+  RUN_TEST(tr, TestCached);
   return 0;
 }

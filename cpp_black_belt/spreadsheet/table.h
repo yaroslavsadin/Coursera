@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <cassert>
+#include <iostream>
 
 template<typename T>
 class Table {
@@ -128,6 +129,16 @@ public:
 
     size_t GetColCount() const noexcept {
         return col_count;
+    }
+
+    void Print(std::ostream& output) const {
+        // for(const auto& row : storage) {
+        //     for(auto val : row) {
+        //         output << val->GetValue() << " | ";
+        //     }
+        //     output << '\n';
+        // }
+        // output << '\n';
     }
 
 private:

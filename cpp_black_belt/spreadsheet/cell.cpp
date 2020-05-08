@@ -44,26 +44,34 @@ std::vector<Position> Cell::GetReferencedCells() const {
 void Cell::HandleInsertedRows(int before, int count) {
     if(formula) {
         auto result = formula->HandleInsertedRows(before,count);
-        /// TODO: do something with the result
+        if(result == IFormula::HandlingResult::ReferencesChanged) {
+            Notify();
+        }
     }
 }
 
 void Cell::HandleInsertedCols(int before, int count) {
     if(formula) {
         auto result = formula->HandleInsertedCols(before,count); 
-        /// TODO: do something with the result
+        if(result == IFormula::HandlingResult::ReferencesChanged) {
+            Notify();
+        }
     }
 }
 
 void Cell::HandleDeletedRows(int first, int count) {
     if(formula) {
         auto result = formula->HandleDeletedRows(first,count);
-        /// TODO: do something with the result
+        if(result == IFormula::HandlingResult::ReferencesChanged) {
+            Notify();
+        }
     }
 }
 void Cell::HandleDeletedCols(int first, int count) {
     if(formula) {
         auto result = formula->HandleDeletedCols(first,count);
-        /// TODO: do something with the result
+        if(result == IFormula::HandlingResult::ReferencesChanged) {
+            Notify();
+        }
     }
 }

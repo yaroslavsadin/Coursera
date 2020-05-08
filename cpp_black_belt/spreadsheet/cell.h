@@ -24,7 +24,7 @@ public:
         for(auto observer : subscribers) {
             /// TODO: Deal with dangling pointers
             auto ptr = observer.lock();
-            if(ptr) ptr->Notify();
+            if(ptr) ptr->Update();
         }
     }
 
