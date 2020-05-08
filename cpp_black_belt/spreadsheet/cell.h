@@ -1,8 +1,9 @@
 #pragma once
-#include "common.h"
-#include "formula.h"
 #include <iostream>
 #include <optional>
+#include <list>
+#include "common.h"
+#include "formula.h"
 
 class Cell : public ICell {
 public:
@@ -14,6 +15,30 @@ public:
     void HandleInsertedCols(int before, int count = 1);
     void HandleDeletedRows(int first, int count = 1);
     void HandleDeletedCols(int first, int count = 1);
+    
+    // Observer part
+    void Subscribe(std::weak_ptr<Cell> observer) const {
+        subscribers.push_back(observer);
+    }
+    void Notify() const {
+        for(auto observer : subscribers) {
+            /// TODO: Deal with dangling pointers
+            auto ptr = observer.lock();
+            if(ptr) ptr->Notify();
+        }
+    }
+
+    // Subject part
+    void Update() const {
+        if(cache.HasValue()) {
+            cache.InvalidateValue();
+            Notify();
+        }
+    }
+
+    ~Cell() {
+        Notify();
+    }
 private:
     class CellCache {
     public:
@@ -52,6 +77,7 @@ private:
     };
 
     const ISheet& sheet;
-    mutable CellCache cache;
     std::unique_ptr<IFormula> formula;
+    mutable CellCache cache;
+    mutable std::list<std::weak_ptr<Cell>> subscribers;
 };

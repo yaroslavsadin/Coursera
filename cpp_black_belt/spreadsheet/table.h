@@ -8,7 +8,7 @@
 template<typename T>
 class Table {
 private:
-    using Row = std::vector<std::unique_ptr<T>>;
+    using Row = std::vector<std::shared_ptr<T>>;
     using Storage = std::vector<Row>;
 public:
     using const_iterator = typename Storage::const_iterator;
@@ -52,10 +52,10 @@ public:
             storage[row].resize(col + 1);
             col_count = std::max(col_count,storage[row].size());
         }
-        storage[row][col] = std::make_unique<ElemType>(std::forward<ElemType>(data));
+        storage[row][col] = std::make_shared<ElemType>(std::forward<ElemType>(data));
     }
 
-    void SetCell(int row, int col, std::unique_ptr<T> data) {
+    void SetCell(int row, int col, std::shared_ptr<T> data) {
         if(storage.size() < row + 1) {
             storage.resize(row + 1);
             row_count = storage.size();

@@ -15,11 +15,13 @@ static inline void CheckPosition(Position pos, std::string message) {
 
 void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
-    storage.SetCell(pos.row,pos.col,std::make_unique<Cell>(*this,text));
-    for(auto pos : storage[pos.row][pos.col]->GetReferencedCells()) {
-        if(storage.GetCell(pos.row,pos.col) == nullptr) {
-            storage.SetCell(pos.row,pos.col,std::make_unique<Cell>(*this,text));
+    auto item = std::make_shared<Cell>(*this,text);
+    storage.SetCell(pos.row,pos.col,item);
+    for(auto referenced : storage[pos.row][pos.col]->GetReferencedCells()) {
+        if(storage.GetCell(referenced.row,referenced.col) == nullptr) {
+            storage.SetCell(referenced.row,referenced.col,std::make_shared<Cell>(*this,""));
         }
+        storage.GetCell(referenced.row,referenced.col)->Subscribe(item);
     }
 }
 const ICell* Sheet::GetCell(Position pos) const{
@@ -39,6 +41,11 @@ void Sheet::InsertRows(int before, int count){
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertRows(before,count);
+        for(const auto& row : storage) {
+            for(auto& cell : row) {
+                cell->HandleInsertedRows(before,count);
+            }
+        }
     }
 }
 void Sheet::InsertCols(int before, int count){    
@@ -46,14 +53,29 @@ void Sheet::InsertCols(int before, int count){
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertCols(before,count);
+        for(const auto& row : storage) {
+            for(auto& cell : row) {
+                cell->HandleInsertedCols(before,count);
+            }
+        }
     }
 }
 
 void Sheet::DeleteRows(int first, int count){
     storage.DeleteRows(first,count);
+    for(const auto& row : storage) {
+        for(auto& cell : row) {
+            cell->HandleDeletedRows(first,count);
+        }
+    }
 }
 void Sheet::DeleteCols(int first, int count){
     storage.DeleteCols(first,count);
+    for(const auto& row : storage) {
+        for(auto& cell : row) {
+            cell->HandleDeletedCols(first,count);
+        }
+    }
 }
 Size Sheet::GetPrintableSize() const{
     return {storage.GetRowCount(),storage.GetColCount()};
