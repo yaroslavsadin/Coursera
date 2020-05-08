@@ -1,7 +1,8 @@
-#include "sheet.h"
 #include <algorithm>
-#include "cell.h"
 #include <cassert>
+#include "sheet.h"
+#include "cell.h"
+
 
 bool Size::operator==(const Size& rhs) const {
     return rows == rhs.rows && cols == rhs.cols;
@@ -16,6 +17,7 @@ static inline void CheckPosition(Position pos, std::string message) {
 void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
     auto item = std::make_shared<Cell>(*this,text);
+    item->CheckCircular(pos); // throws CircularDependencyExeption
     storage.SetCell(pos.row,pos.col,item);
     for(auto referenced : storage[pos.row][pos.col]->GetReferencedCells()) {
         if(storage.GetCell(referenced.row,referenced.col) == nullptr) {

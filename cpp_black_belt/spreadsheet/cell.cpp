@@ -75,3 +75,16 @@ void Cell::HandleDeletedCols(int first, int count) {
         }
     }
 }
+
+void Cell::CheckCircular(Position self) const {
+    for(auto pos : GetReferencedCells()) {
+        if(pos == self) {
+            throw CircularDependencyException("");
+        } else {
+            auto cell_ptr = sheet.GetCell(pos);
+            if(cell_ptr) {
+                static_cast<const Cell*>(cell_ptr)->CheckCircular(self);
+            }
+        }
+    }
+}

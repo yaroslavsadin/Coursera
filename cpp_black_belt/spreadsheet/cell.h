@@ -15,6 +15,7 @@ public:
     void HandleInsertedCols(int before, int count = 1);
     void HandleDeletedRows(int first, int count = 1);
     void HandleDeletedCols(int first, int count = 1);
+    void CheckCircular(Position self) const;
     
     // Observer part
     void Subscribe(std::weak_ptr<Cell> observer) const {
