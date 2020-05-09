@@ -623,8 +623,8 @@ void TestTable() {
   // Deleting is now effective, check with big values
   table.DeleteCols(1,42);
   table.DeleteRows(1,42);
-  ASSERT_EQUAL(table.GetRowCount(),1u);
-  ASSERT_EQUAL(table.GetColCount(),1u);
+  ASSERT_EQUAL(table.GetRowCount(),0u);
+  ASSERT_EQUAL(table.GetColCount(),0u);
   ASSERT(table.GetCell(0,0) == nullptr);
   ASSERT(table.GetCell(42,24) == nullptr);
 
@@ -663,6 +663,15 @@ void TestCached() {
   ASSERT_EQUAL(sheet->GetCell("F5"_pos)->GetValue(),ICell::Value(666));
 }
 
+void TestSize() {
+  auto sheet = CreateSheet();
+  sheet->SetCell("F6"_pos,"0");
+  ASSERT_EQUAL(sheet->GetPrintableSize(),(Size{6,6}));
+  sheet->DeleteRows(0,666);
+  sheet->DeleteCols(0,666);
+  ASSERT_EQUAL(sheet->GetPrintableSize(),(Size{0,0}));
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -694,5 +703,6 @@ int main() {
   RUN_TEST(tr, TestPrint);
   RUN_TEST(tr, TestTable);
   RUN_TEST(tr, TestCached);
+  RUN_TEST(tr, TestSize);
   return 0;
 }
