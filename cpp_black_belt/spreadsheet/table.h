@@ -42,18 +42,22 @@ public:
     template<typename ElemType>
     void SetCell(Position pos, ElemType&& data) {
         static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
-        UpdateSize(pos);
         active_cells[pos] = std::make_shared<ElemType>(std::forward<ElemType>(data));
+        UpdateSize(pos);
     }
 
     void SetCell(Position pos, std::shared_ptr<T> data) {
-        UpdateSize(pos);
         active_cells[pos] = std::move(data);
+        UpdateSize(pos);
     }
 
     void ClearCell(Position pos) {
         if(active_cells.count(pos)) {
             active_cells.erase(pos);
+            size = {0,0};
+            for(auto [pos_,cell] : active_cells) {
+                UpdateSize(pos);
+            }
         }
     }
 
