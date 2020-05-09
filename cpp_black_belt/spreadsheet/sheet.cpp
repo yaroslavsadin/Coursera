@@ -19,25 +19,25 @@ void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
     auto item = std::make_shared<Cell>(*this,text);
     item->CheckCircular(pos); // throws CircularDependencyExeption
-    storage.SetCell(pos.row,pos.col,item);
-    for(auto referenced : storage.GetCell(pos.row,pos.col)->GetReferencedCells()) {
-        if(storage.GetCell(referenced.row,referenced.col) == nullptr) {
-            storage.SetCell(referenced.row,referenced.col,std::make_shared<Cell>(*this,""));
+    storage.SetCell(pos,item);
+    for(auto referenced : storage.GetCell(pos)->GetReferencedCells()) {
+        if(storage.GetCell(referenced) == nullptr) {
+            storage.SetCell(referenced,std::make_shared<Cell>(*this,""));
         }
-        storage.GetCell(referenced.row,referenced.col)->Subscribe(item);
+        storage.GetCell(referenced)->Subscribe(item);
     }
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);
-    return static_cast<ICell*>(storage.GetCell(pos.row,pos.col));
+    return static_cast<ICell*>(storage.GetCell(pos));
 }
 ICell* Sheet::GetCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    return static_cast<ICell*>(storage.GetCell(pos.row,pos.col));
+    return static_cast<ICell*>(storage.GetCell(pos));
 }
 void Sheet::ClearCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    storage.ClearCell(pos.row,pos.col);
+    storage.ClearCell(pos);
 }
 void Sheet::InsertRows(int before, int count){
     if(static_cast<size_t>(before) < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {

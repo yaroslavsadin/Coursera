@@ -9,7 +9,13 @@ bool Position::operator==(const Position& rhs) const {
     return std::tie(row,col) == std::tie(rhs.row,rhs.col); 
 }
 bool Position::operator<(const Position& rhs) const {
-    return std::tie(row,col) < std::tie(rhs.row,rhs.col);
+    if(row < rhs.row) {
+        return true;
+    } else if(row == rhs.row) {
+        return col < rhs.col;
+    } else {
+        return false;
+    }
 }
 bool Position::IsValid() const {
     return row < kMaxRows && col < kMaxCols && row >= 0 && col >= 0;

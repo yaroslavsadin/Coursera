@@ -1,39 +1,29 @@
 #pragma once
 #include "common.h"
-#include <vector>
-#include <string>
-#include <set>
 #include <cassert>
 #include <algorithm>
 #include <unordered_map>
+#include <map>
 #include <iostream>
 
 template<typename T>
 class Table {
 private:
-    uint16_t row_count;
-    uint16_t col_count;
-
-    struct TableSize {
-        uint16_t row;
-        uint16_t col;
-        bool operator==(const TableSize& other) const {
-            return row == other.row && col == other.col;
-        }
-    };
-
-    struct TableSizeHash {
+    struct PositionHash {
         static_assert(sizeof(uint16_t) * 2 == sizeof(uint32_t));
 
-        size_t operator()(TableSize p) const noexcept {
+        size_t operator()(Position p) const noexcept {
             return size_t(p.row) << 16 | p.col;
         }
     };
-    std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash> active_cells;
-public:
-    using const_iterator = typename std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash>::const_iterator;
+    using Storage = std::unordered_map<Position,std::shared_ptr<T>,PositionHash>;
 
-    Table() : row_count(0), col_count(0) {}
+    Size size;
+    Storage active_cells;
+public:
+    using const_iterator = typename Storage::const_iterator;
+
+    Table() = default;
 
     const_iterator begin() const {
         return active_cells.cbegin();
@@ -42,38 +32,35 @@ public:
         return active_cells.cend();
     }
 
-    T* GetCell(size_t row_num, size_t col_num) const {
-        if(active_cells.count({row_num,col_num})) {
-            return active_cells.at({row_num,col_num}).get();
+    T* GetCell(Position pos) const {
+        if(active_cells.count(pos)) {
+            return active_cells.at(pos).get();
         }
         return nullptr;
     }
 
     template<typename ElemType>
-    void SetCell(size_t row, size_t col, ElemType&& data) {
+    void SetCell(Position pos, ElemType&& data) {
         static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
-        auto pos = TableSize{row,col};
         UpdateSize(pos);
         active_cells[pos] = std::make_shared<ElemType>(std::forward<ElemType>(data));
     }
 
-    void SetCell(size_t row, size_t col, std::shared_ptr<T> data) {
-        auto pos = TableSize{row,col};
+    void SetCell(Position pos, std::shared_ptr<T> data) {
         UpdateSize(pos);
         active_cells[pos] = std::move(data);
     }
 
-    void ClearCell(size_t row, size_t col) {
-        if(active_cells.count({row,col})) {
-            active_cells.erase({row,col});
+    void ClearCell(Position pos) {
+        if(active_cells.count(pos)) {
+            active_cells.erase(pos);
         }
     }
 
     void InsertRows(size_t before, size_t count = 1) {
-        if(before < row_count) {
-            row_count = 0;
-            col_count = 0;
-            std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash> temp;
+        if(before < size.rows) {
+            Storage temp;
+            size = {0,0};
             for(auto [pos_,cell] : active_cells) {
                 auto pos = pos_;
                 if(pos.row >= before) {
@@ -87,10 +74,9 @@ public:
     }
 
     void InsertCols(size_t before, size_t count = 1) {
-        if(before < col_count) {
-            row_count = 0;
-            col_count = 0;
-            std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash> temp;
+        if(before < size.cols) {
+            Storage temp;
+            size = {0,0};
             for(auto [pos_,cell] : active_cells) {
                 auto pos = pos_;
                 if(pos.col >= before) {
@@ -104,10 +90,9 @@ public:
     }
 
     void DeleteRows(size_t first, size_t count = 1) {
-        if(first < row_count) {
-            row_count = 0;
-            col_count = 0;
-            std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash> temp;
+        if(first < size.rows) {
+            Storage temp;
+            size = {0,0};
             for(auto [pos_,cell] : active_cells) {
                 auto pos = pos_;
                 if(pos.row < first) {
@@ -124,10 +109,9 @@ public:
     }
 
     void DeleteCols(size_t first, size_t count = 1) {
-        if(first < col_count) {
-            row_count = 0;
-            col_count = 0;
-            std::unordered_map<TableSize,std::shared_ptr<T>,TableSizeHash> temp;
+        if(first < size.cols) {
+            size = {0,0};
+            Storage temp;
             for(auto [pos_,cell] : active_cells) {
                 auto pos = pos_;
                 if(pos.col < first) {
@@ -144,18 +128,26 @@ public:
     }
 
     size_t GetRowCount() const noexcept {
-        return row_count;
+        return size.rows;
     }
 
     size_t GetColCount() const noexcept {
-        return col_count;
+        return size.cols;
+    }
+
+    std::map<Position,T*> GetSorted() const {
+        std::map<Position,T*> res;
+        for(auto [pos,cell] : active_cells) {
+            res[pos] = cell.get();
+        }
+        return res;
     }
 
     // void Print(std::ostream& os) const {
     //     std::vector<std::vector<T*>> printable;
-    //     printable.resize(row_count);
+    //     printable.resize(printable_size.rows);
     //     for(const auto& row : printable) {
-    //         row.resize(col_count);
+    //         row.resize(printable_size.cols);
     //     }
     //     for(auto [pos,cell] : active_cells) {
     //         printable[pos.row][pos.col] = cell.get();
@@ -169,12 +161,12 @@ public:
     //     }
     // }
 private:
-    void UpdateSize(TableSize pos) {
-        if(row_count < pos.row + 1) {
-            row_count = pos.row + 1;
+    void UpdateSize(Position pos) {
+        if(size.rows < pos.row + 1) {
+            size.rows = pos.row + 1;
         }
-        if(col_count < pos.col + 1) {
-            col_count = pos.col + 1;
+        if(size.cols < pos.col + 1) {
+            size.cols = pos.col + 1;
         }
     }
 };
