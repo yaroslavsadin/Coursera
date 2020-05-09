@@ -40,7 +40,7 @@ void Sheet::ClearCell(Position pos){
     storage.ClearCell(pos);
 }
 void Sheet::InsertRows(int before, int count){
-    if(static_cast<size_t>(before) < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {
+    if(before < storage.GetRowCount() && storage.GetRowCount() + count > Position::kMaxRows) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertRows(before,count);
@@ -50,7 +50,7 @@ void Sheet::InsertRows(int before, int count){
     }
 }
 void Sheet::InsertCols(int before, int count){    
-    if(static_cast<size_t>(before) < storage.GetColCount() && storage.GetColCount() + count > Position::kMaxCols) {
+    if(before < storage.GetColCount() && storage.GetColCount() + count > Position::kMaxCols) {
         throw TableTooBigException(__FUNCTION__);
     } else {
         storage.InsertCols(before,count);
@@ -61,52 +61,52 @@ void Sheet::InsertCols(int before, int count){
 }
 
 void Sheet::DeleteRows(int first, int count){
-    storage.DeleteRows(static_cast<size_t>(first),count);
+    storage.DeleteRows(first,count);
     for(const auto [pos,cell] : storage) {
         cell->HandleDeletedRows(first,count);
     }
 }
 void Sheet::DeleteCols(int first, int count){
-    storage.DeleteCols(static_cast<size_t>(first),count);
+    storage.DeleteCols(first,count);
     for(const auto [pos,cell] : storage) {
         cell->HandleDeletedCols(first,count);
     }
 }
 Size Sheet::GetPrintableSize() const{
-    return {static_cast<int>(storage.GetRowCount()),static_cast<int>(storage.GetColCount())};
+    return {storage.GetRowCount(),storage.GetColCount()};
 }
 void Sheet::PrintValues(std::ostream& output) const{
-    // std::string res;
-    // for(const auto [pos,cell] : storage) {
-    //     for(auto i = 0u; i < storage.GetColCount(); i++) {
-    //         if(i < row.size() && row[i] != nullptr) {
-    //             std::stringstream ss;
-    //             std::visit(
-    //             [&ss](const auto& val) {
-    //                 ss << val;
-    //                 return ss.str();
-    //             }, 
-    //             row[i]->GetValue());
-    //             res += ss.str();
-    //         }
-    //         res.push_back('\t');
-    //     }
-    //     res.back() = '\n';
-    // }
-    // output << res;
+    std::string res;
+    for(const auto& row : storage.GetPrintable()) {
+        for(auto i = 0; i < storage.GetColCount(); i++) {
+            if(i < row.size() && row[i] != nullptr) {
+                std::stringstream ss;
+                std::visit(
+                [&ss](const auto& val) {
+                    ss << val;
+                    return ss.str();
+                }, 
+                row[i]->GetValue());
+                res += ss.str();
+            }
+            res.push_back('\t');
+        }
+        res.back() = '\n';
+    }
+    output << res;
 }
 void Sheet::PrintTexts(std::ostream& output) const{
-    // std::string res;
-    // for(const auto& row : storage) {
-    //     for(auto i = 0u; i < storage.GetColCount(); i++) {
-    //         if(i < row.size() && row[i] != nullptr) {
-    //             res += row[i]->GetText();
-    //         }
-    //         res.push_back('\t');
-    //     }
-    //     res.back() = '\n';
-    // }
-    // output << res;
+    std::string res;
+    for(const auto& row : storage.GetPrintable()) {
+        for(auto i = 0; i < storage.GetColCount(); i++) {
+            if(i < row.size() && row[i] != nullptr) {
+                res += row[i]->GetText();
+            }
+            res.push_back('\t');
+        }
+        res.back() = '\n';
+    }
+    output << res;
 }
 
 std::unique_ptr<ISheet> CreateSheet() {

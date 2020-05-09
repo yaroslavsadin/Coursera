@@ -57,7 +57,7 @@ public:
         }
     }
 
-    void InsertRows(size_t before, size_t count = 1) {
+    void InsertRows(int before, int count = 1) {
         if(before < size.rows) {
             Storage temp;
             size = {0,0};
@@ -73,7 +73,7 @@ public:
         }
     }
 
-    void InsertCols(size_t before, size_t count = 1) {
+    void InsertCols(int before, int count = 1) {
         if(before < size.cols) {
             Storage temp;
             size = {0,0};
@@ -89,7 +89,7 @@ public:
         }
     }
 
-    void DeleteRows(size_t first, size_t count = 1) {
+    void DeleteRows(int first, int count = 1) {
         if(first < size.rows) {
             Storage temp;
             size = {0,0};
@@ -108,7 +108,7 @@ public:
         }
     }
 
-    void DeleteCols(size_t first, size_t count = 1) {
+    void DeleteCols(int first, int count = 1) {
         if(first < size.cols) {
             size = {0,0};
             Storage temp;
@@ -127,11 +127,11 @@ public:
         }
     }
 
-    size_t GetRowCount() const noexcept {
+    int GetRowCount() const noexcept {
         return size.rows;
     }
 
-    size_t GetColCount() const noexcept {
+    int GetColCount() const noexcept {
         return size.cols;
     }
 
@@ -143,23 +143,17 @@ public:
         return res;
     }
 
-    // void Print(std::ostream& os) const {
-    //     std::vector<std::vector<T*>> printable;
-    //     printable.resize(printable_size.rows);
-    //     for(const auto& row : printable) {
-    //         row.resize(printable_size.cols);
-    //     }
-    //     for(auto [pos,cell] : active_cells) {
-    //         printable[pos.row][pos.col] = cell.get();
-    //     }
-    //     for(const auto& row : printable) {
-    //         for(auto* item : row) {
-    //             if(item) {
-    //                 os << item;
-    //             }
-    //         }
-    //     }
-    // }
+    std::vector<std::vector<const T*>> GetPrintable() const {
+        std::vector<std::vector<const T*>> printable;
+        printable.resize(size.rows);
+        for(auto& row : printable) {
+            row.resize(static_cast<size_t>(size.cols));
+        }
+        for(auto [pos,cell] : active_cells) {
+            printable[pos.row][pos.col] = cell.get();
+        }
+        return printable;
+    }
 private:
     void UpdateSize(Position pos) {
         if(size.rows < pos.row + 1) {
