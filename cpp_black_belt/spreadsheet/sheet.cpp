@@ -20,20 +20,28 @@ void Sheet::SetCell(Position pos, std::string text){
     auto item = std::make_shared<Cell>(*this,text);
     item->CheckCircular(pos); // throws CircularDependencyExeption
     storage.SetCell(pos,item);
-    for(auto referenced : storage.GetCell(pos)->GetReferencedCells()) {
+    for(auto referenced : (*storage.GetCell(pos))->GetReferencedCells()) {
         if(storage.GetCell(referenced) == nullptr) {
             storage.SetCell(referenced,std::make_shared<Cell>(*this,""));
         }
-        storage.GetCell(referenced)->Subscribe(item);
+        (*storage.GetCell(referenced))->Subscribe(item);
     }
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);
-    return static_cast<ICell*>(storage.GetCell(pos));
+    if(storage.GetCell(pos)) {    
+        return static_cast<ICell*>(storage.GetCell(pos)->get());
+    } else {
+        return nullptr;
+    }
 }
 ICell* Sheet::GetCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    return static_cast<ICell*>(storage.GetCell(pos));
+    if(storage.GetCell(pos)) {    
+        return static_cast<ICell*>(storage.GetCell(pos)->get());
+    } else {
+        return nullptr;
+    }
 }
 void Sheet::ClearCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
@@ -78,15 +86,15 @@ Size Sheet::GetPrintableSize() const{
 void Sheet::PrintValues(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage.GetPrintable()) {
-        for(auto i = 0; i < storage.GetColCount(); i++) {
-            if(i < row.size() && row[i] != nullptr) {
+        for(const auto* cell : row) {
+            if(cell != nullptr) {
                 std::stringstream ss;
                 std::visit(
                 [&ss](const auto& val) {
                     ss << val;
                     return ss.str();
                 }, 
-                row[i]->GetValue());
+                (*cell)->GetValue());
                 res += ss.str();
             }
             res.push_back('\t');
@@ -98,9 +106,9 @@ void Sheet::PrintValues(std::ostream& output) const{
 void Sheet::PrintTexts(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage.GetPrintable()) {
-        for(auto i = 0; i < storage.GetColCount(); i++) {
-            if(i < row.size() && row[i] != nullptr) {
-                res += row[i]->GetText();
+        for(const auto* cell : row) {
+            if(cell != nullptr) {
+                res += (*cell)->GetText();
             }
             res.push_back('\t');
         }
