@@ -15,10 +15,9 @@ namespace Ast {
             UNARY_MINUS,
             UNARY_PLUS
         };
-        static inline bool CheckPlusMinusPresedence(Context ctx) {
-            return ctx == Context::UNARY_MINUS || ctx == Context::UNARY_PLUS || 
-                    ctx == Context::BINARY_MUL || ctx == Context::BINARY_DIV;
-        }
+        enum class BinarySide {
+            NONE, LHS, RHS
+        };
     public:
         virtual void Visit(const NumberNode& node) override;
         virtual void Visit(const UnaryNode<'-'>& node) override;
@@ -30,8 +29,8 @@ namespace Ast {
         virtual void Visit(const CellNode& node) override;
         std::string Get() const;
     private:
-        Context current_ctx = Context::MAIN;
-        bool is_divisor = false;
+        Context ctx = Context::MAIN;
+        BinarySide side = BinarySide::NONE;
         std::stringstream accumulator;
     };
 }

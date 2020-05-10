@@ -593,38 +593,38 @@ namespace {
 
 void TestTable() {
   Table<int> table;
-  ASSERT_EQUAL(table.GetRowCount(),0u);
-  ASSERT_EQUAL(table.GetColCount(),0u);
+  ASSERT_EQUAL(table.GetRowCount(),0);
+  ASSERT_EQUAL(table.GetColCount(),0);
   // Inserting and deleting from empty doesn't have any effect
   table.DeleteCols(0,42);
   table.DeleteRows(0,42);
   table.InsertRows(0,42);
   table.InsertCols(0,42);
-  ASSERT_EQUAL(table.GetRowCount(),0u);
-  ASSERT_EQUAL(table.GetColCount(),0u);
+  ASSERT_EQUAL(table.GetRowCount(),0);
+  ASSERT_EQUAL(table.GetColCount(),0);
   // Setting a value
   table.SetCell({0,0},42);
-  ASSERT_EQUAL(table.GetRowCount(),1u);
-  ASSERT_EQUAL(table.GetColCount(),1u);
+  ASSERT_EQUAL(table.GetRowCount(),1);
+  ASSERT_EQUAL(table.GetColCount(),1);
   // Inserting and deleting after the set value doesn't have any effect either
   table.DeleteCols(1,42);
   table.DeleteRows(1,42);
   table.InsertRows(1,42);
   table.InsertCols(1,42);
-  ASSERT_EQUAL(table.GetRowCount(),1u);
-  ASSERT_EQUAL(table.GetColCount(),1u);
+  ASSERT_EQUAL(table.GetRowCount(),1);
+  ASSERT_EQUAL(table.GetColCount(),1);
   // Inserting before the value
   table.InsertRows(0,4);
   table.InsertCols(0,2);
-  ASSERT_EQUAL(table.GetRowCount(),5u);
-  ASSERT_EQUAL(table.GetColCount(),3u);
+  ASSERT_EQUAL(table.GetRowCount(),5);
+  ASSERT_EQUAL(table.GetColCount(),3);
   ASSERT(table.GetCell({4,2}) != nullptr);
   ASSERT_EQUAL(*table.GetCell({4,2}),42);
   // Deleting is now effective, check with big values
   table.DeleteCols(1,42);
   table.DeleteRows(1,42);
-  ASSERT_EQUAL(table.GetRowCount(),0u);
-  ASSERT_EQUAL(table.GetColCount(),0u);
+  ASSERT_EQUAL(table.GetRowCount(),0);
+  ASSERT_EQUAL(table.GetColCount(),0);
   ASSERT(table.GetCell({0,0}) == nullptr);
   ASSERT(table.GetCell({42,24}) == nullptr);
 
@@ -672,6 +672,23 @@ void TestSize() {
   ASSERT_EQUAL(sheet->GetPrintableSize(),(Size{0,0}));
 }
 
+void TestUnnecesaryParens() {
+  auto reformat = [](std::string expr) {
+      return ParseFormula(std::move(expr))->GetExpression();
+    };
+
+    ASSERT_EQUAL(reformat("(1*2)+(9-8)"), "1*2+9-8");
+    ASSERT_EQUAL(reformat("(1+2)-(9+8)"), "1+2-(9+8)");
+    ASSERT_EQUAL(reformat("(1+2)-(9-8)"), "1+2-(9-8)");
+    ASSERT_EQUAL(reformat("(1+2)*(9-8)"), "(1+2)*(9-8)");
+    ASSERT_EQUAL(reformat("(1*2)*(9/8)"), "1*2*9/8");
+    ASSERT_EQUAL(reformat("(1+2)/(9-8)"), "(1+2)/(9-8)");
+    ASSERT_EQUAL(reformat("(1*2)/(9*8)"), "1*2/(9*8)");
+    ASSERT_EQUAL(reformat("+(1-2)"), "+(1-2)");
+    ASSERT_EQUAL(reformat("+(1*2)"), "+1*2");
+    ASSERT_EQUAL(reformat("+(1/2)"), "+1/2");
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -704,5 +721,6 @@ int main() {
   RUN_TEST(tr, TestTable);
   RUN_TEST(tr, TestCached);
   RUN_TEST(tr, TestSize);
+  RUN_TEST(tr, TestUnnecesaryParens);
   return 0;
 }
