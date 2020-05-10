@@ -651,37 +651,32 @@ void TestCached() {
   sheet->SetCell("A1"_pos, "12");
   ASSERT_EQUAL(sheet->GetCell("B3"_pos)->GetValue(),ICell::Value(24));
   ASSERT_EQUAL(sheet->GetCell("B4"_pos)->GetValue(),ICell::Value(36));
+  sheet->SetCell("A1"_pos, "24");
   
-  // sheet->InsertCols(1,2);
+  sheet->InsertCols(1,2);
 
-  // ASSERT_EQUAL(sheet->GetCell("D3"_pos)->GetValue(),ICell::Value(48));
-  // ASSERT_EQUAL(sheet->GetCell("D4"_pos)->GetValue(),ICell::Value(72));
+  ASSERT_EQUAL(sheet->GetCell("D3"_pos)->GetValue(),ICell::Value(48));
+  ASSERT_EQUAL(sheet->GetCell("D4"_pos)->GetValue(),ICell::Value(72));
   
-  // sheet->SetCell("E3"_pos, "665");
-  // ASSERT_EQUAL(sheet->GetCell("E4"_pos)->GetValue(),ICell::Value(713));
-  // ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(665));
-  // sheet->SetCell("F3"_pos, "1");
-  // ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(666));
+  sheet->SetCell("E3"_pos, "665");
+  ASSERT_EQUAL(sheet->GetCell("E4"_pos)->GetValue(),ICell::Value(713));
+  ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(665));
+  sheet->SetCell("F3"_pos, "1");
+  ASSERT_EQUAL(sheet->GetCell("F4"_pos)->GetValue(),ICell::Value(666));
 
-  // sheet->InsertRows(3);
-  // ASSERT_EQUAL(sheet->GetCell("A5"_pos)->GetValue(),ICell::Value(24));
-  // ASSERT_EQUAL(sheet->GetCell("F5"_pos)->GetValue(),ICell::Value(666));
+  sheet->InsertRows(3);
+  ASSERT_EQUAL(sheet->GetCell("A5"_pos)->GetValue(),ICell::Value(24));
+  ASSERT_EQUAL(sheet->GetCell("F5"_pos)->GetValue(),ICell::Value(666));
 
-  // std::cerr << "-----------------------------------\n";
-  // sheet->DeleteCols(0);
+  sheet->DeleteCols(0);
 
-  // std::cerr << "-----------------------------------\n";
-  // sheet->PrintTexts(std::cerr);
-  // std::cerr << "-----------------------------------\n";
-  // sheet->PrintValues(std::cerr);
-
-  // ASSERT_EQUAL(sheet->GetCell("C2"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
-  // ASSERT_EQUAL(sheet->GetCell("C3"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
-  // ASSERT_EQUAL(sheet->GetCell("C5"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
-  // ASSERT_EQUAL(sheet->GetCell("D3"_pos)->GetValue(),ICell::Value(665));
-  // ASSERT_EQUAL(sheet->GetCell("D5"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
-  // ASSERT_EQUAL(sheet->GetCell("E3"_pos)->GetValue(),ICell::Value(1));
-  // ASSERT_EQUAL(sheet->GetCell("E5"_pos)->GetValue(),ICell::Value(666));
+  ASSERT_EQUAL(sheet->GetCell("C2"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
+  ASSERT_EQUAL(sheet->GetCell("C3"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
+  ASSERT_EQUAL(sheet->GetCell("C5"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
+  ASSERT_EQUAL(sheet->GetCell("D3"_pos)->GetValue(),ICell::Value("665"));
+  ASSERT_EQUAL(sheet->GetCell("D5"_pos)->GetValue(),ICell::Value(FormulaError::Category::Ref));
+  ASSERT_EQUAL(sheet->GetCell("E3"_pos)->GetValue(),ICell::Value("1"));
+  ASSERT_EQUAL(sheet->GetCell("E5"_pos)->GetValue(),ICell::Value(666));
 
 }
 

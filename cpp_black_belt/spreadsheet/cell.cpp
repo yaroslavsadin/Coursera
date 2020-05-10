@@ -1,6 +1,7 @@
 #include "cell.h"
 
-Cell::Cell(const ISheet& sheet, std::string str) : sheet(sheet) {
+Cell::Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> subscribers) 
+: sheet(sheet), subscribers(subscribers) {
     if(str[0] == '=' && str.size() > 1) {
         std::string_view view(str);
         view.remove_prefix(1);
@@ -112,7 +113,11 @@ Cell::~Cell() {
 }
 
 std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
-    auto ptr = std::make_shared<Cell>(sheet,std::move(str));
+    std::list<std::weak_ptr<Cell>> subscribers;
+    if(sheet.GetCell(pos)) {
+        subscribers = (*static_cast<const Cell*>(sheet.GetCell(pos))).GetSubscribers();
+    }
+    auto ptr = std::make_shared<Cell>(sheet,std::move(str),subscribers);
     ptr->CheckCircular(pos);
     return ptr;
 }

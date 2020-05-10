@@ -7,7 +7,7 @@
 
 class Cell : public ICell {
 public:
-    Cell(const ISheet& sheet, std::string str);
+    Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> subscribers);
     virtual Value GetValue() const override;
     virtual std::string GetText() const override;
     virtual std::vector<Position> GetReferencedCells() const override;
@@ -20,6 +20,9 @@ public:
     // Observer part
     void Subscribe(std::weak_ptr<Cell> observer) const;
     void Notify() const;
+    const std::list<std::weak_ptr<Cell>>& GetSubscribers() const {
+        return subscribers;
+    }
 
     // Subscriber part
     void Update() const;
