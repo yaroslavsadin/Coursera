@@ -27,7 +27,7 @@ void Sheet::SetCell(Position pos, std::string text){
 }
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);
-    if(storage.GetCell(pos)) {    
+    if(storage.GetCell(pos)) {
         return static_cast<ICell*>(storage.GetCell(pos)->get());
     } else {
         return nullptr;
@@ -35,7 +35,7 @@ const ICell* Sheet::GetCell(Position pos) const{
 }
 ICell* Sheet::GetCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
-    if(storage.GetCell(pos)) {    
+    if(storage.GetCell(pos)) {
         return static_cast<ICell*>(storage.GetCell(pos)->get());
     } else {
         return nullptr;

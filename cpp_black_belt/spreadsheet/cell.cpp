@@ -6,8 +6,10 @@ Cell::Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> 
         std::string_view view(str);
         view.remove_prefix(1);
         formula = ParseFormula(std::string(view));
+        referenced_cells = formula->GetReferencedCells();
+        text = "=" + formula->GetExpression();
     } else {
-        cache.SetText(str);
+        text = str;
         std::string_view view = str;
         if(view[0] == '\'') {
             view.remove_prefix(1);
@@ -29,23 +31,21 @@ Cell::Value Cell::GetValue() const {
     return cache.GetValue();
 }
 std::string Cell::GetText() const {
-    if(!cache.HasText()) {
-        cache.SetText("=" + formula->GetExpression());
-    }
-    return cache.GetText();
+    return text;
 }
 std::vector<Position> Cell::GetReferencedCells() const {
-    if(formula) {
-        return formula->GetReferencedCells();
-    } else {    
-        return {};
-    }
+    return referenced_cells;
 }
 
 void Cell::HandleInsertedRows(int before, int count) {
     if(formula) {
         auto result = formula->HandleInsertedRows(before,count);
+        if(result == IFormula::HandlingResult::ReferencesRenamedOnly) {
+            text = "=" + formula->GetExpression();
+        }
         if(result == IFormula::HandlingResult::ReferencesChanged) {
+            referenced_cells = formula->GetReferencedCells();
+            text = "=" + formula->GetExpression();
             Notify();
         }
     }
@@ -53,8 +53,13 @@ void Cell::HandleInsertedRows(int before, int count) {
 
 void Cell::HandleInsertedCols(int before, int count) {
     if(formula) {
-        auto result = formula->HandleInsertedCols(before,count); 
+        auto result = formula->HandleInsertedCols(before,count);
+        if(result == IFormula::HandlingResult::ReferencesRenamedOnly) {
+            text = "=" + formula->GetExpression();
+        }
         if(result == IFormula::HandlingResult::ReferencesChanged) {
+            referenced_cells = formula->GetReferencedCells();
+            text = "=" + formula->GetExpression();
             Notify();
         }
     }
@@ -63,7 +68,12 @@ void Cell::HandleInsertedCols(int before, int count) {
 void Cell::HandleDeletedRows(int first, int count) {
     if(formula) {
         auto result = formula->HandleDeletedRows(first,count);
+        if(result == IFormula::HandlingResult::ReferencesRenamedOnly) {
+            text = "=" + formula->GetExpression();
+        }
         if(result == IFormula::HandlingResult::ReferencesChanged) {
+            referenced_cells = formula->GetReferencedCells();
+            text = "=" + formula->GetExpression();
             Notify();
         }
     }
@@ -71,7 +81,12 @@ void Cell::HandleDeletedRows(int first, int count) {
 void Cell::HandleDeletedCols(int first, int count) {
     if(formula) {
         auto result = formula->HandleDeletedCols(first,count);
+        if(result == IFormula::HandlingResult::ReferencesRenamedOnly) {
+            text = "=" + formula->GetExpression();
+        }
         if(result == IFormula::HandlingResult::ReferencesChanged) {
+            referenced_cells = formula->GetReferencedCells();
+            text = "=" + formula->GetExpression();
             Notify();
         }
     }
@@ -102,10 +117,10 @@ void Cell::Notify() const {
 }
 
 void Cell::Update() const {
-    // if(cache.HasValue()) {
-        cache.InvalidateValue();
+    if(cache.HasValue()) {
+        cache.Invalidate();
         Notify();
-    // }
+    }
 }
 
 Cell::~Cell() {

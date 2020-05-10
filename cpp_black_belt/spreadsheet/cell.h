@@ -41,33 +41,18 @@ private:
         Value GetValue() const {
             return *value;
         }
-        void SetText(std::string new_text) {
-            text = std::move(new_text);
-        }
-        bool HasText() const {
-            return text.has_value();
-        }
-        const std::string& GetText() const {
-            return *text;
-        }
-        void InvalidateValue() {
-            value.reset();
-        }
-        void InvalidateText() {
-            text.reset();
-        }
         void Invalidate() {
-            InvalidateValue(); 
-            InvalidateText();
+            value.reset();
         }
     private:
         std::optional<Value> value;
-        std::optional<std::string> text;
     };
 
     const ISheet& sheet;
     Position pos;
     std::unique_ptr<IFormula> formula;
+    std::string text;
+    std::vector<Position> referenced_cells;
     mutable CellCache cache;
     mutable std::list<std::weak_ptr<Cell>> subscribers;
 };
