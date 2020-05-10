@@ -89,6 +89,28 @@ void Cell::CheckCircular(Position self) const {
     }
 }
 
+void Cell::Subscribe(std::weak_ptr<Cell> observer) const {
+    subscribers.push_back(observer);
+}
+void Cell::Notify() const {
+    for(auto observer : subscribers) {
+        /// TODO: Deal with dangling pointers
+        auto ptr = observer.lock();
+        if(ptr) ptr->Update();
+    }
+}
+
+void Cell::Update() const {
+    // if(cache.HasValue()) {
+        cache.InvalidateValue();
+        Notify();
+    // }
+}
+
+Cell::~Cell() {
+    Notify();
+}
+
 std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
     auto ptr = std::make_shared<Cell>(sheet,std::move(str));
     ptr->CheckCircular(pos);

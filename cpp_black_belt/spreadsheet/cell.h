@@ -18,28 +18,13 @@ public:
     void CheckCircular(Position self) const;
     
     // Observer part
-    void Subscribe(std::weak_ptr<Cell> observer) const {
-        subscribers.push_back(observer);
-    }
-    void Notify() const {
-        for(auto observer : subscribers) {
-            /// TODO: Deal with dangling pointers
-            auto ptr = observer.lock();
-            if(ptr) ptr->Update();
-        }
-    }
+    void Subscribe(std::weak_ptr<Cell> observer) const;
+    void Notify() const;
 
     // Subscriber part
-    void Update() const {
-        if(cache.HasValue()) {
-            cache.InvalidateValue();
-            Notify();
-        }
-    }
+    void Update() const;
 
-    virtual ~Cell() {
-        Notify();
-    }
+    virtual ~Cell();
 private:
     class CellCache {
     public:
@@ -78,6 +63,7 @@ private:
     };
 
     const ISheet& sheet;
+    Position pos;
     std::unique_ptr<IFormula> formula;
     mutable CellCache cache;
     mutable std::list<std::weak_ptr<Cell>> subscribers;
