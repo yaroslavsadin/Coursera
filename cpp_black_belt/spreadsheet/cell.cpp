@@ -88,3 +88,9 @@ void Cell::CheckCircular(Position self) const {
         }
     }
 }
+
+std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
+    auto ptr = std::make_shared<Cell>(sheet,std::move(str));
+    ptr->CheckCircular(pos);
+    return ptr;
+}

@@ -17,14 +17,12 @@ static inline void CheckPosition(Position pos, std::string message) {
 
 void Sheet::SetCell(Position pos, std::string text){
     CheckPosition(pos, __FUNCTION__);
-    auto item = std::make_shared<Cell>(*this,text);
-    item->CheckCircular(pos); // throws CircularDependencyExeption
-    storage.SetCell(pos,item);
+    storage.SetCell(pos,MakeCell(*this,text,pos));
     for(auto referenced : (*storage.GetCell(pos))->GetReferencedCells()) {
         if(storage.GetCell(referenced) == nullptr) {
-            storage.SetCell(referenced,std::make_shared<Cell>(*this,""));
+            storage.SetCell(referenced,MakeCell(*this,"",pos));
         }
-        (*storage.GetCell(referenced))->Subscribe(item);
+        (*storage.GetCell(referenced))->Subscribe(*storage.GetCell(pos));
     }
 }
 const ICell* Sheet::GetCell(Position pos) const{

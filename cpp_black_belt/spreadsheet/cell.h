@@ -29,7 +29,7 @@ public:
         }
     }
 
-    // Subject part
+    // Subscriber part
     void Update() const {
         if(cache.HasValue()) {
             cache.InvalidateValue();
@@ -37,7 +37,7 @@ public:
         }
     }
 
-    ~Cell() {
+    virtual ~Cell() {
         Notify();
     }
 private:
@@ -82,3 +82,5 @@ private:
     mutable CellCache cache;
     mutable std::list<std::weak_ptr<Cell>> subscribers;
 };
+
+std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos);
