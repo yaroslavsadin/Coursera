@@ -16,6 +16,9 @@ static inline void CheckPosition(Position pos, std::string message) {
 }
 
 void Sheet::SetCell(Position pos, std::string text){
+    if(storage.GetCell(pos) && (*storage.GetCell(pos))->GetText() == text) {
+        return;
+    }
     CheckPosition(pos, __FUNCTION__);
     storage.SetCell(pos,MakeCell(*this,text,pos));
     for(auto referenced : (*storage.GetCell(pos))->GetReferencedCells()) {

@@ -46,7 +46,6 @@ void Cell::HandleInsertedRows(int before, int count) {
         if(result == IFormula::HandlingResult::ReferencesChanged) {
             referenced_cells = formula->GetReferencedCells();
             text = "=" + formula->GetExpression();
-            Notify();
         }
     }
 }
@@ -60,7 +59,6 @@ void Cell::HandleInsertedCols(int before, int count) {
         if(result == IFormula::HandlingResult::ReferencesChanged) {
             referenced_cells = formula->GetReferencedCells();
             text = "=" + formula->GetExpression();
-            Notify();
         }
     }
 }
@@ -74,7 +72,6 @@ void Cell::HandleDeletedRows(int first, int count) {
         if(result == IFormula::HandlingResult::ReferencesChanged) {
             referenced_cells = formula->GetReferencedCells();
             text = "=" + formula->GetExpression();
-            Notify();
         }
     }
 }
@@ -87,7 +84,6 @@ void Cell::HandleDeletedCols(int first, int count) {
         if(result == IFormula::HandlingResult::ReferencesChanged) {
             referenced_cells = formula->GetReferencedCells();
             text = "=" + formula->GetExpression();
-            Notify();
         }
     }
 }
