@@ -22,7 +22,10 @@ namespace Ast {
     class NumberNode : public Node {
     public:
         NumberNode(double value) : value(value) {}
-        virtual double Evaluate(const ISheet& context) const noexcept override  {
+        virtual double Evaluate(const ISheet& context) const override  {
+            if(!std::isfinite(value)) {
+                throw FormulaError(FormulaError::Category::Div0);
+            }
             return value;
         }
         virtual void Accept(NodeVisitor& visitor) const override {
@@ -45,9 +48,17 @@ namespace Ast {
         virtual double Evaluate(const ISheet& context) const override {
             static_assert(op == '+' || op == '-');
             if constexpr(op == '+') {
-                return rhs->Evaluate(context);
+                auto res = rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return res;
             } else if constexpr(op == '-') {
-                return - rhs->Evaluate(context);
+                auto res = - rhs->Evaluate(context);
+                if(!std::isfinite(res)) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
+                return res;
             }
         }
         const Node& GetRight() const {
@@ -151,11 +162,17 @@ namespace Ast {
                 if(str_val.empty()) {
                     return 0;
                 } else if(auto dval = ToNum(str_val); dval.has_value()) {
+                    if(!std::isfinite(*dval)) {
+                        throw FormulaError(FormulaError::Category::Div0);
+                    }
                     return *dval;
                 } else {
                     throw FormulaError(FormulaError::Category::Value);
                 }
             } else if(std::holds_alternative<double>(val)) {
+                if(!std::isfinite(std::get<double>(val))) {
+                    throw FormulaError(FormulaError::Category::Div0);
+                }
                 return std::get<double>(val);
             } else {
                 throw std::get<FormulaError>(val);

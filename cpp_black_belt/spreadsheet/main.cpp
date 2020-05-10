@@ -689,6 +689,81 @@ void TestUnnecesaryParens() {
     ASSERT_EQUAL(reformat("+(1/2)"), "+1/2");
 }
 
+void TestUnexpectedFormula() {
+  auto sheet = CreateSheet();
+    auto evaluate = [&](std::string expr) {
+      return std::get<double>(ParseFormula(std::move(expr))->Evaluate(*sheet));
+    };
+
+    sheet->SetCell("A1"_pos, "1");
+    ASSERT_EQUAL(evaluate("A1"), 1);
+    sheet->SetCell("A2"_pos, "=12+(56*9)+(88+1)/6");
+    ASSERT_EQUAL(evaluate("A2"), 530.83333333333333333333333333333);
+}
+
+void Test005()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "3.14");
+  sheet->SetCell("A2"_pos, "=A1+42");
+  auto res = sheet->GetCell("A2"_pos)->GetValue();
+  // ASSERT(std::holds_alternative<FormulaError>(res));
+}
+
+void Test006()
+{
+  auto sheet = CreateSheet();
+  bool caught = false;
+  try
+  {
+    sheet->SetCell("A1"_pos, "= ");
+  }
+  catch (FormulaException &fe)
+  {
+    caught = true;
+  }
+  ASSERT(caught);
+}
+
+void Test007()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "=");
+  ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetValue(), ICell::Value("="));
+}
+void Test008()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "\'=R2D2");
+  ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetValue(), ICell::Value("=R2D2"));
+}
+
+#include <cmath>
+void Test009()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "=1e+1000");
+  ASSERT(std::holds_alternative<FormulaError>(sheet->GetCell("A1"_pos)->GetValue()));
+}
+
+void Test010()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "=A2");
+  ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetValue(), ICell::Value(0));
+  sheet->SetCell("A2"_pos, "42");
+  ASSERT_EQUAL(sheet->GetCell("A1"_pos)->GetValue(), ICell::Value(42));
+}
+
+void Test011()
+{
+  auto sheet = CreateSheet();
+  sheet->SetCell("A1"_pos, "=1e+1000");
+  sheet->SetCell("A2"_pos, "=A1");
+  ASSERT(std::holds_alternative<FormulaError>(sheet->GetCell("A2"_pos)->GetValue()) 
+  && std::get<FormulaError>(sheet->GetCell("A2"_pos)->GetValue()) == FormulaError::Category::Div0);
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -722,5 +797,13 @@ int main() {
   RUN_TEST(tr, TestCached);
   RUN_TEST(tr, TestSize);
   RUN_TEST(tr, TestUnnecesaryParens);
+  RUN_TEST(tr, TestUnexpectedFormula);
+  RUN_TEST(tr, Test005);
+  RUN_TEST(tr, Test006);
+  RUN_TEST(tr, Test007);
+  RUN_TEST(tr, Test008);
+  RUN_TEST(tr, Test009);
+  RUN_TEST(tr, Test010);
+  RUN_TEST(tr, Test011);
   return 0;
 }
