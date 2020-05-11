@@ -1,13 +1,13 @@
 #pragma once
 #include <iostream>
 #include <optional>
-#include <list>
+#include <unordered_set>
 #include "common.h"
 #include "formula.h"
 
 class Cell : public ICell {
 public:
-    Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> subscribers);
+    Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers);
     virtual Value GetValue() const override;
     virtual std::string GetText() const override;
     virtual std::vector<Position> GetReferencedCells() const override;
@@ -18,10 +18,14 @@ public:
     void CheckCircular(Position self) const;
     
     // Observer part
-    void Subscribe(std::weak_ptr<Cell> observer) const;
+    void Subscribe(const Cell* observer) const;
+    void Unsubscribe(const Cell* observer) const;
     void Notify() const;
-    const std::list<std::weak_ptr<Cell>>& GetSubscribers() const {
+    const std::unordered_set<const Cell*>& GetSubscribers() const {
         return subscribers;
+    }
+    const std::unordered_set<const Cell*>& GetSubscritions() const {
+        return subscriptions;
     }
 
     // Subscriber part
@@ -54,7 +58,8 @@ private:
     std::string text;
     std::vector<Position> referenced_cells;
     mutable CellCache cache;
-    mutable std::list<std::weak_ptr<Cell>> subscribers;
+    mutable std::unordered_set<const Cell*> subscriptions;
+    mutable std::unordered_set<const Cell*> subscribers;
 };
 
-std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos);
+std::unique_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos);

@@ -2,11 +2,12 @@
 #include "common.h"
 #include <cassert>
 #include <algorithm>
+#include <deque>
 
 template<typename T>
 class Table {
 private:
-    using Storage = std::vector<std::vector<std::shared_ptr<T>>>;
+    using Storage = std::deque<std::deque<std::unique_ptr<T>>>;
 
     Size size;
     Storage storage;
@@ -14,7 +15,7 @@ private:
     bool ContainsCell(Position pos) const {
         return storage.size() > pos.row && storage[pos.row].size() > pos.col;
     }
-    void CleanRow(std::vector<std::shared_ptr<T>>& row) {
+    void CleanRow(std::deque<std::unique_ptr<T>>& row) {
         auto it = find_if(row.rbegin(),row.rend(),
         [](const auto& rhs){
             return rhs != nullptr;
@@ -47,21 +48,21 @@ private:
 public:
     Table() = default;
 
-    const std::shared_ptr<T> GetCell(Position pos) const {
+    const T* GetCell(Position pos) const {
         if(ContainsCell(pos)) {
-            return storage[pos.row][pos.col];
+            return storage[pos.row][pos.col].get();
         }
         return nullptr;
     }
 
-    std::shared_ptr<T> GetCell(Position pos) {
+    T* GetCell(Position pos) {
         if(ContainsCell(pos)) {
-            return storage[pos.row][pos.col];
+            return storage[pos.row][pos.col].get();
         }
         return nullptr;
     }
 
-    void SetCell(Position pos, std::shared_ptr<T> data) {
+    void SetCell(Position pos, std::unique_ptr<T> data) {
         if(storage.size() <= pos.row) {
             storage.resize(pos.row + 1);
         }
@@ -84,7 +85,6 @@ public:
             for(size_t i = 0; i < static_cast<size_t>(count); i++) {
                 storage.emplace(storage.begin() + before + i);
             }
-            Normalize();
         }
     }
 
@@ -97,7 +97,6 @@ public:
                     }
                 }
             }
-            Normalize();
         }
     }
 
@@ -107,7 +106,6 @@ public:
                 storage.begin() + first, 
                 storage.begin() + first + std::min(static_cast<size_t>(count),storage.size())
             );
-            Normalize();
         }
     }
 

@@ -782,34 +782,6 @@ void Test011()
   && std::get<FormulaError>(sheet->GetCell("A2"_pos)->GetValue()) == FormulaError::Category::Div0);
 }
 
-struct PositionHash {
-        // We imply that row and col are both maxed to 16383 i.e. 16 bit
-        size_t operator()(Position p) const noexcept {
-            return size_t(p.row) << 16 | p.col;
-        }
-    };
-
-    template <class T>
-inline void hash_combine(std::size_t & seed, const T & v)
-{
-  std::hash<T> hasher;
-  seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-}
- 
-namespace std
-{
-  template<typename S, typename T> struct hash<pair<S, T>>
-  {
-    inline size_t operator()(const pair<S, T> & v) const
-    {
-      size_t seed = 0;
-      ::hash_combine(seed, v.first);
-      ::hash_combine(seed, v.second);
-      return seed;
-    }
-  };
-}
-
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -851,66 +823,6 @@ int main() {
   RUN_TEST(tr, Test009);
   RUN_TEST(tr, Test010);
   RUN_TEST(tr, Test011);
-
-  TotalDuration table_duration("Table");
-  TotalDuration table_duration_int("TableInt");
-  TotalDuration table_duration_pair_int("TablePairInt");
-  TotalDuration vectors_duration("Vectors");
-
-  {
-   unordered_map<pair<int,int>, int > table;
-    
-      for(int i = 0; i < 16383; i++) {
-        table[{i,16383-i}] = i;
-      }
-      ADD_DURATION(table_duration_pair_int);
-    for(int i = 50; i >= 0; i--)  {
-      for(int i = 0; i < 16383; i++) {
-        table.at({i,16383-i});
-      }
-    }
-  }
-  {
-    std::unordered_map<Position,int,PositionHash> table;
-    
-      for(int i = 0; i < 16383; i++) {
-        table[{i,16383-i}] = i;
-      }
-      ADD_DURATION(table_duration);
-    for(int i = 50; i >= 0; i--)  {
-      for(int i = 0; i < 16383; i++) {
-        table.at({i,16383-i});
-      }
-    }
-  }
-  {
-    std::unordered_map<int,int> table;
-    
-      for(int i = 0; i < 16383; i++) {
-        table[i] = i;
-      }
-      ADD_DURATION(table_duration_int);
-    for(int i = 50; i >= 0; i--)  {
-      for(int i = 0; i < 16383; i++) {
-        table.at(i);
-      }
-    }
-  }
-  {
-    std::vector<std::vector<int>> table(16383,std::vector<int>(16383,0));
-    
-      for(int i = 0; i < 16383; i++) {
-        Position pos{i,16383-i};
-        table[pos.row][pos.col] = i;
-      }
-          ADD_DURATION(vectors_duration);
-    for(int i = 50; i >= 0; i--)  {
-      for(int i = 0; i < 16383; i++) {
-        Position pos{i,16383-i};
-        table[pos.row][pos.col];
-      }
-    }
-  }
 
   return 0;
 }

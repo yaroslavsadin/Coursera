@@ -123,19 +123,21 @@ public:
 };
 
 namespace Ast {
+    static antlr4::ANTLRInputStream input;
+    static BailErrorListener error_listener;
+
     std::unique_ptr<Node> ParseFormula(const std::string& in) {
-        antlr4::ANTLRInputStream input(in);
+        input.load(in);
 
         FormulaLexer lexer(&input);
-        BailErrorListener error_listener;
+        
         lexer.removeErrorListeners();
         lexer.addErrorListener(&error_listener);
         
         antlr4::CommonTokenStream tokens(&lexer);
 
         FormulaParser parser(&tokens);
-        auto error_handler = std::make_shared<antlr4::BailErrorStrategy>();
-        parser.setErrorHandler(error_handler);
+        parser.setErrorHandler(std::make_shared<antlr4::BailErrorStrategy>());
         parser.removeErrorListeners();
 
         try {

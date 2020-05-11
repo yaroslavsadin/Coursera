@@ -31,7 +31,7 @@ void Sheet::SetCell(Position pos, std::string text){
 const ICell* Sheet::GetCell(Position pos) const{
     CheckPosition(pos, __FUNCTION__);
     if(storage.GetCell(pos)) {
-        return static_cast<ICell*>(storage.GetCell(pos).get());
+        return static_cast<const ICell*>(storage.GetCell(pos));
     } else {
         return nullptr;
     }
@@ -39,7 +39,7 @@ const ICell* Sheet::GetCell(Position pos) const{
 ICell* Sheet::GetCell(Position pos){
     CheckPosition(pos, __FUNCTION__);
     if(storage.GetCell(pos)) {
-        return static_cast<ICell*>(storage.GetCell(pos).get());
+        return static_cast<ICell*>(storage.GetCell(pos));
     } else {
         return nullptr;
     }
@@ -54,7 +54,7 @@ void Sheet::InsertRows(int before, int count){
     } else {
         storage.InsertRows(before,count);
         for(auto& row : storage.Get()) {
-            for(auto cell : row) {
+            for(auto& cell : row) {
                 if(cell) {
                     cell->HandleInsertedRows(before,count);
                 }
@@ -68,7 +68,7 @@ void Sheet::InsertCols(int before, int count){
     } else {
         storage.InsertCols(before,count);
         for(auto& row : storage.Get()) {
-            for(auto cell : row) {
+            for(auto& cell : row) {
                 if(cell) {    
                     cell->HandleInsertedCols(before,count);
                 }
@@ -80,7 +80,7 @@ void Sheet::InsertCols(int before, int count){
 void Sheet::DeleteRows(int first, int count){
     storage.DeleteRows(first,count);
     for(auto& row : storage.Get()) {
-        for(auto cell : row) {
+        for(auto& cell : row) {
             if(cell) {
                 cell->HandleDeletedRows(first,count);
             }
@@ -90,7 +90,7 @@ void Sheet::DeleteRows(int first, int count){
 void Sheet::DeleteCols(int first, int count){
     storage.DeleteCols(first,count);
     for(auto& row : storage.Get()) {
-        for(auto cell : row) {
+        for(auto& cell : row) {
             if(cell) {
                 cell->HandleDeletedCols(first,count);
             }
@@ -105,15 +105,16 @@ void Sheet::PrintValues(std::ostream& output) const{
     for(const auto& row : storage.Get()) {
         for(size_t i = 0; i < storage.GetColCount(); i++) {
             if(i < row.size()) {
-                auto cell = row[i];
-                std::stringstream ss;
-                std::visit(
-                [&ss](const auto& val) {
-                    ss << val;
-                    return ss.str();
-                }, 
-                cell->GetValue());
-                res += ss.str();
+                if(auto& cell = row[i]; cell) {
+                    std::stringstream ss;
+                    std::visit(
+                    [&ss](const auto& val) {
+                        ss << val;
+                        return ss.str();
+                    }, 
+                    cell->GetValue());
+                    res += ss.str();
+                }
             }
             res.push_back('\t');
         }
@@ -126,8 +127,9 @@ void Sheet::PrintTexts(std::ostream& output) const{
     for(const auto& row : storage.Get()) {
         for(size_t i = 0; i < storage.GetColCount(); i++) {
             if(i < row.size()) {
-                auto cell = row[i];
-                res += cell->GetText();
+                if(auto& cell = row[i]; cell) {
+                    res += cell->GetText();
+                }
             }
             res.push_back('\t');
         }

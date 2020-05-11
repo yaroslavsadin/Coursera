@@ -1,6 +1,7 @@
 #include "cell.h"
+#include <cassert>
 
-Cell::Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> subscribers) 
+Cell::Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers) 
 : sheet(sheet), subscribers(subscribers) {
     if(str[0] == '=' && str.size() > 1) {
         std::string_view view(str);
@@ -15,6 +16,9 @@ Cell::Cell(const ISheet& sheet, std::string str, std::list<std::weak_ptr<Cell>> 
             view.remove_prefix(1);
         }
         cache.SetValue(std::string(view));
+    }
+    for(auto* cell : subscribers) {
+        cell->subscriptions.insert(this);
     }
 }
 
@@ -101,19 +105,16 @@ void Cell::CheckCircular(Position self) const {
     }
 }
 
-void Cell::Subscribe(std::weak_ptr<Cell> observer) const {
-    subscribers.push_back(observer);
+void Cell::Subscribe(const Cell* subscriber) const {
+    subscribers.insert(subscriber);
+    subscriber->subscriptions.insert(this);
+}
+void Cell::Unsubscribe(const Cell* subscriber) const {   
+    subscribers.erase(subscriber);
 }
 void Cell::Notify() const {
-    auto it = subscribers.begin();
-    while(it != subscribers.end()) {
-        auto ptr = it->lock();
-        if(ptr) { 
-            ptr->Update();
-            it++;
-        } else {
-            it = subscribers.erase(it);
-        }
+    for(const auto* subscriber : subscribers) {
+        subscriber->Update();
     }
 }
 
@@ -125,15 +126,21 @@ void Cell::Update() const {
 }
 
 Cell::~Cell() {
+    for(auto* cell : subscriptions) {
+        cell->subscribers.erase(this);
+    }
+    for(auto* cell : subscribers) {
+        cell->subscriptions.erase(this);
+    }
     Notify();
 }
 
-std::shared_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
-    std::list<std::weak_ptr<Cell>> subscribers;
+std::unique_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
+    std::unordered_set<const Cell*> subscribers;
     if(sheet.GetCell(pos)) {
         subscribers = (*static_cast<const Cell*>(sheet.GetCell(pos))).GetSubscribers();
     }
-    auto ptr = std::make_shared<Cell>(sheet,std::move(str),subscribers);
+    auto ptr = std::make_unique<Cell>(sheet,std::move(str),subscribers);
     ptr->CheckCircular(pos);
     return ptr;
 }
