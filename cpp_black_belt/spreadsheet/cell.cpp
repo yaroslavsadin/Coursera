@@ -1,8 +1,12 @@
 #include "cell.h"
 #include <cassert>
+#include "profile_advanced.h"
 
-Cell::Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers) 
-: sheet(sheet), subscribers(subscribers) {
+TotalDuration cell_ctor_duration("cell_ctor_duration");
+
+Cell::Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_set<const Cell*> subscribers) 
+: sheet(sheet), pos(pos), subscribers(subscribers) {
+    ADD_DURATION(cell_ctor_duration);
     if(str[0] == '=' && str.size() > 1) {
         std::string_view view(str);
         view.remove_prefix(1);
@@ -92,15 +96,12 @@ void Cell::HandleDeletedCols(int first, int count) {
     }
 }
 
-void Cell::CheckCircular(Position self) const {
-    for(auto pos : GetReferencedCells()) {
-        if(pos == self) {
-            throw CircularDependencyException("");
+void Cell::CheckCircular(const Cell* self) const {
+    for(auto* cell : subscriptions) {
+        if(self == cell) {
+            throw CircularDependencyException("CircularDependencyException");
         } else {
-            auto cell_ptr = sheet.GetCell(pos);
-            if(cell_ptr) {
-                static_cast<const Cell*>(cell_ptr)->CheckCircular(self);
-            }
+            cell->CheckCircular(self);
         }
     }
 }
@@ -135,12 +136,14 @@ Cell::~Cell() {
     Notify();
 }
 
+TotalDuration make_cell_duration("make_cell_duration");
+
 std::unique_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
+    ADD_DURATION(make_cell_duration);
     std::unordered_set<const Cell*> subscribers;
     if(sheet.GetCell(pos)) {
         subscribers = (*static_cast<const Cell*>(sheet.GetCell(pos))).GetSubscribers();
     }
-    auto ptr = std::make_unique<Cell>(sheet,std::move(str),subscribers);
-    ptr->CheckCircular(pos);
+    auto ptr = std::make_unique<Cell>(sheet,pos,std::move(str),subscribers);
     return ptr;
 }

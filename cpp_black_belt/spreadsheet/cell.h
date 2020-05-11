@@ -7,7 +7,7 @@
 
 class Cell : public ICell {
 public:
-    Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers);
+    Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_set<const Cell*> subscribers);
     virtual Value GetValue() const override;
     virtual std::string GetText() const override;
     virtual std::vector<Position> GetReferencedCells() const override;
@@ -15,7 +15,7 @@ public:
     void HandleInsertedCols(int before, int count = 1);
     void HandleDeletedRows(int first, int count = 1);
     void HandleDeletedCols(int first, int count = 1);
-    void CheckCircular(Position self) const;
+    void CheckCircular(const Cell* self) const;
     
     // Observer part
     void Subscribe(const Cell* observer) const;

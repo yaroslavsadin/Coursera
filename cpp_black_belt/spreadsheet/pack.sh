@@ -17,7 +17,9 @@ files="ast.cpp
         position.cpp
         sheet.cpp
         sheet.h
-        table.h"
+        table.h
+        profile_advanced.cpp
+        profile_advanced.h"
 
 rm -rf $path/spreadsheet.tar.gz
 tar -czvf $path/spreadsheet.tar.gz $files

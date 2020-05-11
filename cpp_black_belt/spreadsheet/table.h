@@ -76,7 +76,9 @@ public:
     void ClearCell(Position pos) {
         if(ContainsCell(pos)) {
             storage[pos.row][pos.col].reset();
-            Normalize();
+            if(pos.row == size.rows - 1 || pos.col == size.cols - 1) {
+                Normalize();
+            }
         }
     }
 
