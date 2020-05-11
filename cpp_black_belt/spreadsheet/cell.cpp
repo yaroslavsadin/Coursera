@@ -105,10 +105,15 @@ void Cell::Subscribe(std::weak_ptr<Cell> observer) const {
     subscribers.push_back(observer);
 }
 void Cell::Notify() const {
-    for(auto observer : subscribers) {
-        /// TODO: Deal with dangling pointers
-        auto ptr = observer.lock();
-        if(ptr) ptr->Update();
+    auto it = subscribers.begin();
+    while(it != subscribers.end()) {
+        auto ptr = it->lock();
+        if(ptr) { 
+            ptr->Update();
+            it++;
+        } else {
+            it = subscribers.erase(it);
+        }
     }
 }
 
