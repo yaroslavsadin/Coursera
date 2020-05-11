@@ -18,5 +18,5 @@ public:
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
 private:
-    Table<std::shared_ptr<Cell>> storage;
+    Table<Cell> storage;
 };

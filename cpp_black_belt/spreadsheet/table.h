@@ -2,87 +2,126 @@
 #include "common.h"
 #include <cassert>
 #include <algorithm>
-#include <unordered_map>
-#include <map>
-#include <iostream>
 
 template<typename T>
 class Table {
 private:
-    struct PositionHash {
-        // We imply that row and col are both maxed to 16383 i.e. 16 bit
-        size_t operator()(Position p) const noexcept {
-            return size_t(p.row) << 16 | p.col;
-        }
-    };
-    using Storage = std::unordered_map<Position,T,PositionHash>;
+    using Storage = std::vector<std::vector<std::shared_ptr<T>>>;
 
     Size size;
-    Storage active_cells;
-public:
-    using const_iterator = typename Storage::const_iterator;
+    Storage storage;
 
+    bool ContainsCell(Position pos) const {
+        return storage.size() > pos.row && storage[pos.row].size() > pos.col;
+    }
+    void CleanRow(std::vector<std::shared_ptr<T>>& row) {
+        auto it = find_if(row.rbegin(),row.rend(),
+        [](const auto& rhs){
+            return rhs != nullptr;
+        });
+        row.erase(it.base(),row.end());
+    }
+    void Normalize() {
+        size = {0,0};
+        auto r_it_row = storage.rbegin();
+        while(r_it_row != storage.rend()) {
+            auto it_row = r_it_row.base();
+            auto& row = *r_it_row++;
+            CleanRow(row);
+            if(row.size()) {
+                size.cols = std::max(static_cast<size_t>(size.cols),row.size());
+            } else if(it_row == storage.end()) {
+                storage.erase(prev(it_row));
+            }
+        }
+        size.rows = storage.size();
+    }
+    void UpdateSize(Position pos) {
+        if(size.rows < pos.row + 1) {
+            size.rows = pos.row + 1;
+        }
+        if(size.cols < pos.col + 1) {
+            size.cols = pos.col + 1;
+        }
+    }
+public:
     Table() = default;
 
-    const_iterator begin() const {
-        return active_cells.cbegin();
-    }
-    const_iterator end() const {
-        return active_cells.cend();
-    }
-
-    const T* GetCell(Position pos) const {
-        if(active_cells.count(pos)) {
-            return &active_cells.at(pos);
+    const std::shared_ptr<T> GetCell(Position pos) const {
+        if(ContainsCell(pos)) {
+            return storage[pos.row][pos.col];
         }
         return nullptr;
     }
 
-    T* GetCell(Position pos) {
-        if(active_cells.count(pos)) {
-            return &active_cells.at(pos);
+    std::shared_ptr<T> GetCell(Position pos) {
+        if(ContainsCell(pos)) {
+            return storage[pos.row][pos.col];
         }
         return nullptr;
     }
 
-    template<typename ElemType>
-    void SetCell(Position pos, ElemType&& data) {
-        static_assert(std::is_same_v<std::decay_t<T>,std::decay_t<ElemType>>);
-        active_cells[pos] = std::forward<ElemType>(data);
+    void SetCell(Position pos, std::shared_ptr<T> data) {
+        if(storage.size() <= pos.row) {
+            storage.resize(pos.row + 1);
+        }
+        if(storage[pos.row].size() <= pos.col) {
+            storage[pos.row].resize(pos.col + 1);
+        }
+        storage[pos.row][pos.col] = std::move(data);
         UpdateSize(pos);
     }
 
     void ClearCell(Position pos) {
-        if(active_cells.count(pos)) {
-            active_cells.erase(pos);
-            size = {0,0};
-            for(auto [pos_,cell] : active_cells) {
-                UpdateSize(pos);
-            }
+        if(ContainsCell(pos)) {
+            storage[pos.row][pos.col].reset();
+            Normalize();
         }
     }
 
     void InsertRows(int before, int count = 1) {
         if(before < size.rows) {
-            Insert(&Position::row, before, count);
+            for(size_t i = 0; i < static_cast<size_t>(count); i++) {
+                storage.emplace(storage.begin() + before + i);
+            }
+            Normalize();
         }
     }
 
     void InsertCols(int before, int count = 1) {
         if(before < size.cols) {
-            Insert(&Position::col, before, count);
+            for(auto& row : storage) {
+                if(before < row.size()) {
+                    for(size_t i = 0; i < static_cast<size_t>(count); i++) {
+                        row.emplace(row.begin() + before + i);
+                    }
+                }
+            }
+            Normalize();
         }
     }
 
     void DeleteRows(int first, int count = 1) {
-        if(first < size.rows) {
-            Delete(&Position::row, first, count);
+        if(first < size.rows && storage.size()) {
+            storage.erase(
+                storage.begin() + first, 
+                storage.begin() + first + std::min(static_cast<size_t>(count),storage.size())
+            );
+            Normalize();
         }
     }
 
     void DeleteCols(int first, int count = 1) {
         if(first < size.cols) {
-            Delete(&Position::col, first, count);
+            for(auto& row : storage) {
+                if(first < row.size()) {
+                    row.erase(
+                        row.begin() + first, 
+                        row.begin() + first + std::min(static_cast<size_t>(count),row.size())
+                    );
+                }
+            }
+            Normalize();
         }
     }
 
@@ -94,49 +133,10 @@ public:
         return size.cols;
     }
 
-    std::vector<std::vector<const T*>> GetPrintable() const {
-        std::vector<std::vector<const T*>> printable(size.rows,std::vector<const T*>(size.cols,nullptr));
-        for(const auto& [pos,cell] : active_cells) {
-            printable[pos.row][pos.col] = &cell;
-        }
-        return printable;
+    const Storage& Get() const {
+        return storage;
     }
-private:
-    void UpdateSize(Position pos) {
-        if(size.rows < pos.row + 1) {
-            size.rows = pos.row + 1;
-        }
-        if(size.cols < pos.col + 1) {
-            size.cols = pos.col + 1;
-        }
-    }
-    void Insert(int Position::* field, int before, int count) {
-        Storage temp;
-        size = {0,0};
-        for(auto [pos_,cell] : active_cells) {
-            auto pos = pos_;
-            if(pos.*field >= before) {
-                pos.*field += count;
-            }
-            temp[pos] = std::move(cell);
-            UpdateSize(pos);
-        }
-        active_cells.swap(temp);
-    }
-    void Delete(int Position::* field, int first, int count) {
-        Storage temp;
-        size = {0,0};
-        for(auto [pos_,cell] : active_cells) {
-            auto pos = pos_;
-            if(pos.*field < first) {
-                temp[pos] = std::move(cell);
-            }
-            if(pos.*field >= first + count) {
-                pos.*field -= count;
-                temp[pos] = std::move(cell);
-            }
-            UpdateSize(pos);
-        }
-        active_cells.swap(temp);
+    Storage& Get() {
+        return storage;
     }
 };

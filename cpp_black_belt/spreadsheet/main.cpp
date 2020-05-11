@@ -590,46 +590,46 @@ namespace {
   }
 }
 
-#include "cell.h"
+// #include "cell.h"
 
-void TestTable() {
-  Table<int> table;
-  ASSERT_EQUAL(table.GetRowCount(),0);
-  ASSERT_EQUAL(table.GetColCount(),0);
-  // Inserting and deleting from empty doesn't have any effect
-  table.DeleteCols(0,42);
-  table.DeleteRows(0,42);
-  table.InsertRows(0,42);
-  table.InsertCols(0,42);
-  ASSERT_EQUAL(table.GetRowCount(),0);
-  ASSERT_EQUAL(table.GetColCount(),0);
-  // Setting a value
-  table.SetCell({0,0},42);
-  ASSERT_EQUAL(table.GetRowCount(),1);
-  ASSERT_EQUAL(table.GetColCount(),1);
-  // Inserting and deleting after the set value doesn't have any effect either
-  table.DeleteCols(1,42);
-  table.DeleteRows(1,42);
-  table.InsertRows(1,42);
-  table.InsertCols(1,42);
-  ASSERT_EQUAL(table.GetRowCount(),1);
-  ASSERT_EQUAL(table.GetColCount(),1);
-  // Inserting before the value
-  table.InsertRows(0,4);
-  table.InsertCols(0,2);
-  ASSERT_EQUAL(table.GetRowCount(),5);
-  ASSERT_EQUAL(table.GetColCount(),3);
-  ASSERT(table.GetCell({4,2}) != nullptr);
-  ASSERT_EQUAL(*table.GetCell({4,2}),42);
-  // Deleting is now effective, check with big values
-  table.DeleteCols(1,42);
-  table.DeleteRows(1,42);
-  ASSERT_EQUAL(table.GetRowCount(),0);
-  ASSERT_EQUAL(table.GetColCount(),0);
-  ASSERT(table.GetCell({0,0}) == nullptr);
-  ASSERT(table.GetCell({42,24}) == nullptr);
+// void TestTable() {
+//   Table<int> table;
+//   ASSERT_EQUAL(table.GetRowCount(),0);
+//   ASSERT_EQUAL(table.GetColCount(),0);
+//   // Inserting and deleting from empty doesn't have any effect
+//   table.DeleteCols(0,42);
+//   table.DeleteRows(0,42);
+//   table.InsertRows(0,42);
+//   table.InsertCols(0,42);
+//   ASSERT_EQUAL(table.GetRowCount(),0);
+//   ASSERT_EQUAL(table.GetColCount(),0);
+//   // Setting a value
+//   table.SetCell({0,0},42);
+//   ASSERT_EQUAL(table.GetRowCount(),1);
+//   ASSERT_EQUAL(table.GetColCount(),1);
+//   // Inserting and deleting after the set value doesn't have any effect either
+//   table.DeleteCols(1,42);
+//   table.DeleteRows(1,42);
+//   table.InsertRows(1,42);
+//   table.InsertCols(1,42);
+//   ASSERT_EQUAL(table.GetRowCount(),1);
+//   ASSERT_EQUAL(table.GetColCount(),1);
+//   // Inserting before the value
+//   table.InsertRows(0,4);
+//   table.InsertCols(0,2);
+//   ASSERT_EQUAL(table.GetRowCount(),5);
+//   ASSERT_EQUAL(table.GetColCount(),3);
+//   ASSERT(table.GetCell({4,2}) != nullptr);
+//   ASSERT_EQUAL(*table.GetCell({4,2}),42);
+//   // Deleting is now effective, check with big values
+//   table.DeleteCols(1,42);
+//   table.DeleteRows(1,42);
+//   ASSERT_EQUAL(table.GetRowCount(),0);
+//   ASSERT_EQUAL(table.GetColCount(),0);
+//   ASSERT(table.GetCell({0,0}) == nullptr);
+//   ASSERT(table.GetCell({42,24}) == nullptr);
 
-}
+// }
 
 void TestCached() {
   auto sheet = CreateSheet();
@@ -839,7 +839,7 @@ int main() {
   RUN_TEST(tr, TestFormulaIncorrect);
   RUN_TEST(tr, TestCellCircularReferences);
   RUN_TEST(tr, TestPrint);
-  RUN_TEST(tr, TestTable);
+  // RUN_TEST(tr, TestTable);
   RUN_TEST(tr, TestCached);
   RUN_TEST(tr, TestSize);
   RUN_TEST(tr, TestUnnecesaryParens);
