@@ -15,6 +15,7 @@ TotalDuration insert_cols_duration("insert_cols_duration");
 TotalDuration insert_rows_duration("insert_rows_duration");
 TotalDuration print_texts_duration("print_texts_duration");
 TotalDuration print_values_duration("print_values_duration");
+TotalDuration circular_duration("circular_duration");
 
 extern TotalDuration make_cell_duration;
 extern TotalDuration parse_formula_duration;
@@ -41,23 +42,24 @@ void Sheet::SetCell(Position pos, std::string text){
         poss___.push_back(pos);
         texts___.push_back(text);
     }
-    if(++count____ > 4000) {
+    if(++count____ > 10000) {
         std::stringstream ss;
         ss << "SetCell: " << duration_cast<milliseconds>(set_cell_duration.value).count() << std::endl <<
         "GetCell: " << duration_cast<milliseconds>(get_cell_duration.value).count() << std::endl <<
-        // "ClearCell: " << duration_cast<milliseconds>(clear_cell_duration.value).count() << std::endl <<
-        // "DeleteCols: " << duration_cast<milliseconds>(delete_cols_duration.value).count() << std::endl <<
-        // "DeleteRows: " << duration_cast<milliseconds>(delete_rows_duration.value).count() << std::endl <<
-        // "GetPrintable: " << duration_cast<milliseconds>(set_printable_duration.value).count() << std::endl <<
-        // "InsertRows: " << duration_cast<milliseconds>(insert_rows_duration.value).count() << std::endl <<
-        // "InsertCols: " << duration_cast<milliseconds>(insert_cols_duration.value).count() << std::endl <<
-        // "PrintTexts: " << duration_cast<milliseconds>(print_texts_duration.value).count() << std::endl <<
-        // "PrintValues: " << duration_cast<milliseconds>(print_values_duration.value).count() << std::endl;
+        "ClearCell: " << duration_cast<milliseconds>(clear_cell_duration.value).count() << std::endl <<
+        "DeleteCols: " << duration_cast<milliseconds>(delete_cols_duration.value).count() << std::endl <<
+        "DeleteRows: " << duration_cast<milliseconds>(delete_rows_duration.value).count() << std::endl <<
+        "GetPrintable: " << duration_cast<milliseconds>(set_printable_duration.value).count() << std::endl <<
+        "InsertRows: " << duration_cast<milliseconds>(insert_rows_duration.value).count() << std::endl <<
+        "InsertCols: " << duration_cast<milliseconds>(insert_cols_duration.value).count() << std::endl <<
+        "PrintTexts: " << duration_cast<milliseconds>(print_texts_duration.value).count() << std::endl <<
+        "PrintValues: " << duration_cast<milliseconds>(print_values_duration.value).count() << std::endl <<
         "MakeCell: " << duration_cast<milliseconds>(make_cell_duration.value).count() << std::endl <<
         "Formula::GetReferencedCells: " << duration_cast<milliseconds>(get_refs_duration.value).count() << std::endl <<
         "Formula::GetExpression: " << duration_cast<milliseconds>(get_exp_duration.value).count() << std::endl <<
         "Formula::Evaluate: " << duration_cast<milliseconds>(evaluate_duration.value).count() << std::endl <<
         "Cell::Cell: " << duration_cast<milliseconds>(cell_ctor_duration.value).count() << std::endl <<
+        "Cell::CheckCircular: " << duration_cast<milliseconds>(circular_duration.value).count() << std::endl <<
         "ParseFormula: " << duration_cast<milliseconds>(parse_formula_duration.value).count() << std::endl;
 
         for(size_t i = 0; i < 200; i++) {
@@ -79,9 +81,13 @@ void Sheet::SetCell(Position pos, std::string text){
         }
         storage.GetCell(referenced)->Subscribe(cell.get());
     }
-    cell->CheckCircular(cell.get());
-    if(storage.GetCell(pos)) {
-        cell->CheckCircular(storage.GetCell(pos));
+    {
+        ADD_DURATION(circular_duration);
+        if(storage.GetCell(pos)) {
+            cell->CheckCircular(cell.get(),storage.GetCell(pos));
+        } else {
+            cell->CheckCircular(cell.get(),cell.get());
+        }
     }
     storage.SetCell(pos,std::move(cell));
 }

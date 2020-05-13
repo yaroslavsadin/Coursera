@@ -2284,6 +2284,12 @@ void BigFckingTestCase() {
   sheet->SetCell({0,14581}, "=UNW1");
   sheet->SetCell({0,14580}, "=UNV1");
   sheet->SetCell({0,14579}, "=UNU1");
+
+  try {
+    sheet->SetCell({0,0},"=A1");
+    ASSERT(0);
+  } catch(CircularDependencyException&) {
+  }
 }
 
 int main() {

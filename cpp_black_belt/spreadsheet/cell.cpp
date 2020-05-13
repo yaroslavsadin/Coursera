@@ -96,13 +96,19 @@ void Cell::HandleDeletedCols(int first, int count) {
     }
 }
 
-void Cell::CheckCircular(const Cell* self) const {
+void Cell::CheckCircular(const Cell* self, const Cell* prev) const {
     for(auto* cell : subscriptions) {
-        if(self == cell) {
+        if(self == cell || prev == cell) {
             throw CircularDependencyException("CircularDependencyException");
         } else {
-            cell->CheckCircular(self);
+            cell->CheckCircular(self,prev);
         }
+    }
+}
+
+void Cell::GenerateDependencies() const {
+    for(auto* cell : subscriptions) {
+        dependencies.insert(cell);
     }
 }
 

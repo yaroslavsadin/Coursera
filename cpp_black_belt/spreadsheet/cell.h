@@ -15,7 +15,8 @@ public:
     void HandleInsertedCols(int before, int count = 1);
     void HandleDeletedRows(int first, int count = 1);
     void HandleDeletedCols(int first, int count = 1);
-    void CheckCircular(const Cell* self) const;
+    void CheckCircular(const Cell* self, const Cell* prev) const;
+    void GenerateDependencies() const;
     
     // Observer part
     void Subscribe(const Cell* observer) const;
@@ -60,6 +61,7 @@ private:
     mutable CellCache cache;
     mutable std::unordered_set<const Cell*> subscriptions;
     mutable std::unordered_set<const Cell*> subscribers;
+    mutable std::unordered_set<const Cell*> dependencies;
 };
 
 std::unique_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos);
