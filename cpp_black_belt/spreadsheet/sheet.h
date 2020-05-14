@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include "table.h"
+#include <unordered_set>
 
 class Cell;
 
@@ -19,4 +20,18 @@ public:
     virtual void PrintTexts(std::ostream& output) const override;
 private:
     Table<Cell> storage;
+};
+
+class CircularDependencyChecker {
+public:
+    CircularDependencyChecker(Position pos, const Cell* cell, const Sheet& sheet) 
+    : pos(pos), cell(cell), sheet(sheet) {}
+
+    void Check();
+    void CheckRecursevly(const Cell* current);
+private:
+    Position pos;
+    const Cell* cell;
+    const Sheet& sheet;
+    std::unordered_set<const Cell*> checked;
 };

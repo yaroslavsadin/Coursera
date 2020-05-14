@@ -2292,6 +2292,15 @@ void BigFckingTestCase() {
   }
 }
 
+void Test012(){
+  auto sheet = CreateSheet();
+  sheet->SetCell({0,16000}, "1646868");
+  for(size_t i = 15999; i > 0; i--) {
+    sheet->SetCell({0,i}, "=" + Position{0,i+1}.ToString());
+  }
+   sheet->GetCell({0,1})->GetValue();
+}
+
 int main() {
   TestRunner tr;
   RUN_TEST(tr, TestPosition);
@@ -2333,6 +2342,7 @@ int main() {
   RUN_TEST(tr, Test009);
   RUN_TEST(tr, Test010);
   RUN_TEST(tr, Test011);
+  RUN_TEST(tr, Test012);
   RUN_TEST(tr, BigFckingTestCase);
 
   return 0;

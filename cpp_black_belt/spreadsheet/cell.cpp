@@ -13,6 +13,7 @@ Cell::Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_se
         formula = ParseFormula(std::string(view));
         referenced_cells = formula->GetReferencedCells();
         text = "=" + formula->GetExpression();
+        Cell::GetValue();
     } else {
         text = str;
         std::string_view view = str;
@@ -93,22 +94,6 @@ void Cell::HandleDeletedCols(int first, int count) {
             referenced_cells = formula->GetReferencedCells();
             text = "=" + formula->GetExpression();
         }
-    }
-}
-
-void Cell::CheckCircular(const Cell* self, const Cell* prev) const {
-    for(auto* cell : subscriptions) {
-        if(self == cell || prev == cell) {
-            throw CircularDependencyException("CircularDependencyException");
-        } else {
-            cell->CheckCircular(self,prev);
-        }
-    }
-}
-
-void Cell::GenerateDependencies() const {
-    for(auto* cell : subscriptions) {
-        dependencies.insert(cell);
     }
 }
 

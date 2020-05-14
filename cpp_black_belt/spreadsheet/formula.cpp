@@ -36,10 +36,8 @@ Formula::Formula(std::string text)
 {
 }
 
-TotalDuration evaluate_duration("evaluate_duration");
 Formula::Value Formula::Evaluate(const ISheet& sheet) const{
-    ADD_DURATION(evaluate_duration);
-    try {    
+    try {
         return top->Evaluate(sheet);
     } catch(FormulaError err) {
         return err;

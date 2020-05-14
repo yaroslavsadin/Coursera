@@ -61,9 +61,6 @@ void NodeTreeListener::exitParens(FormulaParser::ParensContext * ctx)  { }
 
 void NodeTreeListener::enterCell(FormulaParser::CellContext * ctx)  { }
 void NodeTreeListener::exitCell(FormulaParser::CellContext * ctx)  {   
-    if(ctx->exception) {
-        std::cerr << "Exception" << std::endl;
-    }
     builder.push(std::make_unique<Ast::CellNode>(ctx->getText()));
 }
 
