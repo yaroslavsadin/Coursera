@@ -1,6 +1,5 @@
 #pragma once
 #include "common.h"
-#include <cassert>
 #include <algorithm>
 #include <deque>
 
@@ -13,7 +12,9 @@ private:
     Storage storage;
 
     bool ContainsCell(Position pos) const {
-        return storage.size() > pos.row && storage[pos.row].size() > pos.col;
+        return 
+        storage.size() > static_cast<size_t>(pos.row) && 
+        storage[pos.row].size() > static_cast<size_t>(pos.col);
     }
     void CleanRow(std::deque<std::unique_ptr<T>>& row) {
         auto it = find_if(row.rbegin(),row.rend(),
@@ -63,10 +64,10 @@ public:
     }
 
     void SetCell(Position pos, std::unique_ptr<T> data) {
-        if(storage.size() <= pos.row) {
+        if(storage.size() <= static_cast<size_t>(pos.row)) {
             storage.resize(pos.row + 1);
         }
-        if(storage[pos.row].size() <= pos.col) {
+        if(storage[pos.row].size() <= static_cast<size_t>(pos.col)) {
             storage[pos.row].resize(pos.col + 1);
         }
         storage[pos.row][pos.col] = std::move(data);
@@ -93,7 +94,7 @@ public:
     void InsertCols(int before, int count = 1) {
         if(before < size.cols) {
             for(auto& row : storage) {
-                if(before < row.size()) {
+                if(static_cast<size_t>(before) < row.size()) {
                     for(size_t i = 0; i < static_cast<size_t>(count); i++) {
                         row.emplace(row.begin() + before + i);
                     }
@@ -114,7 +115,7 @@ public:
     void DeleteCols(int first, int count = 1) {
         if(first < size.cols) {
             for(auto& row : storage) {
-                if(first < row.size()) {
+                if(static_cast<size_t>(first) < row.size()) {
                     row.erase(
                         row.begin() + first, 
                         row.begin() + first + std::min(static_cast<size_t>(count),row.size())

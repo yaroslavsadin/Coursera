@@ -18,13 +18,14 @@ public:
     virtual Size GetPrintableSize() const override;
     virtual void PrintValues(std::ostream& output) const override;
     virtual void PrintTexts(std::ostream& output) const override;
+    virtual ~Sheet() = default;
 private:
     Table<Cell> storage;
 };
 
 class CircularDependencyChecker {
 public:
-    CircularDependencyChecker(Position pos, const Cell* cell, const Sheet& sheet) 
+    CircularDependencyChecker(const Sheet& sheet, Position pos, const Cell* cell) 
     : pos(pos), cell(cell), sheet(sheet) {}
 
     void Check();

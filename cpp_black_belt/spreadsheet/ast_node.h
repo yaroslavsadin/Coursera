@@ -149,7 +149,6 @@ namespace Ast {
         static constexpr Position REF{-1,-1};
         CellNode(std::string_view cell_name) : cell_pos(Position::FromString(cell_name)) {}
         virtual double Evaluate(const ISheet& context) const override {
-            // std::cerr << "CellNode::Evaluate" << std::endl;
             if(cell_pos == CellNode::REF) {
                 throw FormulaError(FormulaError::Category::Ref);
             }

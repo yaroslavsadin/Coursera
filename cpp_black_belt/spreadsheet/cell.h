@@ -7,10 +7,10 @@
 
 class Cell : public ICell {
 public:
-    Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_set<const Cell*> subscribers);
+    Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers);
     virtual Value GetValue() const override;
-    virtual std::string GetText() const override;
-    virtual std::vector<Position> GetReferencedCells() const override;
+    virtual std::string GetText() const noexcept override;
+    virtual std::vector<Position> GetReferencedCells() const noexcept override;
     void HandleInsertedRows(int before, int count = 1);
     void HandleInsertedCols(int before, int count = 1);
     void HandleDeletedRows(int first, int count = 1);
@@ -18,7 +18,6 @@ public:
     
     // Observer part
     void Subscribe(const Cell* observer) const;
-    void Unsubscribe(const Cell* observer) const;
     void Notify() const;
     const std::unordered_set<const Cell*>& GetSubscribers() const {
         return subscribers;
@@ -52,7 +51,6 @@ private:
     };
 
     const ISheet& sheet;
-    Position pos;
     std::unique_ptr<IFormula> formula;
     std::string text;
     std::vector<Position> referenced_cells;

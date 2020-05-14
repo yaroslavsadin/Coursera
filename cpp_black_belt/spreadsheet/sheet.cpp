@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cassert>
 #include <sstream>
 #include "sheet.h"
 #include "cell.h"
-#include "profile_advanced.h"
 
 bool Size::operator==(const Size& rhs) const {
     return rows == rhs.rows && cols == rhs.cols;
@@ -38,10 +36,6 @@ void CircularDependencyChecker::CheckRecursevly(const Cell* current) {
 }
 
 void Sheet::SetCell(Position pos, std::string text){
-    
-    if(storage.GetCell(pos) && storage.GetCell(pos)->GetText() == text) {
-        return;
-    }
     CheckPosition(pos, __FUNCTION__);
     auto cell = MakeCell(*this,text,pos);
     for(auto referenced : cell->GetReferencedCells()) {
@@ -50,7 +44,7 @@ void Sheet::SetCell(Position pos, std::string text){
         }
         storage.GetCell(referenced)->Subscribe(cell.get());
     }
-    CircularDependencyChecker(pos, cell.get(), *this).Check();
+    CircularDependencyChecker(*this, pos, cell.get()).Check();
     storage.SetCell(pos,std::move(cell));
 }
 const ICell* Sheet::GetCell(Position pos) const{ 
@@ -130,7 +124,7 @@ Size Sheet::GetPrintableSize() const{
 void Sheet::PrintValues(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage.Get()) {
-        for(size_t i = 0; i < storage.GetColCount(); i++) {
+        for(size_t i = 0; i < static_cast<size_t>(storage.GetColCount()); i++) {
             if(i < row.size()) {
                 if(auto& cell = row[i]; cell) {
                     std::stringstream ss;
@@ -152,7 +146,7 @@ void Sheet::PrintValues(std::ostream& output) const{
 void Sheet::PrintTexts(std::ostream& output) const{
     std::string res;
     for(const auto& row : storage.Get()) {
-        for(size_t i = 0; i < storage.GetColCount(); i++) {
+        for(size_t i = 0; i < static_cast<size_t>(storage.GetColCount()); i++) {
             if(i < row.size()) {
                 if(auto& cell = row[i]; cell) {
                     res += cell->GetText();

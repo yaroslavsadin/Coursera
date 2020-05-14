@@ -1,19 +1,14 @@
 #include "cell.h"
-#include <cassert>
-#include "profile_advanced.h"
 
-TotalDuration cell_ctor_duration("cell_ctor_duration");
-
-Cell::Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_set<const Cell*> subscribers) 
-: sheet(sheet), pos(pos), subscribers(subscribers) {
-    ADD_DURATION(cell_ctor_duration);
+Cell::Cell(const ISheet& sheet, std::string str, std::unordered_set<const Cell*> subscribers) 
+: sheet(sheet), subscribers(std::move(subscribers)) {
     if(str[0] == '=' && str.size() > 1) {
         std::string_view view(str);
         view.remove_prefix(1);
         formula = ParseFormula(std::string(view));
         referenced_cells = formula->GetReferencedCells();
         text = "=" + formula->GetExpression();
-        Cell::GetValue();
+        GetValue();
     } else {
         text = str;
         std::string_view view = str;
@@ -22,7 +17,7 @@ Cell::Cell(const ISheet& sheet, Position pos, std::string str, std::unordered_se
         }
         cache.SetValue(std::string(view));
     }
-    for(auto* cell : subscribers) {
+    for(auto* cell : this->subscribers) {
         cell->subscriptions.insert(this);
     }
 }
@@ -39,10 +34,10 @@ Cell::Value Cell::GetValue() const {
     }
     return cache.GetValue();
 }
-std::string Cell::GetText() const {
+std::string Cell::GetText() const noexcept {
     return text;
 }
-std::vector<Position> Cell::GetReferencedCells() const {
+std::vector<Position> Cell::GetReferencedCells() const noexcept {
     return referenced_cells;
 }
 
@@ -101,9 +96,7 @@ void Cell::Subscribe(const Cell* subscriber) const {
     subscribers.insert(subscriber);
     subscriber->subscriptions.insert(this);
 }
-void Cell::Unsubscribe(const Cell* subscriber) const {   
-    subscribers.erase(subscriber);
-}
+
 void Cell::Notify() const {
     for(const auto* subscriber : subscribers) {
         subscriber->Update();
@@ -118,6 +111,7 @@ void Cell::Update() const {
 }
 
 Cell::~Cell() {
+    // Cell is dying: unsibscribe from all
     for(auto* cell : subscriptions) {
         cell->subscribers.erase(this);
     }
@@ -127,14 +121,11 @@ Cell::~Cell() {
     Notify();
 }
 
-TotalDuration make_cell_duration("make_cell_duration");
-
 std::unique_ptr<Cell> MakeCell(const ISheet& sheet, std::string str, Position pos) {
-    ADD_DURATION(make_cell_duration);
     std::unordered_set<const Cell*> subscribers;
     if(sheet.GetCell(pos)) {
-        subscribers = (*static_cast<const Cell*>(sheet.GetCell(pos))).GetSubscribers();
+        subscribers = static_cast<const Cell*>(sheet.GetCell(pos))->GetSubscribers();
     }
-    auto ptr = std::make_unique<Cell>(sheet,pos,std::move(str),subscribers);
+    auto ptr = std::make_unique<Cell>(sheet,std::move(str),subscribers);
     return ptr;
 }

@@ -44,17 +44,12 @@ Formula::Value Formula::Evaluate(const ISheet& sheet) const{
     }
 }
 
-TotalDuration get_exp_duration("get_exp_duration");
-TotalDuration get_refs_duration("get_refs_duration");
-
 std::string Formula::GetExpression() const{
-    ADD_DURATION(get_exp_duration);
     Ast::PrintExpressionVisitor visitor;
     top->Accept(visitor);
     return visitor.Get();
 }
 std::vector<Position> Formula::GetReferencedCells() const{
-    ADD_DURATION(get_refs_duration);
     Ast::ReferencedCellsVisitor visitor;
     top->Accept(visitor);
     auto res = visitor.Get();
@@ -86,9 +81,6 @@ Formula::HandlingResult Formula::HandleDeletedCols(int first, int count){
     return visitor.Get();
 }
 
-TotalDuration parse_formula_duration("parse_formula_duration");
-
 std::unique_ptr<IFormula> ParseFormula(std::string expression) {
-    ADD_DURATION(parse_formula_duration);
     return std::make_unique<Formula>(std::move(expression));
 }
